@@ -184,7 +184,8 @@ type TranslationKey =
   | 'group.titleOptional'
   | 'group.titlePlaceholder'
   | 'group.stelesCount'
-  | 'group.creating';
+  | 'group.creating'
+  | 'footer.owner';
 
 const translations: Record<TranslationKey, Record<Language, string>> = {
   'nav.groups': { es: 'Grupos', en: 'Groups', fr: 'Groupes', pt: 'Grupos' },
@@ -371,6 +372,7 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
   'group.titlePlaceholder': { es: 'Ej: Grupo relajado', en: 'e.g., Chill group', fr: 'Ex. : Groupe tranquille', pt: 'Ex.: Grupo tranquilo' },
   'group.stelesCount': { es: 'Cuántas Estelas', en: 'How many Steles', fr: 'Combien de Stèles', pt: 'Quantas Estátuas' },
   'group.creating': { es: 'Creando...', en: 'Creating...', fr: 'Création...', pt: 'Criando...' },
+  'footer.owner': { es: 'Hecho por Clarex', en: 'Made by Clarex', fr: 'Cree par Clarex', pt: 'Feito por Clarex' },
 };
 
 export function t(key: TranslationKey, language: Language): string {

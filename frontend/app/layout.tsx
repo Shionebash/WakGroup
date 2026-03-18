@@ -4,6 +4,7 @@ import { AuthProvider } from '@/lib/auth-context';
 import { ChatProvider } from '@/lib/chat-context';
 import { LanguageProvider } from '@/lib/language-context';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import ToastContainer from '@/components/ToastContainer';
 import FloatingChatBar from '@/components/FloatingChatBar';
 
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             <main className="page-wrapper">
                                 {children}
                             </main>
+                            <Footer />
                             <ToastContainer />
                             <FloatingChatBar />
                         </ChatProvider>

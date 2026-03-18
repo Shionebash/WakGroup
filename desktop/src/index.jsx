@@ -2,12 +2,14 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import ReactDOM from 'react-dom/client';
 import axios from 'axios';
 import { io } from 'socket.io-client';
+import packageJson from '../package.json';
 
 import wakfuMobs from '../wakfu_mobs.json';
 import itemsData from '../items.json';
 import mazmosData from '../mazmos.json';
 
 const API_URL_FALLBACK = 'https://wakgroup.onrender.com';
+const APP_VERSION = packageJson.version;
 
 const LANGUAGES = {
     es: { label: 'Español', flag: '🇪🇸' },
@@ -91,6 +93,9 @@ const TRANSLATIONS = {
     'overlay.errorLoadGroups': { es: 'No se pudieron cargar los grupos.', en: 'Could not load groups.', fr: 'Impossible de charger les groupes.', pt: 'Não foi possível carregar os grupos.' },
     'overlay.errorLoadPvp': { es: 'No se pudieron cargar los enfrentamientos.', en: 'Could not load matches.', fr: 'Impossible de charger les matchs.', pt: 'Não foi possível carregar os confrontos.' },
     'overlay.error': { es: 'Error', en: 'Error', fr: 'Erreur', pt: 'Erro' },
+    'overlay.opacity': { es: 'Opacidad', en: 'Opacity', fr: 'Opacite', pt: 'Opacidade' },
+    'overlay.version': { es: 'Version {version}', en: 'Version {version}', fr: 'Version {version}', pt: 'Versao {version}' },
+    'overlay.madeBy': { es: 'Hecho por Clarex', en: 'Made by Clarex', fr: 'Cree par Clarex', pt: 'Feito por Clarex' },
     'notif.newApplication': { es: 'Nueva solicitud', en: 'New application', fr: 'Nouvelle demande', pt: 'Nova candidatura' },
     'notif.applicationAccepted': { es: 'Solicitud aceptada', en: 'Application accepted', fr: 'Demande acceptée', pt: 'Candidatura aceita' },
     'notif.applicationRejected': { es: 'Solicitud rechazada', en: 'Application rejected', fr: 'Demande refusée', pt: 'Candidatura rejeitada' },
@@ -967,10 +972,14 @@ function MainView({ language = 'es', setLanguage }) {
                 </div>
             </div>
 
-            <div style={{ fontSize: 10, color: COLORS.titleMuted, marginTop: 6, borderTop: `1px solid ${COLORS.borderLight}`, paddingTop: 6, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span>WakGroup Overlay</span>
+            <div style={{ fontSize: 10, color: COLORS.titleMuted, marginTop: 6, borderTop: `1px solid ${COLORS.borderLight}`, paddingTop: 6, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <span>WakGroup Overlay</span>
+                    <span>{getTranslation('overlay.version', language).replace('{version}', APP_VERSION)}</span>
+                    <span>{getTranslation('overlay.madeBy', language)}</span>
+                </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <span style={{ fontSize: 10 }}>Opacidad</span>
+                    <span style={{ fontSize: 10 }}>{getTranslation('overlay.opacity', language)}</span>
                     <input type="range" min="0.3" max="1" step="0.05" value={opacity} onChange={(e) => handleOpacityChange(Number(e.target.value))} style={{ width: 80 }} />
                 </div>
             </div>
