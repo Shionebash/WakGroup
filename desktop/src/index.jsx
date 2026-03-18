@@ -910,9 +910,94 @@ function MainView({ language = 'es', setLanguage }) {
     );
 }
 
+function ConfirmModal({ dialog, onConfirm, onCancel }) {
+    if (!dialog) return null;
+
+    const isDanger = dialog.variant === 'danger';
+    const confirmColor = isDanger ? COLORS.error : COLORS.primaryDark;
+
+    return (
+        <div style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 2200,
+            background: 'rgba(12, 9, 7, 0.78)',
+            backdropFilter: 'blur(6px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 18,
+            WebkitAppRegion: 'no-drag',
+        }}>
+            <div style={{
+                width: '100%',
+                maxWidth: 320,
+                borderRadius: 18,
+                overflow: 'hidden',
+                border: `1px solid ${COLORS.border}`,
+                background: `linear-gradient(180deg, ${COLORS.backgroundLight} 0%, ${COLORS.secondary} 100%)`,
+                boxShadow: '0 20px 40px rgba(0, 0, 0, 0.35)',
+            }}>
+                <div style={{ padding: '14px 16px 12px', borderBottom: `1px solid ${COLORS.borderLight}`, background: COLORS.primarySoft }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <img src="../assets/logo.png" alt="WakGroup" style={{ width: 30, height: 30, borderRadius: 8 }} />
+                        <div>
+                            <div style={{ fontSize: 14, fontWeight: 700, color: COLORS.primary }}>{dialog.title || 'WakGroup'}</div>
+                            <div style={{ fontSize: 11, color: COLORS.textSecondary }}>{dialog.subtitle || 'Confirmación'}</div>
+                        </div>
+                    </div>
+                </div>
+                <div style={{ padding: 16 }}>
+                    <p style={{ margin: 0, color: COLORS.textPrimary, fontSize: 13, lineHeight: 1.5 }}>{dialog.message}</p>
+                </div>
+                <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', padding: '0 16px 16px' }}>
+                    <button onClick={onCancel} style={{ padding: '10px 14px', borderRadius: 10, border: `1px solid ${COLORS.border}`, background: COLORS.buttonMuted, color: COLORS.lightText, cursor: 'pointer', fontWeight: 600 }}>
+                        {dialog.cancelLabel || getTranslation('common.cancel', dialog.language)}
+                    </button>
+                    <button onClick={onConfirm} style={{ padding: '10px 14px', borderRadius: 10, border: 'none', background: confirmColor, color: isDanger ? COLORS.lightText : COLORS.darkText, cursor: 'pointer', fontWeight: 700 }}>
+                        {dialog.confirmLabel || getTranslation('common.confirm', dialog.language)}
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function useConfirmDialog(language) {
+    const [dialog, setDialog] = useState(null);
+
+    const requestConfirmation = useCallback((options) => new Promise((resolve) => {
+        setDialog({
+            language,
+            ...options,
+            resolve,
+        });
+    }), [language]);
+
+    const closeDialog = useCallback((result) => {
+        setDialog((current) => {
+            current?.resolve?.(result);
+            return null;
+        });
+    }, []);
+
+    return {
+        dialog,
+        requestConfirmation,
+        confirmDialogNode: (
+            <ConfirmModal
+                dialog={dialog}
+                onConfirm={() => closeDialog(true)}
+                onCancel={() => closeDialog(false)}
+            />
+        ),
+    };
+}
+
 // Vista detalle del grupo PvE
 function GroupDetailView({ groupId, language = 'es' }) {
     const { width: viewportWidth } = useViewportSize();
+    const { requestConfirmation, confirmDialogNode } = useConfirmDialog(language);
     const [apiUrl, setApiUrl] = useState('');
     const [group, setGroup] = useState(null);
     const [characters, setCharacters] = useState([]);
@@ -998,10 +1083,14 @@ function GroupDetailView({ groupId, language = 'es' }) {
             .finally(() => setApplying(false));
     };
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
         if (!group || !user) return;
         if (group.leader_user_id !== user.id) return;
-        if (!confirm(getTranslation('group.confirmDelete', language))) return;
+        const confirmed = await requestConfirmation({
+            message: getTranslation('group.confirmDelete', language),
+            variant: 'danger',
+        });
+        if (!confirmed) return;
         setDeleting(true);
         setError(null);
         const token = localStorage.getItem('session_token');
@@ -1017,7 +1106,11 @@ function GroupDetailView({ groupId, language = 'es' }) {
             setError(getTranslation('group.errorNoCharacters', language));
             return;
         }
-        if (!confirm(getTranslation('group.confirmLeave', language))) return;
+        const confirmed = await requestConfirmation({
+            message: getTranslation('group.confirmLeave', language),
+            variant: 'danger',
+        });
+        if (!confirmed) return;
         const token = localStorage.getItem('session_token');
         try {
             await axios.delete(`${apiUrl}/groups/${groupId}/members/${userChar.id}`, { headers: { Authorization: `Bearer ${token}` } });
@@ -1028,7 +1121,11 @@ function GroupDetailView({ groupId, language = 'es' }) {
     };
 
     const handleKickMember = async (characterId, charName) => {
-        if (!confirm(getTranslation('group.confirmKick', language).replace('{name}', charName))) return;
+        const confirmed = await requestConfirmation({
+            message: getTranslation('group.confirmKick', language).replace('{name}', charName),
+            variant: 'danger',
+        });
+        if (!confirmed) return;
         const token = localStorage.getItem('session_token');
         try {
             await axios.delete(`${apiUrl}/groups/${groupId}/members/${characterId}`, { headers: { Authorization: `Bearer ${token}` } });
@@ -1042,7 +1139,11 @@ function GroupDetailView({ groupId, language = 'es' }) {
     const handleLeaveGroupAsLeader = async () => {
         const members = group.members || [];
         if (members.length === 0) {
-            if (!confirm(getTranslation('group.confirmClose', language))) return;
+            const confirmed = await requestConfirmation({
+                message: getTranslation('group.confirmClose', language),
+                variant: 'danger',
+            });
+            if (!confirmed) return;
             setDeleting(true);
             const token = localStorage.getItem('session_token');
             try {
@@ -1056,7 +1157,11 @@ function GroupDetailView({ groupId, language = 'es' }) {
         }
         
         const newLeader = members[0];
-        if (!confirm(getTranslation('group.confirmLeaveLeader', language).replace('{name}', newLeader.char_name))) return;
+        const confirmed = await requestConfirmation({
+            message: getTranslation('group.confirmLeaveLeader', language).replace('{name}', newLeader.char_name),
+            variant: 'danger',
+        });
+        if (!confirmed) return;
         
         const token = localStorage.getItem('session_token');
         try {
@@ -1068,7 +1173,10 @@ function GroupDetailView({ groupId, language = 'es' }) {
     };
 
     const handleTransferLeadership = async (newLeaderCharId, newLeaderName) => {
-        if (!confirm(getTranslation('group.confirmTransfer', language).replace('{name}', newLeaderName))) return;
+        const confirmed = await requestConfirmation({
+            message: getTranslation('group.confirmTransfer', language).replace('{name}', newLeaderName),
+        });
+        if (!confirmed) return;
         const token = localStorage.getItem('session_token');
         try {
             await axios.put(`${apiUrl}/groups/${groupId}/transfer-leadership`, { new_leader_character_id: newLeaderCharId }, { headers: { Authorization: `Bearer ${token}` } });
@@ -1184,6 +1292,7 @@ function GroupDetailView({ groupId, language = 'es' }) {
                     </>
                 )}
             </div>
+            {confirmDialogNode}
         </div>
     );
 }
@@ -1705,6 +1814,7 @@ function CreatePveGroupView({ language = 'es' }) {
 // Vista detalle PVP
 function PvpGroupDetailView({ groupId, language = 'es' }) {
     const { width: viewportWidth } = useViewportSize();
+    const { requestConfirmation, confirmDialogNode } = useConfirmDialog(language);
     const [apiUrl, setApiUrl] = useState('');
     const [group, setGroup] = useState(null);
     const [characters, setCharacters] = useState([]);
@@ -1766,7 +1876,11 @@ function PvpGroupDetailView({ groupId, language = 'es' }) {
             setError(getTranslation('group.errorNoCharacters', language));
             return;
         }
-        if (!confirm(getTranslation('group.confirmLeave', language))) return;
+        const confirmed = await requestConfirmation({
+            message: getTranslation('group.confirmLeave', language),
+            variant: 'danger',
+        });
+        if (!confirmed) return;
         const token = localStorage.getItem('session_token');
         try {
             await axios.delete(`${apiUrl}/pvp-groups/${groupId}/members/${userChar.id}`, { headers: { Authorization: `Bearer ${token}` } });
@@ -1777,7 +1891,11 @@ function PvpGroupDetailView({ groupId, language = 'es' }) {
     };
 
     const handleKickMember = async (characterId, charName) => {
-        if (!confirm(getTranslation('group.confirmKick', language).replace('{name}', charName))) return;
+        const confirmed = await requestConfirmation({
+            message: getTranslation('group.confirmKick', language).replace('{name}', charName),
+            variant: 'danger',
+        });
+        if (!confirmed) return;
         const token = localStorage.getItem('session_token');
         try {
             await axios.delete(`${apiUrl}/pvp-groups/${groupId}/members/${characterId}`, { headers: { Authorization: `Bearer ${token}` } });
@@ -1791,7 +1909,11 @@ function PvpGroupDetailView({ groupId, language = 'es' }) {
     const handleLeaveGroupAsLeader = async () => {
         const members = group.members || [];
         if (members.length === 0) {
-            if (!confirm(getTranslation('group.confirmClose', language))) return;
+            const confirmed = await requestConfirmation({
+                message: getTranslation('group.confirmClose', language),
+                variant: 'danger',
+            });
+            if (!confirmed) return;
             const token = localStorage.getItem('session_token');
             try {
                 await axios.patch(`${apiUrl}/pvp-groups/${groupId}/close`, {}, { headers: { Authorization: `Bearer ${token}` } });
@@ -1803,7 +1925,11 @@ function PvpGroupDetailView({ groupId, language = 'es' }) {
         }
         
         const newLeader = members[0];
-        if (!confirm(getTranslation('group.confirmLeaveLeader', language).replace('{name}', newLeader.char_name))) return;
+        const confirmed = await requestConfirmation({
+            message: getTranslation('group.confirmLeaveLeader', language).replace('{name}', newLeader.char_name),
+            variant: 'danger',
+        });
+        if (!confirmed) return;
         
         const token = localStorage.getItem('session_token');
         try {
@@ -1815,7 +1941,10 @@ function PvpGroupDetailView({ groupId, language = 'es' }) {
     };
 
     const handleTransferLeadership = async (newLeaderCharId, newLeaderName) => {
-        if (!confirm(getTranslation('group.confirmTransfer', language).replace('{name}', newLeaderName))) return;
+        const confirmed = await requestConfirmation({
+            message: getTranslation('group.confirmTransfer', language).replace('{name}', newLeaderName),
+        });
+        if (!confirmed) return;
         const token = localStorage.getItem('session_token');
         try {
             await axios.put(`${apiUrl}/pvp-groups/${groupId}/transfer-leadership`, { new_leader_character_id: newLeaderCharId }, { headers: { Authorization: `Bearer ${token}` } });
@@ -1911,6 +2040,7 @@ function PvpGroupDetailView({ groupId, language = 'es' }) {
                     </>
                 )}
             </div>
+            {confirmDialogNode}
         </div>
     );
 }
