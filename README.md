@@ -53,7 +53,7 @@ wakgroup/
 │   ├── next.config.js
 │   └── .env.local               (⚠️ NO COMMITAR)
 │
-└── desktop/                      (Electron app - opcional)
+└── Releases                      (Instalador publico de la miniapp)
 ```
 
 ## 🚀 Quick Start
