@@ -38,6 +38,30 @@ function createSecureWindowOptions(overrides = {}) {
     };
 }
 
+function createOverlayWindow(options = {}) {
+    const {
+        minWidth = 340,
+        minHeight = 420,
+        ...rest
+    } = options;
+
+    return new BrowserWindow({
+        frame: false,
+        transparent: true,
+        backgroundColor: '#00000000',
+        roundedCorners: true,
+        alwaysOnTop: true,
+        resizable: true,
+        hasShadow: false,
+        minWidth,
+        minHeight,
+        webPreferences: {
+            ...createSecureWindowOptions(),
+        },
+        ...rest,
+    });
+}
+
 function isAllowedExternalUrl(rawUrl) {
     try {
         const url = new URL(rawUrl);
@@ -120,20 +144,14 @@ function setupAutoUpdater() {
 function createMainWindow() {
     const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
-    mainWindow = new BrowserWindow({
+    mainWindow = createOverlayWindow({
         width: 420,
         height: 680,
         x: width - 440,
         y: 40,
-        frame: false,
-        transparent: true,
-        alwaysOnTop: true,
-        resizable: true,
         skipTaskbar: false,
-        hasShadow: false,
-        webPreferences: {
-            ...createSecureWindowOptions(),
-        },
+        minWidth: 360,
+        minHeight: 560,
     });
 
     mainWindow.loadURL(RENDERER_URL);
@@ -155,17 +173,11 @@ function createDetailWindow(groupId, isPvp = false) {
         return;
     }
 
-    detailWindow = new BrowserWindow({
+    detailWindow = createOverlayWindow({
         width: 420,
         height: 640,
-        frame: false,
-        transparent: true,
-        alwaysOnTop: true,
-        resizable: true,
-        hasShadow: false,
-        webPreferences: {
-            ...createSecureWindowOptions(),
-        },
+        minWidth: 360,
+        minHeight: 520,
     });
 
     detailWindow.loadURL(`${RENDERER_URL}#${isPvp ? 'pvp' : 'group'}/${groupId}`);
@@ -180,17 +192,11 @@ function createChatWindow(groupId) {
         return;
     }
 
-    chatWindow = new BrowserWindow({
+    chatWindow = createOverlayWindow({
         width: 380,
         height: 520,
-        frame: false,
-        transparent: true,
-        alwaysOnTop: true,
-        resizable: true,
-        hasShadow: false,
-        webPreferences: {
-            ...createSecureWindowOptions(),
-        },
+        minWidth: 340,
+        minHeight: 420,
     });
 
     chatWindow.loadURL(`${RENDERER_URL}#chat/${groupId}`);
@@ -207,19 +213,13 @@ function createCreateWindow(type) {
     const x = Math.round(screenWidth / 2 - width / 2);
     const y = Math.round(screenHeight / 2 - height / 2);
 
-    const createWin = new BrowserWindow({
+    const createWin = createOverlayWindow({
         width,
         height,
         x,
         y,
-        frame: false,
-        transparent: true,
-        alwaysOnTop: true,
-        resizable: true,
-        hasShadow: false,
-        webPreferences: {
-            ...createSecureWindowOptions(),
-        },
+        minWidth: 360,
+        minHeight: 500,
     });
 
     createWin.loadURL(`${RENDERER_URL}#${hash}`);
@@ -235,19 +235,13 @@ function createDropsWindow(dungeonId, selectedDrops = []) {
     const x = Math.round(screenWidth / 2 - width / 2);
     const y = Math.round(screenHeight / 2 - height / 2);
 
-    const dropsWin = new BrowserWindow({
+    const dropsWin = createOverlayWindow({
         width,
         height,
         x,
         y,
-        frame: false,
-        transparent: true,
-        alwaysOnTop: true,
-        resizable: true,
-        hasShadow: false,
-        webPreferences: {
-            ...createSecureWindowOptions(),
-        },
+        minWidth: 320,
+        minHeight: 420,
     });
 
     dropsWin.loadURL(`${RENDERER_URL}#${hash}`);

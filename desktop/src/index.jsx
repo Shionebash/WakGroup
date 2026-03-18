@@ -302,14 +302,16 @@ const COLORS = {
 
 const rootStyle = {
     width: '100%',
-    height: '100vh',
+    height: '100%',
     background: COLORS.background,
     color: COLORS.textPrimary,
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    borderRadius: 16,
+    minWidth: 0,
+    minHeight: 0,
+    borderRadius: 20,
     padding: 12,
     boxSizing: 'border-box',
 };
@@ -327,6 +329,24 @@ const INPUT_STYLE = {
 function getSlotsPerTeam(mode) {
     const parsed = Number(String(mode || '').split('v')[0]);
     return Number.isFinite(parsed) && parsed > 0 ? parsed : 3;
+}
+
+function useViewportSize() {
+    const getSize = () => ({
+        width: typeof window === 'undefined' ? 420 : window.innerWidth,
+        height: typeof window === 'undefined' ? 680 : window.innerHeight,
+    });
+
+    const [size, setSize] = useState(getSize);
+
+    useEffect(() => {
+        const handleResize = () => setSize(getSize());
+        window.addEventListener('resize', handleResize);
+        handleResize();
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    return size;
 }
 
 function UpdatePrompt({ prompt, busy, onClose, onDownload, onInstall }) {
@@ -478,6 +498,7 @@ function UpdatePrompt({ prompt, busy, onClose, onDownload, onInstall }) {
 
 // Vista principal: lista de grupos, click en tarjeta = detalle; botón chat en cada tarjeta
 function MainView({ language = 'es', setLanguage }) {
+    const { width: viewportWidth } = useViewportSize();
     const [apiUrl, setApiUrl] = useState('');
     const [clickThrough, setClickThrough] = useState(false);
     const [groups, setGroups] = useState([]);
@@ -648,6 +669,7 @@ function MainView({ language = 'es', setLanguage }) {
     const currentGroups = showPvp ? pvpGroups : groups;
     const loading = showPvp ? loadingPvpGroups : loadingGroups;
     const error = showPvp ? pvpError : groupsError;
+    const isCompact = viewportWidth < 420;
     const handleGroupClick = (g) => {
         if (showPvp) {
             window.electronAPI?.openPvpGroupDetail?.(g.id);
@@ -767,7 +789,7 @@ function MainView({ language = 'es', setLanguage }) {
                 <button onClick={() => window.electronAPI?.toggleClickThrough?.()} style={{ padding: 12, background: clickThrough ? COLORS.error : COLORS.primaryDark, color: COLORS.lightText, border: 'none', borderRadius: 10, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>
                     {clickThrough ? `🔒 ${getTranslation('overlay.clickThroughOn', language)}` : `🔓 ${getTranslation('overlay.clickThroughOff', language)}`}
                 </button>
-                <div style={{ display: 'flex', gap: 8 }}>
+                <div style={{ display: 'flex', gap: 8, flexDirection: isCompact ? 'column' : 'row' }}>
                     <button onClick={() => setShowPvp(false)} style={{ flex: 1, padding: 12, background: !showPvp ? COLORS.primary : COLORS.buttonMuted, color: !showPvp ? COLORS.darkText : COLORS.lightText, border: 'none', borderRadius: 10, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>⚔ PvE</button>
                     <button onClick={() => setShowPvp(true)} style={{ flex: 1, padding: 12, background: showPvp ? COLORS.pvp : COLORS.buttonMuted, color: COLORS.lightText, border: 'none', borderRadius: 10, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>⚔ PVP</button>
                 </div>
@@ -779,9 +801,9 @@ function MainView({ language = 'es', setLanguage }) {
                 <button onClick={() => window.electronAPI?.openWiki?.()} style={{ padding: 12, background: COLORS.secondary, color: COLORS.primary, border: `1px solid ${COLORS.border}`, borderRadius: 10, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>📖 Wiki</button>
             </div>
 
-            <div style={{ marginTop: 8, flex: 1, display: 'flex', flexDirection: 'column', background: COLORS.backgroundLight, borderRadius: 12, padding: 12, overflow: 'hidden' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div style={{ marginTop: 8, flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', background: COLORS.backgroundLight, borderRadius: 12, padding: 12, overflow: 'hidden' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: isCompact ? 'flex-start' : 'center', flexDirection: isCompact ? 'column' : 'row', gap: 8, marginBottom: 6 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
                         {loadingUser && <span style={{ fontSize: 10, color: COLORS.textSecondary }}>...</span>}
                         {user && (
                             <>
@@ -795,8 +817,8 @@ function MainView({ language = 'es', setLanguage }) {
                         )}
                     </div>
                 </div>
-                <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 6 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: isCompact ? 'flex-start' : 'center', flexDirection: isCompact ? 'column' : 'row', gap: 8, marginBottom: 4 }}>
                         <span style={{ fontSize: 13, fontWeight: 600, color: COLORS.primary }}>{showPvp ? getTranslation('overlay.activePvp', language) : getTranslation('overlay.activeGroups', language)}</span>
                         <button onClick={() => {
                             if (showPvp) {
@@ -890,6 +912,7 @@ function MainView({ language = 'es', setLanguage }) {
 
 // Vista detalle del grupo PvE
 function GroupDetailView({ groupId, language = 'es' }) {
+    const { width: viewportWidth } = useViewportSize();
     const [apiUrl, setApiUrl] = useState('');
     const [group, setGroup] = useState(null);
     const [characters, setCharacters] = useState([]);
@@ -962,6 +985,7 @@ function GroupDetailView({ groupId, language = 'es' }) {
 
     const dungeonInfo = group?.dungeon_id ? mazmosData.find(d => String(d.id) === String(group.dungeon_id)) : null;
     const dungeonName = dungeonInfo ? getDungeonName(dungeonInfo, language) : group?.dungeon_name || '';
+    const isCompact = viewportWidth < 390;
 
     const handleApply = () => {
         if (!selectedCharId || !group) return;
@@ -1075,7 +1099,7 @@ function GroupDetailView({ groupId, language = 'es' }) {
                         {group.dungeon_image && <img src={`${apiUrl}/${group.dungeon_image}`} alt="" style={{ width: '100%', borderRadius: 8, marginBottom: 10 }} />}
                         {group.title && <h3 style={{ marginBottom: 6, fontSize: 14 }}>{group.title}</h3>}
                         {group.description && <p style={{ fontSize: 12, color: COLORS.textSecondary, marginBottom: 10 }}>{group.description}</p>}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 12, fontSize: 11 }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: isCompact ? '1fr' : 'repeat(2, minmax(0, 1fr))', gap: 8, marginBottom: 12, fontSize: 11 }}>
                             <div><span style={{ color: COLORS.textSecondary }}>{getTranslation('common.level', language)}:</span> {group.dungeon_lvl}</div>
                             <div><span style={{ color: COLORS.textSecondary }}>{getTranslation('common.stasis', language)}:</span> {group.stasis}</div>
                             {group.steles_active !== undefined && (
@@ -1094,7 +1118,7 @@ function GroupDetailView({ groupId, language = 'es' }) {
                                 </button>
                                 {showDrops && (
                                     <div style={{ background: COLORS.surfaceInset, borderRadius: 8, padding: 10 }}>
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(60px, 1fr))', gap: 8 }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fill, minmax(${isCompact ? 54 : 60}px, 1fr))`, gap: 8 }}>
                                             {drops.map((d) => (
                                                 <div key={d.id} style={{ textAlign: 'center' }}>
                                                     <img src={`${apiUrl}/assets/items/${d.graphic_parameters?.gfxId || '0000000'}.png`} alt="" style={{ width: 36, height: 36, borderRadius: 6, background: COLORS.surfaceInset, display: 'block', margin: '0 auto' }} />
@@ -1166,6 +1190,7 @@ function GroupDetailView({ groupId, language = 'es' }) {
 
 // Chat view
 function ChatView({ groupId, language = 'es' }) {
+    const { width: viewportWidth } = useViewportSize();
     const [apiUrl, setApiUrl] = useState('');
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
@@ -1178,6 +1203,7 @@ function ChatView({ groupId, language = 'es' }) {
     const [opacity, setOpacity] = useState(0.9);
     const socketRef = useRef(null);
     const bottomRef = useRef(null);
+    const isCompact = viewportWidth < 380;
 
     useEffect(() => {
         window.electronAPI?.getApiUrl?.().then((url) => setApiUrl(url || API_URL_FALLBACK));
@@ -1267,7 +1293,7 @@ function ChatView({ groupId, language = 'es' }) {
                             {messages.map((msg) => (
                                 <div key={msg.id} style={{ display: 'flex', flexDirection: msg.user_id === user?.id ? 'row-reverse' : 'row', gap: 8, alignItems: 'flex-end' }}>
                                     <img src={msg.avatar ? `https://cdn.discordapp.com/avatars/${msg.discord_id}/${msg.avatar}.png` : 'https://cdn.discordapp.com/embed/avatars/0.png'} alt="" style={{ width: 28, height: 28, borderRadius: '50%', flexShrink: 0 }} />
-                                    <div style={{ maxWidth: '75%' }}>
+                                    <div style={{ maxWidth: isCompact ? '88%' : '75%' }}>
                                         <span style={{ fontSize: 10, color: COLORS.textSecondary, display: 'block', marginBottom: 2 }}>{msg.user_id !== user?.id && <strong style={{ color: COLORS.primaryDark, marginRight: 4 }}>{msg.username}</strong>}{new Date(typeof msg.created_at === 'number' ? msg.created_at * 1000 : msg.created_at).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' })}</span>
                                         <div style={{ padding: '8px 12px', borderRadius: msg.user_id === user?.id ? '16px 16px 4px 16px' : '16px 16px 16px 4px', background: msg.user_id === user?.id ? COLORS.primaryDark : COLORS.surfaceInset, color: msg.user_id === user?.id ? COLORS.darkText : COLORS.textPrimary, fontSize: 13 }}>{msg.content}</div>
                                     </div>
@@ -1302,6 +1328,7 @@ const BAND_OPTIONS = [20, 35, 50, 65, 80, 95, 110, 125, 140, 155, 170, 185, 200,
 
 // Vista crear PVP
 function CreatePvpGroupView({ language = 'es' }) {
+    const { width: viewportWidth } = useViewportSize();
     const [apiUrl, setApiUrl] = useState('');
     const [characters, setCharacters] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -1364,6 +1391,7 @@ function CreatePvpGroupView({ language = 'es' }) {
       };
 
     const modeColor = PVP_MODE_COLORS[formData.pvp_mode] || COLORS.primaryDark;
+    const isCompact = viewportWidth < 400;
 
     return (
         <div style={rootStyle}>
@@ -1382,7 +1410,7 @@ function CreatePvpGroupView({ language = 'es' }) {
                           </div>
                           <div style={{ marginBottom: 12 }}>
                               <label style={{ fontSize: 11, display: 'block', marginBottom: 6 }}>{getTranslation('pvp.mode', language)}</label>
-                            <div style={{ display: 'flex', gap: 6 }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: isCompact ? 'repeat(2, minmax(0, 1fr))' : 'repeat(auto-fit, minmax(72px, 1fr))', gap: 6 }}>
                                 {PVP_MODES.map((mode) => (
                                     <button key={mode} type="button" onClick={() => setFormData({ ...formData, pvp_mode: mode })} style={{ flex: 1, padding: '10px 6px', border: `2px solid ${formData.pvp_mode === mode ? PVP_MODE_COLORS[mode] : COLORS.border}`, borderRadius: 8, background: formData.pvp_mode === mode ? `${PVP_MODE_COLORS[mode]}22` : COLORS.surfaceInset, color: formData.pvp_mode === mode ? PVP_MODE_COLORS[mode] : COLORS.textSecondary, cursor: 'pointer', fontWeight: 700, fontSize: 14 }}>{mode}</button>
                                 ))}
@@ -1419,6 +1447,7 @@ function CreatePvpGroupView({ language = 'es' }) {
 
 // Vista crear PvE
 function CreatePveGroupView({ language = 'es' }) {
+    const { width: viewportWidth } = useViewportSize();
     const [apiUrl, setApiUrl] = useState('');
     const [characters, setCharacters] = useState([]);
     const [dungeons, setDungeons] = useState([]);
@@ -1513,6 +1542,7 @@ function CreatePveGroupView({ language = 'es' }) {
     const hasSteles = selectedDungeon?.steles;
     const hasIntervention = selectedDungeon?.intervention;
     const stelesLvl = Number(selectedDungeon?.steleslvl || selectedDungeon?.steles_level || 0);
+    const isCompact = viewportWidth < 400;
 
     useEffect(() => {
         if (!hasSteles) {
@@ -1602,7 +1632,7 @@ function CreatePveGroupView({ language = 'es' }) {
                             <input type="text" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} placeholder={getTranslation('pve.titlePlaceholder', language)} maxLength={100} style={{ width: '100%', padding: 8, borderRadius: 6, background: COLORS.surfaceInset, color: COLORS.lightText, border: `1px solid ${COLORS.border}`, fontSize: 12 }} />
                         </div>
 
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 12 }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: isCompact ? '1fr' : 'repeat(2, minmax(0, 1fr))', gap: 8, marginBottom: 12 }}>
                             <div>
                                 <label style={{ fontSize: 11, display: 'block', marginBottom: 4 }}>{getTranslation('common.stasis', language)}</label>
                                 <select value={formData.stasis} onChange={(e) => setFormData({ ...formData, stasis: Number(e.target.value) })} style={{ width: '100%', padding: 8, borderRadius: 6, background: COLORS.surfaceInset, color: COLORS.lightText, border: `1px solid ${COLORS.border}`, fontSize: 12 }}>
@@ -1674,6 +1704,7 @@ function CreatePveGroupView({ language = 'es' }) {
 
 // Vista detalle PVP
 function PvpGroupDetailView({ groupId, language = 'es' }) {
+    const { width: viewportWidth } = useViewportSize();
     const [apiUrl, setApiUrl] = useState('');
     const [group, setGroup] = useState(null);
     const [characters, setCharacters] = useState([]);
@@ -1806,6 +1837,7 @@ function PvpGroupDetailView({ groupId, language = 'es' }) {
 
     const modeColor = group ? (PVP_MODE_COLORS[group.pvp_mode] || COLORS.primaryDark) : COLORS.primaryDark;
     const slotsPerTeam = getSlotsPerTeam(group?.pvp_mode);
+    const isCompact = viewportWidth < 420;
 
     const allParticipants = [];
     if (group) {
@@ -1824,13 +1856,13 @@ function PvpGroupDetailView({ groupId, language = 'es' }) {
                 {!loading && group && (
                     <>
                         {group.title && <h3 style={{ marginBottom: 6, fontSize: 14, color: modeColor }}>{group.title}</h3>}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 12, fontSize: 11 }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: isCompact ? '1fr' : 'repeat(2, minmax(0, 1fr))', gap: 8, marginBottom: 12, fontSize: 11 }}>
                             <div><span style={{ color: COLORS.textSecondary }}>{getTranslation('pvp.mode', language)}:</span> <span style={{ color: modeColor, fontWeight: 700 }}>{group.pvp_mode}</span></div>
                             <div><span style={{ color: COLORS.textSecondary }}>{getTranslation('common.levelShort', language)}</span> {group.equipment_band}</div>
                             <div><span style={{ color: COLORS.textSecondary }}>{getTranslation('common.server', language)}:</span> {group.server}</div>
                             <div><span style={{ color: COLORS.textSecondary }}>{getTranslation('common.status', language)}:</span> {group.status === 'open' ? '🟢' : '🔴'}</div>
                         </div>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 8, marginBottom: 12 }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: isCompact ? '1fr' : '1fr auto 1fr', gap: 8, marginBottom: 12 }}>
                             <div style={{ background: 'rgba(211,107,95,0.1)', border: `2px dashed ${COLORS.pvpRed}`, borderRadius: 10, padding: 10 }}>
                                 <div style={{ fontWeight: 700, fontSize: 12, color: COLORS.pvpRed, textAlign: 'center', marginBottom: 6 }}>🔴 {redTeam.length}/{slotsPerTeam}</div>
                                 {redTeam.map((p) => (<div key={p.charId} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: 4, background: COLORS.surfaceInset, borderRadius: 4, marginBottom: 4 }}>{p.classIcon && <img src={`${apiUrl}/${p.classIcon}`} alt="" style={{ width: 20, height: 20 }} />}<span style={{ fontSize: 11, flex: 1 }}>{p.charName}</span>{p.isLeader && <span style={{ fontSize: 9, background: COLORS.pvpRed, color: COLORS.darkText, padding: '1px 4px', borderRadius: 3 }}>L</span>}{isLeader && !p.isLeader && (
@@ -1884,6 +1916,7 @@ function PvpGroupDetailView({ groupId, language = 'es' }) {
 }
 
 function DropsSelectionView({ dungeonId, selectedDrops: initialDrops, language = 'es' }) {
+    const { width: viewportWidth } = useViewportSize();
     const [apiUrl, setApiUrl] = useState(API_URL_FALLBACK);
     const [clickThrough, setClickThrough] = useState(false);
     const [opacity, setOpacity] = useState(0.9);
@@ -1958,6 +1991,7 @@ function DropsSelectionView({ dungeonId, selectedDrops: initialDrops, language =
     };
 
     const dungeon = mazmosData.find(d => String(d.id) === String(dungeonId));
+    const isCompact = viewportWidth < 360;
 
     return (
         <div style={rootStyle}>
@@ -1969,7 +2003,7 @@ function DropsSelectionView({ dungeonId, selectedDrops: initialDrops, language =
                     <div style={{ textAlign: 'center', color: COLORS.textSecondary, padding: 20 }}>{getTranslation('drops.none', language)}</div>
                 ) : (
                     <>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(60px, 1fr))', gap: 8, padding: 8 }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fill, minmax(${isCompact ? 52 : 60}px, 1fr))`, gap: 8, padding: 8 }}>
                             {dropItems.map((d) => {
                                 const isSelected = selectedDrops.includes(d.id);
                                 return (
