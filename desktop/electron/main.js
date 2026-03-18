@@ -1,12 +1,14 @@
-const { app, BrowserWindow, globalShortcut, ipcMain, shell, Notification, screen } = require('electron');
+const { app, BrowserWindow, globalShortcut, ipcMain, shell, Notification, screen, dialog } = require('electron');
 const path = require('path');
 const http = require('http');
+const { autoUpdater } = require('electron-updater');
 
 let mainWindow = null;
 let chatWindow = null;
 let detailWindow = null;
 let authWindow = null;
 let clickThrough = false;
+let updateCheckInterval = null;
 
 function applyClickThroughToAllWindows(value) {
     mainWindow?.setIgnoreMouseEvents(value, { forward: true });
@@ -57,6 +59,63 @@ function hardenAuthWindow(win) {
             event.preventDefault();
         }
     });
+}
+
+function setupAutoUpdater() {
+    if (!app.isPackaged) {
+        return;
+    }
+
+    autoUpdater.autoDownload = false;
+    autoUpdater.autoInstallOnAppQuit = true;
+
+    autoUpdater.on('error', (error) => {
+        console.error('Auto-update error:', error);
+    });
+
+    autoUpdater.on('update-available', async (info) => {
+        const result = await dialog.showMessageBox({
+            type: 'info',
+            buttons: ['Descargar ahora', 'Despues'],
+            defaultId: 0,
+            cancelId: 1,
+            title: 'Actualizacion disponible',
+            message: `WakGroup ${info.version} ya esta disponible.`,
+            detail: 'La nueva version se descargara desde GitHub Releases y podras instalarla cuando termine.',
+        });
+
+        if (result.response === 0) {
+            autoUpdater.downloadUpdate().catch((error) => {
+                console.error('Update download failed:', error);
+            });
+        }
+    });
+
+    autoUpdater.on('update-downloaded', async () => {
+        const result = await dialog.showMessageBox({
+            type: 'info',
+            buttons: ['Instalar ahora', 'Mas tarde'],
+            defaultId: 0,
+            cancelId: 1,
+            title: 'Actualizacion lista',
+            message: 'La nueva version de WakGroup ya se descargo.',
+            detail: 'La aplicacion se cerrara y se instalara la actualizacion.',
+        });
+
+        if (result.response === 0) {
+            setImmediate(() => autoUpdater.quitAndInstall());
+        }
+    });
+
+    autoUpdater.checkForUpdates().catch((error) => {
+        console.error('Initial update check failed:', error);
+    });
+
+    updateCheckInterval = setInterval(() => {
+        autoUpdater.checkForUpdates().catch((error) => {
+            console.error('Scheduled update check failed:', error);
+        });
+    }, 6 * 60 * 60 * 1000);
 }
 
 function createMainWindow() {
@@ -228,6 +287,7 @@ function startOAuthCallbackServer() {
 app.whenReady().then(() => {
     createMainWindow();
     startOAuthCallbackServer();
+    setupAutoUpdater();
 
     // Ctrl+Alt+W — toggle click-through en todas las ventanas
     globalShortcut.register('CommandOrControl+Alt+W', () => {
@@ -242,6 +302,12 @@ app.whenReady().then(() => {
 });
 
 app.on('will-quit', () => globalShortcut.unregisterAll());
+app.on('will-quit', () => {
+    if (updateCheckInterval) {
+        clearInterval(updateCheckInterval);
+        updateCheckInterval = null;
+    }
+});
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();

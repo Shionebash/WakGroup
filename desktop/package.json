@@ -1,16 +1,18 @@
 {
     "name": "wakgroup-desktop",
     "version": "1.0.0",
+    "author": "Shionebash",
     "description": "WakGroup Desktop Overlay Client",
     "homepage": "./",
     "scripts": {
         "dev": "parcel build src/index.html --dist-dir dist-renderer --no-optimize --public-url ./ && electron electron/main.js",
         "build": "parcel build src/index.html --dist-dir dist-renderer --public-url ./ && electron-builder",
+        "release": "parcel build src/index.html --dist-dir dist-renderer --public-url ./ && electron-builder --publish always",
         "electron": "electron electron/main.js"
     },
     "dependencies": {
-        "@parcel/rust-linux-x64-gnu": "^2.16.4",
         "axios": "^1.6.8",
+        "electron-updater": "^6.3.9",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "socket.io-client": "^4.7.4"
@@ -28,9 +30,18 @@
     "build": {
         "appId": "com.wakgroup.desktop",
         "productName": "WakGroup",
+        "artifactName": "WakGroup-Setup.${ext}",
         "directories": {
             "output": "release"
         },
+        "publish": [
+            {
+                "provider": "github",
+                "owner": "Shionebash",
+                "repo": "WakGroup",
+                "releaseType": "release"
+            }
+        ],
         "win": {
             "target": "nsis",
             "icon": "assets/icon.ico"
@@ -40,6 +51,10 @@
             "electron/**",
             "assets/**"
         ],
+        "nsis": {
+            "oneClick": false,
+            "allowToChangeInstallationDirectory": true
+        },
         "extraMetadata": {
             "main": "electron/main.js"
         }

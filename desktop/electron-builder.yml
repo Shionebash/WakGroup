@@ -1,8 +1,14 @@
 appId: com.wakgroup.desktop
 productName: WakGroup
+artifactName: WakGroup-Setup.${ext}
 directories:
   output: release
   buildResources: assets
+publish:
+  - provider: github
+    owner: Shionebash
+    repo: WakGroup
+    releaseType: release
 files:
   - from: dist-renderer
     to: dist-renderer

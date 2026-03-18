@@ -12,6 +12,7 @@ import CreateGroupModal from '@/components/CreateGroupModal';
 const SERVERS = ['', 'Ogrest', 'Rubilax', 'Pandora'];
 const STASIS_OPTIONS = Array.from({ length: 10 }, (_, i) => i + 1);
 const BAND_OPTIONS = [20, 35, 50, 65, 80, 95, 110, 125, 140, 155, 170, 185, 200, 215, 230, 245];
+const DESKTOP_DOWNLOAD_URL = 'https://github.com/Shionebash/WakGroup/releases/latest/download/WakGroup-Setup.exe';
 
 export default function HomePage() {
     const { user } = useAuth();
@@ -57,6 +58,21 @@ export default function HomePage() {
                 <p style={{ color: 'var(--text-secondary)', maxWidth: 520, margin: '0 auto' }}>
                     {t('home.subtitle', language)}
                 </p>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: 12, flexWrap: 'wrap', marginTop: 20 }}>
+                    {user && (
+                        <button className="btn btn-primary" onClick={() => setShowCreate(true)}>
+                            ⚔ {t('home.createGroup', language)}
+                        </button>
+                    )}
+                    <a
+                        className="btn btn-secondary"
+                        href={DESKTOP_DOWNLOAD_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Descargar mini app
+                    </a>
+                </div>
             </div>
 
             {/* Actions bar */}
