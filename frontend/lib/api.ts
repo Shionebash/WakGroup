@@ -18,17 +18,11 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
-// Interceptor de RESPONSE: limpia token si expira
+// Leave auth state decisions to the auth context so we do not erase a token
+// during login redirects or other expected 401 responses.
 api.interceptors.response.use(
     (response) => response,
-    (error) => {
-        if (error.response?.status === 401) {
-            if (typeof window !== 'undefined') {
-                localStorage.removeItem('session_token');
-            }
-        }
-        return Promise.reject(error);
-    }
+    (error) => Promise.reject(error)
 );
 
 export function getAssetUrl(path: string): string {
