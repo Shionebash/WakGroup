@@ -9,6 +9,7 @@ let detailWindow = null;
 let authWindow = null;
 let clickThrough = false;
 let updateCheckInterval = null;
+const resizeSessions = new Map();
 
 function sendUpdaterStatus(payload) {
     if (mainWindow && !mainWindow.isDestroyed()) {
@@ -345,6 +346,61 @@ ipcMain.handle('toggle-click-through', () => {
     chatWindow?.webContents?.send('click-through-changed', clickThrough);
     detailWindow?.webContents?.send('click-through-changed', clickThrough);
     return clickThrough;
+});
+
+ipcMain.handle('start-window-resize', (event, payload) => {
+    const win = BrowserWindow.fromWebContents(event.sender);
+    if (!win || !payload?.edge) return false;
+
+    resizeSessions.set(event.sender.id, {
+        edge: payload.edge,
+        startBounds: win.getBounds(),
+        startX: Number(payload.screenX),
+        startY: Number(payload.screenY),
+        minWidth: win.getMinimumSize()[0] || 320,
+        minHeight: win.getMinimumSize()[1] || 320,
+    });
+
+    return true;
+});
+
+ipcMain.handle('update-window-resize', (event, payload) => {
+    const win = BrowserWindow.fromWebContents(event.sender);
+    const session = resizeSessions.get(event.sender.id);
+    if (!win || !session) return false;
+
+    const deltaX = Number(payload.screenX) - session.startX;
+    const deltaY = Number(payload.screenY) - session.startY;
+    const nextBounds = { ...session.startBounds };
+    const edge = session.edge;
+
+    if (edge.includes('e')) {
+        nextBounds.width = Math.max(session.minWidth, session.startBounds.width + deltaX);
+    }
+
+    if (edge.includes('s')) {
+        nextBounds.height = Math.max(session.minHeight, session.startBounds.height + deltaY);
+    }
+
+    if (edge.includes('w')) {
+        const width = Math.max(session.minWidth, session.startBounds.width - deltaX);
+        nextBounds.x = session.startBounds.x + (session.startBounds.width - width);
+        nextBounds.width = width;
+    }
+
+    if (edge.includes('n')) {
+        const height = Math.max(session.minHeight, session.startBounds.height - deltaY);
+        nextBounds.y = session.startBounds.y + (session.startBounds.height - height);
+        nextBounds.height = height;
+    }
+
+    win.setBounds(nextBounds);
+    return true;
+});
+
+ipcMain.handle('end-window-resize', (event) => {
+    resizeSessions.delete(event.sender.id);
+    return true;
 });
 
 ipcMain.handle('download-update', async () => {

@@ -303,6 +303,7 @@ const COLORS = {
 const rootStyle = {
     width: '100%',
     height: '100%',
+    position: 'relative',
     background: COLORS.background,
     color: COLORS.textPrimary,
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
@@ -347,6 +348,76 @@ function useViewportSize() {
     }, []);
 
     return size;
+}
+
+function ResizeHandles() {
+    const activeCleanupRef = useRef(null);
+
+    useEffect(() => () => {
+        activeCleanupRef.current?.();
+        activeCleanupRef.current = null;
+    }, []);
+
+    const startResize = (edge) => (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        activeCleanupRef.current?.();
+        window.electronAPI?.startWindowResize?.({
+            edge,
+            screenX: event.screenX,
+            screenY: event.screenY,
+        });
+
+        const handleMouseMove = (moveEvent) => {
+            window.electronAPI?.updateWindowResize?.({
+                screenX: moveEvent.screenX,
+                screenY: moveEvent.screenY,
+            });
+        };
+
+        const handleMouseUp = () => {
+            window.electronAPI?.endWindowResize?.();
+            cleanup();
+        };
+
+        const cleanup = () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+            activeCleanupRef.current = null;
+        };
+
+        activeCleanupRef.current = cleanup;
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseup', handleMouseUp);
+    };
+
+    const handles = [
+        { edge: 'nw', top: -3, left: -3, cursor: 'nwse-resize' },
+        { edge: 'ne', top: -3, right: -3, cursor: 'nesw-resize' },
+        { edge: 'sw', bottom: -3, left: -3, cursor: 'nesw-resize' },
+        { edge: 'se', bottom: -3, right: -3, cursor: 'nwse-resize' },
+    ];
+
+    return (
+        <>
+            {handles.map((handle) => (
+                <div
+                    key={handle.edge}
+                    onMouseDown={startResize(handle.edge)}
+                    style={{
+                        position: 'absolute',
+                        width: 20,
+                        height: 20,
+                        zIndex: 2600,
+                        borderRadius: 12,
+                        background: 'transparent',
+                        WebkitAppRegion: 'no-drag',
+                        ...handle,
+                    }}
+                />
+            ))}
+        </>
+    );
 }
 
 function UpdatePrompt({ prompt, busy, onClose, onDownload, onInstall }) {
@@ -890,6 +961,7 @@ function MainView({ language = 'es', setLanguage }) {
                 onDownload={handleDownloadUpdate}
                 onInstall={handleInstallUpdate}
             />
+            <ResizeHandles />
         </div>
     );
 }
@@ -1277,6 +1349,7 @@ function GroupDetailView({ groupId, language = 'es' }) {
                 )}
             </div>
             {confirmDialogNode}
+            <ResizeHandles />
         </div>
     );
 }
@@ -1411,6 +1484,7 @@ function ChatView({ groupId, language = 'es' }) {
                     </>
                 )}
             </div>
+            <ResizeHandles />
         </div>
     );
 }
@@ -1534,6 +1608,7 @@ function CreatePvpGroupView({ language = 'es' }) {
                     </form>
                 )}
             </div>
+            <ResizeHandles />
         </div>
     );
 }
@@ -1791,6 +1866,7 @@ function CreatePveGroupView({ language = 'es' }) {
                     </form>
                 )}
             </div>
+            <ResizeHandles />
         </div>
     );
 }
@@ -2025,6 +2101,7 @@ function PvpGroupDetailView({ groupId, language = 'es' }) {
                 )}
             </div>
             {confirmDialogNode}
+            <ResizeHandles />
         </div>
     );
 }
@@ -2151,6 +2228,7 @@ function DropsSelectionView({ dungeonId, selectedDrops: initialDrops, language =
                     </>
                 )}
             </div>
+            <ResizeHandles />
         </div>
     );
 }

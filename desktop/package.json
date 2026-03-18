@@ -1,6 +1,6 @@
 {
     "name": "wakgroup-desktop",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "author": "Shionebash",
     "description": "WakGroup Desktop Overlay Client",
     "homepage": "./",
@@ -61,5 +61,3 @@
     },
     "source": "src/index.html"
 }
-
-
