@@ -442,7 +442,12 @@ function MainView({ language = 'es', setLanguage }) {
     return (
         <div style={rootStyle}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 6, WebkitAppRegion: 'drag', cursor: 'move' }}>
-                <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <img
+                        src="../assets/logo.png"
+                        alt="WakGroup"
+                        style={{ width: 28, height: 28, objectFit: 'contain', borderRadius: 8, flexShrink: 0 }}
+                    />
                     <span style={{ fontSize: 14, fontWeight: 'bold' }}>WakGroup</span>
                     <span style={{ fontSize: 11, color: '#999', marginLeft: 6 }}>Desktop Overlay</span>
                 </div>
