@@ -7,7 +7,7 @@ import wakfuMobs from '../wakfu_mobs.json';
 import itemsData from '../items.json';
 import mazmosData from '../mazmos.json';
 
-const API_URL_FALLBACK = 'http://localhost:4000';
+const API_URL_FALLBACK = 'https://wakgroup.onrender.com';
 
 const LANGUAGES = {
     es: { label: 'Español', flag: '🇪🇸' },

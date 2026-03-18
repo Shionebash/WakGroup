@@ -14,9 +14,50 @@ function applyClickThroughToAllWindows(value) {
     if (detailWindow && !detailWindow.isDestroyed()) detailWindow.setIgnoreMouseEvents(value, { forward: true });
 }
 
-const API_URL = 'http://localhost:4000';
+const API_URL = process.env.WAKGROUP_API_URL || 'https://wakgroup.onrender.com';
+const WEB_URL = process.env.WAKGROUP_WEB_URL || 'https://wakgroup.vercel.app';
 const RENDERER_URL = `file://${path.join(__dirname, '../dist-renderer/index.html')}`;
 const DESKTOP_CALLBACK_PORT = 45678;
+
+function createSecureWindowOptions(overrides = {}) {
+    return {
+        nodeIntegration: false,
+        contextIsolation: true,
+        webSecurity: true,
+        allowRunningInsecureContent: false,
+        preload: path.join(__dirname, 'preload.js'),
+        ...overrides,
+    };
+}
+
+function isAllowedExternalUrl(rawUrl) {
+    try {
+        const url = new URL(rawUrl);
+        const allowedOrigins = new Set([
+            new URL(API_URL).origin,
+            new URL(WEB_URL).origin,
+            'https://discord.com',
+            'https://www.discord.com',
+        ]);
+
+        if (url.protocol === 'http:' && url.hostname === '127.0.0.1' && url.port === String(DESKTOP_CALLBACK_PORT)) {
+            return true;
+        }
+
+        return url.protocol === 'https:' && allowedOrigins.has(url.origin);
+    } catch {
+        return false;
+    }
+}
+
+function hardenAuthWindow(win) {
+    win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+    win.webContents.on('will-navigate', (event, targetUrl) => {
+        if (!isAllowedExternalUrl(targetUrl)) {
+            event.preventDefault();
+        }
+    });
+}
 
 function createMainWindow() {
     const { width, height } = screen.getPrimaryDisplay().workAreaSize;
@@ -33,9 +74,7 @@ function createMainWindow() {
         skipTaskbar: false,
         hasShadow: false,
         webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            preload: path.join(__dirname, 'preload.js'),
+            ...createSecureWindowOptions(),
         },
     });
 
@@ -67,9 +106,7 @@ function createDetailWindow(groupId, isPvp = false) {
         resizable: true,
         hasShadow: false,
         webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            preload: path.join(__dirname, 'preload.js'),
+            ...createSecureWindowOptions(),
         },
     });
 
@@ -94,9 +131,7 @@ function createChatWindow(groupId) {
         resizable: true,
         hasShadow: false,
         webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            preload: path.join(__dirname, 'preload.js'),
+            ...createSecureWindowOptions(),
         },
     });
 
@@ -125,9 +160,7 @@ function createCreateWindow(type) {
         resizable: true,
         hasShadow: false,
         webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            preload: path.join(__dirname, 'preload.js'),
+            ...createSecureWindowOptions(),
         },
     });
 
@@ -155,9 +188,7 @@ function createDropsWindow(dungeonId, selectedDrops = []) {
         resizable: true,
         hasShadow: false,
         webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            preload: path.join(__dirname, 'preload.js'),
+            ...createSecureWindowOptions(),
         },
     });
 
@@ -173,10 +204,13 @@ function startOAuthCallbackServer() {
             if (token && mainWindow && !mainWindow.isDestroyed()) {
                 mainWindow.webContents.send('oauth-token', token);
             }
+            if (authWindow && !authWindow.isDestroyed()) {
+                authWindow.close();
+            }
             res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
             res.end(`
                 <!DOCTYPE html>
-                <html><head><meta charset="utf-8"><title>Wakfu LFG</title></head>
+                <html><head><meta charset="utf-8"><title>WakGroup</title></head>
                 <body style="font-family:sans-serif;background:#1a1a2e;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">
                     <p style="text-align:center;">✅ Iniciado sesión en la mini app.<br>Puedes cerrar esta pestaña.</p>
                 </body></html>
@@ -261,11 +295,11 @@ ipcMain.handle('minimize-current-window', (event) => {
 });
 
 ipcMain.handle('open-wiki', () => {
-    shell.openExternal('http://localhost:3000/wiki');
+    shell.openExternal(`${WEB_URL}/wiki`);
 });
 
 ipcMain.handle('open-login', () => {
-    const loginUrl = `${API_URL}/auth/discord?from=desktop`;
+    const loginUrl = `${API_URL}/auth/discord?from=desktop&desktop_callback_port=${DESKTOP_CALLBACK_PORT}`;
     
     const authWindow = new BrowserWindow({
         width: 500,
@@ -273,52 +307,11 @@ ipcMain.handle('open-login', () => {
         frame: true,
         parent: mainWindow,
         webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            preload: path.join(__dirname, 'preload.js'),
+            ...createSecureWindowOptions(),
         },
     });
-    
+    hardenAuthWindow(authWindow);
     authWindow.loadURL(loginUrl);
-    
-    // Check for token in URL
-    const checkForToken = () => {
-        if (authWindow.isDestroyed()) return;
-        const url = authWindow.webContents.getURL();
-        if (url && url.includes('token=')) {
-            try {
-                const urlObj = new URL(url);
-                const token = urlObj.searchParams.get('token');
-                if (token && mainWindow && !mainWindow.isDestroyed()) {
-                    mainWindow.webContents.send('oauth-token', token);
-                }
-            } catch(e) {}
-        }
-    };
-    
-    authWindow.webContents.on('did-finish-load', () => {
-        checkForToken();
-    });
-    
-    // Also try to get token via executeJavaScript
-    authWindow.webContents.on('did-finish-load', () => {
-        setTimeout(() => {
-            if (authWindow.isDestroyed()) return;
-            authWindow.webContents.executeJavaScript(`
-                (function() {
-                    var token = sessionStorage.getItem('oauth_token');
-                    if (token) return token;
-                    var url = window.location.href;
-                    var match = url.match(/token=([^&]+)/);
-                    return match ? match[1] : null;
-                })();
-            `).then((token) => {
-                if (token && mainWindow && !mainWindow.isDestroyed()) {
-                    mainWindow.webContents.send('oauth-token', token);
-                }
-            }).catch(() => {});
-        }, 1000);
-    });
     
     authWindow.on('closed', () => {
         authWindow = null;

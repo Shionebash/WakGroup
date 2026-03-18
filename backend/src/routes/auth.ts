@@ -15,6 +15,12 @@ const DISCORD_REDIRECT_URI = process.env.DISCORD_REDIRECT_URI!;
 router.get('/discord', (req, res) => {
     const state = uuidv4();
     const isSecure = process.env.USE_SECURE_COOKIES === 'true';
+    const desktopCallbackPortRaw = req.query.desktop_callback_port;
+    const desktopCallbackPort =
+        typeof desktopCallbackPortRaw === 'string' && /^\d{2,5}$/.test(desktopCallbackPortRaw)
+            ? Number(desktopCallbackPortRaw)
+            : null;
+
     res.cookie('oauth_state', state, {
         httpOnly: true,
         secure: isSecure,
@@ -29,6 +35,14 @@ router.get('/discord', (req, res) => {
             sameSite: isSecure ? 'none' : 'lax',
             maxAge: 10 * 60 * 1000
         });
+        if (desktopCallbackPort && desktopCallbackPort >= 1024 && desktopCallbackPort <= 65535) {
+            res.cookie('oauth_desktop_callback_port', String(desktopCallbackPort), {
+                httpOnly: true,
+                secure: isSecure,
+                sameSite: isSecure ? 'none' : 'lax',
+                maxAge: 10 * 60 * 1000
+            });
+        }
     }
 
     const params = new URLSearchParams({
@@ -111,11 +125,16 @@ router.get('/discord/callback', async (req: Request, res: Response): Promise<voi
 
         // Si el login vino de la mini app, redirigir al callback local de Electron
         const redirectTarget = req.cookies?.oauth_redirect_target;
+        const desktopCallbackPort = Number(req.cookies?.oauth_desktop_callback_port || 45678);
         res.clearCookie('oauth_redirect_target');
+        res.clearCookie('oauth_desktop_callback_port');
         if (redirectTarget === 'desktop') {
-            // Redirect back to the desktop app with token as hash
-            // Use a special localhost URL that Electron can handle
-            res.redirect(`http://localhost:4000/auth/desktop-callback?token=${encodeURIComponent(token)}`);
+            const safeDesktopCallbackPort =
+                Number.isInteger(desktopCallbackPort) && desktopCallbackPort >= 1024 && desktopCallbackPort <= 65535
+                    ? desktopCallbackPort
+                    : 45678;
+            // Redirect only to the loopback callback server owned by the desktop app.
+            res.redirect(`http://127.0.0.1:${safeDesktopCallbackPort}/callback?token=${encodeURIComponent(token)}`);
             return;
         }
 

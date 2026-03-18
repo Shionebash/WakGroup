@@ -1,5 +1,5 @@
-appId: com.wakfu.lfg.desktop
-productName: Wakfu LFG
+appId: com.wakgroup.desktop
+productName: WakGroup
 directories:
   output: release
   buildResources: assets

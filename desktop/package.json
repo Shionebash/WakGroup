@@ -1,7 +1,7 @@
 {
     "name": "wakgroup-desktop",
     "version": "1.0.0",
-    "description": "Wakfu LFG Desktop Overlay Client",
+    "description": "WakGroup Desktop Overlay Client",
     "homepage": "./",
     "scripts": {
         "dev": "parcel build src/index.html --dist-dir dist-renderer --no-optimize --public-url ./ && electron electron/main.js",
@@ -26,8 +26,8 @@
         "wait-on": "^7.2.0"
     },
     "build": {
-        "appId": "com.wakfu.lfg.desktop",
-        "productName": "Wakfu LFG",
+        "appId": "com.wakgroup.desktop",
+        "productName": "WakGroup",
         "directories": {
             "output": "release"
         },
