@@ -76,6 +76,18 @@ const TRANSLATIONS = {
     'overlay.createGroup': { es: 'Crear Grupo', en: 'Create Group', fr: 'Créer un groupe', pt: 'Criar Grupo' },
     'overlay.createPvp': { es: 'Crear Enfrentamiento', en: 'Create Match', fr: 'Créer un match', pt: 'Criar Confronto' },
     'overlay.logout': { es: 'Salir', en: 'Logout', fr: 'Déconnexion', pt: 'Sair' },
+    'overlay.clickThroughOn': {
+        es: 'Click-Through activado (Ctrl+Alt+W)',
+        en: 'Click-through enabled (Ctrl+Alt+W)',
+        fr: 'Click-through activé (Ctrl+Alt+W)',
+        pt: 'Click-through ativado (Ctrl+Alt+W)',
+    },
+    'overlay.clickThroughOff': {
+        es: 'Click-Through desactivado (Ctrl+Alt+W)',
+        en: 'Click-through disabled (Ctrl+Alt+W)',
+        fr: 'Click-through désactivé (Ctrl+Alt+W)',
+        pt: 'Click-through desativado (Ctrl+Alt+W)',
+    },
     'overlay.errorLoadGroups': { es: 'No se pudieron cargar los grupos.', en: 'Could not load groups.', fr: 'Impossible de charger les groupes.', pt: 'Não foi possível carregar os grupos.' },
     'overlay.errorLoadPvp': { es: 'No se pudieron cargar los enfrentamientos.', en: 'Could not load matches.', fr: 'Impossible de charger les matchs.', pt: 'Não foi possível carregar os confrontos.' },
     'overlay.error': { es: 'Error', en: 'Error', fr: 'Erreur', pt: 'Erro' },
@@ -753,7 +765,7 @@ function MainView({ language = 'es', setLanguage }) {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 <button onClick={() => window.electronAPI?.toggleClickThrough?.()} style={{ padding: 12, background: clickThrough ? COLORS.error : COLORS.primaryDark, color: COLORS.lightText, border: 'none', borderRadius: 10, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>
-                    {clickThrough ? '🔒 Click-Through ON' : '🔓 Click-Through OFF'}
+                    {clickThrough ? `🔒 ${getTranslation('overlay.clickThroughOn', language)}` : `🔓 ${getTranslation('overlay.clickThroughOff', language)}`}
                 </button>
                 <div style={{ display: 'flex', gap: 8 }}>
                     <button onClick={() => setShowPvp(false)} style={{ flex: 1, padding: 12, background: !showPvp ? COLORS.primary : COLORS.buttonMuted, color: !showPvp ? COLORS.darkText : COLORS.lightText, border: 'none', borderRadius: 10, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>⚔ PvE</button>
