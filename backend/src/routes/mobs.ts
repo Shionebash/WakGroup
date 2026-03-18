@@ -52,7 +52,7 @@ function loadData() {
 
 loadData();
 
-router.get('/mob/:id/drops', (req: Request, res: Response) => {
+router.get('/:id/drops', (req: Request, res: Response) => {
     const { id } = req.params;
     const mob = mobsData[id] || mobsData[String(id)];
     
@@ -79,6 +79,7 @@ router.get('/mob/:id/drops', (req: Request, res: Response) => {
     res.json(drops);
 });
 
+// Backward-compatible legacy route in case any client still calls /mobs/mobs/:id/drops
 router.get('/mobs/:id/drops', (req: Request, res: Response) => {
     const { id } = req.params;
     const mob = mobsData[id] || mobsData[String(id)];
