@@ -1,0 +1,17 @@
+appId: com.wakfu.lfg.desktop
+productName: Wakfu LFG
+directories:
+  output: release
+  buildResources: assets
+files:
+  - from: dist-renderer
+    to: dist-renderer
+  - from: electron
+    to: electron
+win:
+  target:
+    - nsis
+  icon: assets/icon.ico
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true

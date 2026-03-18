@@ -1,0 +1,50 @@
+{
+    "name": "wakgroup-desktop",
+    "version": "1.0.0",
+    "description": "Wakfu LFG Desktop Overlay Client",
+    "homepage": "./",
+    "scripts": {
+        "dev": "parcel build src/index.html --dist-dir dist-renderer --no-optimize --public-url ./ && electron electron/main.js",
+        "build": "parcel build src/index.html --dist-dir dist-renderer --public-url ./ && electron-builder",
+        "electron": "electron electron/main.js"
+    },
+    "dependencies": {
+        "@parcel/rust-linux-x64-gnu": "^2.16.4",
+        "axios": "^1.6.8",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "socket.io-client": "^4.7.4"
+    },
+    "devDependencies": {
+        "@types/react": "^18.3.1",
+        "@types/react-dom": "^18.3.0",
+        "concurrently": "^8.2.2",
+        "electron": "^41.0.2",
+        "electron-builder": "^26.8.1",
+        "electron-is-dev": "^2.0.0",
+        "parcel": "^2.16.4",
+        "wait-on": "^7.2.0"
+    },
+    "build": {
+        "appId": "com.wakfu.lfg.desktop",
+        "productName": "Wakfu LFG",
+        "directories": {
+            "output": "release"
+        },
+        "win": {
+            "target": "nsis",
+            "icon": "assets/icon.ico"
+        },
+        "files": [
+            "dist-renderer/**",
+            "electron/**",
+            "assets/**"
+        ],
+        "extraMetadata": {
+            "main": "electron/main.js"
+        }
+    },
+    "source": "src/index.html"
+}
+
+

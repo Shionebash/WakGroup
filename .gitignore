@@ -1,0 +1,29 @@
+# Node / build
+node_modules/
+dist/
+.next/
+out/
+build/
+release/
+.parcel-cache/
+.vercel/
+.DS_Store
+
+# Desktop app builds
+desktop/release/
+desktop/dist-renderer/
+desktop/.parcel-cache/
+desktop/node_modules/
+
+# Env
+.env
+.env.*
+
+# Logs / artifacts
+WakGroup.zip
+backend/*_out*.txt
+backend/seed_output.txt
+backend/server_out.txt
+backend/server_out_cmd.txt
+frontend/build_output.txt
+frontend/build_error_detailed.txt
