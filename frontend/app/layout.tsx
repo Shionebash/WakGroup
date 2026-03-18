@@ -8,7 +8,7 @@ import ToastContainer from '@/components/ToastContainer';
 import FloatingChatBar from '@/components/FloatingChatBar';
 
 export const metadata: Metadata = {
-    title: 'Wakfu LFG — Busca tu grupo para mazmorras',
+    title: 'WakGroup — Busca tu grupo para mazmorras',
     description: 'Plataforma para encontrar grupo y hacer mazmorras en Wakfu. Únete a grupos, crea tu party y conquista las mazmorras del mundo de los Doce.',
     keywords: 'wakfu, lfg, group finder, mazmorras, dungeons, online',
 };
