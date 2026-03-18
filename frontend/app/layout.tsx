@@ -11,6 +11,16 @@ export const metadata: Metadata = {
     title: 'WakGroup — Busca tu grupo para mazmorras',
     description: 'Plataforma para encontrar grupo y hacer mazmorras en Wakfu. Únete a grupos, crea tu party y conquista las mazmorras del mundo de los Doce.',
     keywords: 'wakfu, lfg, group finder, mazmorras, dungeons, online',
+    icons: {
+        icon: '/logo.png',
+        shortcut: '/logo.png',
+        apple: '/logo.png',
+    },
+    openGraph: {
+        title: 'WakGroup',
+        description: 'Plataforma para encontrar grupo y hacer mazmorras en Wakfu.',
+        images: ['/logo.png'],
+    },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

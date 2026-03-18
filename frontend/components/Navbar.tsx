@@ -23,7 +23,12 @@ export default function Navbar() {
         <nav className="navbar">
             <div className="navbar-container">
                 <Link href="/" className="navbar-logo">
-                    ⚔ WakGroup
+                    <img
+                        src="/logo.png"
+                        alt="WakGroup"
+                        style={{ width: 34, height: 34, objectFit: 'contain', borderRadius: 8 }}
+                    />
+                    <span>WakGroup</span>
                 </Link>
 
                 <div className="navbar-menu">
@@ -57,7 +62,6 @@ export default function Navbar() {
                         <>
                             {user ? (
                                 <div className="navbar-user">
-                                    {/* Notification bell */}
                                     <NotificationBell />
 
                                     <Link href="/profile" className="nav-user-link">
