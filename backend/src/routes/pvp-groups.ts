@@ -8,7 +8,7 @@ import { validateRequest } from '../middleware/validate.js';
 const router = Router();
 
 const VALID_SERVERS = ['Ogrest', 'Rubilax', 'Pandora'];
-const VALID_PVP_MODES = ['1v1', '2v2', '3v3'];
+const VALID_PVP_MODES = ['1v1', '2v2', '3v3', '4v4', '5v5', '6v6'];
 const VALID_BANDS = [20, 35, 50, 65, 80, 95, 110, 125, 140, 155, 170, 185, 200, 215, 230, 245];
 const VALID_TEAMS = ['red', 'blue'];
 

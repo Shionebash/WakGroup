@@ -294,7 +294,7 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
   'dungeons.levelBand': { es: 'Nivel {level}', en: 'Level {level}', fr: 'Niveau {level}', pt: 'Nível {level}' },
   'dungeons.viewGroups': { es: 'Ver grupos', en: 'View groups', fr: 'Voir les groupes', pt: 'Ver grupos' },
   'dungeons.createGroup': { es: 'Crear grupo', en: 'Create group', fr: 'Créer un groupe', pt: 'Criar grupo' },
-  'pvp.subtitle': { es: 'Encuentra rivales para enfrentamientos PVP. 1v1, 2v2 o 3v3 — demuestra tu fuerza.', en: 'Find rivals for PVP matches. 1v1, 2v2, or 3v3 — prove your strength.', fr: 'Trouvez des adversaires pour des matchs PVP. 1v1, 2v2 ou 3v3 — montrez votre puissance.', pt: 'Encontre rivais para confrontos PVP. 1v1, 2v2 ou 3v3 — mostre sua força.' },
+  'pvp.subtitle': { es: 'Encuentra rivales para enfrentamientos PVP. Desde 1v1 hasta 6v6 — demuestra tu fuerza.', en: 'Find rivals for PVP matches. From 1v1 up to 6v6 — prove your strength.', fr: 'Trouvez des adversaires pour des matchs PVP. De 1v1 jusqu\'au 6v6 — montrez votre puissance.', pt: 'Encontre rivais para confrontos PVP. De 1v1 até 6v6 — mostre sua força.' },
   'pvp.searchPlaceholder': { es: 'Buscar por título...', en: 'Search by title...', fr: 'Rechercher par titre...', pt: 'Buscar por título...' },
   'pvp.anyMode': { es: 'Cualquier modo', en: 'Any mode', fr: 'Tous les modes', pt: 'Qualquer modo' },
   'pvp.allBands': { es: 'Todas las franjas', en: 'All bands', fr: 'Toutes les tranches', pt: 'Todas as faixas' },

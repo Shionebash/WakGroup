@@ -17,6 +17,18 @@ const MODE_COLOR: Record<string, string> = {
     '1v1': '#e57373',
     '2v2': '#ffb74d',
     '3v3': '#64b5f6',
+    '4v4': '#4db6ac',
+    '5v5': '#9575cd',
+    '6v6': '#f06292',
+};
+
+const SLOTS_PER_TEAM_BY_MODE: Record<string, number> = {
+    '1v1': 1,
+    '2v2': 2,
+    '3v3': 3,
+    '4v4': 4,
+    '5v5': 5,
+    '6v6': 6,
 };
 
 export default function PvpGroupDetailModal({ groupId, onClose, onDeleted }: PvpGroupDetailModalProps) {
@@ -199,7 +211,7 @@ export default function PvpGroupDetailModal({ groupId, onClose, onDeleted }: Pvp
 
     // ── Render ───────────────────────────────────────────────────────
     const modeColor = group ? (MODE_COLOR[group.pvp_mode] || 'var(--primary-color)') : 'var(--primary-color)';
-    const slotsPerTeam = group?.pvp_mode === '1v1' ? 1 : group?.pvp_mode === '2v2' ? 2 : 3;
+    const slotsPerTeam = SLOTS_PER_TEAM_BY_MODE[group?.pvp_mode] || 3;
 
     const TEAM_RED = { bg: 'rgba(220,50,50,0.10)', border: '#e57373', label: t('pvp.redTeam', language), color: '#e57373' };
     const TEAM_BLUE = { bg: 'rgba(50,100,220,0.10)', border: '#64b5f6', label: t('pvp.blueTeam', language), color: '#64b5f6' };

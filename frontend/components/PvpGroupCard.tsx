@@ -11,11 +11,23 @@ const PVP_MODE_COLORS: Record<string, string> = {
     '1v1': '#e57373',
     '2v2': '#ffb74d',
     '3v3': '#64b5f6',
+    '4v4': '#4db6ac',
+    '5v5': '#9575cd',
+    '6v6': '#f06292',
+};
+
+const TOTAL_SLOTS_BY_MODE: Record<string, number> = {
+    '1v1': 2,
+    '2v2': 4,
+    '3v3': 6,
+    '4v4': 8,
+    '5v5': 10,
+    '6v6': 12,
 };
 
 export default function PvpGroupCard({ group, onClick }: PvpGroupCardProps) {
     const modeColor = PVP_MODE_COLORS[group.pvp_mode] || 'var(--primary-color)';
-    const totalSlots = group.pvp_mode === '1v1' ? 2 : group.pvp_mode === '2v2' ? 4 : 6;
+    const totalSlots = TOTAL_SLOTS_BY_MODE[group.pvp_mode] || 6;
     const { language } = useLanguage();
 
     return (

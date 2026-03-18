@@ -8,13 +8,16 @@ interface CreatePvpGroupModalProps {
     onCreated: () => void;
 }
 
-const PVP_MODES = ['1v1', '2v2', '3v3'];
+const PVP_MODES = ['1v1', '2v2', '3v3', '4v4', '5v5', '6v6'];
 const BAND_OPTIONS = [20, 35, 50, 65, 80, 95, 110, 125, 140, 155, 170, 185, 200, 215, 230, 245];
 
 const PVP_MODE_COLORS: Record<string, string> = {
     '1v1': '#e57373',
     '2v2': '#ffb74d',
     '3v3': '#64b5f6',
+    '4v4': '#4db6ac',
+    '5v5': '#9575cd',
+    '6v6': '#f06292',
 };
 
 export default function CreatePvpGroupModal({ onClose, onCreated }: CreatePvpGroupModalProps) {
@@ -94,7 +97,7 @@ export default function CreatePvpGroupModal({ onClose, onCreated }: CreatePvpGro
                         {/* Modo PVP */}
                         <div className="form-group">
                             <label>Modo PVP</label>
-                            <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 10, marginTop: 4 }}>
                                 {PVP_MODES.map(mode => (
                                     <button
                                         key={mode}
@@ -124,6 +127,9 @@ export default function CreatePvpGroupModal({ onClose, onCreated }: CreatePvpGro
                                 {formData.pvp_mode === '1v1' && '2 jugadores en total — duelo individual'}
                                 {formData.pvp_mode === '2v2' && '4 jugadores en total — 2 por equipo'}
                                 {formData.pvp_mode === '3v3' && '6 jugadores en total — 3 por equipo'}
+                                {formData.pvp_mode === '4v4' && '8 jugadores en total — 4 por equipo'}
+                                {formData.pvp_mode === '5v5' && '10 jugadores en total — 5 por equipo'}
+                                {formData.pvp_mode === '6v6' && '12 jugadores en total — 6 por equipo'}
                             </p>
                         </div>
 
