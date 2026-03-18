@@ -111,7 +111,7 @@ function setupAutoUpdater() {
         return;
     }
 
-    autoUpdater.autoDownload = true;
+    autoUpdater.autoDownload = false;
     autoUpdater.autoInstallOnAppQuit = false;
 
     autoUpdater.on('error', (error) => {
@@ -127,7 +127,7 @@ function setupAutoUpdater() {
         sendUpdaterStatus({
             type: 'available',
             version: info.version,
-            detail: 'La nueva version se esta descargando en segundo plano y se podra instalar al cerrar la app.',
+            detail: 'Hay una nueva version lista. Puedes decidir si deseas descargarla ahora o mas tarde.',
         });
     });
 

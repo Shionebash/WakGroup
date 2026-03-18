@@ -435,7 +435,8 @@ function UpdatePrompt({ prompt, busy, onClose, onDownload, onInstall }) {
 
     if (isAvailable) {
         title = `WakGroup ${prompt.version} disponible`;
-        message = 'Hay una nueva version y ya comenzo a descargarse en segundo plano.';
+        message = 'Hay una nueva version disponible para la miniapp.';
+        detail = prompt.detail || 'Puedes descargarla ahora o dejarla para despues.';
     } else if (isDownloading) {
         title = 'Descargando actualizacion';
         message = `La nueva version se esta descargando (${Math.round(progress)}%).`;
@@ -511,7 +512,26 @@ function UpdatePrompt({ prompt, busy, onClose, onDownload, onInstall }) {
                             Mas tarde
                         </button>
                     )}
-                    {isAvailable && null}
+                    {isAvailable && (
+                        <button
+                            onClick={onDownload}
+                            disabled={busy}
+                            style={{
+                                padding: '10px 14px',
+                                borderRadius: 10,
+                                border: 'none',
+                                background: `linear-gradient(135deg, ${COLORS.primaryDark} 0%, ${COLORS.primary} 100%)`,
+                                color: COLORS.darkText,
+                                cursor: busy ? 'wait' : 'pointer',
+                                fontWeight: 700,
+                                minWidth: 120,
+                                boxShadow: '0 10px 24px rgba(177, 143, 76, 0.28)',
+                                opacity: busy ? 0.8 : 1,
+                            }}
+                        >
+                            {busy ? 'Preparando...' : 'Descargar ahora'}
+                        </button>
+                    )}
                     {isDownloaded && (
                         <button
                             onClick={onInstall}
