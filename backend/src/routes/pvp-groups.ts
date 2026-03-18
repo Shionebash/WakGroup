@@ -294,7 +294,7 @@ router.delete('/:id/members/:characterId', requireAuth, async (req: Request, res
   try {
     // Get the user's character IDs
     const userChars = await db.query('SELECT id FROM characters WHERE user_id = $1', [req.user!.userId]);
-    const userCharIds = userChars.rows.map(c => c.id);
+    const userCharIds = userChars.rows.map((c: any) => c.id);
     
     // Get group info
     const groupResult = await db.query('SELECT * FROM pvp_groups WHERE id = $1', [id]);
@@ -337,7 +337,7 @@ router.delete('/:id/leader', requireAuth, async (req: Request, res: Response): P
   
   try {
     const userChars = await db.query('SELECT id FROM characters WHERE user_id = $1', [req.user!.userId]);
-    const userCharIds = userChars.rows.map(c => c.id);
+    const userCharIds = userChars.rows.map((c: any) => c.id);
     
     const groupResult = await db.query('SELECT * FROM pvp_groups WHERE id = $1', [id]);
     if (groupResult.rows.length === 0) {
@@ -385,7 +385,7 @@ router.put('/:id/transfer-leadership', requireAuth, async (req: Request, res: Re
   
   try {
     const userChars = await db.query('SELECT id FROM characters WHERE user_id = $1', [req.user!.userId]);
-    const userCharIds = userChars.rows.map(c => c.id);
+    const userCharIds = userChars.rows.map((c: any) => c.id);
     
     const groupResult = await db.query('SELECT * FROM pvp_groups WHERE id = $1', [id]);
     if (groupResult.rows.length === 0) {
