@@ -18,6 +18,7 @@ interface MazmoData {
     intervention?: boolean;
     jefeId?: number;
     isDungeon?: boolean;
+    isActive?: boolean;
 }
 
 let mazmosData: MazmoData[] = [];
@@ -41,6 +42,10 @@ mazmosData.forEach((m) => {
     }
 });
 
+function isMazmoActive(mazmo?: MazmoData | null) {
+    return mazmo?.isActive !== false;
+}
+
 // GET /dungeons - all dungeons with optional filters
 router.get('/', async (req: Request, res: Response): Promise<void> => {
     const db = getDb();
@@ -59,16 +64,18 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
     try {
         const dungeonsResult = await db.query(sql, params);
         
-        const dungeons = dungeonsResult.rows.map((d: any) => {
-            const mazmo = mazmosById.get(d.id);
-            return {
-                ...d,
-                steles: mazmo?.steles || false,
-                steleslvl: mazmo?.steleslvl || 0,
-                intervention: mazmo?.intervention || false,
-                jefeId: mazmo?.jefeId || null,
-            };
-        });
+        const dungeons = dungeonsResult.rows
+            .filter((d: any) => isMazmoActive(mazmosById.get(d.id)))
+            .map((d: any) => {
+                const mazmo = mazmosById.get(d.id);
+                return {
+                    ...d,
+                    steles: mazmo?.steles || false,
+                    steleslvl: mazmo?.steleslvl || 0,
+                    intervention: mazmo?.intervention || false,
+                    jefeId: mazmo?.jefeId || null,
+                };
+            });
         
         res.json(dungeons);
     } catch (err) {
@@ -89,6 +96,10 @@ router.get('/:id', async (req: Request, res: Response): Promise<void> => {
         
         const dungeon = dungeonResult.rows[0];
         const mazmo = mazmosById.get(Number(req.params.id));
+        if (!isMazmoActive(mazmo)) {
+            res.status(404).json({ error: 'Mazmorra no encontrada' });
+            return;
+        }
         
         res.json({
             ...dungeon,

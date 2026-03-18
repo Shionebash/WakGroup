@@ -45,7 +45,7 @@ export default function CreateGroupModal({ onClose, onCreated, prefillDungeonId 
                     api.get('/dungeons'),
                 ]);
                 setCharacters(charsRes.data);
-                setDungeons(dungeonsRes.data);
+                setDungeons((dungeonsRes.data || []).filter((d: any) => d?.isActive !== false));
             } catch (err) {
                 setError(t('group.errorLoadData', language));
             } finally {

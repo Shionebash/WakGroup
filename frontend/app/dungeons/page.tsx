@@ -21,7 +21,9 @@ export default function DungeonsPage() {
     const [createForDungeon, setCreateForDungeon] = useState<number | null>(null);
 
     useEffect(() => {
-        api.get('/dungeons').then(r => setDungeons(r.data)).finally(() => setLoading(false));
+        api.get('/dungeons')
+            .then(r => setDungeons((r.data || []).filter((d: any) => d?.isActive !== false)))
+            .finally(() => setLoading(false));
     }, []);
 
     const filtered = dungeons.filter(d => {
