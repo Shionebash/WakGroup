@@ -26,6 +26,9 @@ const API_URL = process.env.WAKGROUP_API_URL || 'https://wakgroup.onrender.com';
 const WEB_URL = process.env.WAKGROUP_WEB_URL || 'https://wakgroup.vercel.app';
 const RENDERER_URL = `file://${path.join(__dirname, '../dist-renderer/index.html')}`;
 const DESKTOP_CALLBACK_PORT = 45678;
+const APP_ICON = path.join(__dirname, '../assets/icon.ico');
+let downloadedUpdateAvailable = false;
+let isInstallingUpdate = false;
 
 function createSecureWindowOptions(overrides = {}) {
     return {
@@ -53,6 +56,7 @@ function createOverlayWindow(options = {}) {
         alwaysOnTop: true,
         resizable: true,
         hasShadow: false,
+        icon: APP_ICON,
         minWidth,
         minHeight,
         webPreferences: {
@@ -60,6 +64,16 @@ function createOverlayWindow(options = {}) {
         },
         ...rest,
     });
+}
+
+function installDownloadedUpdate({ silent = true, forceRunAfter = false } = {}) {
+    if (!downloadedUpdateAvailable || isInstallingUpdate) {
+        return false;
+    }
+
+    isInstallingUpdate = true;
+    setImmediate(() => autoUpdater.quitAndInstall(silent, forceRunAfter));
+    return true;
 }
 
 function isAllowedExternalUrl(rawUrl) {
@@ -96,11 +110,12 @@ function setupAutoUpdater() {
         return;
     }
 
-    autoUpdater.autoDownload = false;
-    autoUpdater.autoInstallOnAppQuit = true;
+    autoUpdater.autoDownload = true;
+    autoUpdater.autoInstallOnAppQuit = false;
 
     autoUpdater.on('error', (error) => {
         console.error('Auto-update error:', error);
+        isInstallingUpdate = false;
         sendUpdaterStatus({
             type: 'error',
             message: error?.message || 'No se pudo completar la actualizacion.',
@@ -111,7 +126,7 @@ function setupAutoUpdater() {
         sendUpdaterStatus({
             type: 'available',
             version: info.version,
-            detail: 'La nueva version se descargara desde GitHub Releases y podras instalarla cuando termine.',
+            detail: 'La nueva version se esta descargando en segundo plano y se podra instalar al cerrar la app.',
         });
     });
 
@@ -123,10 +138,11 @@ function setupAutoUpdater() {
     });
 
     autoUpdater.on('update-downloaded', (info) => {
+        downloadedUpdateAvailable = true;
         sendUpdaterStatus({
             type: 'downloaded',
             version: info.version,
-            detail: 'La aplicacion se cerrara y se instalara la actualizacion.',
+            detail: 'La actualizacion ya esta lista. Se instalara en silencio al cerrar la app o puedes aplicarla ahora.',
         });
     });
 
@@ -278,6 +294,7 @@ function startOAuthCallbackServer() {
 }
 
 app.whenReady().then(() => {
+    app.setAppUserModelId('com.wakgroup.desktop');
     createMainWindow();
     startOAuthCallbackServer();
     setupAutoUpdater();
@@ -299,6 +316,13 @@ app.on('will-quit', () => {
     if (updateCheckInterval) {
         clearInterval(updateCheckInterval);
         updateCheckInterval = null;
+    }
+});
+
+app.on('before-quit', (event) => {
+    if (downloadedUpdateAvailable && !isInstallingUpdate) {
+        event.preventDefault();
+        installDownloadedUpdate({ silent: true, forceRunAfter: false });
     }
 });
 
@@ -329,8 +353,7 @@ ipcMain.handle('download-update', async () => {
 });
 
 ipcMain.handle('install-update', async () => {
-    setImmediate(() => autoUpdater.quitAndInstall());
-    return true;
+    return installDownloadedUpdate({ silent: true, forceRunAfter: true });
 });
 
 ipcMain.handle('open-group-detail', (_, groupId) => {
@@ -375,6 +398,7 @@ ipcMain.handle('open-login', () => {
         height: 600,
         frame: true,
         parent: mainWindow,
+        icon: APP_ICON,
         webPreferences: {
             ...createSecureWindowOptions(),
         },

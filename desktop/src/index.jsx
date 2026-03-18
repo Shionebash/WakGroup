@@ -364,14 +364,14 @@ function UpdatePrompt({ prompt, busy, onClose, onDownload, onInstall }) {
 
     if (isAvailable) {
         title = `WakGroup ${prompt.version} disponible`;
-        message = 'Hay una nueva version lista para descargar.';
+        message = 'Hay una nueva version y ya comenzo a descargarse en segundo plano.';
     } else if (isDownloading) {
         title = 'Descargando actualizacion';
         message = `La nueva version se esta descargando (${Math.round(progress)}%).`;
         detail = 'Puedes seguir usando la miniapp mientras termina la descarga.';
     } else if (isDownloaded) {
         title = `WakGroup ${prompt.version} listo para instalar`;
-        message = 'La actualizacion ya se descargo y esta lista.';
+        message = 'La actualizacion ya se descargo y se instalara en silencio cuando cierres la miniapp.';
     } else if (isError) {
         title = 'No se pudo actualizar';
         message = prompt.message || 'Ocurrio un problema al revisar o descargar la actualizacion.';
@@ -440,23 +440,7 @@ function UpdatePrompt({ prompt, busy, onClose, onDownload, onInstall }) {
                             Mas tarde
                         </button>
                     )}
-                    {isAvailable && (
-                        <button
-                            onClick={onDownload}
-                            disabled={busy}
-                            style={{
-                                padding: '10px 14px',
-                                borderRadius: 10,
-                                border: 'none',
-                                background: `linear-gradient(135deg, ${COLORS.primary} 0%, ${COLORS.primaryDark} 100%)`,
-                                color: COLORS.darkText,
-                                cursor: busy ? 'wait' : 'pointer',
-                                fontWeight: 700,
-                            }}
-                        >
-                            Descargar ahora
-                        </button>
-                    )}
+                    {isAvailable && null}
                     {isDownloaded && (
                         <button
                             onClick={onInstall}
