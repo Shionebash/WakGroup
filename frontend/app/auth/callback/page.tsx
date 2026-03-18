@@ -1,20 +1,23 @@
 'use client';
 import { Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useAuth } from '@/lib/auth-context';
 
 function CallbackHandler() {
     const router = useRouter();
     const params = useSearchParams();
+    const { loginWithToken } = useAuth();
 
     useEffect(() => {
         const token = params.get('token');
-        console.log('Auth callback token:', token ? 'found' : 'not found');
-        if (token) {
-            localStorage.setItem('session_token', token);
-            console.log('Token saved to localStorage');
-        }
-        router.replace('/');
-    }, [params, router]);
+        const finishLogin = async () => {
+            if (token) {
+                await loginWithToken(token);
+            }
+            window.location.replace('/');
+        };
+        finishLogin();
+    }, [params, router, loginWithToken]);
 
     return (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
