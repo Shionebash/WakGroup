@@ -203,14 +203,14 @@ function WindowChrome({ title, subtitle, clickThrough, opacity, onOpacityChange,
             justifyContent: 'space-between',
             padding: '10px 12px',
             margin: '-12px -12px 12px -12px',
-            borderBottom: '1px solid rgba(255,255,255,0.1)',
+            borderBottom: `1px solid ${COLORS.borderLight}`,
             borderRadius: '16px 16px 0 0',
             WebkitAppRegion: 'drag',
             cursor: 'move',
         }}>
             <div>
                 <span style={{ fontSize: 13, fontWeight: 'bold' }}>{title}</span>
-                {subtitle && <span style={{ fontSize: 10, color: '#999', marginLeft: 6 }}>{subtitle}</span>}
+                {subtitle && <span style={{ fontSize: 10, color: COLORS.titleMuted, marginLeft: 6 }}>{subtitle}</span>}
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, WebkitAppRegion: 'no-drag' }}>
                 <button
@@ -221,7 +221,7 @@ function WindowChrome({ title, subtitle, clickThrough, opacity, onOpacityChange,
                         borderRadius: 4,
                         border: 'none',
                         background: clickThrough ? COLORS.error : COLORS.success,
-                        color: '#fff',
+                        color: COLORS.lightText,
                         cursor: 'pointer',
                     }}
                 >
@@ -229,13 +229,13 @@ function WindowChrome({ title, subtitle, clickThrough, opacity, onOpacityChange,
                 </button>
                 <button
                     onClick={() => onOpacityChange?.(Math.min(1, opacity + 0.1))}
-                    style={{ padding: '4px 8px', fontSize: 10, borderRadius: 4, border: 'none', background: 'rgba(255,255,255,0.15)', color: '#fff', cursor: 'pointer' }}
+                    style={{ padding: '4px 8px', fontSize: 10, borderRadius: 4, border: 'none', background: COLORS.buttonMutedStrong, color: COLORS.lightText, cursor: 'pointer' }}
                 >+</button>
                 <button
                     onClick={() => onOpacityChange?.(Math.max(0.3, opacity - 0.1))}
-                    style={{ padding: '4px 8px', fontSize: 10, borderRadius: 4, border: 'none', background: 'rgba(255,255,255,0.15)', color: '#fff', cursor: 'pointer' }}
+                    style={{ padding: '4px 8px', fontSize: 10, borderRadius: 4, border: 'none', background: COLORS.buttonMutedStrong, color: COLORS.lightText, cursor: 'pointer' }}
                 >-</button>
-                <button onClick={handleMinimize} style={{ padding: '4px 8px', fontSize: 10, borderRadius: 4, border: 'none', background: '#f39c12', color: '#fff', cursor: 'pointer' }}>─</button>
+                <button onClick={handleMinimize} style={{ padding: '4px 8px', fontSize: 10, borderRadius: 4, border: 'none', background: COLORS.warning, color: COLORS.lightText, cursor: 'pointer' }}>─</button>
                 <button onClick={handleClose} style={{ padding: '4px 8px', fontSize: 10, borderRadius: 4, border: 'none', background: COLORS.error, color: COLORS.lightText, cursor: 'pointer' }}>✕</button>
             </div>
         </div>
@@ -248,29 +248,44 @@ const btnStyle = (bg) => ({
     borderRadius: 4,
     border: 'none',
     background: bg,
-    color: '#fff',
+    color: COLORS.lightText,
     cursor: 'pointer',
 });
 
 const COLORS = {
     primary: '#d4a574',
-    primaryDark: '#c9a227',
+    primaryDark: '#8b6914',
     background: '#1a1410',
     backgroundLight: '#242019',
-    textPrimary: '#e5e7eb',
-    textSecondary: '#94a3b8',
-    error: '#ff7675',
-    success: '#51cf66',
-    blue: '#3498db',
-    purple: '#5865F2',
-    pvp: '#e74c3c',
-    pvpRed: '#e57373',
-    pvpOrange: '#ffb74d',
-    pvpBlue: '#64b5f6',
-    darkText: '#000',
-    lightText: '#fff',
-    border: 'rgba(148,163,184,0.3)',
-    borderLight: 'rgba(148,163,184,0.1)',
+    secondary: '#2c2416',
+    surfaceElevated: 'rgba(26,20,16,0.96)',
+    surfaceInset: 'rgba(44,36,22,0.72)',
+    card: 'rgba(36,32,25,0.92)',
+    textPrimary: '#f5f5f5',
+    textSecondary: '#b0b0b0',
+    titleMuted: '#8f867a',
+    error: '#f44336',
+    success: '#4caf50',
+    warning: '#ff9800',
+    info: '#2196f3',
+    darkText: '#1a1410',
+    lightText: '#f5f5f5',
+    border: 'rgba(74,64,53,0.85)',
+    borderLight: 'rgba(74,64,53,0.45)',
+    buttonMuted: 'rgba(74,64,53,0.55)',
+    buttonMutedStrong: 'rgba(74,64,53,0.75)',
+    successSoft: 'rgba(76,175,80,0.16)',
+    errorSoft: 'rgba(244,67,54,0.14)',
+    primarySoft: 'rgba(212,165,116,0.16)',
+    warningSoft: 'rgba(255,152,0,0.16)',
+    infoSoft: 'rgba(33,150,243,0.16)',
+    pvp: '#b85b4f',
+    pvpRed: '#d36b5f',
+    pvpOrange: '#d89a4b',
+    pvpGold: '#d4a574',
+    pvpAmber: '#b98549',
+    pvpBronze: '#8f6238',
+    pvpBlue: '#7a9eb8',
 };
 
 const rootStyle = {
@@ -286,6 +301,168 @@ const rootStyle = {
     padding: 12,
     boxSizing: 'border-box',
 };
+
+const INPUT_STYLE = {
+    width: '100%',
+    padding: 8,
+    borderRadius: 6,
+    background: COLORS.surfaceInset,
+    color: COLORS.lightText,
+    border: `1px solid ${COLORS.border}`,
+    fontSize: 12,
+};
+
+function getSlotsPerTeam(mode) {
+    const parsed = Number(String(mode || '').split('v')[0]);
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : 3;
+}
+
+function UpdatePrompt({ prompt, busy, onClose, onDownload, onInstall }) {
+    if (!prompt) return null;
+
+    const isAvailable = prompt.type === 'available';
+    const isDownloading = prompt.type === 'downloading';
+    const isDownloaded = prompt.type === 'downloaded';
+    const isError = prompt.type === 'error';
+    const progress = typeof prompt.percent === 'number' ? Math.max(0, Math.min(100, prompt.percent)) : 0;
+
+    let title = 'Actualizacion de WakGroup';
+    let message = 'Hay una novedad lista para tu miniapp.';
+    let detail = prompt.detail || '';
+
+    if (isAvailable) {
+        title = `WakGroup ${prompt.version} disponible`;
+        message = 'Hay una nueva version lista para descargar.';
+    } else if (isDownloading) {
+        title = 'Descargando actualizacion';
+        message = `La nueva version se esta descargando (${Math.round(progress)}%).`;
+        detail = 'Puedes seguir usando la miniapp mientras termina la descarga.';
+    } else if (isDownloaded) {
+        title = `WakGroup ${prompt.version} listo para instalar`;
+        message = 'La actualizacion ya se descargo y esta lista.';
+    } else if (isError) {
+        title = 'No se pudo actualizar';
+        message = prompt.message || 'Ocurrio un problema al revisar o descargar la actualizacion.';
+    }
+
+    return (
+        <div style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'rgba(12, 9, 7, 0.78)',
+            backdropFilter: 'blur(6px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 2000,
+            padding: 18,
+            WebkitAppRegion: 'no-drag',
+        }}>
+            <div style={{
+                width: '100%',
+                maxWidth: 320,
+                background: `linear-gradient(180deg, ${COLORS.backgroundLight} 0%, ${COLORS.secondary} 100%)`,
+                border: `1px solid ${COLORS.border}`,
+                boxShadow: '0 20px 40px rgba(0, 0, 0, 0.35)',
+                borderRadius: 18,
+                overflow: 'hidden',
+            }}>
+                <div style={{
+                    padding: '14px 16px 12px',
+                    borderBottom: `1px solid ${COLORS.borderLight}`,
+                    background: COLORS.primarySoft,
+                }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <img src="../assets/logo.png" alt="WakGroup" style={{ width: 30, height: 30, borderRadius: 8 }} />
+                        <div>
+                            <div style={{ fontSize: 14, fontWeight: 700, color: COLORS.primary }}>{title}</div>
+                            <div style={{ fontSize: 11, color: COLORS.textSecondary }}>Mini app de WakGroup</div>
+                        </div>
+                    </div>
+                </div>
+                <div style={{ padding: 16 }}>
+                    <p style={{ margin: 0, fontSize: 13, lineHeight: 1.45, color: COLORS.textPrimary }}>{message}</p>
+                    {detail && <p style={{ margin: '8px 0 0', fontSize: 11, lineHeight: 1.5, color: COLORS.textSecondary }}>{detail}</p>}
+                    {isDownloading && (
+                        <div style={{ marginTop: 14 }}>
+                            <div style={{ height: 8, borderRadius: 999, background: COLORS.buttonMuted, overflow: 'hidden' }}>
+                                <div style={{ width: `${progress}%`, height: '100%', background: `linear-gradient(90deg, ${COLORS.primary} 0%, ${COLORS.primaryDark} 100%)` }} />
+                            </div>
+                        </div>
+                    )}
+                </div>
+                <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', padding: '0 16px 16px' }}>
+                    {!isDownloading && (
+                        <button
+                            onClick={onClose}
+                            style={{
+                                padding: '10px 14px',
+                                borderRadius: 10,
+                                border: `1px solid ${COLORS.border}`,
+                                background: COLORS.buttonMuted,
+                                color: COLORS.lightText,
+                                cursor: 'pointer',
+                                fontWeight: 600,
+                            }}
+                        >
+                            Mas tarde
+                        </button>
+                    )}
+                    {isAvailable && (
+                        <button
+                            onClick={onDownload}
+                            disabled={busy}
+                            style={{
+                                padding: '10px 14px',
+                                borderRadius: 10,
+                                border: 'none',
+                                background: `linear-gradient(135deg, ${COLORS.primary} 0%, ${COLORS.primaryDark} 100%)`,
+                                color: COLORS.darkText,
+                                cursor: busy ? 'wait' : 'pointer',
+                                fontWeight: 700,
+                            }}
+                        >
+                            Descargar ahora
+                        </button>
+                    )}
+                    {isDownloaded && (
+                        <button
+                            onClick={onInstall}
+                            disabled={busy}
+                            style={{
+                                padding: '10px 14px',
+                                borderRadius: 10,
+                                border: 'none',
+                                background: `linear-gradient(135deg, ${COLORS.primary} 0%, ${COLORS.primaryDark} 100%)`,
+                                color: COLORS.darkText,
+                                cursor: busy ? 'wait' : 'pointer',
+                                fontWeight: 700,
+                            }}
+                        >
+                            Instalar ahora
+                        </button>
+                    )}
+                    {isError && (
+                        <button
+                            onClick={onClose}
+                            style={{
+                                padding: '10px 14px',
+                                borderRadius: 10,
+                                border: 'none',
+                                background: COLORS.error,
+                                color: COLORS.lightText,
+                                cursor: 'pointer',
+                                fontWeight: 700,
+                            }}
+                        >
+                            Entendido
+                        </button>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}
 
 // Vista principal: lista de grupos, click en tarjeta = detalle; botón chat en cada tarjeta
 function MainView({ language = 'es', setLanguage }) {
@@ -304,6 +481,8 @@ function MainView({ language = 'es', setLanguage }) {
     const [showNotifs, setShowNotifs] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const [notifLoading, setNotifLoading] = useState(false);
+    const [updatePrompt, setUpdatePrompt] = useState(null);
+    const [updateBusy, setUpdateBusy] = useState(false);
 
     const fetchUser = useCallback(async () => {
         if (!apiUrl) return;
@@ -328,6 +507,12 @@ function MainView({ language = 'es', setLanguage }) {
             window.electronAPI.onOAuthToken((token) => {
                 localStorage.setItem('session_token', token);
                 fetchUser();
+            });
+            window.electronAPI.onUpdaterStatus((payload) => {
+                setUpdatePrompt(payload);
+                if (payload?.type !== 'downloading') {
+                    setUpdateBusy(false);
+                }
             });
             
             // Listen for auth token from browser callback
@@ -428,6 +613,26 @@ function MainView({ language = 'es', setLanguage }) {
         if (window.electronAPI) window.electronAPI.setOpacity(n);
     };
 
+    const handleDownloadUpdate = async () => {
+        try {
+            setUpdateBusy(true);
+            await window.electronAPI?.downloadUpdate?.();
+        } catch (error) {
+            setUpdatePrompt({ type: 'error', message: error?.message || 'No se pudo iniciar la descarga.' });
+            setUpdateBusy(false);
+        }
+    };
+
+    const handleInstallUpdate = async () => {
+        try {
+            setUpdateBusy(true);
+            await window.electronAPI?.installUpdate?.();
+        } catch (error) {
+            setUpdatePrompt({ type: 'error', message: error?.message || 'No se pudo instalar la actualizacion.' });
+            setUpdateBusy(false);
+        }
+    };
+
     const currentGroups = showPvp ? pvpGroups : groups;
     const loading = showPvp ? loadingPvpGroups : loadingGroups;
     const error = showPvp ? pvpError : groupsError;
@@ -449,7 +654,7 @@ function MainView({ language = 'es', setLanguage }) {
                         style={{ width: 28, height: 28, objectFit: 'contain', borderRadius: 8, flexShrink: 0 }}
                     />
                     <span style={{ fontSize: 14, fontWeight: 'bold' }}>WakGroup</span>
-                    <span style={{ fontSize: 11, color: '#999', marginLeft: 6 }}>Desktop Overlay</span>
+                    <span style={{ fontSize: 11, color: COLORS.titleMuted, marginLeft: 6 }}>Desktop Overlay</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, WebkitAppRegion: 'no-drag', position: 'relative' }}>
                     {user && (
@@ -463,16 +668,16 @@ function MainView({ language = 'es', setLanguage }) {
                                 )}
                             </button>
                             {showNotifs && (
-                                <div style={{ position: 'absolute', top: '100%', right: 0, width: 280, maxHeight: 350, background: 'rgba(30,30,50,0.98)', border: '1px solid rgba(148,163,184,0.3)', borderRadius: 8, zIndex: 1000, overflow: 'hidden', marginTop: 4 }}>
-                                    <div style={{ padding: '8px 10px', borderBottom: '1px solid rgba(148,163,184,0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div style={{ position: 'absolute', top: '100%', right: 0, width: 280, maxHeight: 350, background: COLORS.surfaceElevated, border: `1px solid ${COLORS.border}`, borderRadius: 8, zIndex: 1000, overflow: 'hidden', marginTop: 4 }}>
+                                    <div style={{ padding: '8px 10px', borderBottom: `1px solid ${COLORS.borderLight}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <span style={{ fontSize: 12, fontWeight: 'bold', color: COLORS.primaryDark }}>🔔 {getTranslation('overlay.notifications', language)}</span>
                                         <button onClick={refreshNotifications} style={{ background: 'none', border: 'none', color: COLORS.textSecondary, fontSize: 10, cursor: 'pointer' }}>🔄</button>
                                     </div>
                                     <div style={{ maxHeight: 280, overflowY: 'auto' }}>
                                         {notifLoading ? (
-                                            <div style={{ padding: 20, textAlign: 'center', color: '#9ca3af', fontSize: 11 }}>{getTranslation('common.loading', language)}</div>
+                                            <div style={{ padding: 20, textAlign: 'center', color: COLORS.textSecondary, fontSize: 11 }}>{getTranslation('common.loading', language)}</div>
                                         ) : notifications.length === 0 ? (
-                                            <div style={{ padding: 20, textAlign: 'center', color: '#9ca3af', fontSize: 11 }}>{getTranslation('overlay.noNotifications', language)}</div>
+                                            <div style={{ padding: 20, textAlign: 'center', color: COLORS.textSecondary, fontSize: 11 }}>{getTranslation('overlay.noNotifications', language)}</div>
                                         ) : (
                                             notifications.slice(0, 30).map(n => {
                                                 const TYPE_LABELS = {
@@ -488,12 +693,12 @@ function MainView({ language = 'es', setLanguage }) {
                                                 const processed = n.processed;
                                                 
                                                 return (
-                                                    <div key={n.id} style={{ padding: '8px 10px', borderBottom: '1px solid rgba(148,163,184,0.1)', background: n.is_read ? 'transparent' : 'rgba(212,165,116,0.08)', display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+                                                    <div key={n.id} style={{ padding: '8px 10px', borderBottom: `1px solid ${COLORS.borderLight}`, background: n.is_read ? 'transparent' : 'rgba(212,165,116,0.08)', display: 'flex', gap: 8, alignItems: 'flex-start' }}>
                                                         <span style={{ fontSize: 16 }}>{meta.icon}</span>
                                                         <div style={{ flex: 1, minWidth: 0 }}>
                                                             <div style={{ fontSize: 11, fontWeight: n.is_read ? 400 : 600, marginBottom: 2 }}>{meta.label}</div>
                                                             {payload.from_username && (
-                                                                <div style={{ fontSize: 10, color: '#9ca3af' }}>
+                                                                <div style={{ fontSize: 10, color: COLORS.textSecondary }}>
                                                                     <span style={{ color: COLORS.primaryDark }}>{payload.from_username}</span>
                                                                     {payload.char_name && <> · {payload.char_name}</>}
                                                                 </div>
@@ -501,13 +706,13 @@ function MainView({ language = 'es', setLanguage }) {
                                                             {isAppReceived && appId && (
                                                                 <div style={{ display: 'flex', gap: 4, marginTop: 4 }}>
                                                                     {processed === 'accepted' ? (
-                                                                        <span style={{ fontSize: 10, color: '#27ae60', fontWeight: 'bold' }}>✅ Aceptado</span>
+                                                                        <span style={{ fontSize: 10, color: COLORS.success, fontWeight: 'bold' }}>✅ Aceptado</span>
                                                                     ) : processed === 'rejected' ? (
-                                                                        <span style={{ fontSize: 10, color: '#e74c3c', fontWeight: 'bold' }}>❌ Rechazado</span>
+                                                                        <span style={{ fontSize: 10, color: COLORS.error, fontWeight: 'bold' }}>❌ Rechazado</span>
                                                                     ) : (
                                                                         <>
-                                                                            <button onClick={() => handleNotifAction(n, 'accepted')} style={{ background: 'rgba(39,174,96,0.2)', border: '1px solid #27ae60', borderRadius: 4, color: '#27ae60', cursor: 'pointer', fontSize: 10, padding: '2px 6px', fontWeight: 'bold' }}>✓</button>
-                                                                            <button onClick={() => handleNotifAction(n, 'rejected')} style={{ background: 'rgba(231,76,60,0.2)', border: '1px solid #e74c3c', borderRadius: 4, color: '#e74c3c', cursor: 'pointer', fontSize: 10, padding: '2px 6px', fontWeight: 'bold' }}>✕</button>
+                                                                            <button onClick={() => handleNotifAction(n, 'accepted')} style={{ background: COLORS.successSoft, border: `1px solid ${COLORS.success}`, borderRadius: 4, color: COLORS.success, cursor: 'pointer', fontSize: 10, padding: '2px 6px', fontWeight: 'bold' }}>✓</button>
+                                                                            <button onClick={() => handleNotifAction(n, 'rejected')} style={{ background: COLORS.errorSoft, border: `1px solid ${COLORS.error}`, borderRadius: 4, color: COLORS.error, cursor: 'pointer', fontSize: 10, padding: '2px 6px', fontWeight: 'bold' }}>✕</button>
                                                                         </>
                                                                     )}
                                                                 </div>
@@ -526,9 +731,9 @@ function MainView({ language = 'es', setLanguage }) {
                         value={language}
                         onChange={(e) => setLanguage(e.target.value)}
                         style={{
-                            background: 'rgba(255,255,255,0.1)',
-                            color: '#fff',
-                            border: '1px solid rgba(255,255,255,0.2)',
+                            background: COLORS.buttonMuted,
+                            color: COLORS.lightText,
+                            border: `1px solid ${COLORS.border}`,
                             borderRadius: 4,
                             padding: '2px 4px',
                             fontSize: 10,
@@ -536,30 +741,30 @@ function MainView({ language = 'es', setLanguage }) {
                         }}
                     >
                         {Object.entries(LANGUAGES).map(([code, { label, flag }]) => (
-                            <option key={code} value={code} style={{ background: '#1a1a2e' }}>
+                            <option key={code} value={code} style={{ background: COLORS.background }}>
                                 {flag} {label}
                             </option>
                         ))}
                     </select>
-                    <button onClick={() => window.electronAPI?.minimizeWindow?.()} style={btnStyle('rgba(243,156,18,0.9)')}>─</button>
-                    <button onClick={() => window.electronAPI?.closeWindow?.()} style={btnStyle('rgba(231,76,60,0.9)')}>✕</button>
+                    <button onClick={() => window.electronAPI?.minimizeWindow?.()} style={btnStyle(COLORS.warning)}>─</button>
+                    <button onClick={() => window.electronAPI?.closeWindow?.()} style={btnStyle(COLORS.error)}>✕</button>
                 </div>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <button onClick={() => window.electronAPI?.toggleClickThrough?.()} style={{ padding: 12, background: clickThrough ? COLORS.error : COLORS.success, color: '#fff', border: 'none', borderRadius: 10, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>
+                <button onClick={() => window.electronAPI?.toggleClickThrough?.()} style={{ padding: 12, background: clickThrough ? COLORS.error : COLORS.primaryDark, color: COLORS.lightText, border: 'none', borderRadius: 10, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>
                     {clickThrough ? '🔒 Click-Through ON' : '🔓 Click-Through OFF'}
                 </button>
                 <div style={{ display: 'flex', gap: 8 }}>
-                    <button onClick={() => setShowPvp(false)} style={{ flex: 1, padding: 12, background: !showPvp ? COLORS.primary : 'rgba(255,255,255,0.08)', color: !showPvp ? COLORS.background : '#fff', border: 'none', borderRadius: 10, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>⚔ PvE</button>
-                    <button onClick={() => setShowPvp(true)} style={{ flex: 1, padding: 12, background: showPvp ? COLORS.pvp : 'rgba(255,255,255,0.08)', color: showPvp ? '#fff' : '#fff', border: 'none', borderRadius: 10, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>⚔ PVP</button>
+                    <button onClick={() => setShowPvp(false)} style={{ flex: 1, padding: 12, background: !showPvp ? COLORS.primary : COLORS.buttonMuted, color: !showPvp ? COLORS.darkText : COLORS.lightText, border: 'none', borderRadius: 10, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>⚔ PvE</button>
+                    <button onClick={() => setShowPvp(true)} style={{ flex: 1, padding: 12, background: showPvp ? COLORS.pvp : COLORS.buttonMuted, color: COLORS.lightText, border: 'none', borderRadius: 10, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>⚔ PVP</button>
                 </div>
                 {user && (
-                    <button onClick={() => window.electronAPI?.openCreateGroup?.(showPvp ? 'pvp' : 'pve')} style={{ padding: 12, background: showPvp ? COLORS.pvp : COLORS.success, color: '#fff', border: 'none', borderRadius: 10, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>
+                    <button onClick={() => window.electronAPI?.openCreateGroup?.(showPvp ? 'pvp' : 'pve')} style={{ padding: 12, background: showPvp ? COLORS.pvp : COLORS.primaryDark, color: COLORS.lightText, border: 'none', borderRadius: 10, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>
                         ➕ {showPvp ? getTranslation('overlay.createPvp', language) : getTranslation('overlay.createGroup', language)}
                     </button>
                 )}
-                <button onClick={() => window.electronAPI?.openWiki?.()} style={{ padding: 12, background: COLORS.blue, color: '#fff', border: 'none', borderRadius: 10, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>📖 Wiki</button>
+                <button onClick={() => window.electronAPI?.openWiki?.()} style={{ padding: 12, background: COLORS.secondary, color: COLORS.primary, border: `1px solid ${COLORS.border}`, borderRadius: 10, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>📖 Wiki</button>
             </div>
 
             <div style={{ marginTop: 8, flex: 1, display: 'flex', flexDirection: 'column', background: COLORS.backgroundLight, borderRadius: 12, padding: 12, overflow: 'hidden' }}>
@@ -568,13 +773,13 @@ function MainView({ language = 'es', setLanguage }) {
                         {loadingUser && <span style={{ fontSize: 10, color: COLORS.textSecondary }}>...</span>}
                         {user && (
                             <>
-                                {user.avatar ? <img src={`https://cdn.discordapp.com/avatars/${user.discord_id}/${user.avatar}.png`} alt="" style={{ width: 22, height: 22, borderRadius: '50%' }} /> : <span style={{ width: 22, height: 22, borderRadius: '50%', background: COLORS.purple, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: '#fff' }}>{user.username?.[0]?.toUpperCase() || '?'}</span>}
+                                {user.avatar ? <img src={`https://cdn.discordapp.com/avatars/${user.discord_id}/${user.avatar}.png`} alt="" style={{ width: 22, height: 22, borderRadius: '50%' }} /> : <span style={{ width: 22, height: 22, borderRadius: '50%', background: COLORS.primaryDark, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: COLORS.lightText }}>{user.username?.[0]?.toUpperCase() || '?'}</span>}
                                 <span style={{ fontSize: 11, color: COLORS.textPrimary, maxWidth: 80, overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.username}</span>
-                                <button onClick={() => { localStorage.removeItem('session_token'); setUser(null); }} style={{ padding: '2px 6px', fontSize: 10, borderRadius: 4, border: 'none', background: 'rgba(255,255,255,0.15)', color: '#fff', cursor: 'pointer' }}>{getTranslation('overlay.logout', language)}</button>
+                                <button onClick={() => { localStorage.removeItem('session_token'); setUser(null); }} style={{ padding: '2px 6px', fontSize: 10, borderRadius: 4, border: 'none', background: COLORS.buttonMutedStrong, color: COLORS.lightText, cursor: 'pointer' }}>{getTranslation('overlay.logout', language)}</button>
                             </>
                         )}
                         {!user && !loadingUser && (
-                            <button onClick={() => window.electronAPI?.openLogin?.()} style={{ padding: '4px 8px', fontSize: 11, borderRadius: 999, border: 'none', background: COLORS.purple, color: '#fff', cursor: 'pointer' }}>🔑 Login</button>
+                            <button onClick={() => window.electronAPI?.openLogin?.()} style={{ padding: '4px 8px', fontSize: 11, borderRadius: 999, border: 'none', background: COLORS.primaryDark, color: COLORS.lightText, cursor: 'pointer' }}>🔑 Login</button>
                         )}
                     </div>
                 </div>
@@ -589,18 +794,18 @@ function MainView({ language = 'es', setLanguage }) {
                                 setLoadingGroups(true);
                                 axios.get(`${apiUrl}/groups`).then((res) => setGroups(res.data || [])).catch(() => setGroupsError(getTranslation('overlay.errorLoadGroups', language))).finally(() => setLoadingGroups(false));
                             }
-                        }} style={{ padding: '4px 10px', fontSize: 10, borderRadius: 6, border: 'none', background: 'rgba(255,255,255,0.1)', color: '#fff', cursor: 'pointer' }}>🔄</button>
+                        }} style={{ padding: '4px 10px', fontSize: 10, borderRadius: 6, border: 'none', background: COLORS.buttonMuted, color: COLORS.lightText, cursor: 'pointer' }}>🔄</button>
                     </div>
                     {error && !loading && <div style={{ fontSize: 12, color: COLORS.error }}>{error}</div>}
-                    {!loading && !error && currentGroups.length === 0 && <div style={{ fontSize: 12, color: '#bbb' }}>{showPvp ? getTranslation('overlay.noActivePvp', language) : getTranslation('overlay.noActiveGroups', language)}</div>}
+                    {!loading && !error && currentGroups.length === 0 && <div style={{ fontSize: 12, color: COLORS.textSecondary }}>{showPvp ? getTranslation('overlay.noActivePvp', language) : getTranslation('overlay.noActiveGroups', language)}</div>}
                     {!loading && !error && currentGroups.map((g) => (
                         <div
                             key={g.id}
                             style={{
                                 padding: '12px 14px',
                                 borderRadius: 12,
-                                background: 'rgba(15, 23, 42, 0.85)',
-                                border: `1px solid ${showPvp ? 'rgba(231, 76, 60, 0.4)' : 'rgba(148, 163, 184, 0.3)'}`,
+                                background: COLORS.card,
+                                border: `1px solid ${showPvp ? COLORS.borderLight : COLORS.border}`,
                                 cursor: 'pointer',
                             }}
                             onClick={() => handleGroupClick(g)}
@@ -620,7 +825,7 @@ function MainView({ language = 'es', setLanguage }) {
                             <div style={{ display: 'flex', gap: 8, fontSize: 10, color: COLORS.textSecondary, marginTop: 4, alignItems: 'center', flexWrap: 'wrap' }}>
                                 {showPvp ? (
                                     <>
-                                        <span style={{ color: g.pvp_mode === '1v1' ? '#e57373' : g.pvp_mode === '2v2' ? '#ffb74d' : '#64b5f6', fontWeight: 600 }}>{g.pvp_mode}</span>
+                                        <span style={{ color: PVP_MODE_COLORS[g.pvp_mode] || COLORS.primaryDark, fontWeight: 600 }}>{g.pvp_mode}</span>
                                         <span>{getTranslation('common.levelShort', language)} {g.equipment_band}</span>
                                     </>
                                 ) : (
@@ -628,13 +833,13 @@ function MainView({ language = 'es', setLanguage }) {
                                         <span>{getTranslation('common.stasis', language)} {g.stasis}</span>
                                         <span>{getTranslation('common.levelShort', language)} {g.dungeon_lvl}</span>
                                         {g.steles_active && (
-                                            <span style={{ background: 'rgba(156, 39, 176, 0.2)', color: '#ce93d8', padding: '1px 6px', borderRadius: 4, fontWeight: 600 }}>🗼 {g.steles_count}</span>
+                                            <span style={{ background: COLORS.primarySoft, color: COLORS.primary, padding: '1px 6px', borderRadius: 4, fontWeight: 600 }}>🗼 {g.steles_count}</span>
                                         )}
                                         {g.intervention_active && (
-                                            <span style={{ background: 'rgba(255, 152, 0, 0.2)', color: '#ffb74d', padding: '1px 6px', borderRadius: 4, fontWeight: 600 }}>⚡ Int</span>
+                                            <span style={{ background: COLORS.warningSoft, color: COLORS.warning, padding: '1px 6px', borderRadius: 4, fontWeight: 600 }}>⚡ Int</span>
                                         )}
                                         {g.steles_active && g.steles_drops && g.steles_drops.length > 0 && (
-                                            <span style={{ background: 'rgba(76, 175, 80, 0.2)', color: '#81c784', padding: '1px 6px', borderRadius: 4, fontWeight: 600 }}>💎 Drops</span>
+                                            <span style={{ background: COLORS.successSoft, color: COLORS.success, padding: '1px 6px', borderRadius: 4, fontWeight: 600 }}>💎 Drops</span>
                                         )}
                                     </>
                                 )}
@@ -642,7 +847,7 @@ function MainView({ language = 'es', setLanguage }) {
                                 {!showPvp && (
                                     <button
                                         onClick={(e) => { e.stopPropagation(); window.electronAPI?.openChat?.(g.id); }}
-                                        style={{ marginLeft: 'auto', padding: '2px 8px', fontSize: 10, borderRadius: 4, border: 'none', background: '#3498db', color: '#fff', cursor: 'pointer' }}
+                                        style={{ marginLeft: 'auto', padding: '2px 8px', fontSize: 10, borderRadius: 4, border: 'none', background: COLORS.info, color: COLORS.lightText, cursor: 'pointer' }}
                                     >
                                         💬
                                     </button>
@@ -653,13 +858,20 @@ function MainView({ language = 'es', setLanguage }) {
                 </div>
             </div>
 
-            <div style={{ fontSize: 10, color: '#666', marginTop: 6, borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 6, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span>v1.2.0 | Overlay</span>
+            <div style={{ fontSize: 10, color: COLORS.titleMuted, marginTop: 6, borderTop: `1px solid ${COLORS.borderLight}`, paddingTop: 6, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span>WakGroup Overlay</span>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                     <span style={{ fontSize: 10 }}>Opacidad</span>
                     <input type="range" min="0.3" max="1" step="0.05" value={opacity} onChange={(e) => handleOpacityChange(Number(e.target.value))} style={{ width: 80 }} />
                 </div>
             </div>
+            <UpdatePrompt
+                prompt={updatePrompt}
+                busy={updateBusy}
+                onClose={() => { if (updatePrompt?.type !== 'downloading') setUpdatePrompt(null); }}
+                onDownload={handleDownloadUpdate}
+                onInstall={handleInstallUpdate}
+            />
         </div>
     );
 }
@@ -844,13 +1056,13 @@ function GroupDetailView({ groupId, language = 'es' }) {
         <div style={rootStyle}>
             <WindowChrome title={getTranslation('group.detailTitle', language)} subtitle={dungeonName} clickThrough={clickThrough} opacity={opacity} onOpacityChange={handleOpacityChange} onToggleClickThrough={() => window.electronAPI?.toggleClickThrough?.()} />
             <div style={{ flex: 1, overflowY: 'auto', padding: '4px' }}>
-                {loading && <div style={{ textAlign: 'center', color: '#bbb' }}>{getTranslation('common.loading', language)}</div>}
+                {loading && <div style={{ textAlign: 'center', color: COLORS.textSecondary }}>{getTranslation('common.loading', language)}</div>}
                 {!loading && !group && <div style={{ color: COLORS.error }}>{getTranslation('group.notFound', language)}</div>}
                 {!loading && group && (
                     <>
                         {group.dungeon_image && <img src={`${apiUrl}/${group.dungeon_image}`} alt="" style={{ width: '100%', borderRadius: 8, marginBottom: 10 }} />}
                         {group.title && <h3 style={{ marginBottom: 6, fontSize: 14 }}>{group.title}</h3>}
-                        {group.description && <p style={{ fontSize: 12, color: '#cbd5e1', marginBottom: 10 }}>{group.description}</p>}
+                        {group.description && <p style={{ fontSize: 12, color: COLORS.textSecondary, marginBottom: 10 }}>{group.description}</p>}
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 12, fontSize: 11 }}>
                             <div><span style={{ color: COLORS.textSecondary }}>{getTranslation('common.level', language)}:</span> {group.dungeon_lvl}</div>
                             <div><span style={{ color: COLORS.textSecondary }}>{getTranslation('common.stasis', language)}:</span> {group.stasis}</div>
@@ -861,20 +1073,20 @@ function GroupDetailView({ groupId, language = 'es' }) {
                                 <div><span style={{ color: COLORS.textSecondary }}>{getTranslation('common.intervention', language)}:</span> {group.intervention_active ? getTranslation('common.yes', language) : getTranslation('common.no', language)}</div>
                             )}
                             <div><span style={{ color: COLORS.textSecondary }}>{getTranslation('common.server', language)}:</span> {group.server}</div>
-                            <div><span style={{ color: '#94a3b8' }}>{getTranslation('common.status', language)}:</span> {group.status === 'open' ? '🟢' : '🔴'}</div>
+                            <div><span style={{ color: COLORS.textSecondary }}>{getTranslation('common.status', language)}:</span> {group.status === 'open' ? '🟢' : '🔴'}</div>
                         </div>
                         {group.steles_active && drops.length > 0 && (
                             <div style={{ marginBottom: 10 }}>
-                                <button onClick={() => setShowDrops(!showDrops)} style={{ padding: '6px 12px', background: showDrops ? '#c9a227' : 'rgba(255,255,255,0.1)', color: showDrops ? '#000' : '#fff', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 11, fontWeight: 'bold', marginBottom: 8 }}>
+                                <button onClick={() => setShowDrops(!showDrops)} style={{ padding: '6px 12px', background: showDrops ? COLORS.primaryDark : COLORS.buttonMuted, color: showDrops ? COLORS.darkText : COLORS.lightText, border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 11, fontWeight: 'bold', marginBottom: 8 }}>
                                     {showDrops ? getTranslation('group.dropsHide', language) : getTranslation('group.dropsActive', language)}
                                 </button>
                                 {showDrops && (
-                                    <div style={{ background: 'rgba(0,0,0,0.2)', borderRadius: 8, padding: 10 }}>
+                                    <div style={{ background: COLORS.surfaceInset, borderRadius: 8, padding: 10 }}>
                                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(60px, 1fr))', gap: 8 }}>
                                             {drops.map((d) => (
                                                 <div key={d.id} style={{ textAlign: 'center' }}>
-                                                    <img src={`${apiUrl}/assets/items/${d.graphic_parameters?.gfxId || '0000000'}.png`} alt="" style={{ width: 36, height: 36, borderRadius: 6, background: 'rgba(0,0,0,0.3)', display: 'block', margin: '0 auto' }} />
-                                                    <div style={{ fontSize: 8, color: '#e5e7eb', marginTop: 4 }}>{d.title?.es || `Item ${d.id}`}</div>
+                                                    <img src={`${apiUrl}/assets/items/${d.graphic_parameters?.gfxId || '0000000'}.png`} alt="" style={{ width: 36, height: 36, borderRadius: 6, background: COLORS.surfaceInset, display: 'block', margin: '0 auto' }} />
+                                                    <div style={{ fontSize: 8, color: COLORS.textPrimary, marginTop: 4 }}>{d.title?.es || `Item ${d.id}`}</div>
                                                 </div>
                                             ))}
                                         </div>
@@ -885,17 +1097,17 @@ function GroupDetailView({ groupId, language = 'es' }) {
                         <div style={{ marginBottom: 10 }}>
                             <h4 style={{ fontSize: 12, marginBottom: 6 }}>{getTranslation('group.membersTitle', language).replace('{count}', String((group.members?.length || 0) + 1))}</h4>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: 4, background: 'rgba(0,0,0,0.2)', borderRadius: 4 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: 4, background: COLORS.surfaceInset, borderRadius: 4 }}>
                                     {group.leader_class_icon && <img src={`${apiUrl}/${group.leader_class_icon}`} alt="" style={{ width: 24, height: 24 }} />}
                                     <span>{group.leader_name}</span>
-                                    <span style={{ fontSize: 10, color: '#94a3b8' }}>{group.leader_class_name}</span>
-                                    <span style={{ marginLeft: 'auto', fontSize: 9, background: '#c9a227', color: '#000', padding: '2px 6px', borderRadius: 4 }}>{getTranslation('group.leader', language)}</span>
+                                    <span style={{ fontSize: 10, color: COLORS.textSecondary }}>{group.leader_class_name}</span>
+                                    <span style={{ marginLeft: 'auto', fontSize: 9, background: COLORS.primaryDark, color: COLORS.darkText, padding: '2px 6px', borderRadius: 4 }}>{getTranslation('group.leader', language)}</span>
                                 </div>
                                 {(group.members || []).map((m) => (
-                                    <div key={m.membership_id} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: 4, background: 'rgba(0,0,0,0.2)', borderRadius: 4 }}>
+                                    <div key={m.membership_id} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: 4, background: COLORS.surfaceInset, borderRadius: 4 }}>
                                         {m.class_icon && <img src={`${apiUrl}/${m.class_icon}`} alt="" style={{ width: 24, height: 24 }} />}
                                         <span>{m.char_name}</span>
-                                        <span style={{ fontSize: 10, color: '#94a3b8' }}>{m.class_name}</span>
+                                        <span style={{ fontSize: 10, color: COLORS.textSecondary }}>{m.class_name}</span>
                                         {isLeader && (
                                             <button onClick={() => handleKickMember(m.char_id, m.char_name)} style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, padding: '2px' }} title={getTranslation('group.kick', language)}>👢</button>
                                         )}
@@ -903,12 +1115,12 @@ function GroupDetailView({ groupId, language = 'es' }) {
                                 ))}
                             </div>
                         </div>
-                        {error && <div style={{ color: '#ff7675', fontSize: 12, marginBottom: 8 }}>{error}</div>}
-                        {message && <div style={{ color: '#51cf66', fontSize: 12, marginBottom: 8 }}>{message}</div>}
+                        {error && <div style={{ color: COLORS.error, fontSize: 12, marginBottom: 8 }}>{error}</div>}
+                        {message && <div style={{ color: COLORS.success, fontSize: 12, marginBottom: 8 }}>{message}</div>}
                         {user && group.status === 'open' && (
                             <div style={{ marginBottom: 10 }}>
                                 <label style={{ fontSize: 11, display: 'block', marginBottom: 4 }}>{getTranslation('group.selectChar', language)}</label>
-                                <select value={selectedCharId} onChange={(e) => setSelectedCharId(e.target.value)} style={{ width: '100%', padding: 6, borderRadius: 4, background: 'rgba(0,0,0,0.3)', color: '#fff', border: '1px solid rgba(148,163,184,0.3)', marginBottom: 8 }}>
+                                <select value={selectedCharId} onChange={(e) => setSelectedCharId(e.target.value)} style={{ width: '100%', padding: 6, borderRadius: 4, background: COLORS.surfaceInset, color: COLORS.lightText, border: `1px solid ${COLORS.border}`, marginBottom: 8 }}>
                                     <option value="">Elige un personaje</option>
                                     {characters.map((c) => <option key={c.id} value={c.id}>{c.name} - {c.class_name} {getTranslation('common.levelShort', language)}{c.level}</option>)}
                                 </select>
@@ -917,22 +1129,22 @@ function GroupDetailView({ groupId, language = 'es' }) {
                         )}
                         {user && group && group.leader_user_id === user.id && (
                             <>
-                                <button onClick={handleDelete} disabled={deleting} style={{ width: '100%', padding: 10, marginBottom: 8, background: '#e74c3c', color: '#fff', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>{deleting ? 'Eliminando...' : '🗑 Eliminar grupo'}</button>
+                                <button onClick={handleDelete} disabled={deleting} style={{ width: '100%', padding: 10, marginBottom: 8, background: COLORS.error, color: COLORS.lightText, border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>{deleting ? 'Eliminando...' : '🗑 Eliminar grupo'}</button>
                                 {group.members && group.members.length > 0 && (
                                     <div style={{ marginBottom: 8 }}>
-                                        <select onChange={(e) => { if (e.target.value) { handleTransferLeadership(e.target.value, group.members.find(m => m.char_id === e.target.value)?.char_name); e.target.value = ''; } }} style={{ width: '100%', padding: 6, borderRadius: 4, background: 'rgba(0,0,0,0.3)', color: '#fff', border: '1px solid rgba(148,163,184,0.3)', fontSize: 11 }}>
+                                        <select onChange={(e) => { if (e.target.value) { handleTransferLeadership(e.target.value, group.members.find(m => m.char_id === e.target.value)?.char_name); e.target.value = ''; } }} style={{ width: '100%', padding: 6, borderRadius: 4, background: COLORS.surfaceInset, color: COLORS.lightText, border: `1px solid ${COLORS.border}`, fontSize: 11 }}>
                                             <option value="">{getTranslation('group.transfer', language)}</option>
                                             {group.members.map((m) => <option key={m.char_id} value={m.char_id}>{m.char_name}</option>)}
                                         </select>
                                     </div>
                                 )}
-                                <button onClick={handleLeaveGroupAsLeader} style={{ width: '100%', padding: 10, marginBottom: 8, background: '#f39c12', color: '#000', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>🚪 {getTranslation('group.leaveAsLeader', language)}</button>
+                                <button onClick={handleLeaveGroupAsLeader} style={{ width: '100%', padding: 10, marginBottom: 8, background: COLORS.warning, color: COLORS.darkText, border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>🚪 {getTranslation('group.leaveAsLeader', language)}</button>
                             </>
                         )}
                         {isMember && !isLeader && (
-                            <button onClick={handleLeaveGroup} style={{ width: '100%', padding: 10, marginBottom: 8, background: '#e74c3c', color: '#fff', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>🚪 {getTranslation('group.leave', language)}</button>
+                            <button onClick={handleLeaveGroup} style={{ width: '100%', padding: 10, marginBottom: 8, background: COLORS.error, color: COLORS.lightText, border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>🚪 {getTranslation('group.leave', language)}</button>
                         )}
-                        <button onClick={() => window.electronAPI?.openChat?.(groupId)} style={{ width: '100%', padding: 10, background: '#3498db', color: '#fff', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>💬 Abrir chat</button>
+                        <button onClick={() => window.electronAPI?.openChat?.(groupId)} style={{ width: '100%', padding: 10, background: COLORS.info, color: COLORS.lightText, border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>💬 Abrir chat</button>
                     </>
                 )}
             </div>
@@ -1026,30 +1238,30 @@ function ChatView({ groupId, language = 'es' }) {
 
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>
                 {isMember === false && (
-                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24, background: 'rgba(0,0,0,0.2)', borderRadius: 8 }}>
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24, background: COLORS.surfaceInset, borderRadius: 8 }}>
                         <span style={{ fontSize: 28 }}>🔒</span>
-                        <p style={{ color: '#94a3b8', fontSize: 13, marginTop: 8 }}>{getTranslation('chat.onlyMembers', language)}</p>
+                        <p style={{ color: COLORS.textSecondary, fontSize: 13, marginTop: 8 }}>{getTranslation('chat.onlyMembers', language)}</p>
                     </div>
                 )}
                 {isMember !== false && (
                     <>
-                        <div style={{ padding: '8px 0', fontSize: 11, color: connected ? '#51cf66' : '#94a3b8', display: 'flex', alignItems: 'center', gap: 4 }}>
-                            <span style={{ width: 6, height: 6, borderRadius: '50%', background: connected ? '#51cf66' : '#64748b', display: 'inline-block' }} />
+                        <div style={{ padding: '8px 0', fontSize: 11, color: connected ? COLORS.success : COLORS.textSecondary, display: 'flex', alignItems: 'center', gap: 4 }}>
+                            <span style={{ width: 6, height: 6, borderRadius: '50%', background: connected ? COLORS.success : COLORS.titleMuted, display: 'inline-block' }} />
                             {connected ? 'Conectado' : 'Conectando...'}
                         </div>
                         <div style={{ flex: 1, overflowY: 'auto', padding: '8px 0', display: 'flex', flexDirection: 'column', gap: 8 }}>
-                            {loadingHistory && <div style={{ textAlign: 'center', color: '#94a3b8' }}>{getTranslation('chat.loadingMessages', language)}</div>}
-                            {!loadingHistory && messages.length === 0 && <div style={{ textAlign: 'center', color: '#94a3b8', fontSize: 12 }}>{getTranslation('chat.noMessages', language)}</div>}
+                            {loadingHistory && <div style={{ textAlign: 'center', color: COLORS.textSecondary }}>{getTranslation('chat.loadingMessages', language)}</div>}
+                            {!loadingHistory && messages.length === 0 && <div style={{ textAlign: 'center', color: COLORS.textSecondary, fontSize: 12 }}>{getTranslation('chat.noMessages', language)}</div>}
                             {messages.map((msg) => (
                                 <div key={msg.id} style={{ display: 'flex', flexDirection: msg.user_id === user?.id ? 'row-reverse' : 'row', gap: 8, alignItems: 'flex-end' }}>
                                     <img src={msg.avatar ? `https://cdn.discordapp.com/avatars/${msg.discord_id}/${msg.avatar}.png` : 'https://cdn.discordapp.com/embed/avatars/0.png'} alt="" style={{ width: 28, height: 28, borderRadius: '50%', flexShrink: 0 }} />
                                     <div style={{ maxWidth: '75%' }}>
-                                        <span style={{ fontSize: 10, color: '#94a3b8', display: 'block', marginBottom: 2 }}>{msg.user_id !== user?.id && <strong style={{ color: '#c9a227', marginRight: 4 }}>{msg.username}</strong>}{new Date(typeof msg.created_at === 'number' ? msg.created_at * 1000 : msg.created_at).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' })}</span>
-                                        <div style={{ padding: '8px 12px', borderRadius: msg.user_id === user?.id ? '16px 16px 4px 16px' : '16px 16px 16px 4px', background: msg.user_id === user?.id ? '#c9a227' : 'rgba(0,0,0,0.3)', color: msg.user_id === user?.id ? '#000' : '#e2e8f0', fontSize: 13 }}>{msg.content}</div>
+                                        <span style={{ fontSize: 10, color: COLORS.textSecondary, display: 'block', marginBottom: 2 }}>{msg.user_id !== user?.id && <strong style={{ color: COLORS.primaryDark, marginRight: 4 }}>{msg.username}</strong>}{new Date(typeof msg.created_at === 'number' ? msg.created_at * 1000 : msg.created_at).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' })}</span>
+                                        <div style={{ padding: '8px 12px', borderRadius: msg.user_id === user?.id ? '16px 16px 4px 16px' : '16px 16px 16px 4px', background: msg.user_id === user?.id ? COLORS.primaryDark : COLORS.surfaceInset, color: msg.user_id === user?.id ? COLORS.darkText : COLORS.textPrimary, fontSize: 13 }}>{msg.content}</div>
                                     </div>
                                 </div>
                             ))}
-                            {error && <div style={{ color: '#ff7675', fontSize: 12 }}>{error}</div>}
+                            {error && <div style={{ color: COLORS.error, fontSize: 12 }}>{error}</div>}
                             <div ref={bottomRef} />
                         </div>
                         <div style={{ display: 'flex', gap: 8, paddingTop: 8 }}>
@@ -1061,9 +1273,9 @@ function ChatView({ groupId, language = 'es' }) {
                                 placeholder={getTranslation('chat.placeholder', language)}
                                 maxLength={500}
                                 disabled={!connected}
-                                style={{ width: '100%', padding: '10px 14px', borderRadius: 10, background: 'rgba(0,0,0,0.3)', color: '#fff', border: '1px solid rgba(148,163,184,0.3)', fontSize: 13, outline: 'none' }}
+                                style={{ width: '100%', padding: '10px 14px', borderRadius: 10, background: COLORS.surfaceInset, color: COLORS.lightText, border: `1px solid ${COLORS.border}`, fontSize: 13, outline: 'none' }}
                             />
-                            <button onClick={sendMessage} disabled={!connected || !input.trim()} style={{ width: 40, height: 40, borderRadius: 12, background: '#c9a227', color: '#000', border: 'none', cursor: 'pointer', fontSize: 14 }}>➤</button>
+                            <button onClick={sendMessage} disabled={!connected || !input.trim()} style={{ width: 40, height: 40, borderRadius: 12, background: COLORS.primaryDark, color: COLORS.darkText, border: 'none', cursor: 'pointer', fontSize: 14 }}>➤</button>
                         </div>
                     </>
                 )}
@@ -1072,8 +1284,8 @@ function ChatView({ groupId, language = 'es' }) {
     );
 }
 
-const PVP_MODE_COLORS = { '1v1': COLORS.pvpRed, '2v2': COLORS.pvpOrange, '3v3': COLORS.pvpBlue };
-const PVP_MODES = ['1v1', '2v2', '3v3'];
+const PVP_MODE_COLORS = { '1v1': COLORS.pvpRed, '2v2': COLORS.pvpOrange, '3v3': COLORS.pvpGold, '4v4': COLORS.pvpAmber, '5v5': COLORS.pvpBlue, '6v6': COLORS.pvpBronze };
+const PVP_MODES = ['1v1', '2v2', '3v3', '4v4', '5v5', '6v6'];
 const BAND_OPTIONS = [20, 35, 50, 65, 80, 95, 110, 125, 140, 155, 170, 185, 200, 215, 230, 245];
 
 // Vista crear PVP
@@ -1139,53 +1351,53 @@ function CreatePvpGroupView({ language = 'es' }) {
           }
       };
 
-    const modeColor = PVP_MODE_COLORS[formData.pvp_mode];
+    const modeColor = PVP_MODE_COLORS[formData.pvp_mode] || COLORS.primaryDark;
 
     return (
         <div style={rootStyle}>
               <WindowChrome title={getTranslation('pvp.createTitle', language)} subtitle="PVP" clickThrough={clickThrough} opacity={opacity} onOpacityChange={handleOpacityChange} onToggleClickThrough={() => window.electronAPI?.toggleClickThrough?.()} />
             <div style={{ flex: 1, overflowY: 'auto', padding: '4px' }}>
                 {loading ? (
-                    <div style={{ textAlign: 'center', color: '#bbb' }}>{getTranslation('common.loading', language)}</div>
+                    <div style={{ textAlign: 'center', color: COLORS.textSecondary }}>{getTranslation('common.loading', language)}</div>
                   ) : success ? (
-                      <div style={{ textAlign: 'center', color: '#51cf66', fontSize: 14, padding: 20 }}>{getTranslation('pvp.created', language)}</div>
+                      <div style={{ textAlign: 'center', color: COLORS.success, fontSize: 14, padding: 20 }}>{getTranslation('pvp.created', language)}</div>
                   ) : (
                       <form onSubmit={handleSubmit}>
-                          {error && <div style={{ color: '#ff7675', fontSize: 11, marginBottom: 10 }}>{error}</div>}
+                          {error && <div style={{ color: COLORS.error, fontSize: 11, marginBottom: 10 }}>{error}</div>}
                           <div style={{ marginBottom: 12 }}>
                               <label style={{ fontSize: 11, display: 'block', marginBottom: 4 }}>{getTranslation('group.title', language)}</label>
-                              <input type="text" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} placeholder={getTranslation('pvp.titlePlaceholder', language)} maxLength={100} required style={{ width: '100%', padding: 8, borderRadius: 6, background: 'rgba(0,0,0,0.3)', color: '#fff', border: '1px solid rgba(148,163,184,0.3)', fontSize: 12 }} />
+                              <input type="text" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} placeholder={getTranslation('pvp.titlePlaceholder', language)} maxLength={100} required style={{ width: '100%', padding: 8, borderRadius: 6, background: COLORS.surfaceInset, color: COLORS.lightText, border: `1px solid ${COLORS.border}`, fontSize: 12 }} />
                           </div>
                           <div style={{ marginBottom: 12 }}>
                               <label style={{ fontSize: 11, display: 'block', marginBottom: 6 }}>{getTranslation('pvp.mode', language)}</label>
                             <div style={{ display: 'flex', gap: 6 }}>
                                 {PVP_MODES.map((mode) => (
-                                    <button key={mode} type="button" onClick={() => setFormData({ ...formData, pvp_mode: mode })} style={{ flex: 1, padding: '10px 6px', border: `2px solid ${formData.pvp_mode === mode ? PVP_MODE_COLORS[mode] : 'rgba(148,163,184,0.3)'}`, borderRadius: 8, background: formData.pvp_mode === mode ? `${PVP_MODE_COLORS[mode]}22` : 'rgba(0,0,0,0.2)', color: formData.pvp_mode === mode ? PVP_MODE_COLORS[mode] : '#9ca3af', cursor: 'pointer', fontWeight: 700, fontSize: 14 }}>{mode}</button>
+                                    <button key={mode} type="button" onClick={() => setFormData({ ...formData, pvp_mode: mode })} style={{ flex: 1, padding: '10px 6px', border: `2px solid ${formData.pvp_mode === mode ? PVP_MODE_COLORS[mode] : COLORS.border}`, borderRadius: 8, background: formData.pvp_mode === mode ? `${PVP_MODE_COLORS[mode]}22` : COLORS.surfaceInset, color: formData.pvp_mode === mode ? PVP_MODE_COLORS[mode] : COLORS.textSecondary, cursor: 'pointer', fontWeight: 700, fontSize: 14 }}>{mode}</button>
                                 ))}
                             </div>
                         </div>
                         <div style={{ marginBottom: 12 }}>
                             <label style={{ fontSize: 11, display: 'block', marginBottom: 4 }}>{getTranslation('pvp.equipmentBandLabel', language)}</label>
-                            <select value={formData.equipment_band} onChange={(e) => setFormData({ ...formData, equipment_band: Number(e.target.value) })} style={{ width: '100%', padding: 8, borderRadius: 6, background: 'rgba(0,0,0,0.3)', color: '#fff', border: '1px solid rgba(148,163,184,0.3)', fontSize: 12 }}>
+                            <select value={formData.equipment_band} onChange={(e) => setFormData({ ...formData, equipment_band: Number(e.target.value) })} style={{ width: '100%', padding: 8, borderRadius: 6, background: COLORS.surfaceInset, color: COLORS.lightText, border: `1px solid ${COLORS.border}`, fontSize: 12 }}>
                                 {BAND_OPTIONS.map((n) => <option key={n} value={n}>{getTranslation('common.levelShort', language)} {n}</option>)}
                             </select>
                         </div>
                         <div style={{ marginBottom: 12 }}>
                             <label style={{ fontSize: 11, display: 'block', marginBottom: 4 }}>Personaje</label>
-                            <select value={formData.character_id} onChange={(e) => setFormData({ ...formData, character_id: e.target.value })} required style={{ width: '100%', padding: 8, borderRadius: 6, background: 'rgba(0,0,0,0.3)', color: '#fff', border: '1px solid rgba(148,163,184,0.3)', fontSize: 12 }}>
+                            <select value={formData.character_id} onChange={(e) => setFormData({ ...formData, character_id: e.target.value })} required style={{ width: '100%', padding: 8, borderRadius: 6, background: COLORS.surfaceInset, color: COLORS.lightText, border: `1px solid ${COLORS.border}`, fontSize: 12 }}>
                                 <option value="">{getTranslation('group.selectChar', language)}</option>
                                 {characters.map((c) => <option key={c.id} value={c.id}>{c.name} - {c.class_name} {getTranslation('common.levelShort', language)} {c.level}</option>)}
                             </select>
                         </div>
                         <div style={{ marginBottom: 16 }}>
                             <label style={{ fontSize: 11, display: 'block', marginBottom: 4 }}>{getTranslation('common.server', language)}</label>
-                            <select value={formData.server} onChange={(e) => setFormData({ ...formData, server: e.target.value })} style={{ width: '100%', padding: 8, borderRadius: 6, background: 'rgba(0,0,0,0.3)', color: '#fff', border: '1px solid rgba(148,163,184,0.3)', fontSize: 12 }}>
+                            <select value={formData.server} onChange={(e) => setFormData({ ...formData, server: e.target.value })} style={{ width: '100%', padding: 8, borderRadius: 6, background: COLORS.surfaceInset, color: COLORS.lightText, border: `1px solid ${COLORS.border}`, fontSize: 12 }}>
                                 <option value="Ogrest">Ogrest</option>
                                 <option value="Rubilax">Rubilax</option>
                                 <option value="Pandora">Pandora</option>
                             </select>
                         </div>
-                        <button type="submit" disabled={submitting} style={{ width: '100%', padding: 12, background: modeColor, color: '#000', border: 'none', borderRadius: 6, cursor: 'pointer', fontWeight: 'bold', fontSize: 13 }}>{submitting ? getTranslation('pvp.creating', language) : `⚔ ${getTranslation('pvp.create', language)}`}</button>
+                        <button type="submit" disabled={submitting} style={{ width: '100%', padding: 12, background: modeColor, color: COLORS.darkText, border: 'none', borderRadius: 6, cursor: 'pointer', fontWeight: 'bold', fontSize: 13 }}>{submitting ? getTranslation('pvp.creating', language) : `⚔ ${getTranslation('pvp.create', language)}`}</button>
                     </form>
                 )}
             </div>
@@ -1354,20 +1566,20 @@ function CreatePveGroupView({ language = 'es' }) {
             <WindowChrome title={getTranslation('pve.createTitle', language)} subtitle="PvE" clickThrough={clickThrough} opacity={opacity} onOpacityChange={handleOpacityChange} onToggleClickThrough={() => window.electronAPI?.toggleClickThrough?.()} />
             <div style={{ flex: 1, overflowY: 'auto', padding: '4px' }}>
                 {loading ? (
-                    <div style={{ textAlign: 'center', color: '#bbb' }}>{getTranslation('common.loading', language)}</div>
+                    <div style={{ textAlign: 'center', color: COLORS.textSecondary }}>{getTranslation('common.loading', language)}</div>
                 ) : success ? (
-                    <div style={{ textAlign: 'center', color: '#51cf66', fontSize: 14, padding: 20 }}>{getTranslation('pve.created', language)}</div>
+                    <div style={{ textAlign: 'center', color: COLORS.success, fontSize: 14, padding: 20 }}>{getTranslation('pve.created', language)}</div>
                 ) : (
                     <form onSubmit={handleSubmit}>
-                        {error && <div style={{ color: '#ff7675', fontSize: 11, marginBottom: 10 }}>{error}</div>}
+                        {error && <div style={{ color: COLORS.error, fontSize: 11, marginBottom: 10 }}>{error}</div>}
 
                         <div style={{ marginBottom: 12, position: 'relative' }}>
                             <label style={{ fontSize: 11, display: 'block', marginBottom: 4 }}>{getTranslation('group.dungeon', language)}</label>
-                            <input type="text" placeholder={getTranslation('pve.searchPlaceholder', language)} value={dungeonSearch !== '' ? dungeonSearch : (selectedDungeon?.name?.[language] || selectedDungeon?.name?.es || '')} onChange={(e) => { setDungeonSearch(e.target.value); setDungeonOpen(true); if (!e.target.value) setFormData(prev => ({ ...prev, dungeon_id: '' })); }} onFocus={() => { setDungeonSearch(''); setDungeonOpen(true); }} onBlur={() => setTimeout(() => setDungeonOpen(false), 150)} autoComplete="off" style={{ width: '100%', padding: 8, borderRadius: 6, background: 'rgba(0,0,0,0.3)', color: '#fff', border: '1px solid rgba(148,163,184,0.3)', fontSize: 12 }} />
+                            <input type="text" placeholder={getTranslation('pve.searchPlaceholder', language)} value={dungeonSearch !== '' ? dungeonSearch : (selectedDungeon?.name?.[language] || selectedDungeon?.name?.es || '')} onChange={(e) => { setDungeonSearch(e.target.value); setDungeonOpen(true); if (!e.target.value) setFormData(prev => ({ ...prev, dungeon_id: '' })); }} onFocus={() => { setDungeonSearch(''); setDungeonOpen(true); }} onBlur={() => setTimeout(() => setDungeonOpen(false), 150)} autoComplete="off" style={{ width: '100%', padding: 8, borderRadius: 6, background: COLORS.surfaceInset, color: COLORS.lightText, border: `1px solid ${COLORS.border}`, fontSize: 12 }} />
                             {dungeonOpen && (
-                                <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: 'rgba(30,30,50,0.95)', border: '1px solid rgba(148,163,184,0.3)', borderRadius: 6, maxHeight: 200, overflowY: 'auto', zIndex: 100 }}>
+                                <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: COLORS.surfaceElevated, border: `1px solid ${COLORS.border}`, borderRadius: 6, maxHeight: 200, overflowY: 'auto', zIndex: 100 }}>
                                     {dungeons.filter(d => { const q = dungeonSearch.toLowerCase(); return !q || getDungeonName(d, language).toLowerCase().includes(q); }).map(dungeon => (
-                                        <div key={dungeon.id} onMouseDown={() => { setFormData(prev => ({ ...prev, dungeon_id: String(dungeon.id) })); setDungeonSearch(''); setDungeonOpen(false); }} style={{ padding: '8px 12px', cursor: 'pointer', fontSize: 12, borderBottom: '1px solid rgba(148,163,184,0.1)' }}>{getDungeonName(dungeon, language)} <span style={{ color: '#9ca3af', fontSize: 10 }}>{getTranslation('common.level', language)} {dungeon.modulated}</span></div>
+                                        <div key={dungeon.id} onMouseDown={() => { setFormData(prev => ({ ...prev, dungeon_id: String(dungeon.id) })); setDungeonSearch(''); setDungeonOpen(false); }} style={{ padding: '8px 12px', cursor: 'pointer', fontSize: 12, borderBottom: `1px solid ${COLORS.borderLight}` }}>{getDungeonName(dungeon, language)} <span style={{ color: COLORS.textSecondary, fontSize: 10 }}>{getTranslation('common.level', language)} {dungeon.modulated}</span></div>
                                     ))}
                                 </div>
                             )}
@@ -1375,19 +1587,19 @@ function CreatePveGroupView({ language = 'es' }) {
 
                         <div style={{ marginBottom: 12 }}>
                             <label style={{ fontSize: 11, display: 'block', marginBottom: 4 }}>{getTranslation('group.titleOptional', language)}</label>
-                            <input type="text" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} placeholder={getTranslation('pve.titlePlaceholder', language)} maxLength={100} style={{ width: '100%', padding: 8, borderRadius: 6, background: 'rgba(0,0,0,0.3)', color: '#fff', border: '1px solid rgba(148,163,184,0.3)', fontSize: 12 }} />
+                            <input type="text" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} placeholder={getTranslation('pve.titlePlaceholder', language)} maxLength={100} style={{ width: '100%', padding: 8, borderRadius: 6, background: COLORS.surfaceInset, color: COLORS.lightText, border: `1px solid ${COLORS.border}`, fontSize: 12 }} />
                         </div>
 
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 12 }}>
                             <div>
                                 <label style={{ fontSize: 11, display: 'block', marginBottom: 4 }}>{getTranslation('common.stasis', language)}</label>
-                                <select value={formData.stasis} onChange={(e) => setFormData({ ...formData, stasis: Number(e.target.value) })} style={{ width: '100%', padding: 8, borderRadius: 6, background: 'rgba(0,0,0,0.3)', color: '#fff', border: '1px solid rgba(148,163,184,0.3)', fontSize: 12 }}>
+                                <select value={formData.stasis} onChange={(e) => setFormData({ ...formData, stasis: Number(e.target.value) })} style={{ width: '100%', padding: 8, borderRadius: 6, background: COLORS.surfaceInset, color: COLORS.lightText, border: `1px solid ${COLORS.border}`, fontSize: 12 }}>
                                     {Array.from({ length: 10 }, (_, i) => i + 1).map(n => <option key={n} value={n}>{n}</option>)}
                                 </select>
                             </div>
                             <div>
                                 <label style={{ fontSize: 11, display: 'block', marginBottom: 4 }}>{getTranslation('common.server', language)}</label>
-                                <select value={formData.server} onChange={(e) => setFormData({ ...formData, server: e.target.value })} style={{ width: '100%', padding: 8, borderRadius: 6, background: 'rgba(0,0,0,0.3)', color: '#fff', border: '1px solid rgba(148,163,184,0.3)', fontSize: 12 }}>
+                                <select value={formData.server} onChange={(e) => setFormData({ ...formData, server: e.target.value })} style={{ width: '100%', padding: 8, borderRadius: 6, background: COLORS.surfaceInset, color: COLORS.lightText, border: `1px solid ${COLORS.border}`, fontSize: 12 }}>
                                     <option value="Ogrest">Ogrest</option>
                                     <option value="Rubilax">Rubilax</option>
                                     <option value="Pandora">Pandora</option>
@@ -1398,7 +1610,7 @@ function CreatePveGroupView({ language = 'es' }) {
                         {hasSteles && (
                             <div style={{ marginBottom: 12 }}>
                                 <label style={{ fontSize: 11, display: 'block', marginBottom: 4 }}>{getTranslation('group.stelesActiveLabel', language)}</label>
-                                <select value={formData.steles_active ? 'yes' : 'no'} onChange={(e) => { const enabled = e.target.value === 'yes'; setFormData({ ...formData, steles_active: enabled }); if (!enabled) setShowDrops(false); }} style={{ width: '100%', padding: 8, borderRadius: 6, background: 'rgba(0,0,0,0.3)', color: '#fff', border: '1px solid rgba(148,163,184,0.3)', fontSize: 12 }}>
+                                <select value={formData.steles_active ? 'yes' : 'no'} onChange={(e) => { const enabled = e.target.value === 'yes'; setFormData({ ...formData, steles_active: enabled }); if (!enabled) setShowDrops(false); }} style={{ width: '100%', padding: 8, borderRadius: 6, background: COLORS.surfaceInset, color: COLORS.lightText, border: `1px solid ${COLORS.border}`, fontSize: 12 }}>
                                     <option value="no">{getTranslation('common.no', language)}</option>
                                     <option value="yes">{getTranslation('common.yes', language)}</option>
                                 </select>
@@ -1408,7 +1620,7 @@ function CreatePveGroupView({ language = 'es' }) {
                         {hasSteles && formData.steles_active && (
                             <div style={{ marginBottom: 12 }}>
                                 <label style={{ fontSize: 11, display: 'block', marginBottom: 4 }}>{getTranslation('group.stelesCountLabel', language)}</label>
-                                <select value={formData.steles_count} onChange={(e) => setFormData({ ...formData, steles_count: Number(e.target.value) })} style={{ width: '100%', padding: 8, borderRadius: 6, background: 'rgba(0,0,0,0.3)', color: '#fff', border: '1px solid rgba(148,163,184,0.3)', fontSize: 12 }}>
+                                <select value={formData.steles_count} onChange={(e) => setFormData({ ...formData, steles_count: Number(e.target.value) })} style={{ width: '100%', padding: 8, borderRadius: 6, background: COLORS.surfaceInset, color: COLORS.lightText, border: `1px solid ${COLORS.border}`, fontSize: 12 }}>
                                     {Array.from({ length: Math.max(1, stelesLvl) }, (_, i) => i + 1).map(n => <option key={n} value={n}>{n}</option>)}
                                 </select>
                             </div>
@@ -1416,7 +1628,7 @@ function CreatePveGroupView({ language = 'es' }) {
 
                         {hasSteles && formData.steles_active && (
                             <div style={{ marginBottom: 12 }}>
-                                <button type="button" onClick={() => window.electronAPI?.openDrops?.(formData.dungeon_id, formData.steles_drops)} style={{ width: '100%', padding: 10, borderRadius: 8, background: formData.steles_drops.length > 0 ? '#27ae60' : 'rgba(255,255,255,0.1)', color: '#fff', border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>
+                                <button type="button" onClick={() => window.electronAPI?.openDrops?.(formData.dungeon_id, formData.steles_drops)} style={{ width: '100%', padding: 10, borderRadius: 8, background: formData.steles_drops.length > 0 ? COLORS.success : COLORS.buttonMuted, color: COLORS.lightText, border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>
                                     💎 {getTranslation('pve.dropsCount', language).replace('{count}', String(formData.steles_drops.length))}
                                 </button>
                             </div>
@@ -1425,7 +1637,7 @@ function CreatePveGroupView({ language = 'es' }) {
                         {hasIntervention && (
                             <div style={{ marginBottom: 12 }}>
                                 <label style={{ fontSize: 11, display: 'block', marginBottom: 4 }}>{getTranslation('group.interventionActiveLabel', language)}</label>
-                                <select value={formData.intervention_active ? 'yes' : 'no'} onChange={(e) => setFormData({ ...formData, intervention_active: e.target.value === 'yes' })} style={{ width: '100%', padding: 8, borderRadius: 6, background: 'rgba(0,0,0,0.3)', color: '#fff', border: '1px solid rgba(148,163,184,0.3)', fontSize: 12 }}>
+                                <select value={formData.intervention_active ? 'yes' : 'no'} onChange={(e) => setFormData({ ...formData, intervention_active: e.target.value === 'yes' })} style={{ width: '100%', padding: 8, borderRadius: 6, background: COLORS.surfaceInset, color: COLORS.lightText, border: `1px solid ${COLORS.border}`, fontSize: 12 }}>
                                     <option value="no">{getTranslation('common.no', language)}</option>
                                     <option value="yes">{getTranslation('common.yes', language)}</option>
                                 </select>
@@ -1434,13 +1646,13 @@ function CreatePveGroupView({ language = 'es' }) {
 
                         <div style={{ marginBottom: 16 }}>
                             <label style={{ fontSize: 11, display: 'block', marginBottom: 4 }}>Personaje</label>
-                            <select value={formData.character_id} onChange={(e) => setFormData({ ...formData, character_id: e.target.value })} required style={{ width: '100%', padding: 8, borderRadius: 6, background: 'rgba(0,0,0,0.3)', color: '#fff', border: '1px solid rgba(148,163,184,0.3)', fontSize: 12 }}>
+                            <select value={formData.character_id} onChange={(e) => setFormData({ ...formData, character_id: e.target.value })} required style={{ width: '100%', padding: 8, borderRadius: 6, background: COLORS.surfaceInset, color: COLORS.lightText, border: `1px solid ${COLORS.border}`, fontSize: 12 }}>
                                 <option value="">{getTranslation('group.selectChar', language)}</option>
                                 {characters.map((c) => <option key={c.id} value={c.id}>{c.name} - {c.class_name} {getTranslation('common.levelShort', language)} {c.level}</option>)}
                             </select>
                         </div>
 
-                        <button type="submit" disabled={submitting} style={{ width: '100%', padding: 12, background: '#27ae60', color: '#fff', border: 'none', borderRadius: 6, cursor: 'pointer', fontWeight: 'bold', fontSize: 13 }}>{submitting ? getTranslation('pvp.creating', language) : `⚔ ${getTranslation('group.create', language)}`}</button>
+                        <button type="submit" disabled={submitting} style={{ width: '100%', padding: 12, background: COLORS.success, color: COLORS.lightText, border: 'none', borderRadius: 6, cursor: 'pointer', fontWeight: 'bold', fontSize: 13 }}>{submitting ? getTranslation('pvp.creating', language) : `⚔ ${getTranslation('group.create', language)}`}</button>
                     </form>
                 )}
             </div>
@@ -1580,8 +1792,8 @@ function PvpGroupDetailView({ groupId, language = 'es' }) {
 
     if (!groupId) return <div style={rootStyle}>ID no válido</div>;
 
-    const modeColor = group ? (PVP_MODE_COLORS[group.pvp_mode] || '#c9a227') : '#c9a227';
-    const slotsPerTeam = group?.pvp_mode === '1v1' ? 1 : group?.pvp_mode === '2v2' ? 2 : 3;
+    const modeColor = group ? (PVP_MODE_COLORS[group.pvp_mode] || COLORS.primaryDark) : COLORS.primaryDark;
+    const slotsPerTeam = getSlotsPerTeam(group?.pvp_mode);
 
     const allParticipants = [];
     if (group) {
@@ -1595,63 +1807,63 @@ function PvpGroupDetailView({ groupId, language = 'es' }) {
         <div style={rootStyle}>
             <WindowChrome title={getTranslation('pvp.title', language) || 'Enfrentamiento PVP'} subtitle={group?.pvp_mode} clickThrough={clickThrough} opacity={opacity} onOpacityChange={handleOpacityChange} onToggleClickThrough={() => window.electronAPI?.toggleClickThrough?.()} />
             <div style={{ flex: 1, overflowY: 'auto', padding: '4px' }}>
-                {loading && <div style={{ textAlign: 'center', color: '#bbb' }}>{getTranslation('common.loading', language)}</div>}
-                {!loading && !group && <div style={{ color: '#ff7675' }}>{getTranslation('pvp.notFound', language)}</div>}
+                {loading && <div style={{ textAlign: 'center', color: COLORS.textSecondary }}>{getTranslation('common.loading', language)}</div>}
+                {!loading && !group && <div style={{ color: COLORS.error }}>{getTranslation('pvp.notFound', language)}</div>}
                 {!loading && group && (
                     <>
                         {group.title && <h3 style={{ marginBottom: 6, fontSize: 14, color: modeColor }}>{group.title}</h3>}
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 12, fontSize: 11 }}>
-                            <div><span style={{ color: '#94a3b8' }}>{getTranslation('pvp.mode', language)}:</span> <span style={{ color: modeColor, fontWeight: 700 }}>{group.pvp_mode}</span></div>
-                            <div><span style={{ color: '#94a3b8' }}>{getTranslation('common.levelShort', language)}</span> {group.equipment_band}</div>
-                            <div><span style={{ color: '#94a3b8' }}>{getTranslation('common.server', language)}:</span> {group.server}</div>
-                            <div><span style={{ color: '#94a3b8' }}>{getTranslation('common.status', language)}:</span> {group.status === 'open' ? '🟢' : '🔴'}</div>
+                            <div><span style={{ color: COLORS.textSecondary }}>{getTranslation('pvp.mode', language)}:</span> <span style={{ color: modeColor, fontWeight: 700 }}>{group.pvp_mode}</span></div>
+                            <div><span style={{ color: COLORS.textSecondary }}>{getTranslation('common.levelShort', language)}</span> {group.equipment_band}</div>
+                            <div><span style={{ color: COLORS.textSecondary }}>{getTranslation('common.server', language)}:</span> {group.server}</div>
+                            <div><span style={{ color: COLORS.textSecondary }}>{getTranslation('common.status', language)}:</span> {group.status === 'open' ? '🟢' : '🔴'}</div>
                         </div>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 8, marginBottom: 12 }}>
-                            <div style={{ background: 'rgba(220,50,50,0.1)', border: '2px dashed #e57373', borderRadius: 10, padding: 10 }}>
-                                <div style={{ fontWeight: 700, fontSize: 12, color: '#e57373', textAlign: 'center', marginBottom: 6 }}>🔴 {redTeam.length}/{slotsPerTeam}</div>
-                                {redTeam.map((p) => (<div key={p.charId} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: 4, background: 'rgba(0,0,0,0.2)', borderRadius: 4, marginBottom: 4 }}>{p.classIcon && <img src={`${apiUrl}/${p.classIcon}`} alt="" style={{ width: 20, height: 20 }} />}<span style={{ fontSize: 11, flex: 1 }}>{p.charName}</span>{p.isLeader && <span style={{ fontSize: 9, background: '#e57373', color: '#000', padding: '1px 4px', borderRadius: 3 }}>L</span>}{isLeader && !p.isLeader && (
+                            <div style={{ background: 'rgba(211,107,95,0.1)', border: `2px dashed ${COLORS.pvpRed}`, borderRadius: 10, padding: 10 }}>
+                                <div style={{ fontWeight: 700, fontSize: 12, color: COLORS.pvpRed, textAlign: 'center', marginBottom: 6 }}>🔴 {redTeam.length}/{slotsPerTeam}</div>
+                                {redTeam.map((p) => (<div key={p.charId} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: 4, background: COLORS.surfaceInset, borderRadius: 4, marginBottom: 4 }}>{p.classIcon && <img src={`${apiUrl}/${p.classIcon}`} alt="" style={{ width: 20, height: 20 }} />}<span style={{ fontSize: 11, flex: 1 }}>{p.charName}</span>{p.isLeader && <span style={{ fontSize: 9, background: COLORS.pvpRed, color: COLORS.darkText, padding: '1px 4px', borderRadius: 3 }}>L</span>}{isLeader && !p.isLeader && (
                                             <button onClick={() => handleKickMember(p.charId, p.charName)} style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, padding: '2px' }} title={getTranslation('group.kick', language)}>👢</button>
                                         )}</div>))}
-                                {Array.from({ length: Math.max(0, slotsPerTeam - redTeam.length) }).map((_, i) => (<div key={`slot-red-${i}`} style={{ height: 32, border: '1.5px dashed #e57373', borderRadius: 6, opacity: 0.3, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: '#e57373', marginBottom: 4 }}>{getTranslation('common.free', language)}</div>))}
+                                {Array.from({ length: Math.max(0, slotsPerTeam - redTeam.length) }).map((_, i) => (<div key={`slot-red-${i}`} style={{ height: 32, border: `1.5px dashed ${COLORS.pvpRed}`, borderRadius: 6, opacity: 0.3, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: COLORS.pvpRed, marginBottom: 4 }}>{getTranslation('common.free', language)}</div>))}
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', fontSize: 18, fontWeight: 900, color: '#c9a227' }}>VS</div>
-                            <div style={{ background: 'rgba(50,100,220,0.1)', border: '2px dashed #64b5f6', borderRadius: 10, padding: 10 }}>
-                                <div style={{ fontWeight: 700, fontSize: 12, color: '#64b5f6', textAlign: 'center', marginBottom: 6 }}>🔵 {blueTeam.length}/{slotsPerTeam}</div>
-                                {blueTeam.map((p) => (<div key={p.charId} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: 4, background: 'rgba(0,0,0,0.2)', borderRadius: 4, marginBottom: 4 }}>{p.classIcon && <img src={`${apiUrl}/${p.classIcon}`} alt="" style={{ width: 20, height: 20 }} />}<span style={{ fontSize: 11, flex: 1 }}>{p.charName}</span>{p.isLeader && <span style={{ fontSize: 9, background: '#64b5f6', color: '#000', padding: '1px 4px', borderRadius: 3 }}>L</span>}{isLeader && !p.isLeader && (
+                            <div style={{ display: 'flex', alignItems: 'center', fontSize: 18, fontWeight: 900, color: COLORS.primaryDark }}>VS</div>
+                            <div style={{ background: 'rgba(122,158,184,0.12)', border: `2px dashed ${COLORS.pvpBlue}`, borderRadius: 10, padding: 10 }}>
+                                <div style={{ fontWeight: 700, fontSize: 12, color: COLORS.pvpBlue, textAlign: 'center', marginBottom: 6 }}>🔵 {blueTeam.length}/{slotsPerTeam}</div>
+                                {blueTeam.map((p) => (<div key={p.charId} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: 4, background: COLORS.surfaceInset, borderRadius: 4, marginBottom: 4 }}>{p.classIcon && <img src={`${apiUrl}/${p.classIcon}`} alt="" style={{ width: 20, height: 20 }} />}<span style={{ fontSize: 11, flex: 1 }}>{p.charName}</span>{p.isLeader && <span style={{ fontSize: 9, background: COLORS.pvpBlue, color: COLORS.darkText, padding: '1px 4px', borderRadius: 3 }}>L</span>}{isLeader && !p.isLeader && (
                                             <button onClick={() => handleKickMember(p.charId, p.charName)} style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, padding: '2px' }} title={getTranslation('group.kick', language)}>👢</button>
                                         )}</div>))}
-                                {Array.from({ length: Math.max(0, slotsPerTeam - blueTeam.length) }).map((_, i) => (<div key={`slot-blue-${i}`} style={{ height: 32, border: '1.5px dashed #64b5f6', borderRadius: 6, opacity: 0.3, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: '#64b5f6', marginBottom: 4 }}>{getTranslation('common.free', language)}</div>))}
+                                {Array.from({ length: Math.max(0, slotsPerTeam - blueTeam.length) }).map((_, i) => (<div key={`slot-blue-${i}`} style={{ height: 32, border: `1.5px dashed ${COLORS.pvpBlue}`, borderRadius: 6, opacity: 0.3, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: COLORS.pvpBlue, marginBottom: 4 }}>{getTranslation('common.free', language)}</div>))}
                             </div>
                         </div>
-                        {error && <div style={{ color: '#ff7675', fontSize: 12, marginBottom: 8 }}>{error}</div>}
-                        {message && <div style={{ color: '#51cf66', fontSize: 12, marginBottom: 8 }}>{message}</div>}
+                        {error && <div style={{ color: COLORS.error, fontSize: 12, marginBottom: 8 }}>{error}</div>}
+                        {message && <div style={{ color: COLORS.success, fontSize: 12, marginBottom: 8 }}>{message}</div>}
                         {user && group.status === 'open' && !isMember && (
                             <div style={{ marginBottom: 10 }}>
                                 <label style={{ fontSize: 11, display: 'block', marginBottom: 4 }}>Tu personaje</label>
-                                <select value={selectedCharId} onChange={(e) => setSelectedCharId(e.target.value)} style={{ width: '100%', padding: 6, borderRadius: 4, background: 'rgba(0,0,0,0.3)', color: '#fff', border: '1px solid rgba(148,163,184,0.3)', marginBottom: 8 }}>
+                                <select value={selectedCharId} onChange={(e) => setSelectedCharId(e.target.value)} style={{ width: '100%', padding: 6, borderRadius: 4, background: COLORS.surfaceInset, color: COLORS.lightText, border: `1px solid ${COLORS.border}`, marginBottom: 8 }}>
                                     <option value="">Elige personaje</option>
                                     {characters.map((c) => <option key={c.id} value={c.id}>{c.name} - {c.class_name} {getTranslation('common.levelShort', language)}{c.level}</option>)}
                                 </select>
-                                <button onClick={handleApply} disabled={applying || !selectedCharId} style={{ padding: '8px 12px', background: modeColor, color: '#000', border: 'none', borderRadius: 6, cursor: 'pointer', fontWeight: 'bold', fontSize: 12, width: '100%' }}>{applying ? 'Enviando...' : '⚔ Solicitar'}</button>
+                                <button onClick={handleApply} disabled={applying || !selectedCharId} style={{ padding: '8px 12px', background: modeColor, color: COLORS.darkText, border: 'none', borderRadius: 6, cursor: 'pointer', fontWeight: 'bold', fontSize: 12, width: '100%' }}>{applying ? 'Enviando...' : '⚔ Solicitar'}</button>
                             </div>
                         )}
                         {isMember && !isLeader && (
-                            <button onClick={handleLeaveGroup} style={{ width: '100%', padding: 10, marginBottom: 8, background: '#e74c3c', color: '#fff', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>🚪 {getTranslation('group.leave', language)}</button>
+                            <button onClick={handleLeaveGroup} style={{ width: '100%', padding: 10, marginBottom: 8, background: COLORS.error, color: COLORS.lightText, border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>🚪 {getTranslation('group.leave', language)}</button>
                         )}
                         {isLeader && (
                             <>
                                 {group.members && group.members.length > 0 && (
                                     <div style={{ marginBottom: 8 }}>
-                                        <select onChange={(e) => { if (e.target.value) { handleTransferLeadership(e.target.value, group.members.find(m => m.char_id === e.target.value)?.char_name); e.target.value = ''; } }} style={{ width: '100%', padding: 6, borderRadius: 4, background: 'rgba(0,0,0,0.3)', color: '#fff', border: '1px solid rgba(148,163,184,0.3)', fontSize: 11 }}>
+                                        <select onChange={(e) => { if (e.target.value) { handleTransferLeadership(e.target.value, group.members.find(m => m.char_id === e.target.value)?.char_name); e.target.value = ''; } }} style={{ width: '100%', padding: 6, borderRadius: 4, background: COLORS.surfaceInset, color: COLORS.lightText, border: `1px solid ${COLORS.border}`, fontSize: 11 }}>
                                             <option value="">{getTranslation('group.transfer', language)}</option>
                                             {group.members.map((m) => <option key={m.char_id} value={m.char_id}>{m.char_name}</option>)}
                                         </select>
                                     </div>
                                 )}
-                                <button onClick={handleLeaveGroupAsLeader} style={{ width: '100%', padding: 10, marginBottom: 8, background: '#f39c12', color: '#000', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>🚪 {getTranslation('group.leaveAsLeader', language)}</button>
+                                <button onClick={handleLeaveGroupAsLeader} style={{ width: '100%', padding: 10, marginBottom: 8, background: COLORS.warning, color: COLORS.darkText, border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>🚪 {getTranslation('group.leaveAsLeader', language)}</button>
                             </>
                         )}
-                        <button onClick={() => window.electronAPI?.openChat?.(groupId)} style={{ width: '100%', padding: 10, background: '#3498db', color: '#fff', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>💬 {getTranslation('chat.open', language)}</button>
+                        <button onClick={() => window.electronAPI?.openChat?.(groupId)} style={{ width: '100%', padding: 10, background: COLORS.info, color: COLORS.lightText, border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}>💬 {getTranslation('chat.open', language)}</button>
                     </>
                 )}
             </div>
@@ -1740,9 +1952,9 @@ function DropsSelectionView({ dungeonId, selectedDrops: initialDrops, language =
             <WindowChrome title={getTranslation('drops.title', language)} subtitle={getDungeonName(dungeon, language)} clickThrough={clickThrough} opacity={opacity} onOpacityChange={handleOpacityChange} onToggleClickThrough={() => window.electronAPI?.toggleClickThrough?.()} />
             <div style={{ flex: 1, overflowY: 'auto', padding: '4px' }}>
                 {loading ? (
-                    <div style={{ textAlign: 'center', color: '#bbb', padding: 20 }}>{getTranslation('drops.loading', language)}</div>
+                    <div style={{ textAlign: 'center', color: COLORS.textSecondary, padding: 20 }}>{getTranslation('drops.loading', language)}</div>
                 ) : dropItems.length === 0 ? (
-                    <div style={{ textAlign: 'center', color: '#bbb', padding: 20 }}>{getTranslation('drops.none', language)}</div>
+                    <div style={{ textAlign: 'center', color: COLORS.textSecondary, padding: 20 }}>{getTranslation('drops.none', language)}</div>
                 ) : (
                     <>
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(60px, 1fr))', gap: 8, padding: 8 }}>
@@ -1755,25 +1967,25 @@ function DropsSelectionView({ dungeonId, selectedDrops: initialDrops, language =
                                         style={{
                                             position: 'relative',
                                             textAlign: 'center',
-                                            background: isSelected ? 'rgba(34,197,94,0.2)' : 'rgba(0,0,0,0.2)',
-                                            border: `2px solid ${isSelected ? '#27ae60' : 'rgba(148,163,184,0.3)'}`,
+                                            background: isSelected ? COLORS.successSoft : COLORS.surfaceInset,
+                                            border: `2px solid ${isSelected ? COLORS.success : COLORS.border}`,
                                             borderRadius: 10,
                                             padding: 8,
                                             cursor: 'pointer',
                                         }}
                                         title={getItemTitle({ title: d.title }, language) || `Item ${d.id}`}
                                     >
-                                        <img src={`${apiUrl}/assets/items/${d.graphic_parameters?.gfxId || '0000000'}.png`} alt="" style={{ width: 36, height: 36, borderRadius: 6, display: 'block', margin: '0 auto', background: 'rgba(0,0,0,0.3)' }} />
-                                        <div style={{ fontSize: 9, color: '#fff', marginTop: 4, lineHeight: 1.2 }}>{getItemTitle({ title: d.title }, language) || `Item ${d.id}`}</div>
-                                        <div style={{ fontSize: 8, color: '#9ca3af' }}>{d.dropRate}</div>
+                                        <img src={`${apiUrl}/assets/items/${d.graphic_parameters?.gfxId || '0000000'}.png`} alt="" style={{ width: 36, height: 36, borderRadius: 6, display: 'block', margin: '0 auto', background: COLORS.surfaceInset }} />
+                                        <div style={{ fontSize: 9, color: COLORS.lightText, marginTop: 4, lineHeight: 1.2 }}>{getItemTitle({ title: d.title }, language) || `Item ${d.id}`}</div>
+                                        <div style={{ fontSize: 8, color: COLORS.textSecondary }}>{d.dropRate}</div>
                                         {isSelected && (
-                                            <span style={{ position: 'absolute', top: 4, right: 4, width: 18, height: 18, borderRadius: '50%', background: '#27ae60', color: '#000', fontSize: 11, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✓</span>
+                                            <span style={{ position: 'absolute', top: 4, right: 4, width: 18, height: 18, borderRadius: '50%', background: COLORS.success, color: COLORS.darkText, fontSize: 11, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✓</span>
                                         )}
                                     </button>
                                 );
                             })}
                         </div>
-                        <button onClick={handleConfirm} style={{ width: '100%', padding: 14, background: '#27ae60', color: '#fff', border: 'none', borderRadius: 12, cursor: 'pointer', fontWeight: 'bold', fontSize: 14, marginTop: 12 }}>
+                        <button onClick={handleConfirm} style={{ width: '100%', padding: 14, background: COLORS.success, color: COLORS.lightText, border: 'none', borderRadius: 12, cursor: 'pointer', fontWeight: 'bold', fontSize: 14, marginTop: 12 }}>
                             {getTranslation('drops.confirm', language).replace('{count}', String(selectedDrops.length))}
                         </button>
                     </>

@@ -1,4 +1,4 @@
-const { app, BrowserWindow, globalShortcut, ipcMain, shell, Notification, screen, dialog } = require('electron');
+const { app, BrowserWindow, globalShortcut, ipcMain, shell, Notification, screen } = require('electron');
 const path = require('path');
 const http = require('http');
 const { autoUpdater } = require('electron-updater');
@@ -9,6 +9,12 @@ let detailWindow = null;
 let authWindow = null;
 let clickThrough = false;
 let updateCheckInterval = null;
+
+function sendUpdaterStatus(payload) {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.webContents.send('updater-status', payload);
+    }
+}
 
 function applyClickThroughToAllWindows(value) {
     mainWindow?.setIgnoreMouseEvents(value, { forward: true });
@@ -71,40 +77,33 @@ function setupAutoUpdater() {
 
     autoUpdater.on('error', (error) => {
         console.error('Auto-update error:', error);
+        sendUpdaterStatus({
+            type: 'error',
+            message: error?.message || 'No se pudo completar la actualizacion.',
+        });
     });
 
-    autoUpdater.on('update-available', async (info) => {
-        const result = await dialog.showMessageBox({
-            type: 'info',
-            buttons: ['Descargar ahora', 'Despues'],
-            defaultId: 0,
-            cancelId: 1,
-            title: 'Actualizacion disponible',
-            message: `WakGroup ${info.version} ya esta disponible.`,
+    autoUpdater.on('update-available', (info) => {
+        sendUpdaterStatus({
+            type: 'available',
+            version: info.version,
             detail: 'La nueva version se descargara desde GitHub Releases y podras instalarla cuando termine.',
         });
-
-        if (result.response === 0) {
-            autoUpdater.downloadUpdate().catch((error) => {
-                console.error('Update download failed:', error);
-            });
-        }
     });
 
-    autoUpdater.on('update-downloaded', async () => {
-        const result = await dialog.showMessageBox({
-            type: 'info',
-            buttons: ['Instalar ahora', 'Mas tarde'],
-            defaultId: 0,
-            cancelId: 1,
-            title: 'Actualizacion lista',
-            message: 'La nueva version de WakGroup ya se descargo.',
+    autoUpdater.on('download-progress', (progress) => {
+        sendUpdaterStatus({
+            type: 'downloading',
+            percent: progress?.percent || 0,
+        });
+    });
+
+    autoUpdater.on('update-downloaded', (info) => {
+        sendUpdaterStatus({
+            type: 'downloaded',
+            version: info.version,
             detail: 'La aplicacion se cerrara y se instalara la actualizacion.',
         });
-
-        if (result.response === 0) {
-            setImmediate(() => autoUpdater.quitAndInstall());
-        }
     });
 
     autoUpdater.checkForUpdates().catch((error) => {
@@ -330,6 +329,16 @@ ipcMain.handle('toggle-click-through', () => {
     return clickThrough;
 });
 
+ipcMain.handle('download-update', async () => {
+    await autoUpdater.downloadUpdate();
+    return true;
+});
+
+ipcMain.handle('install-update', async () => {
+    setImmediate(() => autoUpdater.quitAndInstall());
+    return true;
+});
+
 ipcMain.handle('open-group-detail', (_, groupId) => {
     createDetailWindow(groupId, false);
 });
@@ -367,7 +376,7 @@ ipcMain.handle('open-wiki', () => {
 ipcMain.handle('open-login', () => {
     const loginUrl = `${API_URL}/auth/discord?from=desktop&desktop_callback_port=${DESKTOP_CALLBACK_PORT}`;
     
-    const authWindow = new BrowserWindow({
+    authWindow = new BrowserWindow({
         width: 500,
         height: 600,
         frame: true,
