@@ -82,24 +82,17 @@ async function syncDungeonCapacities(db: Pool, mazmosPath: string) {
 
 async function syncGroupStatuses(db: Pool) {
     await db.query(`
-        UPDATE groups AS g
+        UPDATE groups
         SET status = CASE
-                WHEN counts.member_total >= d.max_players THEN 'full'
+                WHEN (SELECT COUNT(*) FROM group_members gm WHERE gm.group_id = groups.id) + 1 >= d.max_players THEN 'full'
                 ELSE 'open'
             END,
             updated_at = CURRENT_TIMESTAMP
-        FROM dungeons AS d
-        JOIN (
-            SELECT g2.id, COUNT(gm.id) + 1 AS member_total
-            FROM groups AS g2
-            LEFT JOIN group_members AS gm ON gm.group_id = g2.id
-            WHERE g2.status IN ('open', 'full')
-            GROUP BY g2.id
-        ) AS counts ON counts.id = g.id
-        WHERE g.dungeon_id = d.id
-          AND g.status IN ('open', 'full')
-          AND g.status IS DISTINCT FROM CASE
-                WHEN counts.member_total >= d.max_players THEN 'full'
+        FROM dungeons d
+        WHERE groups.dungeon_id = d.id
+          AND groups.status IN ('open', 'full')
+          AND groups.status IS DISTINCT FROM CASE
+                WHEN (SELECT COUNT(*) FROM group_members gm WHERE gm.group_id = groups.id) + 1 >= d.max_players THEN 'full'
                 ELSE 'open'
             END
     `);
