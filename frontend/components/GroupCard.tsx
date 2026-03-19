@@ -56,7 +56,7 @@ export default function GroupCard({ group, onClick }: GroupProps) {
                             title={group.leader_class_name}
                         />
                     )}
-                    <span className="leader-name">{group.leader_username}</span>
+                    <span className="leader-name">{group.leader_name}</span>
                 </div>
 
                 <div className="group-card-members">
