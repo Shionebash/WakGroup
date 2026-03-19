@@ -73,10 +73,10 @@ async function syncDungeonCapacities(db: Pool, mazmosPath: string) {
 
     await db.query(`
         UPDATE dungeons AS d
-        SET max_players = src.max_players
+        SET max_players = src.max_players::integer
         FROM (VALUES ${placeholders}) AS src(id, max_players)
-        WHERE d.id = src.id
-          AND d.max_players IS DISTINCT FROM src.max_players
+        WHERE d.id = src.id::integer
+          AND d.max_players IS DISTINCT FROM src.max_players::integer
     `, values);
 }
 
