@@ -10,6 +10,23 @@ const router = Router();
 
 const VALID_SERVERS = ['Ogrest', 'Rubilax', 'Pandora'];
 
+async function isGroupMember(groupId: string, userId: string): Promise<boolean> {
+  const db = getDb();
+  const result = await db.query(`
+    SELECT 1
+    FROM group_members gm
+    JOIN characters c ON gm.character_id = c.id
+    WHERE gm.group_id = $1 AND c.user_id = $2
+    UNION
+    SELECT 1
+    FROM groups g
+    JOIN characters c ON g.leader_char_id = c.id
+    WHERE g.id = $3 AND c.user_id = $4
+  `, [groupId, userId, groupId, userId]);
+
+  return result.rows.length > 0;
+}
+
 // GET /groups - list with filters
 router.get('/', async (req: Request, res: Response) => {
   const db = getDb();
@@ -50,16 +67,45 @@ router.get('/', async (req: Request, res: Response) => {
   }
 });
 
+// GET /groups/:id/messages - chat history for members only
+router.get('/:id/messages', requireAuth, async (req: Request, res: Response): Promise<void> => {
+  const db = getDb();
+  const { id } = req.params;
+
+  try {
+    const isMember = await isGroupMember(id, req.user!.userId);
+    if (!isMember) {
+      res.status(403).json({ error: 'No eres miembro de este grupo' });
+      return;
+    }
+
+    const result = await db.query(`
+      SELECT cm.id, cm.content, cm.created_at,
+             u.id as user_id, u.discord_id, u.username, u.avatar
+      FROM chat_messages cm
+      JOIN users u ON cm.user_id = u.id
+      WHERE cm.group_id = $1
+      ORDER BY cm.created_at ASC
+      LIMIT 100
+    `, [id]);
+
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
 // GET /groups/:id - detail with members
 router.get('/:id', async (req: Request, res: Response): Promise<void> => {
   const db = getDb();
   const { id } = req.params;
 
   try {
-    const groupResult = await db.query(`
+        const groupResult = await db.query(`
             SELECT 
             g.*,
-            d.name_es as dungeon_name, d.image_path as dungeon_image, d.modulated as dungeon_lvl, d.max_players, d.max_players,
+            d.name_es as dungeon_name, d.image_path as dungeon_image, d.modulated as dungeon_lvl, d.max_players,
             c.name as leader_name, c.class_id as leader_class_id,
             cl.icon_path as leader_class_icon, cl.name_es as leader_class_name,
             u.username as leader_username, u.avatar as leader_avatar, u.id as leader_user_id
@@ -89,26 +135,6 @@ router.get('/:id', async (req: Request, res: Response): Promise<void> => {
             JOIN users u ON c.user_id = u.id
             WHERE gm.group_id = $1
         `, [id]);
-
-    // GET /groups/:id/messages - historial de chat
-    router.get('/:id/messages', async (req: Request, res: Response): Promise<void> => {
-      const db = getDb();
-      try {
-        const result = await db.query(`
-            SELECT cm.id, cm.content, cm.created_at, 
-            u.id as user_id, u.discord_id, u.username, u.avatar
-            FROM chat_messages cm
-            JOIN users u ON cm.user_id = u.id
-            WHERE cm.group_id = $1
-            ORDER BY cm.created_at ASC
-            LIMIT 100
-        `, [req.params.id]);
-        res.json(result.rows);
-      } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Database error' });
-      }
-    });
 
     // Get chat messages (last 50)
     const messagesResult = await db.query(`

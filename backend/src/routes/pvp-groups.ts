@@ -12,6 +12,23 @@ const VALID_PVP_MODES = ['1v1', '2v2', '3v3', '4v4', '5v5', '6v6'];
 const VALID_BANDS = [20, 35, 50, 65, 80, 95, 110, 125, 140, 155, 170, 185, 200, 215, 230, 245];
 const VALID_TEAMS = ['red', 'blue'];
 
+async function isPvpGroupMember(groupId: string, userId: string): Promise<boolean> {
+  const db = getDb();
+  const result = await db.query(`
+    SELECT 1
+    FROM pvp_group_members pgm
+    JOIN characters c ON pgm.character_id = c.id
+    WHERE pgm.pvp_group_id = $1 AND c.user_id = $2
+    UNION
+    SELECT 1
+    FROM pvp_groups pg
+    JOIN characters c ON pg.leader_char_id = c.id
+    WHERE pg.id = $3 AND c.user_id = $4
+  `, [groupId, userId, groupId, userId]);
+
+  return result.rows.length > 0;
+}
+
 // GET /pvp-groups - list with filters
 router.get('/', async (req: Request, res: Response) => {
   const db = getDb();
@@ -100,9 +117,15 @@ router.get('/:id', async (req: Request, res: Response): Promise<void> => {
 });
 
 // GET /pvp-groups/:id/messages
-router.get('/:id/messages', async (req: Request, res: Response): Promise<void> => {
+router.get('/:id/messages', requireAuth, async (req: Request, res: Response): Promise<void> => {
   const db = getDb();
   try {
+    const isMember = await isPvpGroupMember(req.params.id, req.user!.userId);
+    if (!isMember) {
+      res.status(403).json({ error: 'No eres miembro de este grupo' });
+      return;
+    }
+
     const result = await db.query(`
       SELECT cm.id, cm.content, cm.created_at,
         u.id as user_id, u.discord_id, u.username, u.avatar
