@@ -319,7 +319,7 @@ export default function GroupDetailModal({ groupId, onClose, onDeleted }: GroupD
                             )}
 
                             <div className="detail-section">
-                                <h4>{t('group.membersTitle', language).replace('{count}', String((group.members?.length || 0) + 1))}</h4>
+                                <h4>{t('group.membersTitle', language).replace('{count}', String((group.members?.length || 0) + 1)).replace('{max}', String(group.max_players || 6))}</h4>
                                 <div className="members-list">
                                     <div className="member-item">
                                         {group.leader_class_icon && (

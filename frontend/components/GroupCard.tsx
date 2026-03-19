@@ -61,7 +61,7 @@ export default function GroupCard({ group, onClick }: GroupProps) {
 
                 <div className="group-card-members">
                     <span className="member-count">
-                        👥 {group.member_count || 1}/6 {t('common.members', language).toLowerCase()}
+                        👥 {group.member_count || 1}/{group.max_players || 6} {t('common.members', language).toLowerCase()}
                     </span>
                 </div>
             </div>

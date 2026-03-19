@@ -18,7 +18,7 @@ router.get('/', async (req: Request, res: Response) => {
   let sql = `
     SELECT 
       g.*,
-      d.name_es as dungeon_name, d.image_path as dungeon_image, d.modulated as dungeon_lvl,
+      d.name_es as dungeon_name, d.image_path as dungeon_image, d.modulated as dungeon_lvl, d.max_players,
       c.name as leader_name, c.class_id as leader_class_id, c.server as leader_server,
       cl.icon_path as leader_class_icon, cl.name_es as leader_class_name,
       u.username as leader_username, u.avatar as leader_avatar, u.id as leader_user_id,
@@ -59,7 +59,7 @@ router.get('/:id', async (req: Request, res: Response): Promise<void> => {
     const groupResult = await db.query(`
             SELECT 
             g.*,
-            d.name_es as dungeon_name, d.image_path as dungeon_image, d.modulated as dungeon_lvl, d.max_players,
+            d.name_es as dungeon_name, d.image_path as dungeon_image, d.modulated as dungeon_lvl, d.max_players, d.max_players,
             c.name as leader_name, c.class_id as leader_class_id,
             cl.icon_path as leader_class_icon, cl.name_es as leader_class_name,
             u.username as leader_username, u.avatar as leader_avatar, u.id as leader_user_id

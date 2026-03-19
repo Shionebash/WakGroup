@@ -226,6 +226,12 @@ export default function CreateGroupModal({ onClose, onCreated, prefillDungeonId 
                             )}
                         </div>
 
+                        {selectedDungeon && (
+                            <div style={{ marginTop: -4, marginBottom: 12, fontSize: 12, color: 'var(--text-secondary)' }}>
+                                {t('common.players', language)}: {selectedDungeon.max_players || selectedDungeon.players || 6}
+                            </div>
+                        )}
+
                         <div className="form-group">
                             <label>{t('group.titleOptional', language)}</label>
                             <input

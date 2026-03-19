@@ -356,7 +356,7 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
   'group.dropsShow': { es: 'Drops activados', en: 'Active drops', fr: 'Drops actifs', pt: 'Drops ativos' },
   'group.bossDrops': { es: 'Drops del jefe', en: 'Boss drops', fr: 'Drops du boss', pt: 'Drops do chefe' },
   'group.noDrops': { es: 'Sin drops registrados para este jefe.', en: 'No drops registered for this boss.', fr: 'Aucun drop enregistré pour ce boss.', pt: 'Nenhum drop registrado para este chefe.' },
-  'group.membersTitle': { es: 'Miembros ({count}/6)', en: 'Members ({count}/6)', fr: 'Membres ({count}/6)', pt: 'Membros ({count}/6)' },
+  'group.membersTitle': { es: 'Miembros ({count}/{max})', en: 'Members ({count}/{max})', fr: 'Membres ({count}/{max})', pt: 'Membros ({count}/{max})' },
   'group.openChat': { es: 'Abrir chat del grupo', en: 'Open group chat', fr: 'Ouvrir le chat du groupe', pt: 'Abrir chat do grupo' },
   'group.chatLocked': { es: 'El chat está disponible solo para miembros del grupo.', en: 'Chat is available only for group members.', fr: 'Le chat est disponible uniquement pour les membres du groupe.', pt: 'O chat está disponível apenas para membros do grupo.' },
   'group.selectCharacter': { es: 'Selecciona tu personaje', en: 'Select your character', fr: 'Sélectionnez votre personnage', pt: 'Selecione seu personagem' },
