@@ -368,7 +368,7 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
   'group.errorLoadData': { es: 'Error al cargar datos', en: 'Error loading data', fr: 'Erreur de chargement des données', pt: 'Erro ao carregar dados' },
   'group.errorCreate': { es: 'Error al crear grupo', en: 'Error creating group', fr: 'Erreur lors de la création du groupe', pt: 'Erro ao criar grupo' },
   'group.character': { es: 'Personaje', en: 'Character', fr: 'Personnage', pt: 'Personagem' },
-  'group.titleOptional': { es: 'Título (opcional)', en: 'Title (optional)', fr: 'Titre (optionnel)', pt: 'Título (opcional)' },
+  'group.titleOptional': { es: 'Título', en: 'Title', fr: 'Titre', pt: 'Título' },
   'group.titlePlaceholder': { es: 'Ej: Grupo relajado', en: 'e.g., Chill group', fr: 'Ex. : Groupe tranquille', pt: 'Ex.: Grupo tranquilo' },
   'group.stelesCount': { es: 'Cuántas Estelas', en: 'How many Steles', fr: 'Combien de Stèles', pt: 'Quantas Estátuas' },
   'group.creating': { es: 'Creando...', en: 'Creating...', fr: 'Création...', pt: 'Criando...' },
