@@ -73,16 +73,24 @@ async function getPvpGroupUsers(db: Pool, groupId: string): Promise<string[]> {
 
 async function warnInactiveDungeonGroups(db: Pool, io: SocketServer | null) {
     const result = await db.query(`
+        WITH candidates AS (
+            SELECT
+                g.id,
+                c.user_id AS leader_user_id,
+                COALESCE(NULLIF(g.title, ''), d.name_es, 'Grupo') AS group_title
+            FROM groups g
+            JOIN characters c ON g.leader_char_id = c.id
+            LEFT JOIN dungeons d ON d.id = g.dungeon_id
+            WHERE g.status IN ('open', 'full')
+              AND g.inactivity_prompt_sent_at IS NULL
+              AND COALESCE(g.last_activity_at, g.created_at) <= CURRENT_TIMESTAMP - ${WARNING_INTERVAL_SQL}
+        )
         UPDATE groups g
         SET inactivity_prompt_sent_at = CURRENT_TIMESTAMP,
             updated_at = CURRENT_TIMESTAMP
-        FROM characters c
-        LEFT JOIN dungeons d ON d.id = g.dungeon_id
-        WHERE g.leader_char_id = c.id
-          AND g.status IN ('open', 'full')
-          AND g.inactivity_prompt_sent_at IS NULL
-          AND COALESCE(g.last_activity_at, g.created_at) <= CURRENT_TIMESTAMP - ${WARNING_INTERVAL_SQL}
-        RETURNING g.id, c.user_id AS leader_user_id, COALESCE(NULLIF(g.title, ''), d.name_es, 'Grupo') AS group_title
+        FROM candidates
+        WHERE g.id = candidates.id
+        RETURNING g.id, candidates.leader_user_id, candidates.group_title
     `);
 
     for (const row of result.rows as PromptRow[]) {
@@ -124,16 +132,24 @@ async function warnInactivePvpGroups(db: Pool, io: SocketServer | null) {
 
 async function closeInactiveDungeonGroups(db: Pool, io: SocketServer | null) {
     const result = await db.query(`
+        WITH candidates AS (
+            SELECT
+                g.id,
+                c.user_id AS leader_user_id,
+                COALESCE(NULLIF(g.title, ''), d.name_es, 'Grupo') AS group_title
+            FROM groups g
+            JOIN characters c ON g.leader_char_id = c.id
+            LEFT JOIN dungeons d ON d.id = g.dungeon_id
+            WHERE g.status IN ('open', 'full')
+              AND g.inactivity_prompt_sent_at IS NOT NULL
+              AND g.inactivity_prompt_sent_at <= CURRENT_TIMESTAMP - ${CLOSE_INTERVAL_SQL}
+        )
         UPDATE groups g
         SET status = 'closed',
             updated_at = CURRENT_TIMESTAMP
-        FROM characters c
-        LEFT JOIN dungeons d ON d.id = g.dungeon_id
-        WHERE g.leader_char_id = c.id
-          AND g.status IN ('open', 'full')
-          AND g.inactivity_prompt_sent_at IS NOT NULL
-          AND g.inactivity_prompt_sent_at <= CURRENT_TIMESTAMP - ${CLOSE_INTERVAL_SQL}
-        RETURNING g.id, c.user_id AS leader_user_id, COALESCE(NULLIF(g.title, ''), d.name_es, 'Grupo') AS group_title
+        FROM candidates
+        WHERE g.id = candidates.id
+        RETURNING g.id, candidates.leader_user_id, candidates.group_title
     `);
 
     for (const row of result.rows as ClosedRow[]) {
