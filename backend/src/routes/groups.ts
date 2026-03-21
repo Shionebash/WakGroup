@@ -5,6 +5,7 @@ import { getDb } from '../db/database.js';
 import { requireAuth } from '../middleware/auth.js';
 import { validateRequest } from '../middleware/validate.js';
 import { DungeonGroup } from '../types/index.js';
+import { acknowledgeGroupKeepAlive, touchDungeonGroupActivity } from '../services/group-inactivity.js';
 
 const router = Router();
 
@@ -205,6 +206,7 @@ router.post('/',
                 INSERT INTO groups (id, title, description, dungeon_id, leader_char_id, stasis, steles_active, steles_count, intervention_active, steles_drops, server)
                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
             `, [id, title, description || null, dungeon_id, leader_char_id, stasis, steles_active, steles_count, intervention_active, JSON.stringify(steles_drops || []), server]);
+      await touchDungeonGroupActivity(db, id);
 
       const newGroupResult = await db.query('SELECT * FROM groups WHERE id = $1', [id]);
       res.status(201).json(newGroupResult.rows[0]);
@@ -263,6 +265,17 @@ router.patch('/:id/close', requireAuth, async (req: Request, res: Response): Pro
     console.error(err);
     res.status(500).json({ error: 'Database error' });
   }
+});
+
+// POST /groups/:id/keep-alive - leader confirms the group is still active
+router.post('/:id/keep-alive', requireAuth, async (req: Request, res: Response): Promise<void> => {
+  const db = getDb();
+  const ok = await acknowledgeGroupKeepAlive(db, 'dungeon', req.params.id, req.user!.userId);
+  if (!ok) {
+    res.status(404).json({ error: 'Grupo no encontrado o permisos insuficientes' });
+    return;
+  }
+  res.json({ ok: true });
 });
 
 // DELETE /groups/:id/members/:characterId - member leaves or leader kicks

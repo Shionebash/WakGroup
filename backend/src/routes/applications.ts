@@ -5,6 +5,7 @@ import { getDb } from '../db/database.js';
 import { requireAuth } from '../middleware/auth.js';
 import { validateRequest } from '../middleware/validate.js';
 import { Application, DungeonGroup } from '../types/index.js';
+import { touchDungeonGroupActivity } from '../services/group-inactivity.js';
 
 const router = Router();
 
@@ -51,6 +52,7 @@ router.post('/',
                 }
                 const memberId = uuidv4();
                 await db.query('INSERT INTO group_members (id, group_id, character_id) VALUES ($1, $2, $3)', [memberId, group_id, character_id]);
+                await touchDungeonGroupActivity(db, group_id);
                 res.status(201).json({ ok: true, auto_accepted: true });
                 return;
             }
@@ -81,6 +83,7 @@ router.post('/',
 
             const id = uuidv4();
             await db.query('INSERT INTO applications (id, group_id, character_id) VALUES ($1, $2, $3)', [id, group_id, character_id]);
+            await touchDungeonGroupActivity(db, group_id);
 
             // Get applicant username and char name for richer notification
             const applicantUserResult = await db.query('SELECT username FROM users WHERE id = $1', [req.user!.userId]);
@@ -183,6 +186,7 @@ router.patch('/:id',
                 // Add as member
                 const memberId = uuidv4();
                 await db.query('INSERT INTO group_members (id, group_id, character_id) VALUES ($1, $2, $3)', [memberId, app.group_id, app.character_id]);
+                await touchDungeonGroupActivity(db, app.group_id);
 
                 // Update group status if full
                 const newCount = memberCount + 1;
@@ -190,6 +194,7 @@ router.patch('/:id',
                     await db.query("UPDATE groups SET status = 'full', updated_at = CURRENT_TIMESTAMP WHERE id = $1", [app.group_id]);
                 }
             }
+            await touchDungeonGroupActivity(db, app.group_id);
 
             // Notify applicant
             const notifId = uuidv4();

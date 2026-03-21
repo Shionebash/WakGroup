@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
-import NotificationBell from '@/components/NotificationBell';
+import NotificationBell from '@/components/NotificationBellV2';
 import { useLanguage, LANGUAGE_LABELS, LANGUAGE_FLAGS, Language } from '@/lib/language-context';
 import { t } from '@/lib/translations';
 

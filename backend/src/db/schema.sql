@@ -187,6 +187,10 @@ ALTER TABLE groups ADD COLUMN IF NOT EXISTS steles_active BOOLEAN NOT NULL DEFAU
 ALTER TABLE groups ADD COLUMN IF NOT EXISTS steles_count INTEGER NOT NULL DEFAULT 1;
 ALTER TABLE groups ADD COLUMN IF NOT EXISTS intervention_active BOOLEAN NOT NULL DEFAULT false;
 ALTER TABLE groups ADD COLUMN IF NOT EXISTS steles_drops TEXT;
+ALTER TABLE groups ADD COLUMN IF NOT EXISTS last_activity_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE groups ADD COLUMN IF NOT EXISTS inactivity_prompt_sent_at TIMESTAMP;
+ALTER TABLE pvp_groups ADD COLUMN IF NOT EXISTS last_activity_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE pvp_groups ADD COLUMN IF NOT EXISTS inactivity_prompt_sent_at TIMESTAMP;
 
 
 CREATE INDEX IF NOT EXISTS idx_characters_user_id ON characters(user_id);
@@ -194,6 +198,7 @@ CREATE INDEX IF NOT EXISTS idx_characters_server ON characters(server);
 CREATE INDEX IF NOT EXISTS idx_groups_dungeon_id ON groups(dungeon_id);
 CREATE INDEX IF NOT EXISTS idx_groups_leader_char_id ON groups(leader_char_id);
 CREATE INDEX IF NOT EXISTS idx_groups_status ON groups(status);
+CREATE INDEX IF NOT EXISTS idx_groups_last_activity_at ON groups(last_activity_at);
 CREATE INDEX IF NOT EXISTS idx_groups_server ON groups(server);
 CREATE INDEX IF NOT EXISTS idx_group_members_group_id ON group_members(group_id);
 CREATE INDEX IF NOT EXISTS idx_group_members_character_id ON group_members(character_id);
@@ -201,4 +206,5 @@ CREATE INDEX IF NOT EXISTS idx_applications_group_id ON applications(group_id);
 CREATE INDEX IF NOT EXISTS idx_applications_character_id ON applications(character_id);
 CREATE INDEX IF NOT EXISTS idx_chat_messages_group_id ON chat_messages(group_id);
 CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications(user_id);
+CREATE INDEX IF NOT EXISTS idx_pvp_groups_last_activity_at ON pvp_groups(last_activity_at);
 CREATE INDEX IF NOT EXISTS idx_wiki_posts_dungeon_id ON wiki_posts(dungeon_id);

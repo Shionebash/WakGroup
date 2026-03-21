@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getDb } from '../db/database.js';
 import { requireAuth } from '../middleware/auth.js';
 import { validateRequest } from '../middleware/validate.js';
+import { touchPvpGroupActivity } from '../services/group-inactivity.js';
 
 const router = Router();
 
@@ -75,6 +76,7 @@ router.post('/',
         INSERT INTO pvp_applications (id, pvp_group_id, character_id)
         VALUES ($1, $2, $3)
       `, [id, pvp_group_id, character_id]);
+      await touchPvpGroupActivity(db, pvp_group_id);
 
       // Get leader user_id from the group's leader character
       const leaderResult = await db.query(
@@ -194,6 +196,7 @@ router.patch('/:id',
           'INSERT INTO pvp_group_members (id, pvp_group_id, character_id) VALUES ($1, $2, $3)',
           [memberId, app.pvp_group_id, app.character_id]
         );
+        await touchPvpGroupActivity(db, app.pvp_group_id);
 
         const newCount = memberCount + 1;
         if (newCount >= maxPlayers) {
@@ -203,6 +206,7 @@ router.patch('/:id',
           );
         }
       }
+      await touchPvpGroupActivity(db, app.pvp_group_id);
 
       // Notify the applicant
       const applicantUserResult = await db.query(

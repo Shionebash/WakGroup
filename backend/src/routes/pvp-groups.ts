@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getDb } from '../db/database.js';
 import { requireAuth } from '../middleware/auth.js';
 import { validateRequest } from '../middleware/validate.js';
+import { acknowledgeGroupKeepAlive, touchPvpGroupActivity } from '../services/group-inactivity.js';
 
 const router = Router();
 
@@ -175,6 +176,7 @@ router.post('/',
         INSERT INTO pvp_groups (id, title, leader_char_id, pvp_mode, equipment_band, server)
         VALUES ($1, $2, $3, $4, $5, $6)
       `, [id, title, leader_char_id, pvp_mode, Number(equipment_band), server]);
+      await touchPvpGroupActivity(db, id);
 
       const newGroup = await db.query('SELECT * FROM pvp_groups WHERE id = $1', [id]);
       res.status(201).json(newGroup.rows[0]);
@@ -307,6 +309,17 @@ router.patch('/:id/close', requireAuth, async (req: Request, res: Response): Pro
     console.error(err);
     res.status(500).json({ error: 'Database error' });
   }
+});
+
+// POST /pvp-groups/:id/keep-alive - leader confirms the match is still active
+router.post('/:id/keep-alive', requireAuth, async (req: Request, res: Response): Promise<void> => {
+  const db = getDb();
+  const ok = await acknowledgeGroupKeepAlive(db, 'pvp', req.params.id, req.user!.userId);
+  if (!ok) {
+    res.status(404).json({ error: 'Grupo no encontrado o permisos insuficientes' });
+    return;
+  }
+  res.json({ ok: true });
 });
 
 // DELETE /pvp-groups/:id/members/:characterId - member leaves or leader kicks

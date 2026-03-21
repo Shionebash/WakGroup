@@ -20,6 +20,7 @@ import dungeonRoutes from './routes/dungeons.js';
 import pvpGroupRoutes from './routes/pvp-groups.js';
 import pvpApplicationRoutes from './routes/pvp-applications.js';
 import mobsRoutes from './routes/mobs.js';
+import { startGroupInactivityMonitor } from './services/group-inactivity.js';
 
 const app = express();
 app.set('trust proxy', 3);
@@ -36,6 +37,7 @@ export let io: ReturnType<typeof initSocket> | null = null;
 initDb().then(() => {
     // Init Socket.io after db starts
     io = initSocket(server);
+    startGroupInactivityMonitor(getDb(), io);
 }).catch(console.error);
 
 

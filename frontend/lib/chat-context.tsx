@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import React, {
     createContext, useContext, useEffect, useRef,
     useState, useCallback, ReactNode,
@@ -6,6 +6,8 @@ import React, {
 import { io, Socket } from 'socket.io-client';
 import { api } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
+import { useLanguage } from '@/lib/language-context';
+import { t } from '@/lib/translations';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -37,6 +39,51 @@ export interface Notification {
     created_at: string;
 }
 
+function getBrowserNotificationTitle(type: string, language: 'es' | 'en' | 'fr' | 'pt') {
+    if (type === 'application_received') return t('notification.newApplication', language);
+    if (type === 'application_accepted') return t('notification.applicationAccepted', language);
+    if (type === 'application_rejected') return t('notification.applicationRejected', language);
+    if (type === 'group_inactivity_prompt') return t('notification.inactivityPrompt', language);
+    if (type === 'group_inactivity_closed') return t('notification.inactivityClosed', language);
+    return t('notification.newMessage', language);
+}
+
+function formatTemplate(template: string, values: Record<string, string>) {
+    return Object.entries(values).reduce(
+        (result, [key, value]) => result.replaceAll(`{${key}}`, value),
+        template
+    );
+}
+
+function getBrowserNotificationBody(data: any, language: 'es' | 'en' | 'fr' | 'pt') {
+    if (data.type === 'application_received') {
+        return formatTemplate(t('notification.applicationReceivedBody', language), {
+            user: data.fromUsername || 'WakGroup',
+            char: data.charName || 'Wakfu',
+        });
+    }
+    if (data.type === 'application_accepted') {
+        return t('notification.applicationAcceptedBody', language);
+    }
+    if (data.type === 'application_rejected') {
+        return t('notification.applicationRejectedBody', language);
+    }
+    if (data.type === 'group_inactivity_prompt') {
+        return formatTemplate(t('notification.inactivityPromptBody', language), {
+            title: data.group_title || 'WakGroup',
+        });
+    }
+    if (data.type === 'group_inactivity_closed') {
+        return formatTemplate(t('notification.inactivityClosedBody', language), {
+            title: data.group_title || 'WakGroup',
+        });
+    }
+    if (data.fromUsername) {
+        return `${data.fromUsername}: ${data.preview || ''}`;
+    }
+    return data.preview || '';
+}
+
 interface ChatContextValue {
     // chat
     sessions: ChatSession[];
@@ -63,6 +110,7 @@ const ChatContext = createContext<ChatContextValue>({
 
 export function ChatProvider({ children }: { children: ReactNode }) {
     const { user } = useAuth();
+    const { language } = useLanguage();
     const socketRef = useRef<Socket | null>(null);
     const [connected, setConnected] = useState(false);
     const [sessions, setSessions] = useState<ChatSession[]>([]);
@@ -70,7 +118,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
 
     const unreadCount = notifications.filter(n => !n.is_read).length;
 
-    // ── Notifications ──────────────────────────────────────────
+    // â”€â”€ Notifications â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     const refreshNotifications = useCallback(async () => {
         if (!user) return;
         try {
@@ -86,7 +134,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         } catch { /* silent */ }
     }, []);
 
-    // ── Socket ─────────────────────────────────────────────────
+    // â”€â”€ Socket â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     useEffect(() => {
         if (!user) {
             socketRef.current?.disconnect();
@@ -142,17 +190,8 @@ export function ChatProvider({ children }: { children: ReactNode }) {
                 'Notification' in window &&
                 window.Notification.permission === 'granted'
             ) {
-                const title = data.type === 'application_received'
-                    ? '⚔ Nueva solicitud de unión'
-                    : data.type === 'application_accepted'
-                    ? '✅ Solicitud aceptada'
-                    : data.type === 'application_rejected'
-                    ? '❌ Solicitud rechazada'
-                    : '💬 Nuevo mensaje';
-
-                const body = data.fromUsername
-                    ? `${data.fromUsername}: ${data.preview || ''}`
-                    : data.preview || '';
+                const title = getBrowserNotificationTitle(data.type, language);
+                const body = getBrowserNotificationBody(data, language);
 
                 new window.Notification(title, {
                     body,
@@ -167,7 +206,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
             socketRef.current = null;
             setConnected(false);
         };
-    }, [user, refreshNotifications]);
+    }, [user, refreshNotifications, language]);
 
     // Poll notifications every 30s
     useEffect(() => {
@@ -175,9 +214,9 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         refreshNotifications();
         const interval = setInterval(refreshNotifications, 30_000);
         return () => clearInterval(interval);
-    }, [user, refreshNotifications]);
+    }, [user, refreshNotifications, language]);
 
-    // ── Chat session management ─────────────────────────────────
+    // â”€â”€ Chat session management â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     const openChat = useCallback(async (groupId: string, groupName: string) => {
         // If already open, just expand it
         setSessions(prev => {
@@ -245,4 +284,5 @@ export function ChatProvider({ children }: { children: ReactNode }) {
 }
 
 export const useChat = () => useContext(ChatContext);
+
 

@@ -34,6 +34,8 @@ export interface DungeonGroup {
     server: Server;
     status: GroupStatus;
     created_at: number;
+    last_activity_at?: number;
+    inactivity_prompt_sent_at?: number | null;
 }
 
 export interface Application {
@@ -79,7 +81,9 @@ export type NotificationType =
     | 'application_received'
     | 'application_accepted'
     | 'application_rejected'
-    | 'group_message';
+    | 'group_message'
+    | 'group_inactivity_prompt'
+    | 'group_inactivity_closed';
 
 // JWT payload
 export interface JwtPayload {

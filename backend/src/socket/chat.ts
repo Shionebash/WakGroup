@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { getDb } from '../db/database.js';
 import { JwtPayload } from '../types/index.js';
+import { touchDungeonGroupActivity, touchPvpGroupActivity } from '../services/group-inactivity.js';
 
 // In-memory map of userId -> socket ids
 const userSockets = new Map<string, string>();
@@ -124,11 +125,13 @@ export function initSocket(server: HttpServer): SocketServer {
                         'INSERT INTO chat_messages (id, group_id, user_id, content) VALUES ($1, $2, $3, $4)',
                         [msgId, groupId, user.userId, cleaned]
                     );
+                    await touchDungeonGroupActivity(db, groupId);
                 } else {
                     await db.query(
                         'INSERT INTO chat_messages (id, pvp_group_id, user_id, content) VALUES ($1, $2, $3, $4)',
                         [msgId, groupId, user.userId, cleaned]
                     );
+                    await touchPvpGroupActivity(db, groupId);
                 }
 
                 const dbUserResult = await db.query(

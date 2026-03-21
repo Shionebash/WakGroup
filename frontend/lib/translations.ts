@@ -77,6 +77,21 @@ type TranslationKey =
   | 'notification.kicked'
   | 'notification.groupClosed'
   | 'notification.newMessage'
+  | 'notification.inactivityPrompt'
+  | 'notification.inactivityClosed'
+  | 'notification.enableAlerts'
+  | 'notification.alertsBlocked'
+  | 'notification.alertsActive'
+  | 'notification.readAll'
+  | 'notification.empty'
+  | 'notification.now'
+  | 'notification.keepLooking'
+  | 'notification.confirmed'
+  | 'notification.inactivityPromptBody'
+  | 'notification.inactivityClosedBody'
+  | 'notification.applicationReceivedBody'
+  | 'notification.applicationAcceptedBody'
+  | 'notification.applicationRejectedBody'
   | 'profile.title'
   | 'profile.characters'
   | 'profile.addCharacter'
@@ -264,6 +279,21 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
   'notification.kicked': { es: 'Has sido expulsado del grupo', en: 'You have been kicked from the group', fr: 'Vous avez été expulsé du groupe', pt: 'Você foi expulso do grupo' },
   'notification.groupClosed': { es: 'El grupo ha sido cerrado', en: 'The group has been closed', fr: 'Le groupe a été fermé', pt: 'O grupo foi fechado' },
   'notification.newMessage': { es: 'Nuevo mensaje', en: 'New message', fr: 'Nouveau message', pt: 'Nova mensagem' },
+  'notification.inactivityPrompt': { es: 'Confirmación de actividad', en: 'Activity confirmation', fr: 'Confirmation d\'activité', pt: 'Confirmação de atividade' },
+  'notification.inactivityClosed': { es: 'Grupo cerrado por inactividad', en: 'Group closed due to inactivity', fr: 'Groupe fermé pour inactivité', pt: 'Grupo fechado por inatividade' },
+  'notification.enableAlerts': { es: 'Activar avisos', en: 'Enable alerts', fr: 'Activer les alertes', pt: 'Ativar alertas' },
+  'notification.alertsBlocked': { es: 'Avisos bloqueados', en: 'Alerts blocked', fr: 'Alertes bloquées', pt: 'Alertas bloqueados' },
+  'notification.alertsActive': { es: 'Avisos activos', en: 'Alerts active', fr: 'Alertes actives', pt: 'Alertas ativos' },
+  'notification.readAll': { es: 'Leer todo', en: 'Read all', fr: 'Tout lire', pt: 'Ler tudo' },
+  'notification.empty': { es: 'Sin notificaciones', en: 'No notifications', fr: 'Aucune notification', pt: 'Sem notificações' },
+  'notification.now': { es: 'ahora', en: 'now', fr: 'maintenant', pt: 'agora' },
+  'notification.keepLooking': { es: 'Seguir buscando', en: 'Keep looking', fr: 'Continuer à chercher', pt: 'Continuar procurando' },
+  'notification.confirmed': { es: 'Confirmado', en: 'Confirmed', fr: 'Confirmé', pt: 'Confirmado' },
+  'notification.inactivityPromptBody': { es: 'Tu grupo "{title}" lleva 1 hora sin actividad. ¿Sigues buscando grupo?', en: 'Your group "{title}" has been inactive for 1 hour. Are you still looking for a group?', fr: 'Votre groupe "{title}" est inactif depuis 1 heure. Cherchez-vous toujours un groupe ?', pt: 'Seu grupo "{title}" está sem atividade há 1 hora. Você ainda está procurando grupo?' },
+  'notification.inactivityClosedBody': { es: 'El grupo "{title}" se cerró automáticamente por inactividad.', en: 'The group "{title}" was automatically closed due to inactivity.', fr: 'Le groupe "{title}" a été fermé automatiquement pour inactivité.', pt: 'O grupo "{title}" foi fechado automaticamente por inatividade.' },
+  'notification.applicationReceivedBody': { es: '{user} quiere unirse con {char}', en: '{user} wants to join with {char}', fr: '{user} veut rejoindre avec {char}', pt: '{user} quer entrar com {char}' },
+  'notification.applicationAcceptedBody': { es: 'Tu solicitud fue aceptada.', en: 'Your application was accepted.', fr: 'Votre candidature a été acceptée.', pt: 'Sua candidatura foi aceita.' },
+  'notification.applicationRejectedBody': { es: 'Tu solicitud fue rechazada.', en: 'Your application was rejected.', fr: 'Votre candidature a été refusée.', pt: 'Sua candidatura foi recusada.' },
   'profile.title': { es: 'Perfil', en: 'Profile', fr: 'Profil', pt: 'Perfil' },
   'profile.characters': { es: 'Personajes', en: 'Characters', fr: 'Personnages', pt: 'Personagens' },
   'profile.addCharacter': { es: 'Añadir personaje', en: 'Add character', fr: 'Ajouter un personnage', pt: 'Adicionar personagem' },
