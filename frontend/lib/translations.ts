@@ -71,6 +71,7 @@ type TranslationKey =
   | 'chat.placeholder'
   | 'chat.send'
   | 'chat.open'
+  | 'overlay.notifications'
   | 'notification.newApplication'
   | 'notification.applicationAccepted'
   | 'notification.applicationRejected'
@@ -273,6 +274,7 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
   'chat.placeholder': { es: 'Escribe un mensaje...', en: 'Write a message...', fr: 'Écrire un message...', pt: 'Escreva uma mensagem...' },
   'chat.send': { es: 'Enviar', en: 'Send', fr: 'Envoyer', pt: 'Enviar' },
   'chat.open': { es: 'Abrir chat', en: 'Open chat', fr: 'Ouvrir le chat', pt: 'Abrir chat' },
+  'overlay.notifications': { es: 'Notificaciones', en: 'Notifications', fr: 'Notifications', pt: 'Notificações' },
   'notification.newApplication': { es: 'Nueva solicitud', en: 'New application', fr: 'Nouvelle demande', pt: 'Nova candidatura' },
   'notification.applicationAccepted': { es: 'Solicitud aceptada', en: 'Application accepted', fr: 'Demande acceptée', pt: 'Candidatura aceita' },
   'notification.applicationRejected': { es: 'Solicitud rechazada', en: 'Application rejected', fr: 'Demande refusée', pt: 'Candidatura rejeitada' },
