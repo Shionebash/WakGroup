@@ -51,6 +51,13 @@ export function initSocket(server: HttpServer): SocketServer {
         cors: { origin: true, credentials: true },
     });
 
+    io.of('/updates').on('connection', (socket) => {
+        socket.emit('desktop_update_channel_ready', {
+            ok: true,
+            time: new Date().toISOString(),
+        });
+    });
+
     io.use((socket, next) => {
         try {
             let token: string | undefined;
@@ -216,4 +223,11 @@ export function initSocket(server: HttpServer): SocketServer {
 export function emitNotification(io: SocketServer, userId: string, event: string, data: unknown): void {
     const socketId = userSockets.get(userId);
     if (socketId) io.to(socketId).emit(event, data);
+}
+
+export function broadcastDesktopUpdate(io: SocketServer, data: Record<string, unknown> = {}): void {
+    io.of('/updates').emit('desktop_update_available', {
+        issuedAt: new Date().toISOString(),
+        ...data,
+    });
 }

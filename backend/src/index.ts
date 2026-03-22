@@ -8,7 +8,7 @@ import rateLimit from 'express-rate-limit';
 import path from 'path';
 
 import { getDb } from './db/database.js';
-import { initSocket } from './socket/chat.js';
+import { broadcastDesktopUpdate, initSocket } from './socket/chat.js';
 
 import authRoutes from './routes/auth.js';
 import characterRoutes from './routes/characters.js';
@@ -106,6 +106,31 @@ app.use('/mobs', mobsRoutes);
 // Health check
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', time: new Date().toISOString() });
+});
+
+app.post('/internal/desktop-updates/broadcast', (req, res) => {
+    const expectedSecret = process.env.DESKTOP_UPDATE_BROADCAST_SECRET;
+    const receivedSecret = req.header('x-update-secret');
+
+    if (!expectedSecret) {
+        return res.status(503).json({ error: 'Desktop update broadcast is not configured.' });
+    }
+
+    if (!receivedSecret || receivedSecret !== expectedSecret) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    if (!io) {
+        return res.status(503).json({ error: 'Socket server is not ready yet.' });
+    }
+
+    const payload = typeof req.body === 'object' && req.body ? req.body : {};
+    broadcastDesktopUpdate(io, payload);
+
+    res.json({
+        ok: true,
+        emittedAt: new Date().toISOString(),
+    });
 });
 
 // 404 handler
