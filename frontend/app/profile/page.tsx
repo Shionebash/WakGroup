@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { api, getAssetUrl } from '@/lib/api';
 import { addToast } from '@/components/ToastContainer';
+import CustomSelect from '@/components/CustomSelect';
 
 const ROLES = ['dps', 'healer', 'tank', 'support', 'invocador', 'posicionador'];
 const SERVERS = ['Ogrest', 'Rubilax', 'Pandora'];
@@ -158,21 +159,27 @@ function CharactersTab({ userId }: { userId: string }) {
                         </div>
                         <div className="form-group">
                             <label className="form-label">Clase *</label>
-                            <select className="form-select" value={form.class_id} onChange={e => set('class_id', Number(e.target.value))}>
-                                {classes.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                            </select>
+                            <CustomSelect
+                                value={String(form.class_id)}
+                                onChange={e => set('class_id', Number(e))}
+                                options={classes.map(c => ({ value: String(c.id), label: c.name }))}
+                            />
                         </div>
                         <div className="form-group">
                             <label className="form-label">Rol *</label>
-                            <select className="form-select" value={form.role} onChange={e => set('role', e.target.value)}>
-                                {ROLES.map(r => <option key={r} value={r}>{r.charAt(0).toUpperCase() + r.slice(1)}</option>)}
-                            </select>
+                            <CustomSelect
+                                value={form.role}
+                                onChange={e => set('role', e)}
+                                options={ROLES.map(r => ({ value: r, label: r.charAt(0).toUpperCase() + r.slice(1) }))}
+                            />
                         </div>
                         <div className="form-group">
                             <label className="form-label">Servidor *</label>
-                            <select className="form-select" value={form.server} onChange={e => set('server', e.target.value)}>
-                                {SERVERS.map(s => <option key={s} value={s}>{s}</option>)}
-                            </select>
+                            <CustomSelect
+                                value={form.server}
+                                onChange={e => set('server', e)}
+                                options={SERVERS.map(s => ({ value: s, label: s }))}
+                            />
                         </div>
                     </div>
                     <div style={{ display: 'flex', gap: 10, marginTop: 16, justifyContent: 'flex-end' }}>

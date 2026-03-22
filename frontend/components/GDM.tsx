@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { api } from '@/lib/api';
 import { useChat } from '@/lib/chat-context';
+import CustomSelect from '@/components/CustomSelect';
 
 interface GroupDetailModalProps {
     groupId: string;
@@ -161,17 +162,15 @@ export default function GroupDetailModal({ groupId, onClose }: GroupDetailModalP
                             {user && group.status === 'open' && (
                                 <div className="form-group">
                                     <label>Selecciona tu personaje</label>
-                                    <select
+                                    <CustomSelect
                                         value={selectedCharId}
-                                        onChange={e => setSelectedCharId(e.target.value)}
-                                    >
-                                        <option value="">Elige un personaje</option>
-                                        {characters.map(char => (
-                                            <option key={char.id} value={char.id}>
-                                                {char.name} - {char.class_name} Nv. {char.level}
-                                            </option>
-                                        ))}
-                                    </select>
+                                        onChange={e => setSelectedCharId(e)}
+                                        placeholder="Elige un personaje"
+                                        options={characters.map(char => ({
+                                            value: String(char.id),
+                                            label: `${char.name} - ${char.class_name} Nv. ${char.level}`,
+                                        }))}
+                                    />
                                 </div>
                             )}
                         </div>

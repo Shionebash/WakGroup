@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { api } from '@/lib/api';
+import CustomSelect from '@/components/CustomSelect';
 
 interface CreatePvpGroupModalProps {
     onClose: () => void;
@@ -136,15 +137,11 @@ export default function CreatePvpGroupModal({ onClose, onCreated }: CreatePvpGro
                         {/* Franja de equipamiento */}
                         <div className="form-group">
                             <label>Franja de nivel del equipamiento</label>
-                            <select
-                                value={formData.equipment_band}
-                                onChange={e => setFormData({ ...formData, equipment_band: Number(e.target.value) })}
-                                required
-                            >
-                                {BAND_OPTIONS.map(n => (
-                                    <option key={n} value={n}>Nivel {n}</option>
-                                ))}
-                            </select>
+                            <CustomSelect
+                                value={String(formData.equipment_band)}
+                                onChange={e => setFormData({ ...formData, equipment_band: Number(e) })}
+                                options={BAND_OPTIONS.map(n => ({ value: String(n), label: `Nivel ${n}` }))}
+                            />
                             <p style={{ fontSize: 11, color: 'var(--text-secondary)', marginTop: 4 }}>
                                 Franja de nivel máximo del equipo permitido en el PVP
                             </p>
@@ -154,31 +151,25 @@ export default function CreatePvpGroupModal({ onClose, onCreated }: CreatePvpGro
                             {/* Personaje líder */}
                             <div className="form-group">
                                 <label>Tu personaje</label>
-                                <select
+                                <CustomSelect
                                     value={formData.character_id}
-                                    onChange={e => setFormData({ ...formData, character_id: e.target.value })}
-                                    required
-                                >
-                                    <option value="">Selecciona personaje</option>
-                                    {characters.map(char => (
-                                        <option key={char.id} value={char.id}>
-                                            {char.name} - {char.class_name} Nv. {char.level}
-                                        </option>
-                                    ))}
-                                </select>
+                                    onChange={e => setFormData({ ...formData, character_id: e })}
+                                    placeholder="Selecciona personaje"
+                                    options={characters.map(char => ({
+                                        value: String(char.id),
+                                        label: `${char.name} - ${char.class_name} Nv. ${char.level}`,
+                                    }))}
+                                />
                             </div>
 
                             {/* Servidor */}
                             <div className="form-group">
                                 <label>Servidor</label>
-                                <select
+                                <CustomSelect
                                     value={formData.server}
-                                    onChange={e => setFormData({ ...formData, server: e.target.value })}
-                                >
-                                    <option value="Ogrest">Ogrest</option>
-                                    <option value="Rubilax">Rubilax</option>
-                                    <option value="Pandora">Pandora</option>
-                                </select>
+                                    onChange={e => setFormData({ ...formData, server: e })}
+                                    options={['Ogrest', 'Rubilax', 'Pandora'].map(server => ({ value: server, label: server }))}
+                                />
                             </div>
                         </div>
 

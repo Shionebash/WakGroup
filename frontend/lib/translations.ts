@@ -115,6 +115,7 @@ type TranslationKey =
   | 'home.allBands'
   | 'home.bandUpTo'
   | 'home.createGroup'
+  | 'home.downloadMiniApp'
   | 'home.emptyTitle'
   | 'home.emptyDesc'
   | 'home.emptyCta'
@@ -317,6 +318,7 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
   'home.allBands': { es: 'Todas las franjas', en: 'All bands', fr: 'Toutes les tranches', pt: 'Todas as faixas' },
   'home.bandUpTo': { es: 'Hasta Nv. {level}', en: 'Up to Lv. {level}', fr: 'Jusqu\'au niv. {level}', pt: 'Até Nv. {level}' },
   'home.createGroup': { es: 'Crear Grupo', en: 'Create Group', fr: 'Créer un groupe', pt: 'Criar Grupo' },
+  'home.downloadMiniApp': { es: 'Descargar mini app', en: 'Download mini app', fr: 'Télécharger la mini app', pt: 'Baixar mini app' },
   'home.emptyTitle': { es: 'Sin grupos disponibles', en: 'No groups available', fr: 'Aucun groupe disponible', pt: 'Nenhum grupo disponível' },
   'home.emptyDesc': { es: 'No hay grupos activos con estos filtros. ¡Crea el tuyo!', en: 'No active groups with these filters. Create yours!', fr: 'Aucun groupe actif avec ces filtres. Créez le vôtre !', pt: 'Não há grupos ativos com esses filtros. Crie o seu!' },
   'home.emptyCta': { es: 'Crear el primer grupo', en: 'Create the first group', fr: 'Créer le premier groupe', pt: 'Criar o primeiro grupo' },

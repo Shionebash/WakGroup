@@ -5,6 +5,7 @@ import { useChat } from '@/lib/chat-context';
 import { useLanguage, Language } from '@/lib/language-context';
 import { api } from '@/lib/api';
 import { addToast } from '@/components/ToastContainer';
+import CustomSelect from '@/components/CustomSelect';
 import { t } from '@/lib/translations';
 
 interface PvpGroupDetailModalProps {
@@ -373,14 +374,15 @@ export default function PvpGroupDetailModal({ groupId, onClose, onDeleted }: Pvp
                             {user && group.status === 'open' && !isMember && (
                                 <div className="form-group" style={{ marginTop: 12 }}>
                                     <label>Selecciona tu personaje para unirte</label>
-                                    <select value={selectedCharId} onChange={e => setSelectedCharId(e.target.value)}>
-                                        <option value="">Elige un personaje</option>
-                                        {characters.map((char: any) => (
-                                            <option key={char.id} value={char.id}>
-                                                {char.name} - {char.class_name} Nv. {char.level}
-                                            </option>
-                                        ))}
-                                    </select>
+                                    <CustomSelect
+                                        value={selectedCharId}
+                                        onChange={e => setSelectedCharId(e)}
+                                        placeholder="Elige un personaje"
+                                        options={characters.map((char: any) => ({
+                                            value: String(char.id),
+                                            label: `${char.name} - ${char.class_name} Nv. ${char.level}`,
+                                        }))}
+                                    />
                                 </div>
                             )}
                         </div>
@@ -402,21 +404,20 @@ export default function PvpGroupDetailModal({ groupId, onClose, onDeleted }: Pvp
                         {isLeader && (
                             <div className="modal-footer" style={{ flexDirection: 'column', gap: 8 }}>
                                 {group?.members && group.members.length > 0 && (
-                                    <select 
-                                        className="form-select"
-                                        style={{ fontSize: 12 }}
-                                        onChange={(e) => { 
-                                            if (e.target.value) { 
-                                                handleTransferLeadership(e.target.value, group.members.find((m: any) => m.char_id === e.target.value)?.char_name); 
-                                                e.target.value = ''; 
-                                            } 
+                                    <CustomSelect
+                                        value=""
+                                        onChange={(value) => {
+                                            if (value) {
+                                                handleTransferLeadership(value, group.members.find((m: any) => m.char_id === value)?.char_name);
+                                            }
                                         }}
-                                    >
-                                        <option value="">⭐ Transferir liderazgo</option>
-                                        {group.members.map((m: any) => (
-                                            <option key={m.char_id} value={m.char_id}>{m.char_name}</option>
-                                        ))}
-                                    </select>
+                                        options={group.members.map((m: any) => ({
+                                            value: String(m.char_id),
+                                            label: m.char_name,
+                                        }))}
+                                        placeholder="Transferir liderazgo"
+                                        className="form-select"
+                                    />
                                 )}
                                 <button className="btn btn-warning" onClick={handleLeaveGroupAsLeader} style={{ color: '#000' }}>
                                     🚪 Salir y pasar liderazgo
@@ -606,3 +607,4 @@ function PlayerChip({
         </div>
     );
 }
+

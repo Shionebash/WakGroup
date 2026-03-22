@@ -5,6 +5,7 @@ import { useChat } from '@/lib/chat-context';
 import { useLanguage } from '@/lib/language-context';
 import { api, getAssetUrl } from '@/lib/api';
 import { addToast } from '@/components/ToastContainer';
+import CustomSelect from '@/components/CustomSelect';
 import { t, getItemTitle, getDungeonApiName } from '@/lib/translations';
 
 interface GroupDetailModalProps {
@@ -381,14 +382,15 @@ export default function GroupDetailModal({ groupId, onClose, onDeleted }: GroupD
                             {user && group.status === 'open' && !isMember && (
                                 <div className="form-group" style={{ marginTop: 16 }}>
                                     <label>{t('group.selectCharacter', language)}</label>
-                                    <select value={selectedCharId} onChange={e => setSelectedCharId(e.target.value)}>
-                                        <option value="">{t('group.selectCharacterPlaceholder', language)}</option>
-                                        {characters.map(char => (
-                                            <option key={char.id} value={char.id}>
-                                                {char.name} - {char.class_name} Nv. {char.level}
-                                            </option>
-                                        ))}
-                                    </select>
+                                    <CustomSelect
+                                        value={selectedCharId}
+                                        onChange={e => setSelectedCharId(e)}
+                                        placeholder={t('group.selectCharacterPlaceholder', language)}
+                                        options={characters.map(char => ({
+                                            value: String(char.id),
+                                            label: `${char.name} - ${char.class_name} Nv. ${char.level}`,
+                                        }))}
+                                    />
                                 </div>
                             )}
                         </div>
@@ -417,21 +419,17 @@ export default function GroupDetailModal({ groupId, onClose, onDeleted }: GroupD
                         {isLeader && (
                             <div className="modal-footer" style={{ flexDirection: 'column', gap: 8 }}>
                                 {group?.members && group.members.length > 0 && (
-                                    <select 
+                                    <CustomSelect
                                         className="form-select"
-                                        style={{ fontSize: 12 }}
-                                        onChange={(e) => { 
-                                            if (e.target.value) { 
-                                                handleTransferLeadership(e.target.value, group.members.find((m: any) => m.char_id === e.target.value)?.char_name); 
-                                                e.target.value = ''; 
-                                            } 
+                                        value=""
+                                        onChange={(value) => {
+                                            if (value) {
+                                                handleTransferLeadership(value, group.members.find((m: any) => m.char_id === value)?.char_name);
+                                            }
                                         }}
-                                    >
-                                        <option value="">{t('group.transfer', language)}</option>
-                                        {group.members.map((m: any) => (
-                                            <option key={m.char_id} value={m.char_id}>{m.char_name}</option>
-                                        ))}
-                                    </select>
+                                        placeholder={t('group.transfer', language)}
+                                        options={group.members.map((m: any) => ({ value: String(m.char_id), label: m.char_name }))}
+                                    />
                                 )}
                                 <button className="btn btn-warning" onClick={handleLeaveGroupAsLeader} style={{ color: '#000' }}>
                                     🚪 {t('group.leaveAndTransfer', language)}

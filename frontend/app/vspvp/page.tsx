@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { api } from '@/lib/api';
+import CustomSelect from '@/components/CustomSelect';
 import PvpGroupCard from '@/components/PvpGroupCard';
 import PvpGroupDetailModal from '@/components/PvpGroupDetailModal';
 import CreatePvpGroupModal from '@/components/CreatePvpGroupModal';
@@ -38,80 +39,85 @@ export default function VspvpPage() {
         }
     }, [filterMode, filterBand, filterServer]);
 
-    useEffect(() => { fetchGroups(); }, [fetchGroups]);
+    useEffect(() => {
+        fetchGroups();
+    }, [fetchGroups]);
 
     const filtered = search
-        ? groups.filter(g =>
-            g.title?.toLowerCase().includes(search.toLowerCase())
-        )
+        ? groups.filter((g) => g.title?.toLowerCase().includes(search.toLowerCase()))
         : groups;
 
     return (
         <div className="container" style={{ paddingTop: 32, paddingBottom: 48 }}>
-            {/* Hero */}
-            <div style={{ textAlign: 'center', marginBottom: 40 }}>
-                <h1 className="title-gold" style={{ fontSize: 36, marginBottom: 8 }}>
-                    {t('nav.pvp', language)}
-                </h1>
-                <p style={{ color: 'var(--text-secondary)', maxWidth: 520, margin: '0 auto' }}>
-                    {t('pvp.subtitle', language)}
-                </p>
-            </div>
+            <section className="hero-shell" style={{ marginBottom: 30 }}>
+                <div className="hero-panel hero-panel-pvp hero-panel-single">
+                    <div className="hero-copy">
+                        <span className="hero-eyebrow">PvP Arena</span>
+                        <h1 className="title-gold hero-title">{t('nav.pvp', language)}</h1>
+                        <p className="hero-description">{t('pvp.subtitle', language)}</p>
+                        {user && (
+                            <div className="hero-actions">
+                                <button className="btn btn-primary btn-large" onClick={() => setShowCreate(true)}>
+                                    {t('pvp.create', language)}
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </section>
 
-            {/* Actions bar */}
-            <div className="filters-bar">
-                {/* Search */}
-                <div className="search-bar" style={{ flex: 1, maxWidth: 320 }}>
-                    <span className="search-icon">🔍</span>
-                    <input
-                        className="search-input"
-                        placeholder={t('pvp.searchPlaceholder', language)}
-                        value={search}
-                        onChange={e => setSearch(e.target.value)}
-                    />
+            <section className="filters-shell filters-shell-pvp">
+                <div className="filters-head">
+                    <div>
+                        <h2 className="filters-title">{t('common.search', language)}</h2>
+                        <p className="filters-subtitle">{t('pvp.searchPlaceholder', language)}</p>
+                    </div>
+                    <span className="results-chip results-chip-pvp">{filtered.length} PvP</span>
                 </div>
 
-                {/* PVP Mode filter */}
-                <select
-                    className="form-select"
-                    style={{ width: 130 }}
-                    value={filterMode}
-                    onChange={e => setFilterMode(e.target.value)}
-                >
-                    <option value="">{t('pvp.anyMode', language)}</option>
-                    {PVP_MODES.map(m => <option key={m} value={m}>{m}</option>)}
-                </select>
+                <div className="filters-bar filters-grid">
+                    <div className="search-bar filter-control filter-search">
+                        <span className="search-icon">🔍</span>
+                        <input
+                            className="search-input"
+                            placeholder={t('pvp.searchPlaceholder', language)}
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </div>
 
-                {/* Equipment band filter */}
-                <select
-                    className="form-select"
-                    style={{ width: 160 }}
-                    value={filterBand}
-                    onChange={e => setFilterBand(e.target.value ? Number(e.target.value) : '')}
-                >
-                    <option value="">{t('pvp.allBands', language)}</option>
-                    {BAND_OPTIONS.map(n => <option key={n} value={n}>{t('pvp.bandLevel', language).replace('{level}', String(n))}</option>)}
-                </select>
+                    <CustomSelect
+                        className="filter-control"
+                        value={filterMode}
+                        onChange={(next) => setFilterMode(next)}
+                        placeholder={t('pvp.anyMode', language)}
+                        options={PVP_MODES.map((m) => ({ value: m, label: m }))}
+                    />
 
-                {/* Server filter */}
-                <select
-                    className="form-select"
-                    style={{ width: 140 }}
-                    value={filterServer}
-                    onChange={e => setFilterServer(e.target.value)}
-                >
-                    <option value="">{t('home.allServers', language)}</option>
-                    {SERVERS.map(s => <option key={s} value={s}>{s}</option>)}
-                </select>
+                    <CustomSelect
+                        className="filter-control"
+                        value={filterBand === '' ? '' : String(filterBand)}
+                        onChange={(next) => setFilterBand(next ? Number(next) : '')}
+                        placeholder={t('pvp.allBands', language)}
+                        options={BAND_OPTIONS.map((n) => ({ value: String(n), label: t('pvp.bandLevel', language).replace('{level}', String(n)) }))}
+                    />
 
-                {user && (
-                    <button className="btn btn-primary" onClick={() => setShowCreate(true)}>
-                        ⚔ {t('pvp.create', language)}
-                    </button>
-                )}
-            </div>
+                    <CustomSelect
+                        className="filter-control"
+                        value={filterServer}
+                        onChange={(next) => setFilterServer(next)}
+                        placeholder={t('home.allServers', language)}
+                        options={SERVERS.map((s) => ({ value: s, label: s }))}
+                    />
 
-            {/* Groups grid */}
+                    {user && (
+                        <button className="btn btn-primary filter-cta filter-cta-pvp" onClick={() => setShowCreate(true)}>
+                            {t('pvp.create', language)}
+                        </button>
+                    )}
+                </div>
+            </section>
+
             {loading ? (
                 <div className="spinner" />
             ) : filtered.length === 0 ? (
@@ -120,18 +126,14 @@ export default function VspvpPage() {
                     <h3>{t('pvp.emptyTitle', language)}</h3>
                     <p>{t('pvp.emptyDesc', language)}</p>
                     {user && (
-                        <button
-                            className="btn btn-primary"
-                            onClick={() => setShowCreate(true)}
-                            style={{ marginTop: 24 }}
-                        >
+                        <button className="btn btn-primary btn-large" onClick={() => setShowCreate(true)} style={{ marginTop: 24 }}>
                             {t('pvp.emptyCta', language)}
                         </button>
                     )}
                 </div>
             ) : (
                 <div className="grid-cards">
-                    {filtered.map(g => (
+                    {filtered.map((g) => (
                         <PvpGroupCard
                             key={g.id}
                             group={g}
@@ -141,7 +143,6 @@ export default function VspvpPage() {
                 </div>
             )}
 
-            {/* Modals */}
             {selectedGroupId && (
                 <PvpGroupDetailModal
                     groupId={selectedGroupId}

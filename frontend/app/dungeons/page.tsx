@@ -7,6 +7,7 @@ import CreateGroupModal from '@/components/CreateGroupModal';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/lib/language-context';
 import { t, getDungeonApiName } from '@/lib/translations';
+import CustomSelect from '@/components/CustomSelect';
 
 const LEVEL_BANDS = [20, 35, 50, 65, 80, 95, 110, 125, 140, 155, 170, 185, 200, 215, 230, 245];
 
@@ -57,10 +58,14 @@ export default function DungeonsPage() {
                     <input className="search-input" placeholder={t('dungeons.searchPlaceholder', language)}
                         value={search} onChange={e => setSearch(e.target.value)} />
                 </div>
-                <select className="form-select" style={{ width: 200 }} value={filterBand} onChange={e => setFilterBand(e.target.value ? Number(e.target.value) : '')}>
-                    <option value="">{t('dungeons.allBands', language)}</option>
-                    {LEVEL_BANDS.map(level => <option key={level} value={level}>{t('dungeons.levelBand', language).replace('{level}', String(level))}</option>)}
-                </select>
+                <div style={{ width: 200 }}>
+                    <CustomSelect
+                        value={filterBand === '' ? '' : String(filterBand)}
+                        onChange={(next) => setFilterBand(next ? Number(next) : '')}
+                        placeholder={t('dungeons.allBands', language)}
+                        options={LEVEL_BANDS.map((level) => ({ value: String(level), label: t('dungeons.levelBand', language).replace('{level}', String(level)) }))}
+                    />
+                </div>
             </div>
 
             {loading ? <div className="spinner" /> : (

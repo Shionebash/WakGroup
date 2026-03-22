@@ -1,6 +1,6 @@
 {
     "name": "wakgroup-frontend",
-    "version": "1.0.0",
+    "version": "1.0.14",
     "private": true,
     "scripts": {
         "dev": "next dev",
@@ -22,5 +22,3 @@
         "typescript": "^5.4.2"
     }
 }
-
-

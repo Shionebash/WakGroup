@@ -1,10 +1,10 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { useLanguage } from '@/lib/language-context';
 import { t } from '@/lib/translations';
 import { api } from '@/lib/api';
+import CustomSelect from '@/components/CustomSelect';
 import GroupCard from '@/components/GroupCard';
 import GroupDetailModal from '@/components/GroupDetailModal';
 import CreateGroupModal from '@/components/CreateGroupModal';
@@ -35,13 +35,17 @@ export default function HomePage() {
             if (filterBand) params.min_lvl = filterBand;
             const res = await api.get('/groups', { params });
             setGroups(res.data);
-        } finally { setLoading(false); }
+        } finally {
+            setLoading(false);
+        }
     }, [filterServer, filterStasis, filterBand]);
 
-    useEffect(() => { fetchGroups(); }, [fetchGroups]);
+    useEffect(() => {
+        fetchGroups();
+    }, [fetchGroups]);
 
     const filtered = search
-        ? groups.filter(g => {
+        ? groups.filter((g) => {
             const dungeonName = g.dungeon_name || '';
             return (
                 dungeonName?.toLowerCase().includes(search.toLowerCase()) ||
@@ -52,64 +56,83 @@ export default function HomePage() {
 
     return (
         <div className="container" style={{ paddingTop: 32, paddingBottom: 48 }}>
-            {/* Hero */}
-            <div style={{ textAlign: 'center', marginBottom: 40 }}>
-                <h1 className="title-gold" style={{ fontSize: 36, marginBottom: 8 }}>{t('home.title', language)}</h1>
-                <p style={{ color: 'var(--text-secondary)', maxWidth: 520, margin: '0 auto' }}>
-                    {t('home.subtitle', language)}
-                </p>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: 12, flexWrap: 'wrap', marginTop: 20 }}>
+            <section className="hero-shell" style={{ marginBottom: 30 }}>
+                <div className="hero-panel hero-panel-home hero-panel-single">
+                    <div className="hero-copy">
+                        <span className="hero-eyebrow">WakGroup</span>
+                        <h1 className="title-gold hero-title">{t('home.title', language)}</h1>
+                        <p className="hero-description">{t('home.subtitle', language)}</p>
+                        <div className="hero-actions">
+                            {user && (
+                                <button className="btn btn-primary btn-large" onClick={() => setShowCreate(true)}>
+                                    {t('home.createGroup', language)}
+                                </button>
+                            )}
+                            <a
+                                className="btn btn-secondary btn-large"
+                                href={DESKTOP_DOWNLOAD_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {t('home.downloadMiniApp', language)}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section className="filters-shell">
+                <div className="filters-head">
+                    <div>
+                        <h2 className="filters-title">{t('common.search', language)}</h2>
+                        <p className="filters-subtitle">{t('home.searchPlaceholder', language)}</p>
+                    </div>
+                    <span className="results-chip">{filtered.length} {t('nav.groups', language).toLowerCase()}</span>
+                </div>
+
+                <div className="filters-bar filters-grid">
+                    <div className="search-bar filter-control filter-search">
+                        <span className="search-icon">🔍</span>
+                        <input
+                            className="search-input"
+                            placeholder={t('home.searchPlaceholder', language)}
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </div>
+
+                    <CustomSelect
+                        className="filter-control"
+                        value={filterServer}
+                        onChange={(next) => setFilterServer(next)}
+                        placeholder={t('home.allServers', language)}
+                        options={SERVERS.filter(Boolean).map((s) => ({ value: s, label: s }))}
+                    />
+
+                    <CustomSelect
+                        className="filter-control"
+                        value={filterStasis === '' ? '' : String(filterStasis)}
+                        onChange={(next) => setFilterStasis(next ? Number(next) : '')}
+                        placeholder={t('home.anyStasis', language)}
+                        options={STASIS_OPTIONS.map((n) => ({ value: String(n), label: `Stasis ${n}` }))}
+                    />
+
+                    <CustomSelect
+                        className="filter-control"
+                        value={filterBand === '' ? '' : String(filterBand)}
+                        onChange={(next) => setFilterBand(next ? Number(next) : '')}
+                        placeholder={t('home.allBands', language)}
+                        options={BAND_OPTIONS.map((n) => ({ value: String(n), label: t('home.bandUpTo', language).replace('{level}', String(n)) }))}
+                    />
+
                     {user && (
-                        <button className="btn btn-primary" onClick={() => setShowCreate(true)}>
-                            ⚔ {t('home.createGroup', language)}
+                        <button className="btn btn-primary filter-cta" onClick={() => setShowCreate(true)}>
+                            {t('home.createGroup', language)}
                         </button>
                     )}
-                    <a
-                        className="btn btn-secondary"
-                        href={DESKTOP_DOWNLOAD_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        Descargar mini app
-                    </a>
                 </div>
-            </div>
+            </section>
 
-            {/* Actions bar */}
-            <div className="filters-bar">
-                {/* Search */}
-                <div className="search-bar" style={{ flex: 1, maxWidth: 360 }}>
-                    <span className="search-icon">🔍</span>
-                    <input className="search-input" placeholder={t('home.searchPlaceholder', language)}
-                        value={search} onChange={e => setSearch(e.target.value)} />
-                </div>
-
-                {/* Server filter */}
-                <select className="form-select" style={{ width: 140 }} value={filterServer} onChange={e => setFilterServer(e.target.value)}>
-                    <option value="">{t('home.allServers', language)}</option>
-                    {SERVERS.filter(Boolean).map(s => <option key={s} value={s}>{s}</option>)}
-                </select>
-
-                {/* Stasis filter */}
-                <select className="form-select" style={{ width: 140 }} value={filterStasis} onChange={e => setFilterStasis(e.target.value ? Number(e.target.value) : '')}>
-                    <option value="">{t('home.anyStasis', language)}</option>
-                    {STASIS_OPTIONS.map(n => <option key={n} value={n}>Stasis {n}</option>)}
-                </select>
-
-                {/* Level band filter */}
-                <select className="form-select" style={{ width: 160 }} value={filterBand} onChange={e => setFilterBand(e.target.value ? Number(e.target.value) : '')}>
-                    <option value="">{t('home.allBands', language)}</option>
-                    {BAND_OPTIONS.map(n => <option key={n} value={n}>{t('home.bandUpTo', language).replace('{level}', String(n))}</option>)}
-                </select>
-
-                {user && (
-                    <button className="btn btn-primary" onClick={() => setShowCreate(true)}>
-                        ⚔ {t('home.createGroup', language)}
-                    </button>
-                )}
-            </div>
-
-            {/* Groups grid */}
             {loading ? (
                 <div className="spinner" />
             ) : filtered.length === 0 ? (
@@ -117,17 +140,20 @@ export default function HomePage() {
                     <div className="empty-state-icon">⚔</div>
                     <h3>{t('home.emptyTitle', language)}</h3>
                     <p>{t('home.emptyDesc', language)}</p>
-                    {user && <button className="btn btn-primary" onClick={() => setShowCreate(true)} style={{ marginTop: 24 }}>{t('home.emptyCta', language)}</button>}
+                    {user && (
+                        <button className="btn btn-primary btn-large" onClick={() => setShowCreate(true)} style={{ marginTop: 24 }}>
+                            {t('home.emptyCta', language)}
+                        </button>
+                    )}
                 </div>
             ) : (
                 <div className="grid-cards">
-                    {filtered.map(g => (
+                    {filtered.map((g) => (
                         <GroupCard key={g.id} group={g} onClick={() => setSelectedGroupId(g.id)} />
                     ))}
                 </div>
             )}
 
-            {/* Modals */}
             {selectedGroupId && (
                 <GroupDetailModal
                     groupId={selectedGroupId}

@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { api, getAssetUrl } from '@/lib/api';
+import CustomSelect from '@/components/CustomSelect';
 import { useLanguage } from '@/lib/language-context';
 import { t, getDungeonApiName, getItemTitle } from '@/lib/translations';
 
@@ -137,18 +138,15 @@ export default function CreateGroupModal({ onClose, onCreated, prefillDungeonId 
 
                         <div className="form-group">
                             <label>{t('group.character', language)}</label>
-                            <select
+                            <CustomSelect
                                 value={formData.character_id}
-                                onChange={e => setFormData({ ...formData, character_id: e.target.value })}
-                                required
-                            >
-                                <option value="">{t('group.selectCharacter', language)}</option>
-                                {characters.map(char => (
-                                    <option key={char.id} value={char.id}>
-                                        {char.name} - {char.class_name} Nv. {char.level}
-                                    </option>
-                                ))}
-                            </select>
+                                onChange={e => setFormData({ ...formData, character_id: e })}
+                                placeholder={t('group.selectCharacter', language)}
+                                options={characters.map(char => ({
+                                    value: String(char.id),
+                                    label: `${char.name} - ${char.class_name} Nv. ${char.level}`,
+                                }))}
+                            />
                         </div>
 
                         <div className="form-group" style={{ position: 'relative' }}>
@@ -246,26 +244,20 @@ export default function CreateGroupModal({ onClose, onCreated, prefillDungeonId 
                         <div className="form-row">
                             <div className="form-group">
                                 <label>{t('common.stasis', language)}</label>
-                                <select
-                                    value={formData.stasis}
-                                    onChange={e => setFormData({ ...formData, stasis: Number(e.target.value) })}
-                                >
-                                    {Array.from({ length: 10 }, (_, i) => i + 1).map(n => (
-                                        <option key={n} value={n}>Stasis {n}</option>
-                                    ))}
-                                </select>
+                                <CustomSelect
+                                    value={String(formData.stasis)}
+                                    onChange={e => setFormData({ ...formData, stasis: Number(e) })}
+                                    options={Array.from({ length: 10 }, (_, i) => i + 1).map(n => ({ value: String(n), label: `Stasis ${n}` }))}
+                                />
                             </div>
 
                             <div className="form-group">
                                 <label>{t('common.server', language)}</label>
-                                <select
+                                <CustomSelect
                                     value={formData.server}
-                                    onChange={e => setFormData({ ...formData, server: e.target.value })}
-                                >
-                                    <option value="Ogrest">Ogrest</option>
-                                    <option value="Rubilax">Rubilax</option>
-                                    <option value="Pandora">Pandora</option>
-                                </select>
+                                    onChange={e => setFormData({ ...formData, server: e })}
+                                    options={['Ogrest', 'Rubilax', 'Pandora'].map(server => ({ value: server, label: server }))}
+                                />
                             </div>
                         </div>
 
@@ -273,17 +265,18 @@ export default function CreateGroupModal({ onClose, onCreated, prefillDungeonId 
                             <div style={{ marginTop: 6 }}>
                                 <div className="form-group">
                                     <label>{t('group.stelesActive', language)}</label>
-                                    <select
+                                    <CustomSelect
                                         value={formData.steles_active ? 'yes' : 'no'}
                                         onChange={e => {
-                                            const enabled = e.target.value === 'yes';
+                                            const enabled = e === 'yes';
                                             setFormData(prev => ({ ...prev, steles_active: enabled }));
                                             if (!enabled) setShowDrops(false);
                                         }}
-                                    >
-                                        <option value="no">{t('common.no', language)}</option>
-                                        <option value="yes">{t('common.yes', language)}</option>
-                                    </select>
+                                        options={[
+                                            { value: 'no', label: t('common.no', language) },
+                                            { value: 'yes', label: t('common.yes', language) },
+                                        ]}
+                                    />
                                 </div>
 
                                 {formData.steles_active && (
@@ -291,14 +284,11 @@ export default function CreateGroupModal({ onClose, onCreated, prefillDungeonId 
                                         <div>
                                             <div className="form-group">
                                                 <label>{t('group.stelesCount', language)}</label>
-                                                <select
-                                                    value={formData.steles_count}
-                                                    onChange={e => setFormData({ ...formData, steles_count: Number(e.target.value) })}
-                                                >
-                                                    {Array.from({ length: Math.max(1, stelesLvl) }, (_, i) => i + 1).map(n => (
-                                                        <option key={n} value={n}>{n}</option>
-                                                    ))}
-                                                </select>
+                                                <CustomSelect
+                                                    value={String(formData.steles_count)}
+                                                    onChange={e => setFormData({ ...formData, steles_count: Number(e) })}
+                                                    options={Array.from({ length: Math.max(1, stelesLvl) }, (_, i) => i + 1).map(n => ({ value: String(n), label: String(n) }))}
+                                                />
                                             </div>
                                             <button
                                                 type="button"
@@ -318,13 +308,14 @@ export default function CreateGroupModal({ onClose, onCreated, prefillDungeonId 
                         {hasIntervention && (
                             <div className="form-group" style={{ marginTop: 6 }}>
                                 <label>{t('common.intervention', language)}</label>
-                                <select
+                                <CustomSelect
                                     value={formData.intervention_active ? 'yes' : 'no'}
-                                    onChange={e => setFormData({ ...formData, intervention_active: e.target.value === 'yes' })}
-                                >
-                                    <option value="no">{t('common.no', language)}</option>
-                                    <option value="yes">{t('common.yes', language)}</option>
-                                </select>
+                                    onChange={e => setFormData({ ...formData, intervention_active: e === 'yes' })}
+                                    options={[
+                                        { value: 'no', label: t('common.no', language) },
+                                        { value: 'yes', label: t('common.yes', language) },
+                                    ]}
+                                />
                             </div>
                         )}
 

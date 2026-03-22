@@ -31,88 +31,61 @@ export default function PvpGroupCard({ group, onClick }: PvpGroupCardProps) {
     const { language } = useLanguage();
 
     return (
-        <div className="group-card" onClick={onClick}>
-            {/* Header visual — fondo temático PVP */}
-            <div className="group-card-header" style={{ position: 'relative' }}>
-                <div style={{
-                    width: '100%',
-                    paddingTop: '56.25%',
-                    background: 'linear-gradient(135deg, #1a0a0a 0%, #2d1a0e 50%, #0a0a1a 100%)',
-                    position: 'relative',
-                    borderRadius: '16px 16px 0 0',
-                    overflow: 'hidden',
-                }}>
-                    {/* Decoración PVP */}
-                    <div style={{
-                        position: 'absolute', inset: 0,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontSize: 56, opacity: 0.15, userSelect: 'none',
-                    }}>
-                        ⚔
-                    </div>
-                    {/* Modo PVP badge grande */}
-                    <div style={{
-                        position: 'absolute', top: '50%', left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        fontSize: 28, fontWeight: 900,
-                        fontFamily: 'Cinzel, serif',
-                        color: modeColor,
-                        textShadow: `0 0 20px ${modeColor}88`,
-                        letterSpacing: 4,
-                    }}>
-                        {group.pvp_mode}
-                    </div>
-                    {/* Status badge */}
-                    <div className="group-card-badge">
-                        <span className="badge badge-status">
-                            {group.status === 'open' ? `🟢 ${t('common.open', language)}` : `🔴 ${t('common.full', language)}`}
-                        </span>
-                    </div>
+        <div className="group-card group-card-pvp" onClick={onClick}>
+            <div className="group-card-header group-card-header-pvp">
+                <div className="group-card-header-pvp-bg" />
+                <div className="group-card-overlay group-card-overlay-pvp" />
+                <div className="group-card-pvp-mark" style={{ color: modeColor }}>
+                    {group.pvp_mode}
+                </div>
+                <div className="group-card-badge">
+                    <span className={`badge badge-status ${group.status === 'open' ? 'badge-open' : 'badge-closed'}`}>
+                        {group.status === 'open' ? t('common.open', language) : t('common.full', language)}
+                    </span>
+                </div>
+                <div className="group-card-headline">
+                    <h3 className="group-card-title">{group.title}</h3>
+                    <p className="group-card-subtitle" style={{ color: modeColor }}>
+                        {t('pvp.equipmentBand', language).replace('{level}', String(group.equipment_band))}
+                    </p>
                 </div>
             </div>
 
             <div className="group-card-content">
-                <h3 className="group-card-title">{group.title}</h3>
-
-                {/* Franja de nivel */}
-                <p className="group-card-subtitle" style={{ color: modeColor }}>
-                    {t('pvp.equipmentBand', language).replace('{level}', String(group.equipment_band))}
-                </p>
-
-                <div className="group-card-meta">
-                    <div className="meta-item">
-                        <span className="meta-label">{t('pvp.mode', language)}:</span>
-                        <span className="meta-value" style={{ color: modeColor, fontWeight: 700 }}>
-                            {group.pvp_mode}
-                        </span>
+                <div className="group-card-meta group-card-meta-compact">
+                    <div className="meta-chip" style={{ borderColor: `${modeColor}55` }}>
+                        <span className="meta-label">{t('pvp.mode', language)}</span>
+                        <span className="meta-value" style={{ color: modeColor }}>{group.pvp_mode}</span>
                     </div>
-                    <div className="meta-item">
-                        <span className="meta-label">{t('common.server', language)}:</span>
+                    <div className="meta-chip">
+                        <span className="meta-label">{t('common.server', language)}</span>
                         <span className="meta-value">{group.server}</span>
                     </div>
-                    <div className="meta-item">
-                        <span className="meta-label">{t('pvp.band', language)}:</span>
+                    <div className="meta-chip">
+                        <span className="meta-label">{t('pvp.band', language)}</span>
                         <span className="meta-value">{t('pvp.bandLevel', language).replace('{level}', String(group.equipment_band))}</span>
                     </div>
                 </div>
 
-                <div className="group-card-leader">
-                    <span className="leader-label">{t('common.leader', language)}:</span>
-                    {group.leader_class_icon && (
-                        <img
-                            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${group.leader_class_icon}`}
-                            alt={group.leader_class_name}
-                            className="leader-icon"
-                            title={group.leader_class_name}
-                        />
-                    )}
-                    <span className="leader-name">{group.leader_name}</span>
-                </div>
+                <div className="group-card-footer">
+                    <div className="group-card-leader">
+                        <span className="leader-label">{t('common.leader', language)}</span>
+                        {group.leader_class_icon && (
+                            <img
+                                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${group.leader_class_icon}`}
+                                alt={group.leader_class_name}
+                                className="leader-icon"
+                                title={group.leader_class_name}
+                            />
+                        )}
+                        <span className="leader-name">{group.leader_name}</span>
+                    </div>
 
-                <div className="group-card-members">
-                    <span className="member-count">
-                        ⚔ {group.member_count || 1}/{totalSlots} {t('common.players', language)}
-                    </span>
+                    <div className="group-card-members">
+                        <span className="member-count">
+                            {group.member_count || 1}/{totalSlots} {t('common.players', language)}
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>

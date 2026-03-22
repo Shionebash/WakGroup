@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { api, getAssetUrl } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
 import { addToast } from '@/components/ToastContainer';
+import CustomSelect from '@/components/CustomSelect';
 import { useLanguage } from '@/lib/language-context';
 import { t, getDungeonApiName } from '@/lib/translations';
 
@@ -74,10 +75,14 @@ function WikiContent() {
                     <input className="search-input" placeholder={t('wiki.searchPlaceholder', language)}
                         value={search} onChange={e => setSearch(e.target.value)} />
                 </div>
-                <select className="form-select" style={{ width: 200 }} value={filterBand} onChange={e => setFilterBand(e.target.value ? Number(e.target.value) : '')}>
-                    <option value="">{t('home.allBands', language)}</option>
-                    {BAND_OPTIONS.map(b => <option key={b} value={b}>{t('home.bandUpTo', language).replace('{level}', String(b))}</option>)}
-                </select>
+                <div style={{ width: 200 }}>
+                    <CustomSelect
+                        value={filterBand === '' ? '' : String(filterBand)}
+                        onChange={e => setFilterBand(e ? Number(e) : '')}
+                        placeholder={t('home.allBands', language)}
+                        options={BAND_OPTIONS.map(b => ({ value: String(b), label: t('home.bandUpTo', language).replace('{level}', String(b)) }))}
+                    />
+                </div>
                 <button className="btn btn-ghost" onClick={fetchPosts}>🔄</button>
             </div>
 
@@ -164,13 +169,15 @@ function CreateWikiPostModal({ dungeons, prefillDungeon, onClose, onCreated }: a
                 <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                     <div className="form-group">
                         <label className="form-label">{t('wiki.dungeon', language)}</label>
-                        <select className="form-select" value={form.dungeon_id} onChange={e => set('dungeon_id', e.target.value)}>
-                            <option value="">{t('wiki.selectDungeon', language)}</option>
-                            {dungeons.map((d: any) => {
+                        <CustomSelect
+                            value={form.dungeon_id}
+                            onChange={e => set('dungeon_id', e)}
+                            placeholder={t('wiki.selectDungeon', language)}
+                            options={dungeons.map((d: any) => {
                                 const name = getDungeonApiName(d, language);
-                                return <option key={d.id} value={d.id}>{name} ({t('common.levelShort', language)} {d.modulated})</option>;
+                                return { value: String(d.id), label: `${name} (${t('common.levelShort', language)} ${d.modulated})` };
                             })}
-                        </select>
+                        />
                     </div>
                     <div className="form-group">
                         <label className="form-label">{t('wiki.titleLabel', language)}</label>
