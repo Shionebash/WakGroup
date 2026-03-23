@@ -7,6 +7,7 @@ import { api } from '@/lib/api';
 import { addToast } from '@/components/ToastContainer';
 import CustomSelect from '@/components/CustomSelect';
 import { t } from '@/lib/translations';
+import { formatGroupLanguages } from '@/lib/group-languages';
 
 interface PvpGroupDetailModalProps {
     groupId: string;
@@ -281,6 +282,10 @@ export default function PvpGroupDetailModal({ groupId, onClose, onDeleted }: Pvp
                                 <div className="detail-item">
                                     <span className="detail-label">Servidor:</span>
                                     <span className="detail-value">{group.server}</span>
+                                </div>
+                                <div className="detail-item">
+                                    <span className="detail-label">{t('common.languages', language)}:</span>
+                                    <span className="detail-value">{formatGroupLanguages(group.languages)}</span>
                                 </div>
                                 <div className="detail-item">
                                     <span className="detail-label">Estado:</span>

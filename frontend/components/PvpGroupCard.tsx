@@ -1,6 +1,7 @@
 'use client';
 import { useLanguage } from '@/lib/language-context';
 import { t } from '@/lib/translations';
+import { formatGroupLanguages } from '@/lib/group-languages';
 
 interface PvpGroupCardProps {
     group: any;
@@ -64,6 +65,10 @@ export default function PvpGroupCard({ group, onClick }: PvpGroupCardProps) {
                     <div className="meta-chip">
                         <span className="meta-label">{t('pvp.band', language)}</span>
                         <span className="meta-value">{t('pvp.bandLevel', language).replace('{level}', String(group.equipment_band))}</span>
+                    </div>
+                    <div className="meta-chip">
+                        <span className="meta-label">{t('common.languages', language)}</span>
+                        <span className="meta-value">{formatGroupLanguages(group.languages)}</span>
                     </div>
                 </div>
 

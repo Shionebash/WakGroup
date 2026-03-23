@@ -12,6 +12,7 @@ const VALID_SERVERS = ['Ogrest', 'Rubilax', 'Pandora'];
 const VALID_PVP_MODES = ['1v1', '2v2', '3v3', '4v4', '5v5', '6v6'];
 const VALID_BANDS = [20, 35, 50, 65, 80, 95, 110, 125, 140, 155, 170, 185, 200, 215, 230, 245];
 const VALID_TEAMS = ['red', 'blue'];
+const VALID_GROUP_LANGUAGES = ['es', 'en', 'fr', 'pt'];
 
 async function isPvpGroupMember(groupId: string, userId: string): Promise<boolean> {
   const db = getDb();
@@ -33,7 +34,7 @@ async function isPvpGroupMember(groupId: string, userId: string): Promise<boolea
 // GET /pvp-groups - list with filters
 router.get('/', async (req: Request, res: Response) => {
   const db = getDb();
-  const { pvp_mode, equipment_band, server, limit = '20', offset = '0' } = req.query;
+  const { pvp_mode, equipment_band, server, language, limit = '20', offset = '0' } = req.query;
 
   let sql = `
     SELECT 
@@ -59,6 +60,10 @@ router.get('/', async (req: Request, res: Response) => {
   }
   if (server && VALID_SERVERS.includes(server as string)) {
     sql += ` AND pg.server = $${paramIndex++}`; params.push(server);
+  }
+  if (language && VALID_GROUP_LANGUAGES.includes(language as string)) {
+    sql += ` AND COALESCE(NULLIF(pg.languages, ''), '["es","en","fr","pt"]')::jsonb ? $${paramIndex++}`;
+    params.push(language);
   }
 
   sql += ` ORDER BY pg.created_at DESC LIMIT $${paramIndex++} OFFSET $${paramIndex++}`;
@@ -151,12 +156,14 @@ router.post('/',
     body('leader_char_id').isUUID(),
     body('pvp_mode').isIn(VALID_PVP_MODES),
     body('equipment_band').isInt(),
+    body('languages').isArray({ min: 1 }),
+    body('languages.*').isIn(VALID_GROUP_LANGUAGES),
     body('server').isIn(VALID_SERVERS),
   ],
   validateRequest,
   async (req: Request, res: Response): Promise<void> => {
     const db = getDb();
-    const { title, leader_char_id, pvp_mode, equipment_band, server } = req.body;
+    const { title, leader_char_id, pvp_mode, equipment_band, languages = VALID_GROUP_LANGUAGES, server } = req.body;
 
     if (!VALID_BANDS.includes(Number(equipment_band))) {
       res.status(400).json({ error: 'Franja de equipamiento inválida' }); return;
@@ -172,10 +179,11 @@ router.post('/',
       }
 
       const id = uuidv4();
+      const normalizedLanguages = Array.from(new Set((languages || []).filter((entry: string) => VALID_GROUP_LANGUAGES.includes(entry))));
       await db.query(`
-        INSERT INTO pvp_groups (id, title, leader_char_id, pvp_mode, equipment_band, server)
-        VALUES ($1, $2, $3, $4, $5, $6)
-      `, [id, title, leader_char_id, pvp_mode, Number(equipment_band), server]);
+        INSERT INTO pvp_groups (id, title, leader_char_id, pvp_mode, equipment_band, languages, server)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+      `, [id, title, leader_char_id, pvp_mode, Number(equipment_band), JSON.stringify(normalizedLanguages.length > 0 ? normalizedLanguages : VALID_GROUP_LANGUAGES), server]);
       await touchPvpGroupActivity(db, id);
 
       const newGroup = await db.query('SELECT * FROM pvp_groups WHERE id = $1', [id]);

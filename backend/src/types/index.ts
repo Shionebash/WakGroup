@@ -31,6 +31,7 @@ export interface DungeonGroup {
     steles_count: number;
     intervention_active: boolean;
     steles_drops?: string | number[];
+    languages?: string | string[];
     server: Server;
     status: GroupStatus;
     created_at: number;

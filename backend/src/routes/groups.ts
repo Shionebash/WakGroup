@@ -10,6 +10,7 @@ import { acknowledgeGroupKeepAlive, touchDungeonGroupActivity } from '../service
 const router = Router();
 
 const VALID_SERVERS = ['Ogrest', 'Rubilax', 'Pandora'];
+const VALID_GROUP_LANGUAGES = ['es', 'en', 'fr', 'pt'];
 
 async function isGroupMember(groupId: string, userId: string): Promise<boolean> {
   const db = getDb();
@@ -31,7 +32,7 @@ async function isGroupMember(groupId: string, userId: string): Promise<boolean> 
 // GET /groups - list with filters
 router.get('/', async (req: Request, res: Response) => {
   const db = getDb();
-  const { dungeon_id, server, stasis, min_lvl, limit = '20', offset = '0' } = req.query;
+  const { dungeon_id, server, stasis, min_lvl, language, limit = '20', offset = '0' } = req.query;
 
   let sql = `
     SELECT 
@@ -55,6 +56,10 @@ router.get('/', async (req: Request, res: Response) => {
   if (server && VALID_SERVERS.includes(server as string)) { sql += ` AND g.server = $${paramIndex++}`; params.push(server); }
   if (stasis) { sql += ` AND g.stasis = $${paramIndex++}`; params.push(Number(stasis)); }
   if (min_lvl) { sql += ` AND d.modulated = $${paramIndex++}`; params.push(Number(min_lvl)); }
+  if (language && VALID_GROUP_LANGUAGES.includes(language as string)) {
+    sql += ` AND COALESCE(NULLIF(g.languages, ''), '["es","en","fr","pt"]')::jsonb ? $${paramIndex++}`;
+    params.push(language);
+  }
 
   sql += ` ORDER BY g.created_at DESC LIMIT $${paramIndex++} OFFSET $${paramIndex++}`;
   params.push(Number(limit), Number(offset));
@@ -168,6 +173,8 @@ router.post('/',
     body('steles_count').optional().isInt({ min: 1, max: 10 }),
     body('intervention_active').optional().isBoolean(),
     body('steles_drops').optional().isArray(),
+    body('languages').isArray({ min: 1 }),
+    body('languages.*').isIn(VALID_GROUP_LANGUAGES),
     body('server').isIn(VALID_SERVERS),
   ],
   validateRequest,
@@ -183,6 +190,7 @@ router.post('/',
       steles_count = 1,
       intervention_active = false,
       steles_drops = [],
+      languages = VALID_GROUP_LANGUAGES,
       server,
     } = req.body;
 
@@ -202,10 +210,11 @@ router.post('/',
       }
 
       const id = uuidv4();
+      const normalizedLanguages = Array.from(new Set((languages || []).filter((entry: string) => VALID_GROUP_LANGUAGES.includes(entry))));
       await db.query(`
-                INSERT INTO groups (id, title, description, dungeon_id, leader_char_id, stasis, steles_active, steles_count, intervention_active, steles_drops, server)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-            `, [id, title, description || null, dungeon_id, leader_char_id, stasis, steles_active, steles_count, intervention_active, JSON.stringify(steles_drops || []), server]);
+                INSERT INTO groups (id, title, description, dungeon_id, leader_char_id, stasis, steles_active, steles_count, intervention_active, steles_drops, languages, server)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+            `, [id, title, description || null, dungeon_id, leader_char_id, stasis, steles_active, steles_count, intervention_active, JSON.stringify(steles_drops || []), JSON.stringify(normalizedLanguages.length > 0 ? normalizedLanguages : VALID_GROUP_LANGUAGES), server]);
       await touchDungeonGroupActivity(db, id);
 
       const newGroupResult = await db.query('SELECT * FROM groups WHERE id = $1', [id]);

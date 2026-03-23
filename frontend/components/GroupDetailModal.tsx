@@ -7,6 +7,7 @@ import { api, getAssetUrl } from '@/lib/api';
 import { addToast } from '@/components/ToastContainer';
 import CustomSelect from '@/components/CustomSelect';
 import { t, getItemTitle, getDungeonApiName } from '@/lib/translations';
+import { formatGroupLanguages } from '@/lib/group-languages';
 
 interface GroupDetailModalProps {
     groupId: string;
@@ -271,6 +272,10 @@ export default function GroupDetailModal({ groupId, onClose, onDeleted }: GroupD
                                 <div className="detail-item">
                                     <span className="detail-label">{t('common.server', language)}:</span>
                                     <span className="detail-value">{group.server}</span>
+                                </div>
+                                <div className="detail-item">
+                                    <span className="detail-label">{t('common.languages', language)}:</span>
+                                    <span className="detail-value">{formatGroupLanguages(group.languages)}</span>
                                 </div>
                                 <div className="detail-item">
                                     <span className="detail-label">{t('common.status', language)}:</span>

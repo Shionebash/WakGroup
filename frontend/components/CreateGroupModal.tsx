@@ -5,6 +5,7 @@ import { api, getAssetUrl } from '@/lib/api';
 import CustomSelect from '@/components/CustomSelect';
 import { useLanguage } from '@/lib/language-context';
 import { t, getDungeonApiName, getItemTitle } from '@/lib/translations';
+import { GROUP_LANGUAGE_OPTIONS, getGroupLanguageLabel } from '@/lib/group-languages';
 
 interface CreateGroupModalProps {
     onClose: () => void;
@@ -30,6 +31,7 @@ export default function CreateGroupModal({ onClose, onCreated, prefillDungeonId 
         steles_count: 1,
         intervention_active: false,
         steles_drops: [] as number[],
+        languages: [...GROUP_LANGUAGE_OPTIONS],
     });
 
     const [error, setError] = useState<string | null>(null);
@@ -107,6 +109,7 @@ export default function CreateGroupModal({ onClose, onCreated, prefillDungeonId 
                 steles_count: formData.steles_active ? Number(formData.steles_count) : 1,
                 intervention_active: formData.intervention_active,
                 steles_drops: formData.steles_active ? formData.steles_drops : [],
+                languages: formData.languages,
                 server: formData.server,
             });
             onCreated();
@@ -258,6 +261,44 @@ export default function CreateGroupModal({ onClose, onCreated, prefillDungeonId 
                                     onChange={e => setFormData({ ...formData, server: e })}
                                     options={['Ogrest', 'Rubilax', 'Pandora'].map(server => ({ value: server, label: server }))}
                                 />
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label>{t('group.languages', language)}</label>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                                {GROUP_LANGUAGE_OPTIONS.map((option) => {
+                                    const selected = formData.languages.includes(option);
+                                    return (
+                                        <button
+                                            key={option}
+                                            type="button"
+                                            onClick={() => {
+                                                setFormData((prev) => {
+                                                    const next = prev.languages.includes(option)
+                                                        ? prev.languages.filter((entry) => entry !== option)
+                                                        : [...prev.languages, option];
+                                                    return {
+                                                        ...prev,
+                                                        languages: next.length > 0 ? next : prev.languages,
+                                                    };
+                                                });
+                                            }}
+                                            style={{
+                                                padding: '8px 12px',
+                                                borderRadius: 999,
+                                                border: `1px solid ${selected ? 'var(--primary-color)' : 'var(--border-color)'}`,
+                                                background: selected ? 'rgba(212,165,116,0.16)' : 'var(--background-light)',
+                                                color: selected ? 'var(--text-primary)' : 'var(--text-secondary)',
+                                                cursor: 'pointer',
+                                                fontSize: 12,
+                                                fontWeight: selected ? 700 : 500,
+                                            }}
+                                        >
+                                            {getGroupLanguageLabel(option)}
+                                        </button>
+                                    );
+                                })}
                             </div>
                         </div>
 

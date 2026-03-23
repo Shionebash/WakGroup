@@ -1,6 +1,7 @@
 'use client';
 import { useLanguage } from '@/lib/language-context';
 import { t } from '@/lib/translations';
+import { formatGroupLanguages } from '@/lib/group-languages';
 
 interface GroupProps {
     group: any;
@@ -46,6 +47,10 @@ export default function GroupCard({ group, onClick }: GroupProps) {
                     <div className="meta-chip">
                         <span className="meta-label">{t('common.server', language)}</span>
                         <span className="meta-value">{group.server}</span>
+                    </div>
+                    <div className="meta-chip">
+                        <span className="meta-label">{t('common.languages', language)}</span>
+                        <span className="meta-value">{formatGroupLanguages(group.languages)}</span>
                     </div>
                 </div>
 

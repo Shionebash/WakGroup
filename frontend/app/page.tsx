@@ -8,6 +8,7 @@ import CustomSelect from '@/components/CustomSelect';
 import GroupCard from '@/components/GroupCard';
 import GroupDetailModal from '@/components/GroupDetailModal';
 import CreateGroupModal from '@/components/CreateGroupModal';
+import { GROUP_LANGUAGE_OPTIONS, getGroupLanguageLabel } from '@/lib/group-languages';
 
 const SERVERS = ['', 'Ogrest', 'Rubilax', 'Pandora'];
 const STASIS_OPTIONS = Array.from({ length: 10 }, (_, i) => i + 1);
@@ -25,6 +26,7 @@ export default function HomePage() {
     const [filterServer, setFilterServer] = useState('');
     const [filterStasis, setFilterStasis] = useState<number | ''>('');
     const [filterBand, setFilterBand] = useState<number | ''>('');
+    const [filterLanguage, setFilterLanguage] = useState('');
 
     const fetchGroups = useCallback(async () => {
         setLoading(true);
@@ -33,12 +35,13 @@ export default function HomePage() {
             if (filterServer) params.server = filterServer;
             if (filterStasis) params.stasis = filterStasis;
             if (filterBand) params.min_lvl = filterBand;
+            if (filterLanguage) params.language = filterLanguage;
             const res = await api.get('/groups', { params });
             setGroups(res.data);
         } finally {
             setLoading(false);
         }
-    }, [filterServer, filterStasis, filterBand]);
+    }, [filterServer, filterStasis, filterBand, filterLanguage]);
 
     useEffect(() => {
         fetchGroups();
@@ -123,6 +126,14 @@ export default function HomePage() {
                         onChange={(next) => setFilterBand(next ? Number(next) : '')}
                         placeholder={t('home.allBands', language)}
                         options={BAND_OPTIONS.map((n) => ({ value: String(n), label: t('home.bandUpTo', language).replace('{level}', String(n)) }))}
+                    />
+
+                    <CustomSelect
+                        className="filter-control"
+                        value={filterLanguage}
+                        onChange={(next) => setFilterLanguage(next)}
+                        placeholder={t('home.allLanguages', language)}
+                        options={GROUP_LANGUAGE_OPTIONS.map((code) => ({ value: code, label: getGroupLanguageLabel(code) }))}
                     />
 
                     {user && (

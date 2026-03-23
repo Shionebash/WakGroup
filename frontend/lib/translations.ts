@@ -26,6 +26,8 @@ type TranslationKey =
   | 'common.stasis'
   | 'common.steles'
   | 'common.intervention'
+  | 'common.language'
+  | 'common.languages'
   | 'common.server'
   | 'common.status'
   | 'common.leader'
@@ -111,6 +113,7 @@ type TranslationKey =
   | 'home.subtitle'
   | 'home.searchPlaceholder'
   | 'home.allServers'
+  | 'home.allLanguages'
   | 'home.anyStasis'
   | 'home.allBands'
   | 'home.bandUpTo'
@@ -128,6 +131,7 @@ type TranslationKey =
   | 'dungeons.createGroup'
   | 'pvp.subtitle'
   | 'pvp.searchPlaceholder'
+  | 'pvp.allLanguages'
   | 'pvp.anyMode'
   | 'pvp.allBands'
   | 'pvp.bandLevel'
@@ -198,6 +202,7 @@ type TranslationKey =
   | 'group.errorLoadData'
   | 'group.errorCreate'
   | 'group.character'
+  | 'group.languages'
   | 'group.titleOptional'
   | 'group.titlePlaceholder'
   | 'group.stelesCount'
@@ -229,6 +234,8 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
   'common.stasis': { es: 'Stasis', en: 'Stasis', fr: 'Stase', pt: 'Stasis' },
   'common.steles': { es: 'Estelas', en: 'Steles', fr: 'Stèles', pt: 'Estátuas' },
   'common.intervention': { es: 'Intervención', en: 'Intervention', fr: 'Intervention', pt: 'Intervenção' },
+  'common.language': { es: 'Idioma', en: 'Language', fr: 'Langue', pt: 'Idioma' },
+  'common.languages': { es: 'Idiomas', en: 'Languages', fr: 'Langues', pt: 'Idiomas' },
   'common.server': { es: 'Servidor', en: 'Server', fr: 'Serveur', pt: 'Servidor' },
   'common.status': { es: 'Estado', en: 'Status', fr: 'Statut', pt: 'Status' },
   'common.leader': { es: 'Líder', en: 'Leader', fr: 'Chef', pt: 'Líder' },
@@ -314,6 +321,7 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
   'home.subtitle': { es: 'Encuentra tu party, conquista las mazmorras del mundo de los Doce.', en: 'Find your party and conquer the dungeons of the World of Twelve.', fr: 'Trouvez votre équipe et conquérez les donjons du Monde des Douze.', pt: 'Encontre seu grupo e conquiste as masmorras do Mundo dos Doze.' },
   'home.searchPlaceholder': { es: 'Buscar por mazmorra o título...', en: 'Search by dungeon or title...', fr: 'Rechercher par donjon ou titre...', pt: 'Buscar por masmorra ou título...' },
   'home.allServers': { es: 'Todos los servidores', en: 'All servers', fr: 'Tous les serveurs', pt: 'Todos os servidores' },
+  'home.allLanguages': { es: 'Todos los idiomas', en: 'All languages', fr: 'Toutes les langues', pt: 'Todos os idiomas' },
   'home.anyStasis': { es: 'Cualquier Stasis', en: 'Any Stasis', fr: 'Stasis quelconque', pt: 'Qualquer Stasis' },
   'home.allBands': { es: 'Todas las franjas', en: 'All bands', fr: 'Toutes les tranches', pt: 'Todas as faixas' },
   'home.bandUpTo': { es: 'Hasta Nv. {level}', en: 'Up to Lv. {level}', fr: 'Jusqu\'au niv. {level}', pt: 'Até Nv. {level}' },
@@ -331,6 +339,7 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
   'dungeons.createGroup': { es: 'Crear grupo', en: 'Create group', fr: 'Créer un groupe', pt: 'Criar grupo' },
   'pvp.subtitle': { es: 'Encuentra rivales para enfrentamientos PVP. Desde 1v1 hasta 6v6 — demuestra tu fuerza.', en: 'Find rivals for PVP matches. From 1v1 up to 6v6 — prove your strength.', fr: 'Trouvez des adversaires pour des matchs PVP. De 1v1 jusqu\'au 6v6 — montrez votre puissance.', pt: 'Encontre rivais para confrontos PVP. De 1v1 até 6v6 — mostre sua força.' },
   'pvp.searchPlaceholder': { es: 'Buscar por título...', en: 'Search by title...', fr: 'Rechercher par titre...', pt: 'Buscar por título...' },
+  'pvp.allLanguages': { es: 'Todos los idiomas', en: 'All languages', fr: 'Toutes les langues', pt: 'Todos os idiomas' },
   'pvp.anyMode': { es: 'Cualquier modo', en: 'Any mode', fr: 'Tous les modes', pt: 'Qualquer modo' },
   'pvp.allBands': { es: 'Todas las franjas', en: 'All bands', fr: 'Toutes les tranches', pt: 'Todas as faixas' },
   'pvp.bandLevel': { es: 'Franja Nv. {level}', en: 'Band Lv. {level}', fr: 'Tranche niv. {level}', pt: 'Faixa Nv. {level}' },
@@ -402,6 +411,7 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
   'group.errorLoadData': { es: 'Error al cargar datos', en: 'Error loading data', fr: 'Erreur de chargement des données', pt: 'Erro ao carregar dados' },
   'group.errorCreate': { es: 'Error al crear grupo', en: 'Error creating group', fr: 'Erreur lors de la création du groupe', pt: 'Erro ao criar grupo' },
   'group.character': { es: 'Personaje', en: 'Character', fr: 'Personnage', pt: 'Personagem' },
+  'group.languages': { es: 'Idiomas del grupo', en: 'Group languages', fr: 'Langues du groupe', pt: 'Idiomas do grupo' },
   'group.titleOptional': { es: 'Título', en: 'Title', fr: 'Titre', pt: 'Título' },
   'group.titlePlaceholder': { es: 'Ej: Grupo relajado', en: 'e.g., Chill group', fr: 'Ex. : Groupe tranquille', pt: 'Ex.: Grupo tranquilo' },
   'group.stelesCount': { es: 'Cuántas Estelas', en: 'How many Steles', fr: 'Combien de Stèles', pt: 'Quantas Estátuas' },

@@ -3,6 +3,9 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { api } from '@/lib/api';
 import CustomSelect from '@/components/CustomSelect';
+import { useLanguage } from '@/lib/language-context';
+import { t } from '@/lib/translations';
+import { GROUP_LANGUAGE_OPTIONS, getGroupLanguageLabel } from '@/lib/group-languages';
 
 interface CreatePvpGroupModalProps {
     onClose: () => void;
@@ -23,6 +26,7 @@ const PVP_MODE_COLORS: Record<string, string> = {
 
 export default function CreatePvpGroupModal({ onClose, onCreated }: CreatePvpGroupModalProps) {
     const { user } = useAuth();
+    const { language } = useLanguage();
     const [characters, setCharacters] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
@@ -32,6 +36,7 @@ export default function CreatePvpGroupModal({ onClose, onCreated }: CreatePvpGro
         title: '',
         pvp_mode: '1v1',
         equipment_band: 200,
+        languages: [...GROUP_LANGUAGE_OPTIONS],
         server: 'Ogrest',
     });
 
@@ -55,6 +60,7 @@ export default function CreatePvpGroupModal({ onClose, onCreated }: CreatePvpGro
                 title: formData.title,
                 pvp_mode: formData.pvp_mode,
                 equipment_band: Number(formData.equipment_band),
+                languages: formData.languages,
                 server: formData.server,
             });
             onCreated();
@@ -145,6 +151,44 @@ export default function CreatePvpGroupModal({ onClose, onCreated }: CreatePvpGro
                             <p style={{ fontSize: 11, color: 'var(--text-secondary)', marginTop: 4 }}>
                                 Franja de nivel máximo del equipo permitido en el PVP
                             </p>
+                        </div>
+
+                        <div className="form-group">
+                            <label>{t('group.languages', language)}</label>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                                {GROUP_LANGUAGE_OPTIONS.map((option) => {
+                                    const selected = formData.languages.includes(option);
+                                    return (
+                                        <button
+                                            key={option}
+                                            type="button"
+                                            onClick={() => {
+                                                setFormData((prev) => {
+                                                    const next = prev.languages.includes(option)
+                                                        ? prev.languages.filter((entry) => entry !== option)
+                                                        : [...prev.languages, option];
+                                                    return {
+                                                        ...prev,
+                                                        languages: next.length > 0 ? next : prev.languages,
+                                                    };
+                                                });
+                                            }}
+                                            style={{
+                                                padding: '8px 12px',
+                                                borderRadius: 999,
+                                                border: `1px solid ${selected ? selectedModeColor : 'var(--border-color)'}`,
+                                                background: selected ? `${selectedModeColor}22` : 'var(--background-light)',
+                                                color: selected ? selectedModeColor : 'var(--text-secondary)',
+                                                cursor: 'pointer',
+                                                fontSize: 12,
+                                                fontWeight: selected ? 700 : 500,
+                                            }}
+                                        >
+                                            {getGroupLanguageLabel(option)}
+                                        </button>
+                                    );
+                                })}
+                            </div>
                         </div>
 
                         <div className="form-row">

@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS groups (
     steles_count INTEGER NOT NULL DEFAULT 1,
     intervention_active BOOLEAN NOT NULL DEFAULT false,
     steles_drops TEXT,
+    languages TEXT NOT NULL DEFAULT '["es","en","fr","pt"]',
     server TEXT NOT NULL CHECK (server IN ('Ogrest', 'Rubilax', 'Pandora')),
     status TEXT NOT NULL DEFAULT 'open' CHECK (status IN ('open', 'full', 'closed')),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -133,6 +134,7 @@ CREATE TABLE IF NOT EXISTS pvp_groups (
     pvp_mode TEXT NOT NULL CHECK (pvp_mode IN ('1v1', '2v2', '3v3')),
     equipment_band INTEGER NOT NULL,
     leader_team TEXT NOT NULL DEFAULT 'red' CHECK (leader_team IN ('red', 'blue')),
+    languages TEXT NOT NULL DEFAULT '["es","en","fr","pt"]',
     server TEXT NOT NULL CHECK (server IN ('Ogrest', 'Rubilax', 'Pandora')),
     status TEXT NOT NULL DEFAULT 'open' CHECK (status IN ('open', 'full', 'closed')),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -187,10 +189,14 @@ ALTER TABLE groups ADD COLUMN IF NOT EXISTS steles_active BOOLEAN NOT NULL DEFAU
 ALTER TABLE groups ADD COLUMN IF NOT EXISTS steles_count INTEGER NOT NULL DEFAULT 1;
 ALTER TABLE groups ADD COLUMN IF NOT EXISTS intervention_active BOOLEAN NOT NULL DEFAULT false;
 ALTER TABLE groups ADD COLUMN IF NOT EXISTS steles_drops TEXT;
+ALTER TABLE groups ADD COLUMN IF NOT EXISTS languages TEXT NOT NULL DEFAULT '["es","en","fr","pt"]';
 ALTER TABLE groups ADD COLUMN IF NOT EXISTS last_activity_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 ALTER TABLE groups ADD COLUMN IF NOT EXISTS inactivity_prompt_sent_at TIMESTAMP;
+ALTER TABLE pvp_groups ADD COLUMN IF NOT EXISTS languages TEXT NOT NULL DEFAULT '["es","en","fr","pt"]';
 ALTER TABLE pvp_groups ADD COLUMN IF NOT EXISTS last_activity_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 ALTER TABLE pvp_groups ADD COLUMN IF NOT EXISTS inactivity_prompt_sent_at TIMESTAMP;
+UPDATE groups SET languages = '["es","en","fr","pt"]' WHERE languages IS NULL OR languages = '';
+UPDATE pvp_groups SET languages = '["es","en","fr","pt"]' WHERE languages IS NULL OR languages = '';
 
 
 CREATE INDEX IF NOT EXISTS idx_characters_user_id ON characters(user_id);

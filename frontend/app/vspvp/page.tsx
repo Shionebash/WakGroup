@@ -8,6 +8,7 @@ import PvpGroupDetailModal from '@/components/PvpGroupDetailModal';
 import CreatePvpGroupModal from '@/components/CreatePvpGroupModal';
 import { useLanguage } from '@/lib/language-context';
 import { t } from '@/lib/translations';
+import { GROUP_LANGUAGE_OPTIONS, getGroupLanguageLabel } from '@/lib/group-languages';
 
 const PVP_MODES = ['1v1', '2v2', '3v3', '4v4', '5v5', '6v6'];
 const BAND_OPTIONS = [20, 35, 50, 65, 80, 95, 110, 125, 140, 155, 170, 185, 200, 215, 230, 245];
@@ -24,6 +25,7 @@ export default function VspvpPage() {
     const [filterMode, setFilterMode] = useState('');
     const [filterBand, setFilterBand] = useState<number | ''>('');
     const [filterServer, setFilterServer] = useState('');
+    const [filterLanguage, setFilterLanguage] = useState('');
 
     const fetchGroups = useCallback(async () => {
         setLoading(true);
@@ -32,12 +34,13 @@ export default function VspvpPage() {
             if (filterMode) params.pvp_mode = filterMode;
             if (filterBand) params.equipment_band = filterBand;
             if (filterServer) params.server = filterServer;
+            if (filterLanguage) params.language = filterLanguage;
             const res = await api.get('/pvp-groups', { params });
             setGroups(res.data);
         } finally {
             setLoading(false);
         }
-    }, [filterMode, filterBand, filterServer]);
+    }, [filterMode, filterBand, filterServer, filterLanguage]);
 
     useEffect(() => {
         fetchGroups();
@@ -108,6 +111,14 @@ export default function VspvpPage() {
                         onChange={(next) => setFilterServer(next)}
                         placeholder={t('home.allServers', language)}
                         options={SERVERS.map((s) => ({ value: s, label: s }))}
+                    />
+
+                    <CustomSelect
+                        className="filter-control"
+                        value={filterLanguage}
+                        onChange={(next) => setFilterLanguage(next)}
+                        placeholder={t('pvp.allLanguages', language)}
+                        options={GROUP_LANGUAGE_OPTIONS.map((code) => ({ value: code, label: getGroupLanguageLabel(code) }))}
                     />
 
                     {user && (
