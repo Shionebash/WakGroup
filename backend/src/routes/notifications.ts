@@ -41,6 +41,21 @@ router.patch('/read-all', requireAuth, async (req: Request, res: Response): Prom
     }
 });
 
+// DELETE /notifications/read - clear already read notifications
+router.delete('/read', requireAuth, async (req: Request, res: Response): Promise<void> => {
+    const db = getDb();
+    try {
+        const result = await db.query(
+            'DELETE FROM notifications WHERE user_id = $1 AND is_read = true',
+            [req.user!.userId]
+        );
+        res.json({ ok: true, deleted: result.rowCount ?? 0 });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+
 // GET /notifications/count - unread count
 router.get('/count', requireAuth, async (req: Request, res: Response): Promise<void> => {
     const db = getDb();

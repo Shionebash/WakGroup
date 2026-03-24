@@ -98,6 +98,7 @@ interface ChatContextValue {
     notifications: Notification[];
     unreadCount: number;
     markAllRead: () => void;
+    clearReadNotifications: () => void;
     refreshNotifications: () => void;
 }
 
@@ -105,7 +106,7 @@ const ChatContext = createContext<ChatContextValue>({
     sessions: [], openChat: () => {}, closeChat: () => {},
     toggleChat: () => {}, sendMessage: () => {}, markChatRead: () => {},
     connected: false, notifications: [], unreadCount: 0,
-    markAllRead: () => {}, refreshNotifications: () => {},
+    markAllRead: () => {}, clearReadNotifications: () => {}, refreshNotifications: () => {},
 });
 
 export function ChatProvider({ children }: { children: ReactNode }) {
@@ -131,6 +132,13 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         try {
             await api.patch('/notifications/read-all');
             setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
+        } catch { /* silent */ }
+    }, []);
+
+    const clearReadNotifications = useCallback(async () => {
+        try {
+            await api.delete('/notifications/read');
+            setNotifications(prev => prev.filter(n => !n.is_read));
         } catch { /* silent */ }
     }, []);
 
@@ -276,7 +284,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         <ChatContext.Provider value={{
             sessions, openChat, closeChat, toggleChat,
             sendMessage, markChatRead, connected,
-            notifications, unreadCount, markAllRead, refreshNotifications,
+            notifications, unreadCount, markAllRead, clearReadNotifications, refreshNotifications,
         }}>
             {children}
         </ChatContext.Provider>

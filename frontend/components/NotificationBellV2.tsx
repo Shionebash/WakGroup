@@ -44,7 +44,7 @@ function getNotificationBody(notif: any, payload: any, language: UiLanguage) {
 
 export default function NotificationBellV2() {
     const { user } = useAuth();
-    const { notifications, unreadCount, markAllRead, refreshNotifications } = useChat();
+    const { notifications, unreadCount, markAllRead, clearReadNotifications, refreshNotifications } = useChat();
     const { language } = useLanguage();
     const [open, setOpen] = useState(false);
     const [permissionState, setPermissionState] = useState<string>('default');
@@ -188,6 +188,20 @@ export default function NotificationBellV2() {
                                     }}
                                 >
                                     {t('notification.readAll', language)}
+                                </button>
+                            )}
+                            {notifications.some((notification) => notification.is_read) && (
+                                <button
+                                    onClick={clearReadNotifications}
+                                    style={{
+                                        background: 'none',
+                                        border: 'none',
+                                        color: 'var(--text-secondary)',
+                                        fontSize: 11,
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    {t('notification.clearSeen', language)}
                                 </button>
                             )}
                         </div>

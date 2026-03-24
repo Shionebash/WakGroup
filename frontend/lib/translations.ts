@@ -86,6 +86,7 @@ type TranslationKey =
   | 'notification.alertsBlocked'
   | 'notification.alertsActive'
   | 'notification.readAll'
+  | 'notification.clearSeen'
   | 'notification.empty'
   | 'notification.now'
   | 'notification.keepLooking'
@@ -295,6 +296,7 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
   'notification.alertsBlocked': { es: 'Avisos bloqueados', en: 'Alerts blocked', fr: 'Alertes bloquées', pt: 'Alertas bloqueados' },
   'notification.alertsActive': { es: 'Avisos activos', en: 'Alerts active', fr: 'Alertes actives', pt: 'Alertas ativos' },
   'notification.readAll': { es: 'Leer todo', en: 'Read all', fr: 'Tout lire', pt: 'Ler tudo' },
+  'notification.clearSeen': { es: 'Limpiar vistas', en: 'Clear seen', fr: 'Effacer les vues', pt: 'Limpar vistas' },
   'notification.empty': { es: 'Sin notificaciones', en: 'No notifications', fr: 'Aucune notification', pt: 'Sem notificações' },
   'notification.now': { es: 'ahora', en: 'now', fr: 'maintenant', pt: 'agora' },
   'notification.keepLooking': { es: 'Seguir buscando', en: 'Keep looking', fr: 'Continuer à chercher', pt: 'Continuar procurando' },
