@@ -118,7 +118,10 @@ export default function VspvpPage() {
                         value={filterLanguage}
                         onChange={(next) => setFilterLanguage(next)}
                         placeholder={t('pvp.allLanguages', language)}
-                        options={GROUP_LANGUAGE_OPTIONS.map((code) => ({ value: code, label: getGroupLanguageLabel(code) }))}
+                        options={[
+                            { value: '', label: t('pvp.allLanguages', language) },
+                            ...GROUP_LANGUAGE_OPTIONS.map((code) => ({ value: code, label: getGroupLanguageLabel(code) })),
+                        ]}
                     />
 
                     {user && (

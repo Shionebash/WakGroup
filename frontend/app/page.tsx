@@ -133,7 +133,10 @@ export default function HomePage() {
                         value={filterLanguage}
                         onChange={(next) => setFilterLanguage(next)}
                         placeholder={t('home.allLanguages', language)}
-                        options={GROUP_LANGUAGE_OPTIONS.map((code) => ({ value: code, label: getGroupLanguageLabel(code) }))}
+                        options={[
+                            { value: '', label: t('home.allLanguages', language) },
+                            ...GROUP_LANGUAGE_OPTIONS.map((code) => ({ value: code, label: getGroupLanguageLabel(code) })),
+                        ]}
                     />
 
                     {user && (
