@@ -138,12 +138,6 @@ export default function HomePage() {
                             ...GROUP_LANGUAGE_OPTIONS.map((code) => ({ value: code, label: getGroupLanguageLabel(code) })),
                         ]}
                     />
-
-                    {user && (
-                        <button className="btn btn-primary filter-cta" onClick={() => setShowCreate(true)}>
-                            {t('home.createGroup', language)}
-                        </button>
-                    )}
                 </div>
             </section>
 

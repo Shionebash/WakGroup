@@ -123,12 +123,6 @@ export default function VspvpPage() {
                             ...GROUP_LANGUAGE_OPTIONS.map((code) => ({ value: code, label: getGroupLanguageLabel(code) })),
                         ]}
                     />
-
-                    {user && (
-                        <button className="btn btn-primary filter-cta filter-cta-pvp" onClick={() => setShowCreate(true)}>
-                            {t('pvp.create', language)}
-                        </button>
-                    )}
                 </div>
             </section>
 
