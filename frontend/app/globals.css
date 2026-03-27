@@ -1538,6 +1538,10 @@ h6 {
     padding: 22px;
 }
 
+.dungeons-spotlight-copy .badge {
+    align-self: flex-start;
+}
+
 .dungeons-spotlight-copy h3,
 .wiki-featured-copy h3,
 .wiki-detail-hero-copy h1,
