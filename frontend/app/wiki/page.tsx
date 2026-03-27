@@ -76,21 +76,21 @@ function WikiContent() {
             <section className="hero-shell" style={{ marginBottom: 26 }}>
                 <div className="hero-panel hero-panel-single wiki-hero-panel">
                     <div className="hero-copy">
-                        <span className="hero-eyebrow">Base de conocimiento</span>
+                        <span className="hero-eyebrow">{t('wiki.eyebrow', language)}</span>
                         <h1 className="title-gold hero-title">{t('wiki.title', language)}</h1>
                         <p className="hero-description">{t('wiki.subtitle', language)}</p>
                         <div className="dungeons-hero-stats">
                             <div className="dungeons-hero-pill">
                                 <strong>{filtered.length}</strong>
-                                <span>Guias visibles</span>
+                                <span>{t('wiki.visibleCount', language)}</span>
                             </div>
                             <div className="dungeons-hero-pill">
                                 <strong>{featured.length}</strong>
-                                <span>Destacadas</span>
+                                <span>{t('wiki.featuredCount', language)}</span>
                             </div>
                             <div className="dungeons-hero-pill">
                                 <strong>{recent.length}</strong>
-                                <span>Recientes</span>
+                                <span>{t('wiki.recentCount', language)}</span>
                             </div>
                         </div>
                     </div>
@@ -108,9 +108,9 @@ function WikiContent() {
                 <div className="filters-head">
                     <div>
                         <h2 className="filters-title">{t('common.search', language)}</h2>
-                        <p className="filters-subtitle">Filtra por mazmorra, franja o texto y descubre guias relacionadas sin perder contexto.</p>
+                        <p className="filters-subtitle">{t('wiki.filtersHelp', language)}</p>
                     </div>
-                    <span className="results-chip">{filtered.length} publicaciones</span>
+                    <span className="results-chip">{t('wiki.publicationsCount', language).replace('{count}', String(filtered.length))}</span>
                 </div>
 
                 <div className="wiki-filters-grid">
@@ -153,8 +153,8 @@ function WikiContent() {
                         <section className="wiki-featured-shell">
                             <div className="dungeons-section-head">
                                 <div>
-                                    <span className="hero-eyebrow">Lectura destacada</span>
-                                    <h2 className="filters-title" style={{ marginTop: 10 }}>Guias para entrar rapido en contexto</h2>
+                                    <span className="hero-eyebrow">{t('wiki.featuredEyebrow', language)}</span>
+                                    <h2 className="filters-title" style={{ marginTop: 10 }}>{t('wiki.featuredTitle', language)}</h2>
                                 </div>
                             </div>
                             <div className="wiki-featured-grid">
@@ -169,8 +169,8 @@ function WikiContent() {
                         <div className="wiki-rail-main">
                             <div className="dungeons-section-head">
                                 <div>
-                                    <span className="hero-eyebrow">Archivo</span>
-                                    <h2 className="filters-title" style={{ marginTop: 10 }}>Guias recientes</h2>
+                                    <span className="hero-eyebrow">{t('wiki.archiveEyebrow', language)}</span>
+                                    <h2 className="filters-title" style={{ marginTop: 10 }}>{t('wiki.recentTitle', language)}</h2>
                                 </div>
                             </div>
                             <div className="wiki-post-stack">
@@ -207,12 +207,12 @@ function WikiContent() {
 
                         <aside className="wiki-rail-side">
                             <div className="wiki-aside-card">
-                                <span className="hero-eyebrow">Como publicar</span>
-                                <h3>Guias mas utiles</h3>
+                                <span className="hero-eyebrow">{t('wiki.publishEyebrow', language)}</span>
+                                <h3>{t('wiki.bestGuides', language)}</h3>
                                 <ul className="wiki-aside-list">
-                                    <li>Empieza por la mecanica general del encuentro.</li>
-                                    <li>Resume composicion, posicionamiento y errores comunes.</li>
-                                    <li>Deja recomendaciones accionables al final.</li>
+                                    <li>{t('wiki.guideTip1', language)}</li>
+                                    <li>{t('wiki.guideTip2', language)}</li>
+                                    <li>{t('wiki.guideTip3', language)}</li>
                                 </ul>
                                 {user && (
                                     <button className="btn btn-primary" onClick={() => setShowCreate(true)} style={{ width: '100%', marginTop: 10 }}>
@@ -221,8 +221,8 @@ function WikiContent() {
                                 )}
                             </div>
                             <div className="wiki-aside-card">
-                                <span className="hero-eyebrow">Exploracion</span>
-                                <h3>Accesos rapidos</h3>
+                                <span className="hero-eyebrow">{t('wiki.exploreEyebrow', language)}</span>
+                                <h3>{t('wiki.quickAccess', language)}</h3>
                                 <div className="wiki-aside-tags">
                                     {dungeonOptions.slice(0, 8).map((option) => (
                                         <button key={option.value} className={`wiki-chip ${filterDungeon === option.value ? 'active' : ''}`} onClick={() => setFilterDungeon(option.value)}>
@@ -320,12 +320,12 @@ function CreateWikiPostModal({ dungeons, prefillDungeon, onClose, onCreated }: a
                         </div>
                     </div>
                     <aside className="wiki-create-aside">
-                        <span className="hero-eyebrow">Vista previa</span>
-                        <h3>{form.title || 'Tu guia aparecera aqui'}</h3>
+                        <span className="hero-eyebrow">{t('wiki.preview', language)}</span>
+                        <h3>{form.title || t('wiki.previewTitleFallback', language)}</h3>
                         <p className="wiki-create-aside-dungeon">
-                            {selectedDungeon ? getDungeonApiName(selectedDungeon, language) : 'Selecciona una mazmorra para dar contexto a tu guia.'}
+                            {selectedDungeon ? getDungeonApiName(selectedDungeon, language) : t('wiki.previewDungeonFallback', language)}
                         </p>
-                        <p className="wiki-create-aside-body">{buildWikiExcerpt(form.content) || 'Resume mecanicas, composicion, posicionamiento y errores comunes.'}</p>
+                        <p className="wiki-create-aside-body">{buildWikiExcerpt(form.content) || t('wiki.previewBodyFallback', language)}</p>
                     </aside>
                 </div>
                 <div className="modal-footer">

@@ -51,21 +51,21 @@ export default function DungeonsPage() {
             <section className="hero-shell" style={{ marginBottom: 26 }}>
                 <div className="hero-panel hero-panel-single dungeons-hero-panel">
                     <div className="hero-copy">
-                        <span className="hero-eyebrow">Atlas PvE</span>
+                        <span className="hero-eyebrow">{t('dungeons.eyebrow', language)}</span>
                         <h1 className="title-gold hero-title">{t('dungeons.title', language)}</h1>
                         <p className="hero-description">{t('dungeons.subtitle', language)}</p>
                         <div className="dungeons-hero-stats">
                             <div className="dungeons-hero-pill">
                                 <strong>{filtered.length}</strong>
-                                <span>Mazmorras visibles</span>
+                                <span>{t('dungeons.visibleCount', language)}</span>
                             </div>
                             <div className="dungeons-hero-pill">
                                 <strong>{grouped.length}</strong>
-                                <span>Franjas activas</span>
+                                <span>{t('dungeons.activeBands', language)}</span>
                             </div>
                             <div className="dungeons-hero-pill">
                                 <strong>{featured.length}</strong>
-                                <span>Destacadas</span>
+                                <span>{t('dungeons.featuredCount', language)}</span>
                             </div>
                         </div>
                     </div>
@@ -76,9 +76,9 @@ export default function DungeonsPage() {
                 <div className="filters-head">
                     <div>
                         <h2 className="filters-title">{t('common.search', language)}</h2>
-                        <p className="filters-subtitle">Explora por nombre o franja y salta directo a crear grupo o abrir la wiki.</p>
+                        <p className="filters-subtitle">{t('dungeons.filtersHelp', language)}</p>
                     </div>
-                    <span className="results-chip">{filtered.length} resultados</span>
+                    <span className="results-chip">{t('dungeons.resultsCount', language).replace('{count}', String(filtered.length))}</span>
                 </div>
 
                 <div className="filters-grid dungeons-filters-grid">
@@ -108,8 +108,8 @@ export default function DungeonsPage() {
                 <section className="dungeons-spotlight-shell">
                     <div className="dungeons-section-head">
                         <div>
-                            <span className="hero-eyebrow">Ruta sugerida</span>
-                            <h2 className="filters-title" style={{ marginTop: 10 }}>Mazmorras destacadas</h2>
+                            <span className="hero-eyebrow">{t('dungeons.suggestedRoute', language)}</span>
+                            <h2 className="filters-title" style={{ marginTop: 10 }}>{t('dungeons.featuredTitle', language)}</h2>
                         </div>
                     </div>
                     <div className="dungeons-spotlight-grid">
@@ -133,7 +133,7 @@ export default function DungeonsPage() {
                 <div className="empty-state dungeons-empty-state">
                     <div className="empty-state-icon">WG</div>
                     <h3>{t('home.emptyTitle', language)}</h3>
-                    <p>Prueba otra combinacion de busqueda para descubrir nuevas rutas.</p>
+                    <p>{t('dungeons.emptyAlt', language)}</p>
                 </div>
             ) : (
                 <div className="dungeons-bands-stack">
@@ -141,10 +141,10 @@ export default function DungeonsPage() {
                         <section key={band.level} className="dungeons-band-panel">
                             <div className="dungeons-band-head">
                                 <div>
-                                    <span className="hero-eyebrow">Franja</span>
+                                    <span className="hero-eyebrow">{t('dungeons.bandEyebrow', language)}</span>
                                     <h2 className="dungeons-band-title">{t('dungeons.levelBand', language).replace('{level}', String(band.level))}</h2>
                                 </div>
-                                <span className="results-chip">{band.dungeons.length} mazmorras</span>
+                                <span className="results-chip">{t('dungeons.bandCount', language).replace('{count}', String(band.dungeons.length))}</span>
                             </div>
                             <div className="grid-dungeons dungeons-grid-refined">
                                 {band.dungeons.map((dungeon) => (
@@ -185,11 +185,11 @@ function FeaturedDungeonCard({ dungeon, language, onCreateGroup, onViewGroups, c
             <div className="dungeons-spotlight-copy">
                 <span className="badge badge-status badge-open">{t('common.levelShort', language)} {dungeon.modulated}</span>
                 <h3>{dungeonName}</h3>
-                <p>{dungeon.max_players} {t('common.players', language)} • Grupos y guias en un clic</p>
+                <p>{dungeon.max_players} {t('common.players', language)} • {t('dungeons.quickActions', language)}</p>
                 <div className="dungeons-card-actions">
                     <button className="btn btn-primary" onClick={onViewGroups}>{t('dungeons.viewGroups', language)}</button>
                     {canCreate && <button className="btn btn-secondary" onClick={onCreateGroup}>{t('dungeons.createGroup', language)}</button>}
-                    <a className="btn btn-ghost" href={`/wiki?dungeon=${dungeon.id}`}>Wiki</a>
+                    <a className="btn btn-ghost" href={`/wiki?dungeon=${dungeon.id}`}>{t('dungeons.wiki', language)}</a>
                 </div>
             </div>
         </article>
@@ -217,11 +217,11 @@ function DungeonCard({ dungeon, onCreateGroup, onViewGroups, language, canCreate
             </div>
             <div className="dungeons-refined-body">
                 <h3 className="dungeons-refined-title">{dungeonName}</h3>
-                <p className="dungeons-refined-description">Encuentra grupos activos o crea una convocatoria enfocada en esta mazmorra.</p>
+                <p className="dungeons-refined-description">{t('dungeons.cardDescription', language)}</p>
                 <div className="dungeons-card-actions">
                     <button className="btn btn-ghost" onClick={onViewGroups}>{t('dungeons.viewGroups', language)}</button>
                     {canCreate && <button className="btn btn-secondary" onClick={onCreateGroup}>{t('dungeons.createGroup', language)}</button>}
-                    <a className="btn btn-ghost" href={`/wiki?dungeon=${dungeon.id}`}>Wiki</a>
+                    <a className="btn btn-ghost" href={`/wiki?dungeon=${dungeon.id}`}>{t('dungeons.wiki', language)}</a>
                 </div>
             </div>
         </article>

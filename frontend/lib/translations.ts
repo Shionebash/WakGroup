@@ -130,6 +130,20 @@ type TranslationKey =
   | 'dungeons.levelBand'
   | 'dungeons.viewGroups'
   | 'dungeons.createGroup'
+  | 'dungeons.eyebrow'
+  | 'dungeons.visibleCount'
+  | 'dungeons.activeBands'
+  | 'dungeons.featuredCount'
+  | 'dungeons.filtersHelp'
+  | 'dungeons.resultsCount'
+  | 'dungeons.suggestedRoute'
+  | 'dungeons.featuredTitle'
+  | 'dungeons.emptyAlt'
+  | 'dungeons.bandEyebrow'
+  | 'dungeons.bandCount'
+  | 'dungeons.quickActions'
+  | 'dungeons.cardDescription'
+  | 'dungeons.wiki'
   | 'pvp.subtitle'
   | 'pvp.searchPlaceholder'
   | 'pvp.allLanguages'
@@ -167,6 +181,38 @@ type TranslationKey =
   | 'wiki.saving'
   | 'wiki.publish'
   | 'wiki.delete'
+  | 'wiki.eyebrow'
+  | 'wiki.visibleCount'
+  | 'wiki.featuredCount'
+  | 'wiki.recentCount'
+  | 'wiki.filtersHelp'
+  | 'wiki.publicationsCount'
+  | 'wiki.featuredEyebrow'
+  | 'wiki.featuredTitle'
+  | 'wiki.archiveEyebrow'
+  | 'wiki.recentTitle'
+  | 'wiki.publishEyebrow'
+  | 'wiki.bestGuides'
+  | 'wiki.guideTip1'
+  | 'wiki.guideTip2'
+  | 'wiki.guideTip3'
+  | 'wiki.exploreEyebrow'
+  | 'wiki.quickAccess'
+  | 'wiki.preview'
+  | 'wiki.previewTitleFallback'
+  | 'wiki.previewDungeonFallback'
+  | 'wiki.previewBodyFallback'
+  | 'wiki.summary'
+  | 'wiki.quickContext'
+  | 'wiki.dungeonLabel'
+  | 'wiki.levelLabel'
+  | 'wiki.authorLabel'
+  | 'wiki.related'
+  | 'wiki.moreFromDungeon'
+  | 'wiki.noRelated'
+  | 'wiki.browse'
+  | 'wiki.backToArchive'
+  | 'wiki.moreAboutDungeon'
   | 'group.errorLoad'
   | 'group.selectCharacterError'
   | 'group.errorApply'
@@ -376,6 +422,52 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
   'wiki.saving': { es: 'Guardando...', en: 'Saving...', fr: 'Enregistrement...', pt: 'Salvando...' },
   'wiki.publish': { es: 'Publicar guía', en: 'Publish guide', fr: 'Publier le guide', pt: 'Publicar guia' },
   'wiki.delete': { es: 'Eliminar guía', en: 'Delete guide', fr: 'Supprimer le guide', pt: 'Excluir guia' },
+  'wiki.eyebrow': { es: 'Base de conocimiento', en: 'Knowledge base', fr: 'Base de connaissances', pt: 'Base de conhecimento' },
+  'wiki.visibleCount': { es: 'Guias visibles', en: 'Visible guides', fr: 'Guides visibles', pt: 'Guias visiveis' },
+  'wiki.featuredCount': { es: 'Destacadas', en: 'Featured', fr: 'Mises en avant', pt: 'Destaques' },
+  'wiki.recentCount': { es: 'Recientes', en: 'Recent', fr: 'Recents', pt: 'Recentes' },
+  'wiki.filtersHelp': { es: 'Filtra por mazmorra, franja o texto y descubre guias relacionadas sin perder contexto.', en: 'Filter by dungeon, band, or text and discover related guides without losing context.', fr: 'Filtrez par donjon, tranche ou texte et decouvrez des guides lies sans perdre le contexte.', pt: 'Filtre por masmorra, faixa ou texto e descubra guias relacionadas sem perder contexto.' },
+  'wiki.publicationsCount': { es: '{count} publicaciones', en: '{count} posts', fr: '{count} publications', pt: '{count} publicacoes' },
+  'wiki.featuredEyebrow': { es: 'Lectura destacada', en: 'Featured reading', fr: 'Lecture mise en avant', pt: 'Leitura em destaque' },
+  'wiki.featuredTitle': { es: 'Guias para entrar rapido en contexto', en: 'Guides to get up to speed fast', fr: 'Guides pour entrer rapidement dans le contexte', pt: 'Guias para entrar rapido no contexto' },
+  'wiki.archiveEyebrow': { es: 'Archivo', en: 'Archive', fr: 'Archive', pt: 'Arquivo' },
+  'wiki.recentTitle': { es: 'Guias recientes', en: 'Recent guides', fr: 'Guides recents', pt: 'Guias recentes' },
+  'wiki.publishEyebrow': { es: 'Como publicar', en: 'How to publish', fr: 'Comment publier', pt: 'Como publicar' },
+  'wiki.bestGuides': { es: 'Guias mas utiles', en: 'Most useful guides', fr: 'Guides les plus utiles', pt: 'Guias mais uteis' },
+  'wiki.guideTip1': { es: 'Empieza por la mecanica general del encuentro.', en: 'Start with the overall encounter mechanics.', fr: 'Commencez par les mecaniques generales du combat.', pt: 'Comece pela mecanica geral do encontro.' },
+  'wiki.guideTip2': { es: 'Resume composicion, posicionamiento y errores comunes.', en: 'Summarize composition, positioning, and common mistakes.', fr: 'Resumez la composition, le positionnement et les erreurs courantes.', pt: 'Resuma composicao, posicionamento e erros comuns.' },
+  'wiki.guideTip3': { es: 'Deja recomendaciones accionables al final.', en: 'Leave actionable recommendations at the end.', fr: 'Laissez des recommandations actionnables a la fin.', pt: 'Deixe recomendacoes praticas no final.' },
+  'wiki.exploreEyebrow': { es: 'Exploracion', en: 'Explore', fr: 'Exploration', pt: 'Exploracao' },
+  'wiki.quickAccess': { es: 'Accesos rapidos', en: 'Quick access', fr: 'Acces rapides', pt: 'Acessos rapidos' },
+  'wiki.preview': { es: 'Vista previa', en: 'Preview', fr: 'Apercu', pt: 'Pre-visualizacao' },
+  'wiki.previewTitleFallback': { es: 'Tu guia aparecera aqui', en: 'Your guide will appear here', fr: 'Votre guide apparaitra ici', pt: 'Seu guia aparecera aqui' },
+  'wiki.previewDungeonFallback': { es: 'Selecciona una mazmorra para dar contexto a tu guia.', en: 'Select a dungeon to give your guide context.', fr: 'Selectionnez un donjon pour donner du contexte a votre guide.', pt: 'Selecione uma masmorra para dar contexto ao seu guia.' },
+  'wiki.previewBodyFallback': { es: 'Resume mecanicas, composicion, posicionamiento y errores comunes.', en: 'Summarize mechanics, composition, positioning, and common mistakes.', fr: 'Resumez les mecaniques, la composition, le positionnement et les erreurs courantes.', pt: 'Resuma mecanicas, composicao, posicionamento e erros comuns.' },
+  'wiki.summary': { es: 'Resumen', en: 'Summary', fr: 'Resume', pt: 'Resumo' },
+  'wiki.quickContext': { es: 'Contexto rapido', en: 'Quick context', fr: 'Contexte rapide', pt: 'Contexto rapido' },
+  'wiki.dungeonLabel': { es: 'Mazmorra:', en: 'Dungeon:', fr: 'Donjon :', pt: 'Masmorra:' },
+  'wiki.levelLabel': { es: 'Nivel:', en: 'Level:', fr: 'Niveau :', pt: 'Nivel:' },
+  'wiki.authorLabel': { es: 'Autor:', en: 'Author:', fr: 'Auteur :', pt: 'Autor:' },
+  'wiki.related': { es: 'Relacionadas', en: 'Related', fr: 'Liees', pt: 'Relacionadas' },
+  'wiki.moreFromDungeon': { es: 'Mas guias de esta mazmorra', en: 'More guides for this dungeon', fr: 'Plus de guides pour ce donjon', pt: 'Mais guias desta masmorra' },
+  'wiki.noRelated': { es: 'Aun no hay otras publicaciones para esta mazmorra.', en: 'There are no other posts for this dungeon yet.', fr: 'Il n y a pas encore d autres publications pour ce donjon.', pt: 'Ainda nao ha outras publicacoes para esta masmorra.' },
+  'wiki.browse': { es: 'Explorar', en: 'Browse', fr: 'Explorer', pt: 'Explorar' },
+  'wiki.backToArchive': { es: 'Volver al archivo', en: 'Back to archive', fr: 'Retour aux archives', pt: 'Voltar ao arquivo' },
+  'wiki.moreAboutDungeon': { es: 'Ver mas sobre {dungeon}', en: 'See more about {dungeon}', fr: 'Voir plus sur {dungeon}', pt: 'Ver mais sobre {dungeon}' },
+  'dungeons.eyebrow': { es: 'Atlas PvE', en: 'PvE Atlas', fr: 'Atlas PvE', pt: 'Atlas PvE' },
+  'dungeons.visibleCount': { es: 'Mazmorras visibles', en: 'Visible dungeons', fr: 'Donjons visibles', pt: 'Masmorras visiveis' },
+  'dungeons.activeBands': { es: 'Franjas activas', en: 'Active bands', fr: 'Tranches actives', pt: 'Faixas ativas' },
+  'dungeons.featuredCount': { es: 'Destacadas', en: 'Featured', fr: 'Mises en avant', pt: 'Destaques' },
+  'dungeons.filtersHelp': { es: 'Explora por nombre o franja y salta directo a crear grupo o abrir la wiki.', en: 'Browse by name or band and jump straight into creating a group or opening the wiki.', fr: 'Explorez par nom ou tranche et accedez directement a la creation de groupe ou au wiki.', pt: 'Explore por nome ou faixa e va direto para criar grupo ou abrir a wiki.' },
+  'dungeons.resultsCount': { es: '{count} resultados', en: '{count} results', fr: '{count} resultats', pt: '{count} resultados' },
+  'dungeons.suggestedRoute': { es: 'Ruta sugerida', en: 'Suggested route', fr: 'Parcours suggere', pt: 'Rota sugerida' },
+  'dungeons.featuredTitle': { es: 'Mazmorras destacadas', en: 'Featured dungeons', fr: 'Donjons a la une', pt: 'Masmorras em destaque' },
+  'dungeons.emptyAlt': { es: 'Prueba otra combinacion de busqueda para descubrir nuevas rutas.', en: 'Try another search combination to discover new routes.', fr: 'Essayez une autre combinaison de recherche pour decouvrir de nouvelles routes.', pt: 'Teste outra combinacao de busca para descobrir novas rotas.' },
+  'dungeons.bandEyebrow': { es: 'Franja', en: 'Band', fr: 'Tranche', pt: 'Faixa' },
+  'dungeons.bandCount': { es: '{count} mazmorras', en: '{count} dungeons', fr: '{count} donjons', pt: '{count} masmorras' },
+  'dungeons.quickActions': { es: 'Grupos y guias en un clic', en: 'Groups and guides in one click', fr: 'Groupes et guides en un clic', pt: 'Grupos e guias em um clique' },
+  'dungeons.cardDescription': { es: 'Encuentra grupos activos o crea una convocatoria enfocada en esta mazmorra.', en: 'Find active groups or create a call focused on this dungeon.', fr: 'Trouvez des groupes actifs ou creez un appel cible sur ce donjon.', pt: 'Encontre grupos ativos ou crie uma chamada focada nesta masmorra.' },
+  'dungeons.wiki': { es: 'Wiki', en: 'Wiki', fr: 'Wiki', pt: 'Wiki' },
   'common.close': { es: 'Cerrar', en: 'Close', fr: 'Fermer', pt: 'Fechar' },
   'group.errorLoad': { es: 'Error al cargar grupo', en: 'Error loading group', fr: 'Erreur de chargement du groupe', pt: 'Erro ao carregar grupo' },
   'group.selectCharacterError': { es: 'Selecciona un personaje', en: 'Select a character', fr: 'Sélectionnez un personnage', pt: 'Selecione um personagem' },

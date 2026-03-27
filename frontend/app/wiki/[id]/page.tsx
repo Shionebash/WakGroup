@@ -83,19 +83,19 @@ export default function WikiPostPage() {
 
                 <aside className="wiki-detail-side">
                     <div className="wiki-aside-card">
-                        <span className="hero-eyebrow">Resumen</span>
-                        <h3>Contexto rapido</h3>
+                        <span className="hero-eyebrow">{t('wiki.summary', language)}</span>
+                        <h3>{t('wiki.quickContext', language)}</h3>
                         <ul className="wiki-aside-list">
-                            <li>Mazmorra: {dungeonName}</li>
-                            <li>Nivel: {post.dungeon_lvl}</li>
-                            <li>Autor: {post.username}</li>
+                            <li>{t('wiki.dungeonLabel', language)} {dungeonName}</li>
+                            <li>{t('wiki.levelLabel', language)} {post.dungeon_lvl}</li>
+                            <li>{t('wiki.authorLabel', language)} {post.username}</li>
                         </ul>
                     </div>
                     <div className="wiki-aside-card">
-                        <span className="hero-eyebrow">Relacionadas</span>
-                        <h3>Mas guias de esta mazmorra</h3>
+                        <span className="hero-eyebrow">{t('wiki.related', language)}</span>
+                        <h3>{t('wiki.moreFromDungeon', language)}</h3>
                         {relatedPosts.length === 0 ? (
-                            <p className="filters-subtitle" style={{ marginTop: 12 }}>Aun no hay otras publicaciones para esta mazmorra.</p>
+                            <p className="filters-subtitle" style={{ marginTop: 12 }}>{t('wiki.noRelated', language)}</p>
                         ) : (
                             <div className="wiki-related-stack">
                                 {relatedPosts.map((entry) => (
@@ -108,10 +108,10 @@ export default function WikiPostPage() {
                         )}
                     </div>
                     <div className="wiki-aside-card">
-                        <span className="hero-eyebrow">Explorar</span>
-                        <h3>Volver al archivo</h3>
+                        <span className="hero-eyebrow">{t('wiki.browse', language)}</span>
+                        <h3>{t('wiki.backToArchive', language)}</h3>
                         <Link href={`/wiki?dungeon=${post.dungeon_id}`} className="btn btn-secondary" style={{ width: '100%', marginTop: 10 }}>
-                            Ver mas sobre {dungeonName}
+                            {t('wiki.moreAboutDungeon', language).replace('{dungeon}', dungeonName)}
                         </Link>
                     </div>
                 </aside>
