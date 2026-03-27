@@ -1432,6 +1432,424 @@ h6 {
     border-bottom-color: var(--primary-color);
 }
 
+.dungeons-hero-panel,
+.wiki-hero-panel,
+.dungeons-band-panel,
+.wiki-aside-card,
+.wiki-create-modal,
+.wiki-detail-content-shell {
+    border: 1px solid var(--border-soft);
+    background:
+        radial-gradient(circle at top left, rgba(212, 165, 116, 0.12), transparent 34%),
+        linear-gradient(145deg, rgba(44, 36, 22, 0.96) 0%, rgba(24, 19, 15, 0.98) 100%);
+}
+
+.dungeons-hero-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.dungeons-hero-pill {
+    min-width: 140px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    border: 1px solid var(--border-soft);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.dungeons-hero-pill strong {
+    display: block;
+    color: #f6efe3;
+    font-size: 20px;
+}
+
+.dungeons-hero-pill span {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.dungeons-filters-grid,
+.wiki-filters-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) repeat(2, minmax(180px, 1fr));
+    gap: 12px;
+}
+
+.dungeons-spotlight-shell,
+.wiki-featured-shell {
+    margin-bottom: 28px;
+}
+
+.dungeons-section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.dungeons-spotlight-grid,
+.wiki-featured-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.dungeons-spotlight-card,
+.wiki-featured-card {
+    position: relative;
+    overflow: hidden;
+    min-height: 280px;
+    border-radius: 24px;
+    border: 1px solid var(--border-soft);
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.22);
+}
+
+.dungeons-spotlight-image,
+.wiki-featured-image,
+.wiki-detail-hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+}
+
+.dungeons-spotlight-overlay,
+.wiki-featured-overlay,
+.wiki-detail-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10, 10, 10, 0.08) 0%, rgba(20, 14, 10, 0.42) 42%, rgba(12, 10, 8, 0.96) 100%);
+}
+
+.dungeons-spotlight-copy,
+.wiki-featured-copy {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
+    padding: 22px;
+}
+
+.dungeons-spotlight-copy h3,
+.wiki-featured-copy h3,
+.wiki-detail-hero-copy h1,
+.dungeons-band-title {
+    color: #f6efe3;
+    font-family: 'Cinzel', Georgia, serif;
+}
+
+.dungeons-spotlight-copy p,
+.wiki-featured-copy p,
+.wiki-detail-hero-copy p {
+    color: rgba(245, 245, 245, 0.78);
+    font-size: 13px;
+}
+
+.dungeons-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.dungeons-bands-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.dungeons-band-panel {
+    padding: 20px;
+    border-radius: 24px;
+}
+
+.dungeons-band-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.dungeons-grid-refined {
+    margin-bottom: 0;
+}
+
+.dungeons-refined-card {
+    overflow: hidden;
+    border-radius: 22px;
+    border: 1px solid var(--border-soft);
+    background: linear-gradient(180deg, rgba(35, 29, 22, 0.98) 0%, rgba(25, 20, 16, 0.98) 100%);
+    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.18);
+}
+
+.dungeons-refined-media {
+    position: relative;
+    min-height: 180px;
+}
+
+.dungeons-refined-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+}
+
+.dungeons-refined-shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(12, 10, 8, 0.96), transparent);
+}
+
+.dungeons-refined-meta {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.dungeons-refined-body {
+    padding: 16px;
+}
+
+.dungeons-refined-title {
+    margin-bottom: 8px;
+    color: #f6efe3;
+    font-size: 18px;
+}
+
+.dungeons-refined-description {
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.wiki-hero-cta {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.wiki-rail-shell,
+.wiki-detail-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.85fr);
+    gap: 18px;
+}
+
+.wiki-post-stack,
+.wiki-related-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.wiki-post-card-refined {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border-soft);
+    background: linear-gradient(180deg, rgba(35, 29, 22, 0.98) 0%, rgba(25, 20, 16, 0.98) 100%);
+}
+
+.wiki-post-card-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+    color: inherit;
+    text-decoration: none;
+}
+
+.wiki-post-card-image {
+    width: 92px;
+    height: 92px;
+    object-fit: cover;
+    border-radius: 16px;
+    flex-shrink: 0;
+}
+
+.wiki-post-card-copy {
+    min-width: 0;
+}
+
+.wiki-post-card-copy h3 {
+    color: #f6efe3;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 18px;
+    margin: 8px 0 6px;
+}
+
+.wiki-post-card-copy p {
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.wiki-post-card-meta,
+.wiki-post-card-footer,
+.wiki-detail-meta-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    align-items: center;
+}
+
+.wiki-post-card-meta span,
+.wiki-post-card-footer span {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.wiki-post-card-footer {
+    margin-top: 12px;
+}
+
+.wiki-aside-card {
+    padding: 18px;
+    border-radius: 20px;
+}
+
+.wiki-aside-card h3 {
+    margin: 12px 0;
+    color: #f6efe3;
+    font-family: 'Cinzel', Georgia, serif;
+}
+
+.wiki-aside-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 12px 0 0;
+    padding-left: 18px;
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.wiki-aside-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.wiki-chip {
+    padding: 8px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border-soft);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.wiki-chip.active,
+.wiki-chip:hover {
+    border-color: rgba(212, 165, 116, 0.42);
+    color: var(--text-primary);
+    background: rgba(212, 165, 116, 0.14);
+}
+
+.wiki-create-modal {
+    max-width: 980px;
+}
+
+.wiki-create-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(260px, 0.8fr);
+    gap: 0;
+}
+
+.wiki-create-aside {
+    padding: 24px 20px 20px 0;
+}
+
+.wiki-create-aside h3 {
+    margin: 12px 0 6px;
+    color: #f6efe3;
+    font-family: 'Cinzel', Georgia, serif;
+}
+
+.wiki-create-aside-dungeon,
+.wiki-create-aside-body {
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.wiki-detail-hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 320px;
+    border-radius: 26px;
+    border: 1px solid var(--border-soft);
+}
+
+.wiki-detail-hero-copy {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 320px;
+    padding: 24px;
+}
+
+.wiki-detail-content-shell {
+    margin-top: 18px;
+    padding: 24px;
+    border-radius: 22px;
+}
+
+.wiki-related-card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    border: 1px solid var(--border-soft);
+    background: rgba(255, 255, 255, 0.04);
+    color: inherit;
+    text-decoration: none;
+}
+
+.wiki-related-card strong {
+    color: #f6efe3;
+    font-size: 14px;
+}
+
+.wiki-related-card span {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+@media (max-width: 900px) {
+    .dungeons-filters-grid,
+    .wiki-filters-grid,
+    .dungeons-spotlight-grid,
+    .wiki-featured-grid,
+    .wiki-rail-shell,
+    .wiki-detail-shell,
+    .wiki-create-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .wiki-create-aside {
+        padding: 0 20px 20px;
+    }
+}
+
 .profile-page-shell {
     display: flex;
     flex-direction: column;

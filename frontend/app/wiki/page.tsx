@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useCallback, Suspense } from 'react';
+import { useState, useEffect, useMemo, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { api, getAssetUrl } from '@/lib/api';
@@ -16,7 +16,7 @@ export default function WikiPage() {
         <Suspense fallback={<div className="container" style={{ paddingTop: 60 }}><div className="spinner" /></div>}>
             <WikiContent />
         </Suspense>
-    )
+    );
 }
 
 function WikiContent() {
@@ -28,166 +28,305 @@ function WikiContent() {
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [filterBand, setFilterBand] = useState<number | ''>('');
+    const [filterDungeon, setFilterDungeon] = useState(prefillDungeon || '');
     const [showCreate, setShowCreate] = useState(false);
     const [dungeons, setDungeons] = useState<any[]>([]);
 
-    const fetchPosts = useCallback(async () => {
+    useEffect(() => {
         setLoading(true);
-        try {
-            const params: Record<string, any> = {};
-            if (search) params.search = search;
-            if (filterBand) params.modulated = filterBand;
-            const res = await api.get('/wiki', { params });
-            setPosts(res.data);
-        } finally { setLoading(false); }
-    }, [search, filterBand]);
+        Promise.all([api.get('/wiki'), api.get('/dungeons')])
+            .then(([wikiResponse, dungeonResponse]) => {
+                setPosts(wikiResponse.data || []);
+                setDungeons((dungeonResponse.data || []).filter((entry: any) => entry?.isActive !== false));
+            })
+            .finally(() => setLoading(false));
+    }, []);
 
-    useEffect(() => { fetchPosts(); }, [fetchPosts]);
-    useEffect(() => { api.get('/dungeons').then(r => setDungeons(r.data)); }, []);
+    const filtered = useMemo(() => posts.filter((post) => {
+        if (filterBand && Number(post.dungeon_lvl) !== filterBand) return false;
+        if (filterDungeon && String(post.dungeon_id) !== String(filterDungeon)) return false;
+        if (search) {
+            const query = search.toLowerCase();
+            const haystack = `${post.title || ''} ${post.username || ''} ${post.dungeon_name || ''}`.toLowerCase();
+            if (!haystack.includes(query)) return false;
+        }
+        return true;
+    }), [posts, filterBand, filterDungeon, search]);
+
+    const featured = filtered.slice(0, 2);
+    const recent = filtered.slice(2);
+    const dungeonOptions = dungeons.map((dungeon: any) => ({
+        value: String(dungeon.id),
+        label: `${getDungeonApiName(dungeon, language)} (${t('common.levelShort', language)} ${dungeon.modulated})`,
+    }));
 
     const deletePost = async (id: string) => {
         if (!confirm(t('wiki.confirmDelete', language))) return;
         try {
             await api.delete(`/wiki/${id}`);
-            setPosts(prev => prev.filter(p => p.id !== id));
+            setPosts((prev) => prev.filter((post) => post.id !== id));
             addToast({ title: t('wiki.toastDeleted', language) });
-        } catch (e: any) {
-            addToast({ title: t('common.error', language), body: e.response?.data?.error || t('wiki.errorDelete', language) });
+        } catch (error: any) {
+            addToast({ title: t('common.error', language), body: error.response?.data?.error || t('wiki.errorDelete', language) });
         }
     };
 
     return (
         <div className="container" style={{ paddingTop: 32, paddingBottom: 48 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
-                <div>
-                    <h1 className="title-gold" style={{ fontSize: 32, marginBottom: 4 }}>📖 {t('wiki.title', language)}</h1>
-                    <p style={{ color: 'var(--text-secondary)' }}>{t('wiki.subtitle', language)}</p>
+            <section className="hero-shell" style={{ marginBottom: 26 }}>
+                <div className="hero-panel hero-panel-single wiki-hero-panel">
+                    <div className="hero-copy">
+                        <span className="hero-eyebrow">Base de conocimiento</span>
+                        <h1 className="title-gold hero-title">{t('wiki.title', language)}</h1>
+                        <p className="hero-description">{t('wiki.subtitle', language)}</p>
+                        <div className="dungeons-hero-stats">
+                            <div className="dungeons-hero-pill">
+                                <strong>{filtered.length}</strong>
+                                <span>Guias visibles</span>
+                            </div>
+                            <div className="dungeons-hero-pill">
+                                <strong>{featured.length}</strong>
+                                <span>Destacadas</span>
+                            </div>
+                            <div className="dungeons-hero-pill">
+                                <strong>{recent.length}</strong>
+                                <span>Recientes</span>
+                            </div>
+                        </div>
+                    </div>
+                    {user && (
+                        <div className="wiki-hero-cta">
+                            <button className="btn btn-primary btn-large" onClick={() => setShowCreate(true)}>
+                                + {t('wiki.new', language)}
+                            </button>
+                        </div>
+                    )}
                 </div>
-                {user && (
-                    <button className="btn btn-primary" onClick={() => setShowCreate(true)}>+ {t('wiki.new', language)}</button>
-                )}
-            </div>
+            </section>
 
-            {/* Filters */}
-            <div className="filters-bar">
-                <div className="search-bar" style={{ flex: 1, maxWidth: 400 }}>
-                    <span className="search-icon">🔍</span>
-                    <input className="search-input" placeholder={t('wiki.searchPlaceholder', language)}
-                        value={search} onChange={e => setSearch(e.target.value)} />
+            <section className="filters-shell" style={{ marginBottom: 24 }}>
+                <div className="filters-head">
+                    <div>
+                        <h2 className="filters-title">{t('common.search', language)}</h2>
+                        <p className="filters-subtitle">Filtra por mazmorra, franja o texto y descubre guias relacionadas sin perder contexto.</p>
+                    </div>
+                    <span className="results-chip">{filtered.length} publicaciones</span>
                 </div>
-                <div style={{ width: 200 }}>
+
+                <div className="wiki-filters-grid">
+                    <div className="search-bar filter-control filter-search">
+                        <span className="search-icon">🔍</span>
+                        <input className="search-input" placeholder={t('wiki.searchPlaceholder', language)} value={search} onChange={(event) => setSearch(event.target.value)} />
+                    </div>
                     <CustomSelect
+                        className="filter-control"
                         value={filterBand === '' ? '' : String(filterBand)}
-                        onChange={e => setFilterBand(e ? Number(e) : '')}
+                        onChange={(value) => setFilterBand(value ? Number(value) : '')}
                         placeholder={t('home.allBands', language)}
-                        options={BAND_OPTIONS.map(b => ({ value: String(b), label: t('home.bandUpTo', language).replace('{level}', String(b)) }))}
+                        options={[{ value: '', label: t('home.allBands', language) }, ...BAND_OPTIONS.map((band) => ({
+                            value: String(band),
+                            label: t('home.bandUpTo', language).replace('{level}', String(band)),
+                        }))]}
+                    />
+                    <CustomSelect
+                        className="filter-control"
+                        value={filterDungeon}
+                        onChange={(value) => setFilterDungeon(value)}
+                        placeholder={t('wiki.selectDungeon', language)}
+                        options={[{ value: '', label: t('wiki.selectDungeon', language) }, ...dungeonOptions]}
                     />
                 </div>
-                <button className="btn btn-ghost" onClick={fetchPosts}>🔄</button>
-            </div>
+            </section>
 
-            {/* Posts list */}
-            {loading ? <div className="spinner" /> : posts.length === 0 ? (
-                <div className="empty-state">
-                    <div className="empty-state-icon">📖</div>
+            {loading ? (
+                <div className="spinner" />
+            ) : filtered.length === 0 ? (
+                <div className="empty-state wiki-empty-state">
+                    <div className="empty-state-icon">WG</div>
                     <h3>{t('wiki.emptyTitle', language)}</h3>
                     <p>{t('wiki.emptyDesc', language)}</p>
                     {user && <button className="btn btn-primary" onClick={() => setShowCreate(true)} style={{ marginTop: 24 }}>{t('wiki.emptyCta', language)}</button>}
                 </div>
             ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                    {posts.map((p: any) => {
-                        const isAuthor = user && user.id === p.user_id;
-                        return (
-                            <div key={p.id} className="wiki-post-card" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                                <Link href={`/wiki/${p.id}`} style={{ textDecoration: 'none', flex: 1 }}>
-                                    <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-                                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img src={getAssetUrl(p.dungeon_image)} alt="" width={64} height={64}
-                                            style={{ borderRadius: 10, objectFit: 'cover', flexShrink: 0, background: 'var(--bg-dark)' }} />
-                                        <div style={{ flex: 1 }}>
-                                            <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 4 }}>
-                                                <span style={{ fontSize: 12, color: 'var(--accent-teal)', fontWeight: 600 }}>{getDungeonApiName(p, language) || p.dungeon_name}</span>
-                                                <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{t('common.levelShort', language)} {p.dungeon_lvl}</span>
-                                            </div>
-                                            <h3 style={{ fontSize: 16, fontFamily: 'Cinzel', fontWeight: 700, marginBottom: 4 }}>{p.title}</h3>
-                                            <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
-                                                {t('wiki.by', language).replace('{user}', p.username)} • {new Date(p.created_at * 1000).toLocaleDateString(t('common.locale', language) as any, { day: 'numeric', month: 'short', year: 'numeric' })}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Link>
-                                {isAuthor && (
-                                    <button
-                                        className="btn btn-danger"
-                                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); deletePost(p.id); }}
-                                        style={{ fontSize: 12, padding: '6px 12px' }}
-                                    >
-                                        🗑
+                <>
+                    {featured.length > 0 && (
+                        <section className="wiki-featured-shell">
+                            <div className="dungeons-section-head">
+                                <div>
+                                    <span className="hero-eyebrow">Lectura destacada</span>
+                                    <h2 className="filters-title" style={{ marginTop: 10 }}>Guias para entrar rapido en contexto</h2>
+                                </div>
+                            </div>
+                            <div className="wiki-featured-grid">
+                                {featured.map((post) => (
+                                    <FeaturedWikiCard key={post.id} post={post} language={language} />
+                                ))}
+                            </div>
+                        </section>
+                    )}
+
+                    <section className="wiki-rail-shell">
+                        <div className="wiki-rail-main">
+                            <div className="dungeons-section-head">
+                                <div>
+                                    <span className="hero-eyebrow">Archivo</span>
+                                    <h2 className="filters-title" style={{ marginTop: 10 }}>Guias recientes</h2>
+                                </div>
+                            </div>
+                            <div className="wiki-post-stack">
+                                {(recent.length > 0 ? recent : featured).map((post) => {
+                                    const isAuthor = user && user.id === post.user_id;
+                                    return (
+                                        <article key={post.id} className="wiki-post-card-refined">
+                                            <Link href={`/wiki/${post.id}`} className="wiki-post-card-link">
+                                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                <img src={getAssetUrl(post.dungeon_image)} alt="" className="wiki-post-card-image" />
+                                                <div className="wiki-post-card-copy">
+                                                    <div className="wiki-post-card-meta">
+                                                        <span>{getDungeonApiName(post, language) || post.dungeon_name}</span>
+                                                        <span>{t('common.levelShort', language)} {post.dungeon_lvl}</span>
+                                                    </div>
+                                                    <h3>{post.title}</h3>
+                                                    <p>{buildWikiExcerpt(post.content)}</p>
+                                                    <div className="wiki-post-card-footer">
+                                                        <span>{t('wiki.by', language).replace('{user}', post.username)}</span>
+                                                        <span>{formatPostDate(post.created_at, language)}</span>
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                            {isAuthor && (
+                                                <button className="btn btn-danger" onClick={() => deletePost(post.id)} style={{ fontSize: 12, padding: '8px 12px' }}>
+                                                    {t('wiki.delete', language)}
+                                                </button>
+                                            )}
+                                        </article>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        <aside className="wiki-rail-side">
+                            <div className="wiki-aside-card">
+                                <span className="hero-eyebrow">Como publicar</span>
+                                <h3>Guias mas utiles</h3>
+                                <ul className="wiki-aside-list">
+                                    <li>Empieza por la mecanica general del encuentro.</li>
+                                    <li>Resume composicion, posicionamiento y errores comunes.</li>
+                                    <li>Deja recomendaciones accionables al final.</li>
+                                </ul>
+                                {user && (
+                                    <button className="btn btn-primary" onClick={() => setShowCreate(true)} style={{ width: '100%', marginTop: 10 }}>
+                                        + {t('wiki.new', language)}
                                     </button>
                                 )}
                             </div>
-                        );
-                    })}
-                </div>
+                            <div className="wiki-aside-card">
+                                <span className="hero-eyebrow">Exploracion</span>
+                                <h3>Accesos rapidos</h3>
+                                <div className="wiki-aside-tags">
+                                    {dungeonOptions.slice(0, 8).map((option) => (
+                                        <button key={option.value} className={`wiki-chip ${filterDungeon === option.value ? 'active' : ''}`} onClick={() => setFilterDungeon(option.value)}>
+                                            {option.label}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </aside>
+                    </section>
+                </>
             )}
 
             {showCreate && (
-                <CreateWikiPostModal dungeons={dungeons} prefillDungeon={prefillDungeon} onClose={() => setShowCreate(false)} onCreated={fetchPosts} />
+                <CreateWikiPostModal
+                    dungeons={dungeons}
+                    prefillDungeon={prefillDungeon}
+                    onClose={() => setShowCreate(false)}
+                    onCreated={() => api.get('/wiki').then((response) => setPosts(response.data || []))}
+                />
             )}
         </div>
+    );
+}
+
+function FeaturedWikiCard({ post, language }: any) {
+    return (
+        <Link href={`/wiki/${post.id}`} className="wiki-featured-card">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={getAssetUrl(post.dungeon_image)} alt="" className="wiki-featured-image" />
+            <div className="wiki-featured-overlay" />
+            <div className="wiki-featured-copy">
+                <span className="hero-eyebrow">{getDungeonApiName(post, language) || post.dungeon_name}</span>
+                <h3>{post.title}</h3>
+                <p>{buildWikiExcerpt(post.content)}</p>
+            </div>
+        </Link>
     );
 }
 
 function CreateWikiPostModal({ dungeons, prefillDungeon, onClose, onCreated }: any) {
     const [form, setForm] = useState({ dungeon_id: prefillDungeon || '', title: '', content: '' });
     const [saving, setSaving] = useState(false);
-    const set = (k: string, v: any) => setForm(p => ({ ...p, [k]: v }));
     const { language } = useLanguage();
+    const setField = (key: string, value: any) => setForm((prev) => ({ ...prev, [key]: value }));
+    const selectedDungeon = dungeons.find((entry: any) => String(entry.id) === String(form.dungeon_id));
 
     const submit = async () => {
         if (!form.dungeon_id || !form.title || !form.content) {
-            addToast({ title: t('wiki.requiredTitle', language), body: t('wiki.requiredBody', language) }); return;
+            addToast({ title: t('wiki.requiredTitle', language), body: t('wiki.requiredBody', language) });
+            return;
         }
         setSaving(true);
         try {
             await api.post('/wiki', form);
             addToast({ title: t('wiki.published', language) });
-            onCreated(); onClose();
-        } catch (e: any) {
-            addToast({ title: t('common.error', language), body: e.response?.data?.error || t('wiki.errorPublish', language) });
-        } finally { setSaving(false); }
+            onCreated();
+            onClose();
+        } catch (error: any) {
+            addToast({ title: t('common.error', language), body: error.response?.data?.error || t('wiki.errorPublish', language) });
+        } finally {
+            setSaving(false);
+        }
     };
 
     return (
         <div className="modal-overlay" onClick={onClose}>
-            <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 700 }}>
+            <div className="modal wiki-create-modal" onClick={(event) => event.stopPropagation()}>
                 <div className="modal-header">
-                    <h2 style={{ fontSize: 20 }}>📖 {t('wiki.newTitle', language)}</h2>
+                    <h2 style={{ fontSize: 20 }}>{t('wiki.newTitle', language)}</h2>
                     <button className="btn btn-ghost" onClick={onClose} style={{ marginLeft: 'auto', padding: '6px 12px' }}>✕</button>
                 </div>
-                <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                    <div className="form-group">
-                        <label className="form-label">{t('wiki.dungeon', language)}</label>
-                        <CustomSelect
-                            value={form.dungeon_id}
-                            onChange={e => set('dungeon_id', e)}
-                            placeholder={t('wiki.selectDungeon', language)}
-                            options={dungeons.map((d: any) => {
-                                const name = getDungeonApiName(d, language);
-                                return { value: String(d.id), label: `${name} (${t('common.levelShort', language)} ${d.modulated})` };
-                            })}
-                        />
+                <div className="wiki-create-layout">
+                    <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                        <div className="form-group">
+                            <label className="form-label">{t('wiki.dungeon', language)}</label>
+                            <CustomSelect
+                                value={form.dungeon_id}
+                                onChange={(value) => setField('dungeon_id', value)}
+                                placeholder={t('wiki.selectDungeon', language)}
+                                options={dungeons.map((dungeon: any) => ({
+                                    value: String(dungeon.id),
+                                    label: `${getDungeonApiName(dungeon, language)} (${t('common.levelShort', language)} ${dungeon.modulated})`,
+                                }))}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">{t('wiki.titleLabel', language)}</label>
+                            <input className="form-input" value={form.title} onChange={(event) => setField('title', event.target.value)} maxLength={200} placeholder={t('wiki.titlePlaceholder', language)} />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">{t('wiki.contentLabel', language)}</label>
+                            <textarea className="form-textarea" style={{ minHeight: 260 }} value={form.content} onChange={(event) => setField('content', event.target.value)} placeholder={t('wiki.contentPlaceholder', language)} />
+                            <p style={{ fontSize: 11, color: 'var(--text-secondary)', marginTop: 6 }}>{t('wiki.contentHint', language)}</p>
+                        </div>
                     </div>
-                    <div className="form-group">
-                        <label className="form-label">{t('wiki.titleLabel', language)}</label>
-                        <input className="form-input" value={form.title} onChange={e => set('title', e.target.value)} maxLength={200} placeholder={t('wiki.titlePlaceholder', language)} />
-                    </div>
-                    <div className="form-group">
-                        <label className="form-label">{t('wiki.contentLabel', language)}</label>
-                        <textarea className="form-textarea" style={{ minHeight: 240 }} value={form.content} onChange={e => set('content', e.target.value)} placeholder={t('wiki.contentPlaceholder', language)} />
-                        <p style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>{t('wiki.contentHint', language)}</p>
-                    </div>
+                    <aside className="wiki-create-aside">
+                        <span className="hero-eyebrow">Vista previa</span>
+                        <h3>{form.title || 'Tu guia aparecera aqui'}</h3>
+                        <p className="wiki-create-aside-dungeon">
+                            {selectedDungeon ? getDungeonApiName(selectedDungeon, language) : 'Selecciona una mazmorra para dar contexto a tu guia.'}
+                        </p>
+                        <p className="wiki-create-aside-body">{buildWikiExcerpt(form.content) || 'Resume mecanicas, composicion, posicionamiento y errores comunes.'}</p>
+                    </aside>
                 </div>
                 <div className="modal-footer">
                     <button className="btn btn-ghost" onClick={onClose}>{t('common.cancel', language)}</button>
@@ -196,4 +335,19 @@ function CreateWikiPostModal({ dungeons, prefillDungeon, onClose, onCreated }: a
             </div>
         </div>
     );
+}
+
+function buildWikiExcerpt(content: string) {
+    const plain = String(content || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+    if (!plain) return '';
+    return plain.length > 170 ? `${plain.slice(0, 167)}...` : plain;
+}
+
+function formatPostDate(createdAt: number | string, language: any) {
+    const millis = typeof createdAt === 'number' ? createdAt * 1000 : new Date(createdAt).getTime();
+    return new Date(millis).toLocaleDateString(t('common.locale', language) as any, {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+    });
 }

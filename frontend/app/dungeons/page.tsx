@@ -1,8 +1,7 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { api, getAssetUrl } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
-import GroupDetailModal from '@/components/GroupDetailModal';
 import CreateGroupModal from '@/components/CreateGroupModal';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/lib/language-context';
@@ -23,122 +22,208 @@ export default function DungeonsPage() {
 
     useEffect(() => {
         api.get('/dungeons')
-            .then(r => setDungeons((r.data || []).filter((d: any) => d?.isActive !== false)))
+            .then((response) => setDungeons((response.data || []).filter((dungeon: any) => dungeon?.isActive !== false)))
             .finally(() => setLoading(false));
     }, []);
 
-    const filtered = dungeons.filter(d => {
-        if (filterBand && d.modulated !== filterBand) return false;
-        if (search) {
-            const q = search.toLowerCase();
-            const name = getDungeonApiName(d, language).toLowerCase();
-            const nameAlt = `${d.name_es || ''} ${d.name_en || ''} ${d.name_fr || ''} ${d.name_pt || ''}`.toLowerCase();
-            if (!name.includes(q) && !nameAlt.includes(q)) return false;
-        }
-        return true;
-    });
+    const filtered = useMemo(() => (
+        dungeons.filter((dungeon) => {
+            if (filterBand && dungeon.modulated !== filterBand) return false;
+            if (search) {
+                const query = search.toLowerCase();
+                const translated = getDungeonApiName(dungeon, language).toLowerCase();
+                const fallback = `${dungeon.name_es || ''} ${dungeon.name_en || ''} ${dungeon.name_fr || ''} ${dungeon.name_pt || ''}`.toLowerCase();
+                if (!translated.includes(query) && !fallback.includes(query)) return false;
+            }
+            return true;
+        })
+    ), [dungeons, filterBand, search, language]);
 
-    // Group by modulated level
-    const grouped = LEVEL_BANDS.map(level => ({
+    const grouped = useMemo(() => LEVEL_BANDS.map((level) => ({
         level,
-        dungeons: filtered.filter(d => d.modulated === level),
-    })).filter(b => b.dungeons.length > 0);
+        dungeons: filtered.filter((dungeon) => dungeon.modulated === level),
+    })).filter((band) => band.dungeons.length > 0), [filtered]);
+
+    const featured = filtered.slice(0, 3);
 
     return (
         <div className="container" style={{ paddingTop: 32, paddingBottom: 48 }}>
-            <h1 className="title-gold" style={{ fontSize: 32, marginBottom: 8, textAlign: 'center' }}>{t('dungeons.title', language)}</h1>
-            <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: 32 }}>
-                {t('dungeons.subtitle', language)}
-            </p>
-
-            {/* Filters */}
-            <div className="filters-bar">
-                <div className="search-bar" style={{ flex: 1, maxWidth: 360 }}>
-                    <span className="search-icon">🔍</span>
-                    <input className="search-input" placeholder={t('dungeons.searchPlaceholder', language)}
-                        value={search} onChange={e => setSearch(e.target.value)} />
+            <section className="hero-shell" style={{ marginBottom: 26 }}>
+                <div className="hero-panel hero-panel-single dungeons-hero-panel">
+                    <div className="hero-copy">
+                        <span className="hero-eyebrow">Atlas PvE</span>
+                        <h1 className="title-gold hero-title">{t('dungeons.title', language)}</h1>
+                        <p className="hero-description">{t('dungeons.subtitle', language)}</p>
+                        <div className="dungeons-hero-stats">
+                            <div className="dungeons-hero-pill">
+                                <strong>{filtered.length}</strong>
+                                <span>Mazmorras visibles</span>
+                            </div>
+                            <div className="dungeons-hero-pill">
+                                <strong>{grouped.length}</strong>
+                                <span>Franjas activas</span>
+                            </div>
+                            <div className="dungeons-hero-pill">
+                                <strong>{featured.length}</strong>
+                                <span>Destacadas</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div style={{ width: 200 }}>
+            </section>
+
+            <section className="filters-shell" style={{ marginBottom: 24 }}>
+                <div className="filters-head">
+                    <div>
+                        <h2 className="filters-title">{t('common.search', language)}</h2>
+                        <p className="filters-subtitle">Explora por nombre o franja y salta directo a crear grupo o abrir la wiki.</p>
+                    </div>
+                    <span className="results-chip">{filtered.length} resultados</span>
+                </div>
+
+                <div className="filters-grid dungeons-filters-grid">
+                    <div className="search-bar filter-control filter-search">
+                        <span className="search-icon">🔍</span>
+                        <input
+                            className="search-input"
+                            placeholder={t('dungeons.searchPlaceholder', language)}
+                            value={search}
+                            onChange={(event) => setSearch(event.target.value)}
+                        />
+                    </div>
                     <CustomSelect
+                        className="filter-control"
                         value={filterBand === '' ? '' : String(filterBand)}
                         onChange={(next) => setFilterBand(next ? Number(next) : '')}
                         placeholder={t('dungeons.allBands', language)}
-                        options={LEVEL_BANDS.map((level) => ({ value: String(level), label: t('dungeons.levelBand', language).replace('{level}', String(level)) }))}
+                        options={[{ value: '', label: t('dungeons.allBands', language) }, ...LEVEL_BANDS.map((level) => ({
+                            value: String(level),
+                            label: t('dungeons.levelBand', language).replace('{level}', String(level)),
+                        }))]}
                     />
                 </div>
-            </div>
+            </section>
 
-            {loading ? <div className="spinner" /> : (
-                grouped.map(band => (
-                    <div key={band.level}>
-                        <div className="level-band-header">
-                            <h2>⚔ {t('dungeons.levelBand', language).replace('{level}', String(band.level))}</h2>
-                            <div className="level-band-divider" />
-                        </div>
-                        <div className="grid-dungeons">
-                            {band.dungeons.map((d: any) => (
-                                <DungeonCard key={d.id} dungeon={d} onCreateGroup={() => setCreateForDungeon(d.id)} language={language} />
-                            ))}
+            {featured.length > 0 && (
+                <section className="dungeons-spotlight-shell">
+                    <div className="dungeons-section-head">
+                        <div>
+                            <span className="hero-eyebrow">Ruta sugerida</span>
+                            <h2 className="filters-title" style={{ marginTop: 10 }}>Mazmorras destacadas</h2>
                         </div>
                     </div>
-                ))
+                    <div className="dungeons-spotlight-grid">
+                        {featured.map((dungeon) => (
+                            <FeaturedDungeonCard
+                                key={dungeon.id}
+                                dungeon={dungeon}
+                                language={language}
+                                onCreateGroup={() => setCreateForDungeon(dungeon.id)}
+                                onViewGroups={() => router.push(`/?dungeon=${dungeon.id}`)}
+                                canCreate={Boolean(user)}
+                            />
+                        ))}
+                    </div>
+                </section>
+            )}
+
+            {loading ? (
+                <div className="spinner" />
+            ) : grouped.length === 0 ? (
+                <div className="empty-state dungeons-empty-state">
+                    <div className="empty-state-icon">WG</div>
+                    <h3>{t('home.emptyTitle', language)}</h3>
+                    <p>Prueba otra combinacion de busqueda para descubrir nuevas rutas.</p>
+                </div>
+            ) : (
+                <div className="dungeons-bands-stack">
+                    {grouped.map((band) => (
+                        <section key={band.level} className="dungeons-band-panel">
+                            <div className="dungeons-band-head">
+                                <div>
+                                    <span className="hero-eyebrow">Franja</span>
+                                    <h2 className="dungeons-band-title">{t('dungeons.levelBand', language).replace('{level}', String(band.level))}</h2>
+                                </div>
+                                <span className="results-chip">{band.dungeons.length} mazmorras</span>
+                            </div>
+                            <div className="grid-dungeons dungeons-grid-refined">
+                                {band.dungeons.map((dungeon) => (
+                                    <DungeonCard
+                                        key={dungeon.id}
+                                        dungeon={dungeon}
+                                        language={language}
+                                        onCreateGroup={() => setCreateForDungeon(dungeon.id)}
+                                        onViewGroups={() => router.push(`/?dungeon=${dungeon.id}`)}
+                                        canCreate={Boolean(user)}
+                                    />
+                                ))}
+                            </div>
+                        </section>
+                    ))}
+                </div>
             )}
 
             {createForDungeon && (
                 <CreateGroupModal
                     prefillDungeonId={createForDungeon}
                     onClose={() => setCreateForDungeon(null)}
-                    onCreated={() => { }}
+                    onCreated={() => {}}
                 />
             )}
         </div>
     );
 }
 
-function DungeonCard({ dungeon, onCreateGroup, language }: { dungeon: any; onCreateGroup: () => void; language: any }) {
-    const router = useRouter();
-    const { user } = useAuth();
-    const WIKI_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+function FeaturedDungeonCard({ dungeon, language, onCreateGroup, onViewGroups, canCreate }: any) {
     const dungeonName = getDungeonApiName(dungeon, language);
 
     return (
-        <div className="card" style={{ overflow: 'visible', cursor: 'default' }}>
-            <div style={{ position: 'relative', paddingTop: '56.25%', overflow: 'hidden', borderRadius: '16px 16px 0 0' }}>
+        <article className="dungeons-spotlight-card">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={getAssetUrl(dungeon.image_path)} alt={dungeonName} className="dungeons-spotlight-image" />
+            <div className="dungeons-spotlight-overlay" />
+            <div className="dungeons-spotlight-copy">
+                <span className="badge badge-status badge-open">{t('common.levelShort', language)} {dungeon.modulated}</span>
+                <h3>{dungeonName}</h3>
+                <p>{dungeon.max_players} {t('common.players', language)} • Grupos y guias en un clic</p>
+                <div className="dungeons-card-actions">
+                    <button className="btn btn-primary" onClick={onViewGroups}>{t('dungeons.viewGroups', language)}</button>
+                    {canCreate && <button className="btn btn-secondary" onClick={onCreateGroup}>{t('dungeons.createGroup', language)}</button>}
+                    <a className="btn btn-ghost" href={`/wiki?dungeon=${dungeon.id}`}>Wiki</a>
+                </div>
+            </div>
+        </article>
+    );
+}
+
+function DungeonCard({ dungeon, onCreateGroup, onViewGroups, language, canCreate }: any) {
+    const dungeonName = getDungeonApiName(dungeon, language);
+
+    return (
+        <article className="dungeons-refined-card">
+            <div className="dungeons-refined-media">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                     src={getAssetUrl(dungeon.image_path)}
                     alt={dungeonName}
-                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-                    onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                    className="dungeons-refined-image"
+                    onError={(event) => { (event.target as HTMLImageElement).style.display = 'none'; }}
                 />
-                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(10,14,26,0.9), transparent)' }} />
-                <div style={{ position: 'absolute', bottom: 10, left: 12, right: 12 }}>
-                    <div style={{ fontSize: 14, fontWeight: 700, fontFamily: 'Cinzel', color: 'white', lineHeight: 1.3 }}>{dungeonName}</div>
-                    <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 2 }}>{t('common.levelShort', language)} {dungeon.modulated} • {dungeon.max_players} {t('common.players', language)}</div>
+                <div className="dungeons-refined-shade" />
+                <div className="dungeons-refined-meta">
+                    <span className="badge badge-status badge-open">{t('common.levelShort', language)} {dungeon.modulated}</span>
+                    <span className="badge badge-status badge-closed">{dungeon.max_players} {t('common.players', language)}</span>
                 </div>
             </div>
-            <div style={{ padding: '12px 14px', display: 'flex', gap: 6 }}>
-                <button
-                    className="btn btn-ghost" style={{ flex: 1, fontSize: 12, padding: '7px', justifyContent: 'center' }}
-                    onClick={() => router.push(`/?dungeon=${dungeon.id}`)}
-                >
-                    🔍 {t('dungeons.viewGroups', language)}
-                </button>
-                {user && (
-                    <button
-                        className="btn btn-secondary" style={{ flex: 1, fontSize: 12, padding: '7px', justifyContent: 'center' }}
-                        onClick={onCreateGroup}
-                    >
-                        ⚔ {t('dungeons.createGroup', language)}
-                    </button>
-                )}
-                <a
-                    href={`/wiki?dungeon=${dungeon.id}`}
-                    className="btn btn-ghost" style={{ fontSize: 12, padding: '7px 10px' }}
-                >
-                    📖
-                </a>
+            <div className="dungeons-refined-body">
+                <h3 className="dungeons-refined-title">{dungeonName}</h3>
+                <p className="dungeons-refined-description">Encuentra grupos activos o crea una convocatoria enfocada en esta mazmorra.</p>
+                <div className="dungeons-card-actions">
+                    <button className="btn btn-ghost" onClick={onViewGroups}>{t('dungeons.viewGroups', language)}</button>
+                    {canCreate && <button className="btn btn-secondary" onClick={onCreateGroup}>{t('dungeons.createGroup', language)}</button>}
+                    <a className="btn btn-ghost" href={`/wiki?dungeon=${dungeon.id}`}>Wiki</a>
+                </div>
             </div>
-        </div>
+        </article>
     );
 }
