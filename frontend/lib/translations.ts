@@ -101,6 +101,69 @@ type TranslationKey =
   | 'profile.addCharacter'
   | 'profile.noCharacters'
   | 'profile.yourApplications'
+  | 'profile.loginRequired'
+  | 'profile.loginDiscord'
+  | 'profile.heroEyebrow'
+  | 'profile.heroDescription'
+  | 'profile.tagDiscord'
+  | 'profile.tagModes'
+  | 'profile.tagAccount'
+  | 'profile.activeSection'
+  | 'profile.accountStatus'
+  | 'profile.readyToPlay'
+  | 'profile.accountNote'
+  | 'profile.centerTitle'
+  | 'profile.centerSubtitle'
+  | 'profile.sectionsCount'
+  | 'profile.badge'
+  | 'profile.tabCharsEyebrow'
+  | 'profile.tabSent'
+  | 'profile.tabSentEyebrow'
+  | 'profile.tabIncoming'
+  | 'profile.tabIncomingEyebrow'
+  | 'profile.tabGroups'
+  | 'profile.tabGroupsEyebrow'
+  | 'profile.tabWikiEyebrow'
+  | 'profile.charactersTitle'
+  | 'profile.newCharacter'
+  | 'profile.editCharacter'
+  | 'profile.nameLabel'
+  | 'profile.namePlaceholder'
+  | 'profile.levelLabel'
+  | 'profile.classLabel'
+  | 'profile.roleLabel'
+  | 'profile.serverLabel'
+  | 'profile.saveCharacter'
+  | 'profile.updateCharacter'
+  | 'profile.emptyCharactersTitle'
+  | 'profile.emptyCharactersBody'
+  | 'profile.characterAdded'
+  | 'profile.characterUpdated'
+  | 'profile.characterDeleted'
+  | 'profile.deleteCharacterConfirm'
+  | 'profile.sentEmptyTitle'
+  | 'profile.sentEmptyBody'
+  | 'profile.pending'
+  | 'profile.accepted'
+  | 'profile.rejected'
+  | 'profile.incomingEmptyTitle'
+  | 'profile.incomingEmptyBody'
+  | 'profile.applicationAccepted'
+  | 'profile.applicationRejected'
+  | 'profile.dungeonGroupsTitle'
+  | 'profile.emptyDungeonGroupsTitle'
+  | 'profile.emptyDungeonGroupsBody'
+  | 'profile.deleteDungeonGroupConfirm'
+  | 'profile.groupDeleted'
+  | 'profile.pvpGroupsTitle'
+  | 'profile.emptyPvpGroupsTitle'
+  | 'profile.emptyPvpGroupsBody'
+  | 'profile.deletePvpGroupConfirm'
+  | 'profile.pvpDeleted'
+  | 'profile.emptyPostsTitle'
+  | 'profile.emptyPostsBody'
+  | 'profile.deleteGuideConfirm'
+  | 'profile.guideDeleted'
   | 'dungeon.minLevel'
   | 'dungeon.players'
   | 'dungeon.steles'
@@ -510,6 +573,69 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
   'group.titlePlaceholder': { es: 'Ej: Grupo relajado', en: 'e.g., Chill group', fr: 'Ex. : Groupe tranquille', pt: 'Ex.: Grupo tranquilo' },
   'group.stelesCount': { es: 'Cuántas Estelas', en: 'How many Steles', fr: 'Combien de Stèles', pt: 'Quantas Estátuas' },
   'group.creating': { es: 'Creando...', en: 'Creating...', fr: 'Création...', pt: 'Criando...' },
+  'profile.loginRequired': { es: 'Debes iniciar sesion para ver tu perfil.', en: 'You need to sign in to view your profile.', fr: 'Vous devez vous connecter pour voir votre profil.', pt: 'Voce precisa iniciar sessao para ver seu perfil.' },
+  'profile.loginDiscord': { es: 'Iniciar sesion con Discord', en: 'Sign in with Discord', fr: 'Se connecter avec Discord', pt: 'Entrar com Discord' },
+  'profile.heroEyebrow': { es: 'Panel de perfil', en: 'Profile panel', fr: 'Panneau de profil', pt: 'Painel de perfil' },
+  'profile.heroDescription': { es: 'Un espacio mas claro para gestionar personajes, solicitudes, grupos creados y publicaciones de la comunidad.', en: 'A clearer space to manage characters, applications, created groups, and community posts.', fr: 'Un espace plus clair pour gerer les personnages, demandes, groupes crees et publications de la communaute.', pt: 'Um espaco mais claro para gerenciar personagens, solicitacoes, grupos criados e publicacoes da comunidade.' },
+  'profile.tagDiscord': { es: 'Discord conectado', en: 'Discord connected', fr: 'Discord connecte', pt: 'Discord conectado' },
+  'profile.tagModes': { es: 'PvE y PvP', en: 'PvE and PvP', fr: 'PvE et PvP', pt: 'PvE e PvP' },
+  'profile.tagAccount': { es: 'Cuenta WakGroup', en: 'WakGroup account', fr: 'Compte WakGroup', pt: 'Conta WakGroup' },
+  'profile.activeSection': { es: 'Seccion activa', en: 'Active section', fr: 'Section active', pt: 'Secao ativa' },
+  'profile.accountStatus': { es: 'Estado de cuenta', en: 'Account status', fr: 'Etat du compte', pt: 'Estado da conta' },
+  'profile.readyToPlay': { es: 'Lista para jugar', en: 'Ready to play', fr: 'Pret a jouer', pt: 'Pronta para jogar' },
+  'profile.accountNote': { es: 'Tu progreso y actividad quedan reunidos en una sola interfaz.', en: 'Your progress and activity are gathered in a single interface.', fr: 'Votre progression et votre activite sont reunies dans une seule interface.', pt: 'Seu progresso e sua atividade ficam reunidos em uma unica interface.' },
+  'profile.centerTitle': { es: 'Centro de aventura', en: 'Adventure hub', fr: 'Centre d aventure', pt: 'Centro de aventura' },
+  'profile.centerSubtitle': { es: 'Selecciona la vista que quieres revisar o administrar.', en: 'Select the view you want to review or manage.', fr: 'Selectionnez la vue que vous voulez consulter ou gerer.', pt: 'Selecione a visualizacao que deseja revisar ou administrar.' },
+  'profile.sectionsCount': { es: '{count} secciones', en: '{count} sections', fr: '{count} sections', pt: '{count} secoes' },
+  'profile.badge': { es: 'Perfil WakGroup', en: 'WakGroup profile', fr: 'Profil WakGroup', pt: 'Perfil WakGroup' },
+  'profile.tabCharsEyebrow': { es: 'Builds y roles', en: 'Builds and roles', fr: 'Builds et roles', pt: 'Builds e papeis' },
+  'profile.tabSent': { es: 'Solicitudes enviadas', en: 'Sent applications', fr: 'Demandes envoyees', pt: 'Solicitacoes enviadas' },
+  'profile.tabSentEyebrow': { es: 'Tu actividad', en: 'Your activity', fr: 'Votre activite', pt: 'Sua atividade' },
+  'profile.tabIncoming': { es: 'Solicitudes recibidas', en: 'Received applications', fr: 'Demandes recues', pt: 'Solicitacoes recebidas' },
+  'profile.tabIncomingEyebrow': { es: 'Gestion del lider', en: 'Leader management', fr: 'Gestion du chef', pt: 'Gestao do lider' },
+  'profile.tabGroups': { es: 'Grupos creados', en: 'Created groups', fr: 'Groupes crees', pt: 'Grupos criados' },
+  'profile.tabGroupsEyebrow': { es: 'Historial activo', en: 'Active history', fr: 'Historique actif', pt: 'Historico ativo' },
+  'profile.tabWikiEyebrow': { es: 'Guias publicadas', en: 'Published guides', fr: 'Guides publies', pt: 'Guias publicadas' },
+  'profile.charactersTitle': { es: 'Mis personajes', en: 'My characters', fr: 'Mes personnages', pt: 'Meus personagens' },
+  'profile.newCharacter': { es: 'Nuevo personaje', en: 'New character', fr: 'Nouveau personnage', pt: 'Novo personagem' },
+  'profile.editCharacter': { es: 'Editar personaje', en: 'Edit character', fr: 'Modifier le personnage', pt: 'Editar personagem' },
+  'profile.nameLabel': { es: 'Nombre *', en: 'Name *', fr: 'Nom *', pt: 'Nome *' },
+  'profile.namePlaceholder': { es: 'Nombre del personaje', en: 'Character name', fr: 'Nom du personnage', pt: 'Nome do personagem' },
+  'profile.levelLabel': { es: 'Nivel *', en: 'Level *', fr: 'Niveau *', pt: 'Nivel *' },
+  'profile.classLabel': { es: 'Clase *', en: 'Class *', fr: 'Classe *', pt: 'Classe *' },
+  'profile.roleLabel': { es: 'Rol *', en: 'Role *', fr: 'Role *', pt: 'Papel *' },
+  'profile.serverLabel': { es: 'Servidor *', en: 'Server *', fr: 'Serveur *', pt: 'Servidor *' },
+  'profile.saveCharacter': { es: 'Guardar personaje', en: 'Save character', fr: 'Enregistrer le personnage', pt: 'Salvar personagem' },
+  'profile.updateCharacter': { es: 'Actualizar personaje', en: 'Update character', fr: 'Mettre a jour le personnage', pt: 'Atualizar personagem' },
+  'profile.emptyCharactersTitle': { es: 'Sin personajes', en: 'No characters', fr: 'Aucun personnage', pt: 'Sem personagens' },
+  'profile.emptyCharactersBody': { es: 'Anade tu primer personaje para unirte a grupos.', en: 'Add your first character to join groups.', fr: 'Ajoutez votre premier personnage pour rejoindre des groupes.', pt: 'Adicione seu primeiro personagem para entrar em grupos.' },
+  'profile.characterAdded': { es: 'Personaje anadido', en: 'Character added', fr: 'Personnage ajoute', pt: 'Personagem adicionado' },
+  'profile.characterUpdated': { es: 'Personaje actualizado', en: 'Character updated', fr: 'Personnage mis a jour', pt: 'Personagem atualizado' },
+  'profile.characterDeleted': { es: 'Personaje eliminado', en: 'Character deleted', fr: 'Personnage supprime', pt: 'Personagem excluido' },
+  'profile.deleteCharacterConfirm': { es: 'Eliminar personaje?', en: 'Delete character?', fr: 'Supprimer le personnage ?', pt: 'Excluir personagem?' },
+  'profile.sentEmptyTitle': { es: 'Sin solicitudes', en: 'No applications', fr: 'Aucune demande', pt: 'Sem solicitacoes' },
+  'profile.sentEmptyBody': { es: 'Aun no has aplicado a ningun grupo.', en: 'You have not applied to any group yet.', fr: 'Vous n avez encore postule a aucun groupe.', pt: 'Voce ainda nao se candidatou a nenhum grupo.' },
+  'profile.pending': { es: 'Pendiente', en: 'Pending', fr: 'En attente', pt: 'Pendente' },
+  'profile.accepted': { es: 'Aceptado', en: 'Accepted', fr: 'Accepte', pt: 'Aceito' },
+  'profile.rejected': { es: 'Rechazado', en: 'Rejected', fr: 'Refuse', pt: 'Rejeitado' },
+  'profile.incomingEmptyTitle': { es: 'Sin solicitudes', en: 'No applications', fr: 'Aucune demande', pt: 'Sem solicitacoes' },
+  'profile.incomingEmptyBody': { es: 'No tienes solicitudes pendientes en tus grupos.', en: 'You do not have pending applications in your groups.', fr: 'Vous n avez pas de demandes en attente dans vos groupes.', pt: 'Voce nao tem solicitacoes pendentes nos seus grupos.' },
+  'profile.applicationAccepted': { es: 'Solicitud aceptada', en: 'Application accepted', fr: 'Demande acceptee', pt: 'Solicitacao aceita' },
+  'profile.applicationRejected': { es: 'Solicitud rechazada', en: 'Application rejected', fr: 'Demande refusee', pt: 'Solicitacao rejeitada' },
+  'profile.dungeonGroupsTitle': { es: 'Mazmorra', en: 'Dungeon', fr: 'Donjon', pt: 'Masmorra' },
+  'profile.emptyDungeonGroupsTitle': { es: 'Sin grupos de mazmorra', en: 'No dungeon groups', fr: 'Aucun groupe de donjon', pt: 'Sem grupos de masmorra' },
+  'profile.emptyDungeonGroupsBody': { es: 'No has creado grupos de mazmorra.', en: 'You have not created dungeon groups.', fr: 'Vous n avez pas cree de groupes de donjon.', pt: 'Voce nao criou grupos de masmorra.' },
+  'profile.deleteDungeonGroupConfirm': { es: 'Eliminar este grupo de mazmorra?', en: 'Delete this dungeon group?', fr: 'Supprimer ce groupe de donjon ?', pt: 'Excluir este grupo de masmorra?' },
+  'profile.groupDeleted': { es: 'Grupo eliminado', en: 'Group deleted', fr: 'Groupe supprime', pt: 'Grupo excluido' },
+  'profile.pvpGroupsTitle': { es: 'PVP', en: 'PVP', fr: 'PVP', pt: 'PVP' },
+  'profile.emptyPvpGroupsTitle': { es: 'Sin grupos PVP', en: 'No PVP groups', fr: 'Aucun groupe PVP', pt: 'Sem grupos PVP' },
+  'profile.emptyPvpGroupsBody': { es: 'No has creado enfrentamientos PVP.', en: 'You have not created PVP matches.', fr: 'Vous n avez pas cree de matchs PVP.', pt: 'Voce nao criou confrontos PVP.' },
+  'profile.deletePvpGroupConfirm': { es: 'Eliminar este grupo PVP?', en: 'Delete this PVP group?', fr: 'Supprimer ce groupe PVP ?', pt: 'Excluir este grupo PVP?' },
+  'profile.pvpDeleted': { es: 'Enfrentamiento eliminado', en: 'Match deleted', fr: 'Match supprime', pt: 'Confronto excluido' },
+  'profile.emptyPostsTitle': { es: 'Sin posts', en: 'No posts', fr: 'Aucune publication', pt: 'Sem posts' },
+  'profile.emptyPostsBody': { es: 'Aun no has creado ninguna guia.', en: 'You have not created any guides yet.', fr: 'Vous n avez encore cree aucun guide.', pt: 'Voce ainda nao criou nenhum guia.' },
+  'profile.deleteGuideConfirm': { es: 'Eliminar esta guia?', en: 'Delete this guide?', fr: 'Supprimer ce guide ?', pt: 'Excluir este guia?' },
+  'profile.guideDeleted': { es: 'Guia eliminada', en: 'Guide deleted', fr: 'Guide supprime', pt: 'Guia excluido' },
   'footer.owner': { es: 'Hecho por Clarex', en: 'Made by Clarex', fr: 'Cree par Clarex', pt: 'Feito por Clarex' },
 };
 
