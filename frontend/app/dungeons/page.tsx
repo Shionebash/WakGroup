@@ -1,5 +1,6 @@
 'use client';
 import { useMemo, useState, useEffect } from 'react';
+import Link from 'next/link';
 import { api, getAssetUrl } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
 import CreateGroupModal from '@/components/CreateGroupModal';
@@ -189,7 +190,7 @@ function FeaturedDungeonCard({ dungeon, language, onCreateGroup, onViewGroups, c
                 <div className="dungeons-card-actions">
                     <button className="btn btn-primary" onClick={onViewGroups}>{t('dungeons.viewGroups', language)}</button>
                     {canCreate && <button className="btn btn-secondary" onClick={onCreateGroup}>{t('dungeons.createGroup', language)}</button>}
-                    <a className="btn btn-ghost" href={`/wiki?dungeon=${dungeon.id}`}>{t('dungeons.wiki', language)}</a>
+                    <Link className="btn btn-ghost" href={`/wiki?dungeon=${dungeon.id}`}>{t('dungeons.wiki', language)}</Link>
                 </div>
             </div>
         </article>
@@ -221,7 +222,7 @@ function DungeonCard({ dungeon, onCreateGroup, onViewGroups, language, canCreate
                 <div className="dungeons-card-actions">
                     <button className="btn btn-ghost" onClick={onViewGroups}>{t('dungeons.viewGroups', language)}</button>
                     {canCreate && <button className="btn btn-secondary" onClick={onCreateGroup}>{t('dungeons.createGroup', language)}</button>}
-                    <a className="btn btn-ghost" href={`/wiki?dungeon=${dungeon.id}`}>{t('dungeons.wiki', language)}</a>
+                    <Link className="btn btn-ghost" href={`/wiki?dungeon=${dungeon.id}`}>{t('dungeons.wiki', language)}</Link>
                 </div>
             </div>
         </article>
