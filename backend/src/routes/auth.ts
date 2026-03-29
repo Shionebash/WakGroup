@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { getDb } from '../db/database.js';
-import { generateToken, setCookieSession, requireAuth } from '../middleware/auth.js';
+import { generateToken, setCookieSession, requireAuth, shouldUseSecureCookies } from '../middleware/auth.js';
 import { User } from '../types/index.js';
 
 const router = Router();
@@ -14,7 +14,7 @@ const DISCORD_REDIRECT_URI = process.env.DISCORD_REDIRECT_URI!;
 // Step 1: redirect to Discord OAuth
 router.get('/discord', (req, res) => {
     const state = uuidv4();
-    const isSecure = process.env.USE_SECURE_COOKIES === 'true';
+    const isSecure = shouldUseSecureCookies(req);
     const desktopCallbackPortRaw = req.query.desktop_callback_port;
     const desktopCallbackPort =
         typeof desktopCallbackPortRaw === 'string' && /^\d{2,5}$/.test(desktopCallbackPortRaw)
@@ -121,7 +121,7 @@ router.get('/discord/callback', async (req: Request, res: Response): Promise<voi
             discordId: discordUser.id,
             username: discordUser.username,
         });
-        setCookieSession(res, token);
+        setCookieSession(res, token, req);
 
         // Si el login vino de la mini app, redirigir al callback local de Electron
         const redirectTarget = req.cookies?.oauth_redirect_target;
@@ -198,10 +198,11 @@ router.get('/me', requireAuth, async (req: Request, res: Response): Promise<void
 
 // Logout
 router.get('/logout', (req: Request, res: Response) => {
+    const isSecure = shouldUseSecureCookies(req);
     res.clearCookie('session', {
         httpOnly: true,
-        secure: true,
-        sameSite: 'none',
+        secure: isSecure,
+        sameSite: isSecure ? 'none' : 'lax',
     });
     const redirect = req.query.redirect as string || process.env.FRONTEND_URL || 'http://localhost:3000';
     res.redirect(redirect);

@@ -31,6 +31,31 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+function buildAllowedOrigins(): Set<string> {
+    const configuredFrontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const candidates = [
+        configuredFrontendUrl,
+        process.env.FRONTEND_URL,
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+        'http://localhost:3001',
+        'http://127.0.0.1:3001',
+    ].filter(Boolean) as string[];
+
+    const origins = new Set<string>();
+    for (const candidate of candidates) {
+        try {
+            origins.add(new URL(candidate).origin);
+        } catch {
+            // Ignore malformed env values and keep the server booting.
+        }
+    }
+
+    return origins;
+}
+
+const allowedOrigins = buildAllowedOrigins();
+
 // Initialize database (creates tables if not exist)
 import { initDb } from './db/database.js';
 export let io: ReturnType<typeof initSocket> | null = null;
@@ -57,7 +82,14 @@ app.use(helmet({
 
 // CORS - only allow configured frontend
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'https://packard-dan-magnet-calling.trycloudflare.com',
+    origin(origin, callback) {
+        if (!origin || origin === 'null' || allowedOrigins.has(origin)) {
+            callback(null, true);
+            return;
+        }
+
+        callback(new Error(`Origin ${origin} is not allowed by CORS`));
+    },
     credentials: true,
 }));
 
