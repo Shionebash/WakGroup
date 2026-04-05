@@ -1,0 +1,3124 @@
+.pageShell {
+    width: min(1720px, calc(100vw - 24px));
+    max-width: min(1720px, calc(100vw - 24px));
+    padding-top: 14px;
+    padding-bottom: 24px;
+}
+
+.shell {
+    --panel-bg: linear-gradient(180deg, rgba(44, 39, 33, 0.95), rgba(24, 20, 17, 0.98));
+    --panel-border: rgba(212, 165, 116, 0.16);
+    --panel-soft: rgba(255, 255, 255, 0.03);
+    --panel-soft-strong: rgba(255, 255, 255, 0.055);
+    --text-strong: #f8f0e1;
+    --text-soft: rgba(239, 227, 208, 0.72);
+    display: grid;
+    gap: 12px;
+    width: 100%;
+}
+
+.topBuilder,
+.panel {
+    min-width: 0;
+    border-radius: 22px;
+    border: 1px solid var(--panel-border);
+    background: var(--panel-bg);
+    box-shadow: 0 20px 42px rgba(0, 0, 0, 0.22);
+}
+
+.topBuilder {
+    position: relative;
+    isolation: isolate;
+    overflow: visible;
+    display: grid;
+    grid-template-columns: minmax(280px, 0.9fr) minmax(250px, 0.76fr) minmax(460px, 1.5fr);
+    gap: 8px;
+    align-items: start;
+    padding: clamp(8px, 0.95vw, 11px);
+}
+
+.topBuilder > * {
+    position: relative;
+    z-index: 1;
+}
+
+.topBuilderBackdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    overflow: hidden;
+}
+
+.topBuilderBackdropFigure {
+    position: absolute;
+    top: -10px;
+    right: -18px;
+    display: block;
+    object-fit: contain;
+    object-position: center top;
+    clip-path: inset(0 0 46% 0);
+    filter: saturate(1.08) contrast(1.02) drop-shadow(0 20px 32px rgba(0, 0, 0, 0.18));
+    opacity: 1;
+    user-select: none;
+}
+
+.topBuilderBackdropFigurePrimary {
+    width: min(29vw, 430px);
+    max-width: 34%;
+}
+
+.topBuilderBackdropFigureSecondary {
+    right: 210px;
+    top: -2px;
+    width: min(21vw, 300px);
+    max-width: 23%;
+    opacity: 1;
+    transform: scaleX(-1);
+}
+
+.topBuilderBackdropWash {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 79% 48%, rgba(255, 214, 153, 0.1), transparent 22%),
+        linear-gradient(90deg, rgba(24, 20, 17, 0.02) 0%, rgba(24, 20, 17, 0.04) 36%, rgba(24, 20, 17, 0.14) 64%, rgba(24, 20, 17, 0.34) 100%);
+}
+
+.identity {
+    display: grid;
+    grid-template-columns: 54px minmax(0, 1fr);
+    gap: 8px;
+    align-items: center;
+    align-self: center;
+}
+
+.classPortrait {
+    width: 54px;
+    height: 54px;
+    overflow: hidden;
+    border-radius: 18px;
+    border: 1px solid rgba(212, 165, 116, 0.22);
+    background:
+        radial-gradient(circle at top, rgba(255, 207, 92, 0.18), transparent 56%),
+        linear-gradient(180deg, rgba(72, 60, 46, 0.95), rgba(28, 23, 18, 0.98));
+}
+
+.classPortraitImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.identityCopy {
+    min-width: 0;
+    display: grid;
+    gap: 3px;
+}
+
+.buildNameInput {
+    min-width: 0;
+    border: 0;
+    border-bottom: 1px solid rgba(212, 165, 116, 0.22);
+    background: transparent;
+    color: var(--text-strong);
+    font-size: clamp(0.96rem, 1.2vw, 1.18rem);
+    font-weight: 800;
+    outline: none;
+    padding: 0 0 4px;
+}
+
+.identityMeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    color: var(--text-soft);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.limitStrip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.topControls {
+    display: flex;
+    flex-wrap: nowrap;
+    min-width: 0;
+    gap: 6px;
+    align-items: stretch;
+    align-self: start;
+    z-index: 6;
+}
+
+.topActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+    justify-content: flex-end;
+    grid-column: auto;
+    justify-self: end;
+    align-self: start;
+    padding-top: 15px;
+}
+
+.hiddenFileInput {
+    display: none;
+}
+
+.topActionMessage {
+    grid-column: 1 / -1;
+    margin: -2px 0 0;
+    color: var(--text-soft);
+    font-size: 0.82rem;
+    line-height: 1.35;
+}
+
+.preferencePanel {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    grid-column: 1 / -1;
+}
+
+.preferenceGroup {
+    display: grid;
+    gap: 3px;
+    padding: 6px 9px;
+    border-radius: 14px;
+    border: 1px solid rgba(212, 165, 116, 0.12);
+    background: var(--panel-soft);
+}
+
+.preferenceGroup span {
+    color: var(--text-soft);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.preferenceSelectors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.preferenceCapsule {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 26px;
+    padding: 0 7px;
+    border-radius: 999px;
+    border: 1px solid rgba(212, 165, 116, 0.18);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03)),
+        rgba(32, 26, 21, 0.96);
+    color: var(--text-strong);
+    cursor: grab;
+    font: inherit;
+    transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease, opacity 0.16s ease;
+}
+
+.preferenceCapsule:hover {
+    transform: translateY(-1px);
+    border-color: rgba(255, 207, 92, 0.34);
+    background:
+        linear-gradient(180deg, rgba(255, 207, 92, 0.1), rgba(255, 255, 255, 0.03)),
+        rgba(37, 30, 24, 0.98);
+}
+
+.preferenceCapsuleDragging {
+    opacity: 0.55;
+    cursor: grabbing;
+}
+
+.preferenceElementIcon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    flex-shrink: 0;
+    opacity: 0.95;
+}
+
+.preferenceCapsuleOrder {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    background: rgba(212, 165, 116, 0.16);
+    color: #ffe7bc;
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+
+.topControl,
+.filterField {
+    display: grid;
+    gap: 3px;
+    padding: 6px 8px;
+    border-radius: 14px;
+    border: 1px solid rgba(212, 165, 116, 0.12);
+    background: var(--panel-soft);
+    position: relative;
+    z-index: 6;
+}
+
+.classTopControl {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.levelTopControl {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 0;
+}
+
+.topControl span,
+.filterField span,
+.summaryCard span {
+    color: var(--text-soft);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    line-height: 1;
+}
+
+.topControl select,
+.topControl input,
+.filterField select,
+.filterField input {
+    width: 100%;
+    min-width: 0;
+    min-height: 28px;
+    border: 0;
+    background: transparent;
+    color: var(--text-strong);
+    outline: none;
+    padding: 0;
+    font-size: 14px;
+}
+
+.topEquipment {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(56px, 4.5vw, 72px), 1fr));
+    gap: 6px;
+    align-self: stretch;
+    align-items: start;
+    grid-column: 1 / -1;
+}
+
+.equipSlot {
+    min-width: 0;
+    display: grid;
+    justify-items: center;
+    gap: 2px;
+    min-height: clamp(58px, 5.3vw, 70px);
+    padding: 5px 4px;
+    border-radius: 12px;
+    border: 1px solid rgba(212, 165, 116, 0.14);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
+        rgba(22, 18, 15, 0.92);
+    color: var(--text-strong);
+    cursor: pointer;
+    transition: transform 0.16s ease, border-color 0.16s ease, background-color 0.16s ease;
+    overflow: hidden;
+    position: relative;
+}
+
+.equipSlot:hover:not(.equipSlotInvalid):not(.equipSlotEmpty),
+.equipSlot.equipSlotActive:not(.equipSlotInvalid):not(.equipSlotEmpty) {
+    transform: translateY(-1px);
+    border-color: rgba(255, 207, 92, 0.42);
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 207, 92, 0.12),
+        0 0 14px rgba(255, 207, 92, 0.1);
+}
+
+.equipSlotInvalid {
+    border-color: rgba(219, 92, 92, 0.48);
+    background:
+        linear-gradient(180deg, rgba(190, 54, 54, 0.2), rgba(118, 24, 24, 0.1)),
+        rgba(44, 14, 14, 0.96);
+}
+
+.equipSlotEmpty {
+    background:
+        radial-gradient(circle at top, rgba(212, 165, 116, 0.1), transparent 62%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02)),
+        rgba(22, 18, 15, 0.92);
+}
+
+.equipSlotPlaceholder {
+    min-width: 0;
+    display: grid;
+    gap: 4px;
+    justify-items: center;
+    align-content: center;
+}
+
+.equipSlotGlyph {
+    width: clamp(22px, 2vw, 28px);
+    height: clamp(22px, 2vw, 28px);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(244, 220, 177, 0.58);
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.24));
+}
+
+.equipSlotGlyph svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.equipSlotHint {
+    max-width: 100%;
+    color: rgba(239, 227, 208, 0.52);
+    font-size: 8px;
+    line-height: 1.1;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    overflow-wrap: anywhere;
+}
+
+.equipSlotImg {
+    width: clamp(32px, 2.6vw, 40px);
+    height: clamp(32px, 2.6vw, 40px);
+    object-fit: contain;
+    display: block;
+}
+
+.equipSlot small {
+    color: var(--text-soft);
+    font-size: 9px;
+    line-height: 1;
+}
+
+.tabBar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+}
+
+.tabButton {
+    min-height: 50px;
+    border-radius: 16px;
+    border: 1px solid rgba(212, 165, 116, 0.14);
+    background:
+        linear-gradient(180deg, rgba(54, 48, 40, 0.9), rgba(30, 25, 20, 0.96));
+    color: var(--text-soft);
+    font-size: 0.98rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: border-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
+}
+
+.tabButton:hover,
+.tabButtonActive {
+    color: var(--text-strong);
+    border-color: rgba(255, 207, 92, 0.38);
+    transform: translateY(-1px);
+}
+
+.contentGrid {
+    display: grid;
+    grid-template-columns: minmax(220px, 250px) minmax(0, 1fr) minmax(240px, 280px);
+    gap: 12px;
+    align-items: start;
+}
+
+.contentGridCharacteristics {
+    grid-template-columns: 1fr;
+    grid-template-areas: "center";
+    align-items: start;
+}
+
+.contentGridCharacteristics > .centerStage {
+    grid-area: center;
+}
+
+.leftRail,
+.centerStage,
+.rightRail {
+    display: grid;
+    gap: 10px;
+    min-width: 0;
+}
+
+.centerStageWide {
+    min-width: 0;
+}
+
+.rightRailSecondary {
+    align-self: start;
+}
+
+.leftRail,
+.rightRail {
+    position: sticky;
+    top: 84px;
+    max-height: calc(100vh - 104px);
+    overflow: auto;
+    padding-right: 2px;
+}
+
+.characteristicsAuxHidden {
+    display: none;
+}
+
+.panel {
+    display: grid;
+    gap: 10px;
+    padding: clamp(12px, 1.2vw, 16px);
+}
+
+.panel h3 {
+    margin: 0;
+    color: var(--text-strong);
+    font-size: 0.98rem;
+}
+
+.transferHeader {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.transferActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.transferTextarea {
+    width: 100%;
+    min-height: 240px;
+    resize: vertical;
+    border-radius: 16px;
+    border: 1px solid rgba(212, 165, 116, 0.16);
+    background: rgba(14, 11, 9, 0.72);
+    color: var(--text-strong);
+    padding: 14px 16px;
+    font: inherit;
+    line-height: 1.45;
+    outline: none;
+}
+
+.levelHeaderSelect :global(.custom-select-trigger) {
+    position: relative;
+    justify-content: center;
+    min-height: 40px;
+    min-width: 78px;
+    padding: 8px 34px 8px 12px;
+    text-align: center;
+}
+
+.levelHeaderSelect {
+    width: auto;
+    min-width: 78px;
+}
+
+.levelHeaderSelect :global(.custom-select-value) {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+}
+
+.levelHeaderSelect :global(.custom-select-caret) {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.levelHeaderSelectMenu :global(.custom-select-option) {
+    justify-content: center;
+    text-align: center;
+}
+
+.statGrid,
+.statGridWide,
+.inspectStats {
+    display: grid;
+    gap: 8px;
+}
+
+.statGrid {
+    grid-template-columns: 1fr;
+}
+
+.statGridWide {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.secondaryStatsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.secondaryStatCard {
+    min-width: 0;
+    display: grid;
+    gap: 3px;
+    align-content: space-between;
+    min-height: 50px;
+    padding: 7px 8px;
+    border-radius: 12px;
+    border: 1px solid rgba(212, 165, 116, 0.12);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
+        rgba(25, 21, 18, 0.9);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.secondaryStatCard span {
+    color: var(--text-soft);
+    font-size: 0.64rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    overflow-wrap: anywhere;
+}
+
+.secondaryStatLabelText {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.64rem;
+ }
+
+.secondaryStatCard strong {
+    color: var(--text-strong);
+    font-size: 0.88rem;
+    line-height: 1;
+}
+
+.statRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 12px;
+    background: var(--panel-soft);
+    color: var(--text-soft);
+    font-size: 0.88rem;
+    min-width: 0;
+}
+
+.statRow strong,
+.summaryCard strong,
+.itemHeader h4,
+.inspectHead h3,
+.enchantTitle strong {
+    color: var(--text-strong);
+}
+
+.filterGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 8px;
+}
+
+.filterGrid > * {
+    min-width: 0;
+}
+
+.filterGrid > :first-child {
+    grid-column: span 2;
+}
+
+.mainStatsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(94px, 1fr));
+    gap: 6px;
+}
+
+.mainStatCard,
+.elementCard,
+.aptitudeRow,
+.aptitudeSection {
+    border-radius: 14px;
+    border: 1px solid rgba(212, 165, 116, 0.1);
+    background: var(--panel-soft);
+}
+
+.mainStatCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 6px;
+    align-items: flex-start;
+    min-height: 58px;
+    padding: 8px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
+        rgba(25, 21, 18, 0.9);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.mainStatCardHead {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+
+.mainStatIcon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    flex-shrink: 0;
+    opacity: 0.92;
+}
+
+.mainStatCard span,
+.averageRow span,
+.aptitudeInfo span,
+.elementValues span {
+    color: var(--text-soft);
+}
+
+.mainStatCard span {
+    font-size: 0.68rem;
+    line-height: 1.15;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.mainStatCard strong,
+.averageRow strong,
+.elementCard strong,
+.aptitudeHeader strong,
+.aptitudeControls strong {
+    color: var(--text-strong);
+}
+
+.mainStatCard strong {
+    font-size: 0.98rem;
+    line-height: 1;
+}
+
+.elementGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+    gap: 6px;
+}
+
+.elementCard {
+    display: grid;
+    gap: 8px;
+    min-height: 92px;
+    padding: 10px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
+        rgba(25, 21, 18, 0.9);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.elementCardHead {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.elementCardIcon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    flex-shrink: 0;
+    opacity: 0.95;
+}
+
+.elementValues {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+.elementValues span {
+    display: grid;
+    gap: 3px;
+    padding: 6px 7px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.elementValues strong {
+    font-size: 0.95rem;
+}
+
+.averageRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+    padding: 9px 10px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.aptitudeLayout {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    align-items: start;
+}
+
+.aptitudeSection {
+    overflow: hidden;
+    min-width: 0;
+    border-radius: 8px;
+    border: 1px solid rgba(212, 165, 116, 0.16);
+    background:
+        radial-gradient(circle at top left, rgba(243, 223, 197, 0.08), transparent 35%),
+        linear-gradient(180deg, rgba(43, 36, 30, 0.96), rgba(26, 21, 18, 0.99));
+    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.22);
+}
+
+.aptitudeSectionHeader {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    min-height: 50px;
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(212, 165, 116, 0.14);
+}
+
+.aptitudeSectionHeader h3,
+.aptitudeSectionHeader strong {
+    margin: 0;
+    color: var(--text-strong);
+}
+
+.aptitudeSectionHeader h3 {
+    font-size: 0.98rem;
+    font-weight: 900;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.aptitudeSectionHeader strong {
+    font-size: 0.95rem;
+}
+
+.aptitudeToneIntelligence {
+    background:
+        linear-gradient(180deg, rgba(70, 61, 52, 0.94), rgba(45, 37, 31, 0.98)),
+        linear-gradient(90deg, rgba(180, 154, 110, 0.22), rgba(104, 87, 61, 0.08));
+}
+
+.aptitudeToneStrength {
+    background:
+        linear-gradient(180deg, rgba(70, 58, 46, 0.94), rgba(45, 36, 29, 0.98)),
+        linear-gradient(90deg, rgba(212, 165, 116, 0.2), rgba(116, 79, 42, 0.08));
+}
+
+.aptitudeToneAgility {
+    background:
+        linear-gradient(180deg, rgba(57, 67, 59, 0.94), rgba(34, 42, 37, 0.98)),
+        linear-gradient(90deg, rgba(135, 180, 154, 0.18), rgba(64, 98, 78, 0.08));
+}
+
+.aptitudeToneChance {
+    background:
+        linear-gradient(180deg, rgba(76, 66, 48, 0.94), rgba(49, 40, 29, 0.98)),
+        linear-gradient(90deg, rgba(214, 183, 112, 0.18), rgba(129, 99, 43, 0.08));
+}
+
+.aptitudeToneMajor {
+    background:
+        linear-gradient(180deg, rgba(56, 63, 74, 0.94), rgba(34, 39, 47, 0.98)),
+        linear-gradient(90deg, rgba(126, 160, 205, 0.18), rgba(65, 82, 109, 0.08));
+}
+
+.aptitudeTable {
+    display: grid;
+    background: transparent;
+    padding: 6px;
+}
+
+.aptitudeTable .aptitudeRows {
+    gap: 4px;
+}
+
+.aptitudeTableHead,
+.aptitudeRow {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) 140px minmax(210px, 1fr);
+    gap: 14px;
+    align-items: center;
+}
+
+.aptitudeTableHead {
+    display: none;
+    padding: 14px 18px;
+    color: rgba(245, 232, 205, 0.86);
+    font-size: 0.83rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border: 1px solid rgba(212, 165, 116, 0.16);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.aptitudeHeader {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+}
+
+.aptitudeRows {
+    display: grid;
+    gap: 8px;
+}
+
+.aptitudeRow {
+    grid-template-columns: minmax(0, 1fr) 74px 138px;
+    min-height: 34px;
+    padding: 6px 8px;
+    border-radius: 0;
+    border: 1px solid rgba(212, 165, 116, 0.16);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03)),
+        rgba(34, 28, 23, 0.96);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+}
+
+.aptitudeRow:hover {
+    transform: translateY(-1px);
+    border-color: rgba(255, 207, 92, 0.3);
+    background:
+        linear-gradient(180deg, rgba(255, 207, 92, 0.08), rgba(255, 255, 255, 0.03)),
+        rgba(38, 31, 25, 0.98);
+}
+
+.aptitudeName {
+    min-width: 0;
+    color: var(--text-strong);
+    font-size: 0.88rem;
+    font-weight: 700;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+}
+
+.aptitudeLimit {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.aptitudeValueCell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.aptitudePill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 24px;
+    padding: 0 8px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.aptitudePillLimit {
+    background: rgba(212, 165, 116, 0.16);
+    border: 1px solid rgba(212, 165, 116, 0.22);
+    color: #f3d8ac;
+}
+
+.aptitudePillActive {
+    background: rgba(120, 177, 103, 0.18);
+    border: 1px solid rgba(120, 177, 103, 0.24);
+    color: #cfe8be;
+}
+
+.aptitudePillSoft {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: var(--text-soft);
+}
+
+.aptitudeControls {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-strong);
+    padding: 2px 4px;
+    border-radius: 999px;
+    border: 1px solid rgba(212, 165, 116, 0.14);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.aptitudeButton {
+    width: 24px;
+    height: 24px;
+    border: 1px solid rgba(212, 165, 116, 0.2);
+    border-radius: 6px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)),
+        rgba(50, 40, 29, 0.95);
+    color: var(--text-strong);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 800;
+    line-height: 1;
+    transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+}
+
+.aptitudeButton:hover {
+    transform: translateY(-1px);
+    border-color: rgba(255, 207, 92, 0.34);
+    background:
+        linear-gradient(180deg, rgba(255, 207, 92, 0.12), rgba(255, 255, 255, 0.04)),
+        rgba(58, 47, 34, 0.98);
+}
+
+.aptitudeControls strong {
+    min-width: 2ch;
+    text-align: center;
+    font-size: 0.86rem;
+    color: #fff5df;
+}
+
+.aptitudeSummarySection {
+    min-height: 100%;
+}
+
+.aptitudeSummaryBody {
+    display: grid;
+    gap: 6px;
+    padding: 8px;
+    align-content: start;
+}
+
+.aptitudeToneSummary {
+    background:
+        linear-gradient(180deg, rgba(54, 48, 40, 0.94), rgba(31, 26, 21, 0.98)),
+        linear-gradient(90deg, rgba(212, 165, 116, 0.18), rgba(104, 87, 61, 0.08));
+}
+
+.catalogList,
+.enchantList {
+    display: grid;
+    gap: 10px;
+}
+
+.catalogList {
+    max-height: calc(100vh - 290px);
+    overflow: auto;
+    padding-right: 2px;
+}
+
+.itemCard {
+    display: grid;
+    grid-template-columns: 54px minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+    padding: 10px;
+    border-radius: 14px;
+    border: 1px solid rgba(212, 165, 116, 0.1);
+    background: var(--panel-soft);
+    cursor: pointer;
+}
+
+.itemCardPreview {
+    border-color: rgba(255, 207, 92, 0.55);
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 207, 92, 0.14),
+        0 0 0 1px rgba(255, 207, 92, 0.22);
+}
+
+.itemCard.itemCardInvalid {
+    border-color: rgba(219, 92, 92, 0.34);
+    background:
+        linear-gradient(180deg, rgba(190, 54, 54, 0.12), rgba(255, 255, 255, 0.02)),
+        rgba(52, 20, 20, 0.86);
+    box-shadow: none;
+}
+
+.itemIconBox,
+.inspectIconBox {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    background:
+        radial-gradient(circle at top, rgba(255, 214, 121, 0.2), transparent 55%),
+        linear-gradient(180deg, rgba(105, 86, 50, 0.36), rgba(38, 31, 24, 0.94));
+    color: #1d130e;
+    font-weight: 800;
+}
+
+.itemIconBox {
+    width: 54px;
+    height: 54px;
+}
+
+.itemIconImg,
+.inspectIconImg,
+.enchantIconImg {
+    display: block;
+    object-fit: contain;
+}
+
+.itemIconImg {
+    width: 40px;
+    height: 40px;
+}
+
+.itemBody {
+    min-width: 0;
+    display: grid;
+    gap: 6px;
+}
+
+.itemHeader {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    align-items: start;
+    flex-wrap: wrap;
+}
+
+.itemHeader h4 {
+    margin: 0;
+    font-size: 0.94rem;
+    line-height: 1.05;
+}
+
+.itemHeader p,
+.inspectHead p,
+.inspectDescription,
+.enchantTitle span,
+.emptyState {
+    color: var(--text-soft);
+}
+
+.itemConditionWarning {
+    padding: 9px 11px;
+    border-radius: 12px;
+    border: 1px solid rgba(219, 92, 92, 0.34);
+    background: rgba(122, 28, 28, 0.22);
+    color: #ffb4b4;
+    font-size: 0.82rem;
+    line-height: 1.35;
+}
+
+.itemHeader p,
+.inspectHead p {
+    margin: 4px 0 0;
+    font-size: 0.85rem;
+}
+
+.statChips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.statChip,
+.rarityTag {
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+}
+
+.statChip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 8px;
+    border: 1px solid rgba(212, 165, 116, 0.12);
+    background: rgba(255, 255, 255, 0.045);
+    color: #f0e5d0;
+}
+
+.statChipValue {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.statChipIcon {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    opacity: 0.9;
+}
+
+.rarityTag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 11px;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+}
+
+.emptyState {
+    padding: 16px;
+    border-radius: 16px;
+    border: 1px dashed rgba(212, 165, 116, 0.2);
+    background: rgba(255, 255, 255, 0.02);
+    text-align: center;
+    line-height: 1.45;
+}
+
+.enchantRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    padding: 12px;
+    border-radius: 16px;
+    background: var(--panel-soft);
+    flex-wrap: wrap;
+}
+
+.enchantTitle {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+}
+
+.enchantIconImg {
+    width: 34px;
+    height: 34px;
+}
+
+.summaryGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 12px;
+}
+
+.summaryLayout {
+    display: grid;
+    gap: 12px;
+}
+
+.summaryPanel {
+    padding: 14px 16px;
+}
+
+.summaryHero {
+    display: grid;
+    gap: 12px;
+    overflow: hidden;
+}
+
+.summaryHeroHead {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.summaryHeroIdentity {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.summaryHeroPortrait {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    border: 1px solid rgba(212, 165, 116, 0.18);
+    background:
+        radial-gradient(circle at top, rgba(255, 207, 92, 0.18), transparent 58%),
+        linear-gradient(180deg, rgba(72, 60, 46, 0.95), rgba(28, 23, 18, 0.98));
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.summaryHeroPortraitImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.summaryHeroCopy {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+}
+
+.summaryHeroCopy h3 {
+    margin: 0;
+    color: var(--text-strong);
+    font-size: 1.08rem;
+}
+
+.summaryHeroCopy p {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: 0.84rem;
+}
+
+.summaryHeroMeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.summaryMetaChip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 0 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(212, 165, 116, 0.16);
+    background: rgba(255, 255, 255, 0.045);
+    color: var(--text-strong);
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.summaryPrimaryStrip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
+}
+
+.summaryPrimaryCard {
+    display: grid;
+    gap: 6px;
+    min-height: 68px;
+    padding: 10px 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(212, 165, 116, 0.12);
+    background:
+        radial-gradient(circle at top right, rgba(255, 207, 92, 0.08), transparent 54%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
+        rgba(25, 21, 18, 0.9);
+}
+
+.summaryPrimaryCard span {
+    color: var(--text-soft);
+    font-size: 0.68rem;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.summaryPrimaryCard strong {
+    color: var(--text-strong);
+    font-size: 1.02rem;
+    line-height: 1;
+}
+
+.summarySectionsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    align-items: start;
+}
+
+.summarySectionPanel {
+    display: grid;
+    gap: 10px;
+    align-self: start;
+}
+
+.summarySectionPanel h3 {
+    margin: 0;
+    color: var(--text-strong);
+    font-size: 0.95rem;
+}
+
+.summaryElementGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    align-content: start;
+}
+
+.summaryStatsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 8px;
+}
+
+.summaryStatCard {
+    min-width: 0;
+    display: grid;
+    gap: 4px;
+    min-height: 54px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(212, 165, 116, 0.12);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
+        rgba(25, 21, 18, 0.9);
+}
+
+.summaryStatLabel {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.66rem;
+    line-height: 1.2;
+}
+
+.summaryStatCard strong {
+    color: var(--text-strong);
+    font-size: 0.92rem;
+    line-height: 1;
+}
+
+.summaryEnchantmentsGrid {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    align-content: start;
+}
+
+.summaryEnchantmentCard {
+    display: grid;
+    gap: 7px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(212, 165, 116, 0.12);
+    background: var(--panel-soft);
+}
+
+.summaryEnchantmentHead {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: baseline;
+}
+
+.summaryEnchantmentCard strong {
+    color: var(--text-strong);
+    font-size: 0.9rem;
+}
+
+.summaryEnchantmentHead small {
+    color: var(--text-soft);
+    font-size: 0.72rem;
+}
+
+.summaryTagList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.summaryTag,
+.summaryTagMuted {
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    padding: 0 8px;
+    border-radius: 999px;
+    border: 1px solid rgba(212, 165, 116, 0.14);
+    background: rgba(255, 255, 255, 0.045);
+    color: var(--text-strong);
+    font-size: 0.76rem;
+}
+
+.summaryTagMuted {
+    color: var(--text-soft);
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.summarySecondaryGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 8px;
+    align-content: start;
+}
+
+.summarySecondaryCard {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+    min-height: 46px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(212, 165, 116, 0.12);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02)),
+        rgba(25, 21, 18, 0.9);
+}
+
+.summarySecondaryCard strong {
+    color: var(--text-strong);
+    font-size: 0.9rem;
+    line-height: 1;
+}
+
+.summaryCard {
+    display: grid;
+    gap: 8px;
+    padding: 14px;
+    border-radius: 16px;
+    background: var(--panel-soft);
+    border: 1px solid rgba(212, 165, 116, 0.12);
+}
+
+.summaryCard strong {
+    font-size: 1rem;
+}
+
+.inspectCard {
+    display: grid;
+    gap: 14px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    border: 1px solid transparent;
+}
+
+.inspectCardInvalid {
+    padding: 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(219, 92, 92, 0.3);
+    background:
+        linear-gradient(180deg, rgba(190, 54, 54, 0.1), rgba(255, 255, 255, 0.02)),
+        rgba(44, 15, 15, 0.55);
+}
+
+.inspectActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.inspectHead {
+    display: grid;
+    grid-template-columns: 76px minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+}
+
+.inspectIconBox {
+    width: 76px;
+    height: 76px;
+}
+
+.inspectIconImg {
+    width: 58px;
+    height: 58px;
+}
+
+.inspectDescription {
+    margin: 0;
+    font-size: 0.93rem;
+    line-height: 1.5;
+}
+
+.compareCard {
+    display: grid;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid transparent;
+}
+
+.compareList {
+    display: grid;
+    gap: 10px;
+}
+
+.compareHead {
+    display: grid;
+    gap: 8px;
+}
+
+.compareSectionLabel {
+    margin: 6px 0 0;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-soft);
+}
+
+.compareTitles {
+    display: grid;
+    gap: 4px;
+}
+
+.compareTitles strong {
+    color: var(--text-strong);
+}
+
+.compareTitles span {
+    color: var(--text-soft);
+    font-size: 0.88rem;
+}
+
+.compareRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid transparent;
+    font-size: 0.92rem;
+}
+
+.compareStatLabel {
+    min-width: 0;
+    text-align: left;
+}
+
+.compareStatIcon {
+    width: 18px;
+    height: 18px;
+}
+
+.comparePositive {
+    background: rgba(95, 188, 102, 0.12);
+    border-color: rgba(95, 188, 102, 0.24);
+    color: #c6f0c7;
+}
+
+.compareNegative {
+    background: rgba(226, 86, 86, 0.12);
+    border-color: rgba(226, 86, 86, 0.24);
+    color: #ffc5c5;
+}
+
+.rarityCommon {
+    background: rgba(220, 224, 230, 0.12);
+    border-color: rgba(220, 224, 230, 0.34);
+    color: #e7eaef;
+}
+
+.rarityUncommon {
+    background: rgba(95, 188, 102, 0.16);
+    border-color: rgba(95, 188, 102, 0.42);
+    color: #9ce59e;
+}
+
+.rarityMythic {
+    background: rgba(240, 140, 52, 0.16);
+    border-color: rgba(240, 140, 52, 0.44);
+    color: #ffb36b;
+}
+
+.rarityLegendary {
+    background: rgba(247, 216, 84, 0.16);
+    border-color: rgba(247, 216, 84, 0.44);
+    color: #ffe47a;
+}
+
+.rarityEpic {
+    background: rgba(237, 104, 170, 0.16);
+    border-color: rgba(237, 104, 170, 0.44);
+    color: #ff9bcc;
+}
+
+.rarityRelic {
+    background: rgba(154, 98, 231, 0.16);
+    border-color: rgba(154, 98, 231, 0.44);
+    color: #c6a0ff;
+}
+
+.raritySouvenir {
+    background: rgba(107, 214, 242, 0.16);
+    border-color: rgba(107, 214, 242, 0.44);
+    color: #8ee9ff;
+}
+
+/* Fondos por rareza (catalogo, slots, inspeccion, encantamientos, comparacion) */
+.raritySurfaceCommon {
+    background:
+        linear-gradient(180deg, rgba(220, 224, 230, 0.11), rgba(255, 255, 255, 0.03)),
+        rgba(34, 32, 30, 0.96);
+    border-color: rgba(220, 224, 230, 0.26);
+}
+
+.raritySurfaceUncommon {
+    background:
+        linear-gradient(180deg, rgba(95, 188, 102, 0.14), rgba(255, 255, 255, 0.02)),
+        rgba(22, 32, 26, 0.96);
+    border-color: rgba(95, 188, 102, 0.34);
+}
+
+.raritySurfaceMythic {
+    background:
+        linear-gradient(180deg, rgba(240, 140, 52, 0.14), rgba(255, 255, 255, 0.02)),
+        rgba(36, 28, 20, 0.96);
+    border-color: rgba(240, 140, 52, 0.36);
+}
+
+.raritySurfaceLegendary {
+    background:
+        linear-gradient(180deg, rgba(247, 216, 84, 0.13), rgba(255, 255, 255, 0.02)),
+        rgba(38, 34, 22, 0.96);
+    border-color: rgba(247, 216, 84, 0.34);
+}
+
+.raritySurfaceEpic {
+    background:
+        linear-gradient(180deg, rgba(237, 104, 170, 0.14), rgba(255, 255, 255, 0.02)),
+        rgba(36, 24, 30, 0.96);
+    border-color: rgba(237, 104, 170, 0.36);
+}
+
+.raritySurfaceRelic {
+    background:
+        linear-gradient(180deg, rgba(154, 98, 231, 0.14), rgba(255, 255, 255, 0.02)),
+        rgba(30, 24, 38, 0.96);
+    border-color: rgba(154, 98, 231, 0.36);
+}
+
+.raritySurfaceSouvenir {
+    background:
+        linear-gradient(180deg, rgba(107, 214, 242, 0.12), rgba(255, 255, 255, 0.02)),
+        rgba(22, 32, 38, 0.96);
+    border-color: rgba(107, 214, 242, 0.34);
+}
+
+@media (max-width: 1360px) {
+    .pageShell {
+        width: min(1480px, calc(100vw - 24px));
+        max-width: min(1480px, calc(100vw - 24px));
+    }
+
+    .topBuilder {
+        grid-template-columns: 1fr;
+    }
+
+    .topBuilderBackdropFigurePrimary {
+        width: min(44vw, 380px);
+        max-width: 52%;
+        opacity: 1;
+    }
+
+    .topBuilderBackdropFigureSecondary {
+        right: 170px;
+        top: 2px;
+        width: min(28vw, 236px);
+        max-width: 30%;
+        opacity: 1;
+    }
+
+    .topActions {
+        padding-top: 0;
+        justify-self: stretch;
+        justify-content: flex-start;
+    }
+
+    .topEquipment {
+        grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+    }
+
+    .contentGrid {
+        grid-template-columns: minmax(220px, 250px) minmax(0, 1fr);
+    }
+
+    .rightRail {
+        position: static;
+        max-height: none;
+        overflow: visible;
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 980px) {
+    .tabBar,
+    .filterGrid,
+    .summaryGrid,
+    .statGridWide,
+    .mainStatsGrid,
+    .elementGrid,
+    .aptitudeLayout,
+    .topControls,
+    .contentGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .topEquipment {
+        grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+    }
+
+    .summarySectionsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .summaryElementGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .topBuilderBackdropFigureSecondary {
+        display: none;
+    }
+
+    .topBuilderBackdropFigurePrimary {
+        right: -34px;
+        top: -2px;
+        width: min(56vw, 300px);
+        max-width: 58%;
+        opacity: 1;
+    }
+
+    .topBuilderBackdropWash {
+        background:
+            linear-gradient(180deg, rgba(24, 20, 17, 0.04) 0%, rgba(24, 20, 17, 0.16) 44%, rgba(24, 20, 17, 0.46) 100%);
+    }
+
+    .topControls {
+        flex-wrap: wrap;
+    }
+
+    .levelTopControl {
+        width: 100%;
+        flex: 1 1 100%;
+    }
+
+    .filterGrid > :first-child {
+        grid-column: span 1;
+    }
+
+    .leftRail,
+    .rightRail {
+        position: static;
+        max-height: none;
+        overflow: visible;
+    }
+
+    .preferencePanel,
+    .preferenceSelectors {
+        grid-template-columns: 1fr;
+    }
+
+    .contentGridCharacteristics {
+        grid-template-columns: 1fr;
+        grid-template-areas: "center";
+    }
+
+    .aptitudeLayout {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .aptitudeTableHead,
+    .aptitudeRow {
+        grid-template-columns: minmax(0, 1fr) 132px;
+    }
+
+    .aptitudeTableHead span:last-child,
+    .aptitudeLimit {
+        justify-self: start;
+    }
+
+    .aptitudeValueCell {
+        grid-column: 1 / -1;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .itemCard {
+        grid-template-columns: 62px minmax(0, 1fr);
+    }
+
+    .itemCard > button {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 640px) {
+    .pageShell {
+        width: min(calc(100vw - 12px), 100%);
+        max-width: min(calc(100vw - 12px), 100%);
+    }
+
+    .topBuilder,
+    .panel {
+        padding: 14px;
+    }
+
+    .identity {
+        grid-template-columns: 72px minmax(0, 1fr);
+    }
+
+    .classPortrait {
+        width: 72px;
+        height: 72px;
+    }
+
+    .secondaryStatsGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .summaryHeroHead {
+        align-items: flex-start;
+    }
+
+    .summaryPrimaryStrip,
+    .summaryElementGrid,
+    .summarySecondaryGrid,
+    .summaryEnchantmentsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .topEquipment {
+        grid-template-columns: repeat(auto-fit, minmax(68px, 1fr));
+    }
+
+    .itemCard,
+    .enchantRow,
+    .enchantTitle,
+    .inspectHead {
+        grid-template-columns: 1fr;
+    }
+
+    .aptitudeLayout {
+        grid-template-columns: 1fr;
+    }
+
+    .aptitudeTableHead,
+    .aptitudeRow {
+        grid-template-columns: 1fr;
+    }
+
+    .aptitudeTableHead span:nth-child(2) {
+        display: none;
+    }
+
+    .aptitudeLimit {
+        display: none;
+    }
+
+    .aptitudeValueCell {
+        grid-column: auto;
+        flex-wrap: wrap;
+        align-items: stretch;
+    }
+
+    .enchantRow {
+        display: grid;
+        justify-content: stretch;
+    }
+
+    .itemHeader {
+        display: grid;
+    }
+}
+
+/* --- Encantamientos (runas / sublimaciones) --- */
+.enchantmentPanelHostHidden {
+    display: none !important;
+}
+
+.enchantmentLayout {
+    display: grid;
+    grid-template-columns: minmax(252px, 0.85fr) minmax(0, 1.45fr);
+    gap: 12px;
+    align-items: start;
+    width: 100%;
+}
+
+.enchantmentColumn {
+    padding: 16px 18px;
+}
+
+.enchantmentColumnTitle {
+    margin: 0 0 12px;
+    font-size: 1.05rem;
+    color: var(--text-strong);
+}
+
+.enchantmentHelp {
+    margin: 0 0 14px;
+    font-size: 0.86rem;
+    color: var(--text-soft);
+    line-height: 1.45;
+}
+
+.enchantmentHelp code {
+    font-size: 0.82rem;
+    color: rgba(239, 227, 208, 0.88);
+}
+
+.enchantmentMyList {
+    display: grid;
+    gap: 10px;
+}
+
+.enchantmentGearRow {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(160px, 0.45fr);
+    gap: 12px;
+    align-items: start;
+    padding: 12px;
+    border-radius: 16px;
+    border: 1px solid var(--panel-border);
+}
+
+.enchantmentGearRowSelected {
+    border-color: rgba(255, 207, 92, 0.32);
+    box-shadow: 0 0 0 1px rgba(255, 207, 92, 0.16);
+}
+
+.enchantmentNoSlots {
+    font-size: 0.88rem;
+    color: var(--text-soft);
+    padding: 8px 0;
+}
+
+.enchantmentRuneStrip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.runeSlotBlock {
+    display: grid;
+    gap: 4px;
+    min-width: 108px;
+}
+
+.runeSlot {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    border: 1px dashed rgba(239, 227, 208, 0.2);
+}
+
+.runeSlotDisabled {
+    opacity: 0.28;
+    pointer-events: none;
+}
+
+.runeGem {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
+}
+
+.runeGemSmall {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.runeColor0 {
+    background: linear-gradient(145deg, #f5f0e4, #c8c2b6);
+}
+
+.runeColor1 {
+    background: linear-gradient(145deg, #e85d5d, #8f2020);
+}
+
+.runeColor2 {
+    background: linear-gradient(145deg, #5dd68f, #1e6b3f);
+}
+
+.runeColor3 {
+    background: linear-gradient(145deg, #6bb7ff, #1e5a9c);
+}
+
+.runeSelect,
+.runeLevelSelect {
+    width: 100%;
+    font-size: 0.78rem;
+    padding: 4px 6px;
+    border-radius: 8px;
+    border: 1px solid rgba(212, 165, 116, 0.22);
+    background: rgba(0, 0, 0, 0.25);
+    color: var(--text-strong);
+}
+
+.runeLevelLabel {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--text-soft);
+}
+
+.sublimationSlot {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid rgba(212, 165, 116, 0.35);
+    background:
+        radial-gradient(circle at 30% 20%, rgba(255, 220, 160, 0.25), transparent 55%),
+        linear-gradient(160deg, rgba(80, 60, 40, 0.9), rgba(30, 22, 16, 0.95));
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+}
+
+.enchantmentGearMeta {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+}
+
+.enchantmentGearName {
+    font-weight: 700;
+    color: var(--text-strong);
+    font-size: 0.92rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.enchantmentGearSlots {
+    font-size: 0.8rem;
+    color: var(--text-soft);
+}
+
+.sublimationSelect {
+    width: 100%;
+    font-size: 0.8rem;
+    padding: 6px 8px;
+    border-radius: 10px;
+    border: 1px solid rgba(212, 165, 116, 0.22);
+    background: rgba(0, 0, 0, 0.28);
+    color: var(--text-strong);
+}
+
+.enchantmentCatalog {
+    display: grid;
+    gap: 14px;
+    max-height: min(70vh, 720px);
+    overflow: auto;
+    padding-right: 4px;
+}
+
+.enchantmentCatalogGroupTitle {
+    margin: 0 0 8px;
+    font-size: 0.95rem;
+    color: var(--text-strong);
+}
+
+.enchantmentStatList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.enchantmentStatRow {
+    display: grid;
+    grid-template-columns: 16px minmax(0, 1fr);
+    gap: 8px 10px;
+    align-items: start;
+    font-size: 0.86rem;
+    color: var(--text-soft);
+}
+
+.enchantmentStatName {
+    color: var(--text-strong);
+    font-weight: 600;
+    font-size: 0.88rem;
+}
+
+.enchantmentStatMeta {
+    margin-top: 2px;
+    font-size: 0.78rem;
+    opacity: 0.9;
+}
+
+@media (max-width: 1100px) {
+    .enchantmentLayout {
+        grid-template-columns: 1fr;
+    }
+
+    .enchantmentGearRow {
+        grid-template-columns: 1fr;
+    }
+
+    .enchantmentSidebar {
+        position: static;
+        max-height: none;
+        overflow: visible;
+        padding-right: 0;
+    }
+
+    .enchantmentRunesColumn {
+        max-height: none;
+    }
+
+    .enchantmentRunesColumn .enchantmentMyList {
+        overflow-y: visible;
+    }
+}
+
+.enchantmentSidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-width: 0;
+    position: sticky;
+    top: 12px;
+    align-self: start;
+    max-height: min(calc(100vh - 96px), 920px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-right: 4px;
+    scrollbar-gutter: stable;
+}
+
+.enchantmentSublimationPanel {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    flex: 1;
+    padding: 10px 12px;
+    gap: 0;
+}
+
+.enchantmentSublimationPanel .enchantmentHeaderRow {
+    margin-bottom: 8px;
+}
+
+.enchantmentSublimationPanel .enchantmentHelp {
+    margin: 4px 0 0;
+    font-size: 0.82rem;
+    line-height: 1.35;
+}
+
+.enchantmentSublimationPanel .selectedEquipmentSummary {
+    padding: 8px 10px;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.enchantmentSublimationPanel .sublimationToolbar {
+    margin-bottom: 6px;
+}
+
+.enchantmentSublimationPanel .sublimationCatalogList {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.enchantmentSublimationPanel .sublimationCatalogScroll {
+    flex: 1;
+    min-height: clamp(180px, 24vh, 320px);
+    max-height: none;
+    gap: 8px;
+}
+
+.enchantmentRunesColumn {
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 12px;
+    max-height: min(calc(100vh - 96px), 920px);
+}
+
+.enchantmentRunesColumn .enchantmentHeaderRow {
+    flex-shrink: 0;
+    margin-bottom: 6px;
+}
+
+.enchantmentRunesColumn .enchantmentHelp {
+    margin: 4px 0 0;
+    font-size: 0.82rem;
+    line-height: 1.35;
+}
+
+.enchantmentRunesColumn .enchantmentMyList {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 4px;
+    gap: 8px;
+}
+
+.enchantmentHeaderRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: start;
+    flex-wrap: wrap;
+}
+
+.enchantmentColumnTitle {
+    margin: 0;
+}
+
+.enchantmentHelp {
+    margin: 8px 0 0;
+}
+
+.enchantmentGearRow {
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 14px;
+    border: 1px solid rgba(212, 165, 116, 0.14);
+    grid-template-columns: 1fr;
+}
+
+.enchantmentZenithRow {
+    display: grid;
+    grid-template-columns: minmax(0, 1.72fr) minmax(176px, 0.92fr) minmax(44px, 0.38fr);
+    gap: 8px;
+    align-items: center;
+}
+
+.enchantmentGearMeta {
+    gap: 10px;
+}
+
+.enchantmentGearHeading {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0;
+    min-width: 0;
+}
+
+.enchantmentGearName {
+    font-size: 0.96rem;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+}
+
+.enchantmentGearSlots,
+.enchantmentHint,
+.runeSlotValue,
+.sublimationPattern,
+.sublimationCatalogMain span,
+.enchantmentNoSlots {
+    font-size: 0.8rem;
+    color: var(--text-soft);
+}
+
+.enchantmentRuneStrip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    align-items: stretch;
+}
+
+.runeSlotBlock {
+    gap: 8px;
+    min-width: 0;
+    padding: 10px;
+    border-radius: 14px;
+    border: 1px solid rgba(212, 165, 116, 0.14);
+    background: rgba(16, 13, 11, 0.44);
+}
+
+.runeSlotDisabled {
+    min-height: 152px;
+}
+
+.runeSlotHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.runeSlotHeader strong,
+.sublimationCatalogMain strong {
+    color: var(--text-strong);
+    font-size: 0.84rem;
+}
+
+.runeGem {
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.runeSelect,
+.runeLevelSelect,
+.sublimationSelect,
+.sublimationSearch {
+    width: 100%;
+    min-width: 0;
+    font-size: 0.8rem;
+    padding: 7px 9px;
+    border-radius: 10px;
+    border: 1px solid rgba(212, 165, 116, 0.22);
+    background: rgba(0, 0, 0, 0.28);
+    color: var(--text-strong);
+    outline: none;
+}
+
+.runeLevelLabel {
+    display: grid;
+    gap: 4px;
+    font-size: 0.74rem;
+}
+
+.enchantmentTotalsRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.enchantmentTotalChip,
+.sublimationTier {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 0 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(212, 165, 116, 0.16);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-strong);
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.sublimationSection {
+    display: grid;
+    gap: 8px;
+    padding-top: 4px;
+    border-top: 1px solid rgba(212, 165, 116, 0.12);
+}
+
+.sublimationHeader {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+
+.sublimationTitle {
+    color: var(--text-strong);
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.sublimationCatalogList {
+    display: grid;
+    gap: 12px;
+    overflow: visible;
+    min-width: 0;
+}
+
+.sublimationCatalogScroll {
+    display: grid;
+    gap: 12px;
+    max-height: min(70vh, 720px);
+    overflow-x: visible;
+    overflow-y: auto;
+    padding-right: 4px;
+    min-width: 0;
+}
+
+.enchantmentCatalogGroup {
+    display: grid;
+    gap: 8px;
+}
+
+.enchantmentCatalogGroupTitle {
+    margin: 0;
+}
+
+.sublimationCatalogRow {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: start;
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid transparent;
+    text-align: left;
+    color: inherit;
+}
+
+.sublimationCatalogRowActive {
+    border-color: rgba(255, 207, 92, 0.34);
+    background: rgba(255, 207, 92, 0.08);
+}
+
+.sublimationIconBox {
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background:
+        radial-gradient(circle at top, rgba(255, 214, 121, 0.2), transparent 55%),
+        linear-gradient(180deg, rgba(105, 86, 50, 0.36), rgba(38, 31, 24, 0.94));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    overflow: hidden;
+}
+
+.sublimationIcon {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+    display: block;
+}
+
+.sublimationIconFallback {
+    color: var(--text-strong);
+    font-weight: 800;
+    font-size: 1rem;
+}
+
+.sublimationCatalogMain {
+    min-width: 0;
+    display: grid;
+    gap: 4px;
+}
+
+@media (max-width: 1100px) {
+    .enchantmentLayout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 760px) {
+    .enchantmentRuneStrip,
+    .sublimationCatalogRow {
+        grid-template-columns: 1fr;
+    }
+
+    .sublimationIconBox {
+        width: 44px;
+        height: 44px;
+    }
+}
+
+.compactSocketRow {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
+    align-items: stretch;
+    min-width: 0;
+}
+
+.compactSocketButton {
+    flex: 1 1 0;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 7px;
+    align-items: center;
+    padding: 7px 8px;
+    border-radius: 10px;
+    border: 1px solid rgba(212, 165, 116, 0.14);
+    background: rgba(18, 14, 12, 0.56);
+    color: var(--text-strong);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.16s ease, transform 0.16s ease, background 0.16s ease;
+}
+
+.compactSocketButton:hover,
+.compactSocketButtonActive {
+    border-color: rgba(255, 207, 92, 0.34);
+    transform: translateY(-1px);
+    background: rgba(38, 30, 24, 0.82);
+}
+
+.compactSocketVisual {
+    position: relative;
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.compactSocketGemImage {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.28));
+}
+
+.compactSocketLevelBadge {
+    position: absolute;
+    right: -4px;
+    bottom: -4px;
+    min-width: 14px;
+    height: 14px;
+    padding: 0 3px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff2d4;
+    font-size: 0.58rem;
+    line-height: 14px;
+    text-align: center;
+    border: 1px solid rgba(212, 165, 116, 0.2);
+}
+
+.compactSocketCopy {
+    min-width: 0;
+    display: grid;
+    gap: 1px;
+}
+
+.compactSocketCopy strong,
+.socketEditorHeader strong {
+    color: var(--text-strong);
+    font-size: 0.74rem;
+}
+
+.compactSocketCopy span,
+.compactSocketCopy small,
+.socketEditorHeader span {
+    color: var(--text-soft);
+    font-size: 0.68rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sublimationMiniCard {
+    min-width: 0;
+    align-self: stretch;
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr) auto;
+    gap: 8px;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(212, 165, 116, 0.14);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
+        rgba(19, 15, 12, 0.72);
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+}
+
+.sublimationMiniCard:hover,
+.sublimationMiniCardActive {
+    transform: translateY(-1px);
+    border-color: rgba(255, 207, 92, 0.34);
+    background:
+        linear-gradient(180deg, rgba(255, 207, 92, 0.12), rgba(255, 255, 255, 0.03)),
+        rgba(32, 25, 20, 0.92);
+}
+
+.sublimationMiniIconWrap {
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background:
+        radial-gradient(circle at top, rgba(255, 214, 121, 0.18), transparent 55%),
+        linear-gradient(180deg, rgba(98, 80, 48, 0.4), rgba(34, 28, 22, 0.96));
+    overflow: hidden;
+}
+
+.sublimationMiniIcon {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    display: block;
+}
+
+.sublimationMiniFallback {
+    color: var(--text-strong);
+    font-weight: 800;
+    font-size: 0.9rem;
+}
+
+.sublimationMiniCopy {
+    min-width: 0;
+    display: grid;
+    gap: 2px;
+}
+
+.sublimationMiniCopy strong {
+    color: var(--text-strong);
+    font-size: 0.78rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sublimationMiniCopy span {
+    color: var(--text-soft);
+    font-size: 0.68rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sublimationMiniTier {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 0 8px;
+    border-radius: 999px;
+    border: 1px solid rgba(212, 165, 116, 0.16);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-strong);
+    font-size: 0.68rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.sublimationMiniStack {
+    min-width: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.enchantmentCompactTop {
+    display: grid;
+    gap: 8px;
+}
+
+.enchantmentItemIdentity {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 8px;
+    align-items: center;
+}
+
+.enchantmentItemIconOnlyWrap {
+    flex-shrink: 0;
+}
+
+.enchantmentItemIconBox {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background:
+        radial-gradient(circle at top, rgba(255, 214, 121, 0.2), transparent 55%),
+        linear-gradient(180deg, rgba(105, 86, 50, 0.36), rgba(38, 31, 24, 0.94));
+    overflow: hidden;
+}
+
+.enchantmentItemIcon {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    display: block;
+}
+
+.enchantmentItemIconFallback {
+    color: var(--text-strong);
+    font-weight: 800;
+    font-size: 0.95rem;
+}
+
+.enchantmentItemCopy {
+    min-width: 0;
+    display: grid;
+    gap: 2px;
+}
+
+.socketEditorCard {
+    display: grid;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 14px;
+    border: 1px solid rgba(212, 165, 116, 0.16);
+    background: rgba(16, 12, 10, 0.68);
+}
+
+.socketEditorHeader {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+
+.colorPills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.colorPill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 30px;
+    padding: 0 9px;
+    border-radius: 999px;
+    border: 1px solid rgba(212, 165, 116, 0.14);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-soft);
+    cursor: pointer;
+}
+
+.colorPillActive {
+    border-color: rgba(255, 207, 92, 0.34);
+    color: var(--text-strong);
+    background: rgba(255, 207, 92, 0.1);
+}
+
+.colorPillGemImage {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.28));
+}
+
+.socketEditorGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 140px;
+    gap: 10px;
+}
+
+.socketEditorField {
+    display: grid;
+    gap: 5px;
+}
+
+.compactSelect {
+    width: 100%;
+}
+
+.compactSelectMenu {
+    max-height: 260px;
+    overflow: auto;
+}
+
+.tooltipAnchor {
+    position: relative;
+}
+
+.hoverCard {
+    position: absolute;
+    left: 0;
+    top: calc(100% + 10px);
+    z-index: 15000;
+    width: min(320px, 72vw);
+    display: none;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(212, 165, 116, 0.2);
+    background:
+        linear-gradient(180deg, rgba(47, 39, 31, 0.98), rgba(24, 19, 15, 0.99));
+    box-shadow: 0 18px 34px rgba(0, 0, 0, 0.35);
+}
+
+.tooltipAnchor:hover .hoverCard {
+    display: grid;
+}
+
+.hoverCard p {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: 0.78rem;
+    line-height: 1.45;
+}
+
+.sublimationTooltipPortal {
+    position: fixed;
+    z-index: 15000;
+    width: min(320px, calc(100vw - 16px));
+    display: grid;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(212, 165, 116, 0.2);
+    background:
+        linear-gradient(180deg, rgba(47, 39, 31, 0.98), rgba(24, 19, 15, 0.99));
+    box-shadow: 0 18px 34px rgba(0, 0, 0, 0.35);
+    pointer-events: auto;
+}
+
+.builderItemHoverAnchor {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    vertical-align: middle;
+}
+
+.builderItemTooltipPortal {
+    position: fixed;
+    z-index: 15000;
+    width: min(320px, calc(100vw - 16px));
+    max-height: min(72vh, 520px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: grid;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(212, 165, 116, 0.2);
+    background:
+        linear-gradient(180deg, rgba(47, 39, 31, 0.98), rgba(24, 19, 15, 0.99));
+    box-shadow: 0 18px 34px rgba(0, 0, 0, 0.35);
+    pointer-events: auto;
+}
+
+.builderItemTooltipPortal strong {
+    color: var(--text-strong);
+    font-size: 0.92rem;
+}
+
+.builderItemTooltipMeta {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--text-soft);
+}
+
+.builderItemTooltipPortal p {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: 0.78rem;
+    line-height: 1.45;
+}
+
+.sublimationTooltipMuted {
+    margin: 0;
+    font-size: 0.78rem;
+    color: var(--text-soft);
+}
+
+.sublimationTooltipDescription {
+    margin: 0 0 8px;
+    font-size: 0.78rem;
+    color: var(--text-soft);
+    line-height: 1.45;
+    white-space: pre-line;
+}
+
+.hoverCardStats {
+    display: grid;
+    gap: 6px;
+}
+
+.hoverCardRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    color: var(--text-soft);
+    font-size: 0.78rem;
+}
+
+.hoverCardRow strong,
+.selectedEquipmentCopy strong {
+    color: var(--text-strong);
+}
+
+.socketEditorField span {
+    color: var(--text-soft);
+    font-size: 0.74rem;
+}
+
+.levelStepper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 36px;
+    padding: 0 6px;
+    border-radius: 10px;
+    border: 1px solid rgba(212, 165, 116, 0.18);
+    background: rgba(0, 0, 0, 0.24);
+}
+
+.levelStepper strong {
+    color: var(--text-strong);
+    font-size: 0.9rem;
+}
+
+.levelStepperButton {
+    width: 24px;
+    height: 24px;
+    border: 1px solid rgba(212, 165, 116, 0.2);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-strong);
+    cursor: pointer;
+}
+
+.sublimationCompactRow {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+    padding-top: 2px;
+    border-top: 1px solid rgba(212, 165, 116, 0.08);
+}
+
+.sublimationCompactCopy {
+    display: grid;
+    gap: 4px;
+}
+
+.pickSublimationButton,
+.clearSublimationButton,
+.filterChip {
+    min-height: 34px;
+    padding: 0 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(212, 165, 116, 0.16);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-strong);
+    cursor: pointer;
+}
+
+.filterChipActive {
+    border-color: rgba(255, 207, 92, 0.34);
+    background: rgba(255, 207, 92, 0.1);
+}
+
+.selectedEquipmentSummary {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 10px;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.selectedEquipmentCopy {
+    min-width: 0;
+    display: grid;
+    gap: 3px;
+}
+
+.selectedEquipmentCopy span {
+    color: var(--text-soft);
+    font-size: 0.78rem;
+}
+
+.selectedSublimationHint {
+    color: rgba(255, 220, 148, 0.88);
+    font-size: 0.72rem;
+}
+
+.sublimationConditionsCard {
+    display: grid;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(212, 165, 116, 0.14);
+    background: rgba(14, 11, 9, 0.6);
+}
+
+.sublimationSlotTabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.sublimationConditionsHeader {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+
+.sublimationConditionsHeader strong {
+    color: var(--text-strong);
+}
+
+.sublimationConditionsHeader span,
+.sublimationConditionCopy small {
+    color: var(--text-soft);
+    font-size: 0.72rem;
+}
+
+.sublimationConditionsList {
+    display: grid;
+    gap: 8px;
+}
+
+.sublimationConditionRow {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(212, 165, 116, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.sublimationConditionCopy {
+    min-width: 0;
+    display: grid;
+    gap: 3px;
+}
+
+.sublimationConditionCopy strong {
+    color: var(--text-strong);
+    font-size: 0.76rem;
+}
+
+.sublimationToolbar {
+    display: grid;
+    gap: 10px;
+}
+
+.sublimationFilters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+@media (max-width: 760px) {
+    .enchantmentZenithRow,
+    .socketEditorGrid,
+    .sublimationCompactRow,
+    .sublimationCatalogRow,
+    .sublimationConditionRow {
+        grid-template-columns: 1fr;
+    }
+
+    .compactSocketRow {
+        flex-wrap: wrap;
+    }
+
+    .compactSocketButton {
+        flex: 1 1 calc(50% - 3px);
+        min-width: 108px;
+    }
+}

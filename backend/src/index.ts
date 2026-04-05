@@ -8,7 +8,7 @@ import rateLimit from 'express-rate-limit';
 import path from 'path';
 
 import { getDb } from './db/database.js';
-import { broadcastDesktopUpdate, initSocket } from './socket/chat.js';
+import { broadcastDesktopUpdate, getDesktopUpdateSubscriberCount, initSocket } from './socket/chat.js';
 
 import authRoutes from './routes/auth.js';
 import characterRoutes from './routes/characters.js';
@@ -20,7 +20,12 @@ import dungeonRoutes from './routes/dungeons.js';
 import pvpGroupRoutes from './routes/pvp-groups.js';
 import pvpApplicationRoutes from './routes/pvp-applications.js';
 import mobsRoutes from './routes/mobs.js';
+import { reloadMobRouteData } from './routes/mobs.js';
+import builderRoutes, { reloadBuilderRouteData } from './routes/builder.js';
+
+console.log('[index] Builder routes imported:', typeof builderRoutes);
 import { startGroupInactivityMonitor } from './services/group-inactivity.js';
+import { startWakfuGamedataScheduler } from './services/wakfu-gamedata.js';
 
 const app = express();
 app.set('trust proxy', 3);
@@ -64,6 +69,20 @@ initDb().then(() => {
     io = initSocket(server);
     startGroupInactivityMonitor(getDb(), io);
 }).catch(console.error);
+
+startWakfuGamedataScheduler((result) => {
+    if (!result.changed) {
+        return;
+    }
+
+    if (result.downloadedTypes.includes('items')) {
+        reloadMobRouteData();
+    }
+
+    if (result.downloadedTypes.some((type) => ['items', 'actions', 'equipmentItemTypes'].includes(type))) {
+        reloadBuilderRouteData();
+    }
+});
 
 
 // Security headers
@@ -134,6 +153,8 @@ app.use('/dungeons', dungeonRoutes);
 app.use('/pvp-groups', writeLimiter, pvpGroupRoutes);
 app.use('/pvp-applications', writeLimiter, pvpApplicationRoutes);
 app.use('/mobs', mobsRoutes);
+app.use('/builder', builderRoutes);
+console.log('[index] Builder routes registered');
 
 // Health check
 app.get('/health', (req, res) => {
@@ -158,9 +179,17 @@ app.post('/internal/desktop-updates/broadcast', (req, res) => {
 
     const payload = typeof req.body === 'object' && req.body ? req.body : {};
     broadcastDesktopUpdate(io, payload);
+    const subscriberCount = getDesktopUpdateSubscriberCount(io);
+
+    console.log('[updates] Desktop update broadcast emitted', {
+        version: payload.version || null,
+        subscriberCount,
+        issuedAt: payload.issuedAt || new Date().toISOString(),
+    });
 
     res.json({
         ok: true,
+        subscriberCount,
         emittedAt: new Date().toISOString(),
     });
 });
