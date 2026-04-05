@@ -18,7 +18,17 @@ import {
     SUBLIMATION_MAX_HP_PERCENT_ACTION_IDS,
     type BuilderStatEntry,
 } from '@/lib/builder-stats';
-import { useLanguage } from '@/lib/language-context';
+import { useLanguage, type Language } from '@/lib/language-context';
+import {
+    getAptitudeLineLabel,
+    getAptitudeSectionLabel,
+    getBuilderCopy,
+    getBuilderElementLabel,
+    getBuilderElementOptions,
+    getBuilderStatInfo,
+    getElementMetricInfo,
+    getExclusivePropertyRuleLabel,
+} from './i18n';
 
 type LocaleText = Record<string, string | undefined>;
 type TabId = 'equipment' | 'characteristics' | 'enchantments' | 'summary';
@@ -489,7 +499,7 @@ function getAptitudeAvailable(sectionId: SectionId, level: number) {
     if (sectionId === 'major') return Math.min(Math.floor(Math.max(level - 1, 0) / 50), 4);
     return Math.floor(Math.max(level - 1, 0) / 4);
 }
-function formatAptitudeMax(max: number) { return Number.isFinite(max) ? String(max) : 'sin limite'; }
+function formatAptitudeMax(max: number, noLimitLabel: string) { return Number.isFinite(max) ? String(max) : noLimitLabel; }
 function reorderElementPreference(current: ElementKey[], fromIndex: number, toIndex: number) {
     const next = [...current];
     const [moved] = next.splice(fromIndex, 1);
@@ -557,7 +567,11 @@ function buildHypotheticalEquippedItems(activeEquippedItems: BuilderItem[], equi
     const baseItems = previous ? activeEquippedItems.filter((item) => item.id !== previous.id) : activeEquippedItems;
     return [...baseItems, previewItem];
 }
-function getEquippedConditionState(equippedBySlot: Record<string, BuilderItem>) {
+function getEquippedConditionState(
+    equippedBySlot: Record<string, BuilderItem>,
+    exclusiveRules: Array<{ propertyId: number; label: string }>,
+    copy: ReturnType<typeof getBuilderCopy>,
+) {
     const invalidBySlot = new Map<string, string[]>();
     const activeItems: BuilderItem[] = [];
     const usedExclusiveProperties = new Set<number>();
@@ -570,7 +584,7 @@ function getEquippedConditionState(equippedBySlot: Record<string, BuilderItem>) 
         if (!item) continue;
 
         // Validar propiedades exclusivas (reliquias/épicos)
-        const exclusiveIssues = EXCLUSIVE_PROPERTY_RULES
+        const exclusiveIssues = exclusiveRules
             .filter((rule) => item.properties.includes(rule.propertyId) && usedExclusiveProperties.has(rule.propertyId))
             .map((rule) => rule.label);
         
@@ -588,14 +602,14 @@ function getEquippedConditionState(equippedBySlot: Record<string, BuilderItem>) 
         if (slotId === 'ring_left' || slotId === 'ring_right') {
             const ringBaseName = getRingBaseName(item.title);
             if (usedRingNames.has(ringBaseName)) {
-                invalidBySlot.set(slotId, [COPY.sameRingType]);
+                invalidBySlot.set(slotId, [copy.sameRingType]);
                 continue;
             }
             usedRingNames.add(ringBaseName);
         }
 
         // Registrar propiedades exclusivas usadas
-        for (const rule of EXCLUSIVE_PROPERTY_RULES) {
+        for (const rule of exclusiveRules) {
             if (item.properties.includes(rule.propertyId)) usedExclusiveProperties.add(rule.propertyId);
         }
 
@@ -604,7 +618,7 @@ function getEquippedConditionState(equippedBySlot: Record<string, BuilderItem>) 
 
     // Segunda pasada: validar bloqueo de slot secundario por arma de dos manos
     if (hasTwoHandedWeapon && equippedBySlot.off_hand) {
-        invalidBySlot.set('off_hand', [COPY.twoHandedWeaponEquipped]);
+        invalidBySlot.set('off_hand', [copy.twoHandedWeaponEquipped]);
         // Remover el item del slot secundario de los items activos
         const offHandItem = equippedBySlot.off_hand;
         const offHandIndex = activeItems.findIndex(item => item.id === offHandItem.id);
@@ -707,6 +721,23 @@ function ItemIcon({ item, className, fallback, alt }: { item: BuilderItem; class
 
 export default function BuilderPage() {
     const { language } = useLanguage();
+    const copy = useMemo(() => getBuilderCopy(language as Language), [language]);
+    const elementOptions = useMemo(() => getBuilderElementOptions(language as Language), [language]);
+    const exclusivePropertyRules = useMemo(
+        () => EXCLUSIVE_PROPERTY_RULES.map((rule) => ({ ...rule, label: getExclusivePropertyRuleLabel(rule.propertyId, language as Language) })),
+        [language],
+    );
+    const localizedAptitudeSections = useMemo(
+        () => APTITUDE_SECTIONS.map((section) => ({
+            ...section,
+            label: getAptitudeSectionLabel(section.id, language as Language),
+            lines: section.lines.map((line) => ({
+                ...line,
+                label: getAptitudeLineLabel(line.id, language as Language),
+            })),
+        })),
+        [language],
+    );
     const [metadata, setMetadata] = useState<BuilderMetadataResponse | null>(null);
     const [tab, setTab] = useState<TabId>('equipment');
     const [activeSlot, setActiveSlot] = useState('');
@@ -757,19 +788,25 @@ export default function BuilderPage() {
     const activeSlotDefinition = useMemo(() => activeSlot ? slotMap.get(activeSlot) || null : null, [activeSlot, slotMap]);
     const selectedClass = useMemo(() => metadata?.classes.find((entry) => entry.id === selectedClassId) || metadata?.classes[0] || null, [metadata, selectedClassId]);
     const equippedItems = useMemo(() => Object.values(equippedBySlot), [equippedBySlot]);
-    const equippedConditionState = useMemo(() => getEquippedConditionState(equippedBySlot), [equippedBySlot]);
+    const equippedConditionState = useMemo(
+        () => getEquippedConditionState(equippedBySlot, exclusivePropertyRules, copy),
+        [copy, equippedBySlot, exclusivePropertyRules],
+    );
     const activeEquippedItems = equippedConditionState.activeItems;
     const inspectedItem = inspectedSlot ? equippedBySlot[inspectedSlot] || null : null;
     const inspectedIssues = inspectedSlot ? equippedConditionState.invalidBySlot.get(inspectedSlot) || [] : [];
     const previewItem = useMemo(() => items.find((entry) => entry.id === previewItemId) || null, [items, previewItemId]);
-    const levelBracketOptions = useMemo(() => [{ value: '0', label: 'Todos los niveles' }, ...LEVEL_BRACKETS.map((entry) => ({ value: String(entry.max), label: String(entry.max) }))], []);
+    const levelBracketOptions = useMemo(
+        () => [{ value: '0', label: language === 'en' ? 'All levels' : language === 'fr' ? 'Tous les niveaux' : language === 'pt' ? 'Todos os niveis' : 'Todos los niveles' }, ...LEVEL_BRACKETS.map((entry) => ({ value: String(entry.max), label: String(entry.max) }))],
+        [language],
+    );
     const classOptions = useMemo(() => (metadata?.classes || []).map((entry) => ({ value: String(entry.id), label: getText(entry.names, language) })), [language, metadata]);
-    const rarityOptions = useMemo(() => [{ value: '0', label: COPY.rarityAll }, ...(metadata?.rarities || []).map((entry) => ({ value: String(entry.id), label: getText(entry.label, language) }))], [language, metadata]);
+    const rarityOptions = useMemo(() => [{ value: '0', label: copy.rarityAll }, ...(metadata?.rarities || []).map((entry) => ({ value: String(entry.id), label: getText(entry.label, language) }))], [copy.rarityAll, language, metadata]);
     const itemTypeOptions = useMemo(() => {
         // Mostrar siempre todos los tipos de equipment, no filtrar por slot activo
         const allTypes = metadata?.equipmentTypes || [];
-        return [{ value: '0', label: COPY.itemTypeAll }, ...allTypes.map((entry) => ({ value: String(entry.id), label: getText(entry.label, language) }))];
-    }, [language, metadata]);
+        return [{ value: '0', label: copy.itemTypeAll }, ...allTypes.map((entry) => ({ value: String(entry.id), label: getText(entry.label, language) }))];
+    }, [copy.itemTypeAll, language, metadata]);
 
     useEffect(() => {
         if (!itemTypeId || !activeSlotDefinition) return;
@@ -781,7 +818,7 @@ export default function BuilderPage() {
         });
         if (!stillValid) setItemTypeId(0);
     }, [activeSlotDefinition, itemTypeId, metadata]);
-    const statOptions = useMemo(() => [{ value: '', label: COPY.statAll }, ...(metadata?.statOptions || []).map((entry) => ({ value: entry.key, label: getText(entry.label, language) }))], [language, metadata]);
+    const statOptions = useMemo(() => [{ value: '', label: copy.statAll }, ...(metadata?.statOptions || []).map((entry) => ({ value: entry.key, label: getText(entry.label, language) }))], [copy.statAll, language, metadata]);
     const selectedClassNames = selectedClass?.names;
     const isIop = useMemo(() => {
         const names = [selectedClassNames?.es, selectedClassNames?.en, selectedClassNames?.fr, selectedClassNames?.pt];
@@ -869,15 +906,15 @@ export default function BuilderPage() {
     );
     const totalSecondaryMastery = stat([...BUILDER_SECONDARY_MASTERY_ACTION_IDS]);
     const totalPw = stat([191, 192]);
-    const resourceLabel = isHuppermage ? 'Brisa' : 'PW';
+    const resourceLabel = isHuppermage ? copy.resourceBreeze : copy.resourceWakfu;
     const resourceValue = isHuppermage ? stat([191191]) : totalPw;
     const primaryStats = [
-        { id: 'hp', actionId: 20, label: 'PdV', value: stat([20]) },
+        { id: 'hp', actionId: 20, label: copy.hpShort, value: stat([20]) },
         { id: 'ap', actionId: 31, label: 'PA', value: stat([31]) },
         { id: 'mp', actionId: 41, label: 'PM', value: stat([41]) },
         { id: 'resource', actionId: isHuppermage ? 191191 : 191, label: resourceLabel, value: resourceValue },
-        { id: 'armor', actionId: 45897, label: 'Armadura', value: stat([45897]) },
-        { id: 'mastery', actionId: 120, label: 'Dominio total', value: highestElementalMastery + totalSecondaryMastery },
+        { id: 'armor', actionId: 45897, label: copy.armor, value: stat([45897]) },
+        { id: 'mastery', actionId: 120, label: copy.totalMastery, value: highestElementalMastery + totalSecondaryMastery },
     ];
     const secondaryStats = useMemo(
         () => getBuilderStatEntries(finalStats, 'secondary')
@@ -911,7 +948,7 @@ export default function BuilderPage() {
     const epicCount = equippedItems.filter((item) => item.rarity === 7).length;
     const souvenirCount = equippedItems.filter((item) => item.rarity === 6).length;
     const activeFiltersCount = [rarity > 0, itemTypeId > 0, statKey !== '', query.trim() !== ''].filter(Boolean).length;
-    const aptitudeSummary = APTITUDE_SECTIONS.flatMap((section) => section.lines.filter((line) => (aptitudes[line.id] || 0) > 0).map((line) => ({ id: line.id, label: line.label, value: aptitudes[line.id] || 0 })));
+    const aptitudeSummary = localizedAptitudeSections.flatMap((section) => section.lines.filter((line) => (aptitudes[line.id] || 0) > 0).map((line) => ({ id: line.id, label: line.label, value: aptitudes[line.id] || 0 })));
     const equippedInActiveSlot = activeSlot ? equippedBySlot[activeSlot] || null : null;
     const comparisonFinalStats = useMemo(() => {
         if (!previewItem || !activeSlot) return null;
@@ -1011,9 +1048,9 @@ export default function BuilderPage() {
             const nextEquipped = assignImportedItemsToSlots(resolvedEntries);
             setEquippedBySlot(nextEquipped);
             setInspectedSlot(Object.keys(nextEquipped)[0] || '');
-            setTransferMessage(COPY.importSuccess);
+            setTransferMessage(copy.importSuccess);
         } catch {
-            setTransferMessage(COPY.importError);
+            setTransferMessage(copy.importError);
         }
     }
 
@@ -1059,7 +1096,7 @@ export default function BuilderPage() {
         anchor.click();
         document.body.removeChild(anchor);
         URL.revokeObjectURL(objectUrl);
-        setTransferMessage(COPY.exportSuccess);
+        setTransferMessage(copy.exportSuccess);
     }
 
     function openImportBuildFilePicker() {
@@ -1075,7 +1112,7 @@ export default function BuilderPage() {
             const sourceText = await file.text();
             await importBuildFromJson(sourceText);
         } catch {
-            setTransferMessage(COPY.importError);
+            setTransferMessage(copy.importError);
         }
     }
 
@@ -1126,14 +1163,14 @@ export default function BuilderPage() {
                     <div className={styles.identity}>
                         <div className={styles.classPortrait}>{selectedClass?.icon ? <img src={getAssetUrl(selectedClass.icon)} alt={getText(selectedClass.names, language)} className={styles.classPortraitImg} /> : null}</div>
                         <div className={styles.identityCopy}>
-                            <input className={styles.buildNameInput} value={buildName} onChange={(event) => setBuildName(event.target.value)} aria-label={COPY.buildName} />
-                            <div className={styles.identityMeta}><span>{buildLevel}</span><span>{getText(selectedClass?.names, language)}</span><span>{COPY.basePoints}</span></div>
-                            <div className={styles.limitStrip}><Badge label={COPY.relics} value={relicCount} tone={styles.rarityRelic} /><Badge label={COPY.epics} value={epicCount} tone={styles.rarityEpic} /><Badge label={COPY.souvenirs} value={souvenirCount} tone={styles.raritySouvenir} /></div>
+                            <input className={styles.buildNameInput} value={buildName} onChange={(event) => setBuildName(event.target.value)} aria-label={copy.buildName} />
+                            <div className={styles.identityMeta}><span>{buildLevel}</span><span>{getText(selectedClass?.names, language)}</span><span>{copy.basePoints}</span></div>
+                            <div className={styles.limitStrip}><Badge label={copy.relics} value={relicCount} tone={styles.rarityRelic} /><Badge label={copy.epics} value={epicCount} tone={styles.rarityEpic} /><Badge label={copy.souvenirs} value={souvenirCount} tone={styles.raritySouvenir} /></div>
                         </div>
                     </div>
                     <div className={styles.topControls}>
-                        <label className={`${styles.topControl} ${styles.classTopControl}`.trim()}><span>{COPY.class}</span><CustomSelect value={String(selectedClassId)} onChange={(value) => setSelectedClassId(Number(value))} options={classOptions} /></label>
-                        <label className={`${styles.topControl} ${styles.levelTopControl}`.trim()}><span>{COPY.level}</span><CustomSelect value={String(buildLevel)} onChange={(value) => setBuildLevel(Number(value))} options={levelBracketOptions} className={styles.levelHeaderSelect} menuClassName={styles.levelHeaderSelectMenu} /></label>
+                        <label className={`${styles.topControl} ${styles.classTopControl}`.trim()}><span>{copy.class}</span><CustomSelect value={String(selectedClassId)} onChange={(value) => setSelectedClassId(Number(value))} options={classOptions} /></label>
+                        <label className={`${styles.topControl} ${styles.levelTopControl}`.trim()}><span>{copy.level}</span><CustomSelect value={String(buildLevel)} onChange={(value) => setBuildLevel(Number(value))} options={levelBracketOptions} className={styles.levelHeaderSelect} menuClassName={styles.levelHeaderSelectMenu} /></label>
                     </div>
                     <div className={styles.topActions}>
                         <input
@@ -1143,13 +1180,13 @@ export default function BuilderPage() {
                             className={styles.hiddenFileInput}
                             onChange={handleImportBuildFile}
                         />
-                        <button type="button" className="btn btn-secondary" onClick={openImportBuildFilePicker}>{COPY.importBuild}</button>
-                        <button type="button" className="btn btn-primary" onClick={exportBuildToJson}>{COPY.exportBuild}</button>
+                        <button type="button" className="btn btn-secondary" onClick={openImportBuildFilePicker}>{copy.importBuild}</button>
+                        <button type="button" className="btn btn-primary" onClick={exportBuildToJson}>{copy.exportBuild}</button>
                     </div>
                     {transferMessage ? <div className={styles.topActionMessage}>{transferMessage}</div> : null}
                     <div className={styles.preferencePanel}>
                         <div className={styles.preferenceGroup}>
-                            <span>{COPY.masteryPrefs}</span>
+                            <span>{copy.masteryPrefs}</span>
                             <div className={styles.preferenceSelectors}>
                                 {masteryPreference.map((value, index) => (
                                     <div
@@ -1163,13 +1200,13 @@ export default function BuilderPage() {
                                     >
                                         <span className={styles.preferenceCapsuleOrder}>{index + 1}</span>
                                         <img src={getAssetUrl(getElementIconAssetPath(value))} alt="" className={styles.preferenceElementIcon} aria-hidden />
-                                        <span>{ELEMENT_OPTIONS.find((entry) => entry.value === value)?.label || value}</span>
+                                        <span>{elementOptions.find((entry) => entry.value === value)?.label || value}</span>
                                     </div>
                                 ))}
                             </div>
                         </div>
                         <div className={styles.preferenceGroup}>
-                            <span>{COPY.resistancePrefs}</span>
+                            <span>{copy.resistancePrefs}</span>
                             <div className={styles.preferenceSelectors}>
                                 {resistancePreference.map((value, index) => (
                                     <div
@@ -1183,7 +1220,7 @@ export default function BuilderPage() {
                                     >
                                         <span className={styles.preferenceCapsuleOrder}>{index + 1}</span>
                                         <img src={getAssetUrl(getElementIconAssetPath(value))} alt="" className={styles.preferenceElementIcon} aria-hidden />
-                                        <span>{ELEMENT_OPTIONS.find((entry) => entry.value === value)?.label || value}</span>
+                                        <span>{elementOptions.find((entry) => entry.value === value)?.label || value}</span>
                                     </div>
                                 ))}
                             </div>
@@ -1200,12 +1237,12 @@ export default function BuilderPage() {
                     </div>
                 </header>
 
-                <nav className={styles.tabBar}>{TABS.map((tabId) => <button key={tabId} type="button" className={`${styles.tabButton} ${tab === tabId ? styles.tabButtonActive : ''}`} onClick={() => setTab(tabId)}>{COPY[tabId]}</button>)}</nav>
+                <nav className={styles.tabBar}>{TABS.map((tabId) => <button key={tabId} type="button" className={`${styles.tabButton} ${tab === tabId ? styles.tabButtonActive : ''}`} onClick={() => setTab(tabId)}>{copy[tabId]}</button>)}</nav>
 
                 <div className={`${styles.contentGrid} ${tab === 'characteristics' || tab === 'enchantments' || tab === 'summary' ? styles.contentGridCharacteristics : ''}`}>
                     <section className={`${styles.leftRail} ${tab === 'characteristics' || tab === 'enchantments' || tab === 'summary' ? styles.characteristicsAuxHidden : ''}`}>
                         <div className={styles.panel}>
-                            <h3>{COPY.mainStats}</h3>
+                            <h3>{copy.mainStats}</h3>
                             <div className={styles.mainStatsGrid}>
                                 {primaryStats.map((entry) => {
                                     const iconPath = getPrimaryStatIconAssetPath(entry.id as PrimaryStatLayoutId, isHuppermage ? 'brisa' : 'pw');
@@ -1222,16 +1259,16 @@ export default function BuilderPage() {
                             </div>
                         </div>
                         <div className={styles.panel}>
-                            <h3>{COPY.elementalStats}</h3>
+                            <h3>{copy.elementalStats}</h3>
                             <div className={styles.elementGrid}>
-                                <ElementCard element="fire" label="Fuego" resistance={elementalResistanceReduction.fire} mastery={elementalMastery.fire} />
-                                <ElementCard element="water" label="Agua" resistance={elementalResistanceReduction.water} mastery={elementalMastery.water} />
-                                <ElementCard element="earth" label="Tierra" resistance={elementalResistanceReduction.earth} mastery={elementalMastery.earth} />
-                                <ElementCard element="air" label="Aire" resistance={elementalResistanceReduction.air} mastery={elementalMastery.air} />
+                                <ElementCard element="fire" label={getBuilderElementLabel('fire', language as Language)} resistance={elementalResistanceReduction.fire} mastery={elementalMastery.fire} language={language as Language} />
+                                <ElementCard element="water" label={getBuilderElementLabel('water', language as Language)} resistance={elementalResistanceReduction.water} mastery={elementalMastery.water} language={language as Language} />
+                                <ElementCard element="earth" label={getBuilderElementLabel('earth', language as Language)} resistance={elementalResistanceReduction.earth} mastery={elementalMastery.earth} language={language as Language} />
+                                <ElementCard element="air" label={getBuilderElementLabel('air', language as Language)} resistance={elementalResistanceReduction.air} mastery={elementalMastery.air} language={language as Language} />
                             </div>
                         </div>
                         <div className={styles.panel}>
-                            <h3>{COPY.secondaryStats}</h3>
+                            <h3>{copy.secondaryStats}</h3>
                             <div className={styles.secondaryStatsGrid}>
                                 {secondaryStats.map((entry) => (
                                     <div key={entry.id} className={styles.secondaryStatCard}>
@@ -1246,31 +1283,31 @@ export default function BuilderPage() {
                     <section className={`${styles.centerStage} ${tab === 'characteristics' || tab === 'enchantments' || tab === 'summary' ? styles.centerStageWide : ''}`}>
                         {tab === 'equipment' && <div className={styles.panel}>
                             <div className={styles.filterGrid}>
-                                <label className={styles.filterField}><span>{COPY.search}</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={COPY.searchPlaceholder} /></label>
-                                <label className={styles.filterField}><span>{COPY.maxLevel}</span><CustomSelect value={String(maxItemLevel)} onChange={(value) => setMaxItemLevel(Number(value) || 0)} options={levelBracketOptions} /></label>
-                                <label className={styles.filterField}><span>{COPY.rarity}</span><CustomSelect value={String(rarity)} onChange={(value) => setRarity(Number(value) || 0)} options={rarityOptions} /></label>
-                                <label className={styles.filterField}><span>{COPY.itemType}</span><CustomSelect value={String(itemTypeId)} onChange={(value) => setItemTypeId(Number(value) || 0)} options={itemTypeOptions} /></label>
-                                <label className={styles.filterField}><span>{COPY.statFilter}</span><CustomSelect value={statKey} onChange={setStatKey} options={statOptions} /></label>
+                                <label className={styles.filterField}><span>{copy.search}</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={copy.searchPlaceholder} /></label>
+                                <label className={styles.filterField}><span>{copy.maxLevel}</span><CustomSelect value={String(maxItemLevel)} onChange={(value) => setMaxItemLevel(Number(value) || 0)} options={levelBracketOptions} /></label>
+                                <label className={styles.filterField}><span>{copy.rarity}</span><CustomSelect value={String(rarity)} onChange={(value) => setRarity(Number(value) || 0)} options={rarityOptions} /></label>
+                                <label className={styles.filterField}><span>{copy.itemType}</span><CustomSelect value={String(itemTypeId)} onChange={(value) => setItemTypeId(Number(value) || 0)} options={itemTypeOptions} /></label>
+                                <label className={styles.filterField}><span>{copy.statFilter}</span><CustomSelect value={statKey} onChange={setStatKey} options={statOptions} /></label>
                             </div>
-                            <div className={styles.catalogList}>{loadingItems ? <div className={styles.emptyState}>{COPY.loading}</div> : items.length === 0 ? <div className={styles.emptyState}>{COPY.noResults}</div> : items.map((item) => {
+                            <div className={styles.catalogList}>{loadingItems ? <div className={styles.emptyState}>{copy.loading}</div> : items.length === 0 ? <div className={styles.emptyState}>{copy.noResults}</div> : items.map((item) => {
                                 const rarityLabel = metadata?.rarities.find((entry) => entry.id === item.rarity);
                                 const equipped = activeSlot && equippedBySlot[activeSlot]?.id === item.id;
-                                const nextEquipIssues = activeSlot ? Array.from(getEquippedConditionState({ ...equippedBySlot, [activeSlot]: item }).invalidBySlot.values()).flat() : [];
+                                const nextEquipIssues = activeSlot ? Array.from(getEquippedConditionState({ ...equippedBySlot, [activeSlot]: item }, exclusivePropertyRules, copy).invalidBySlot.values()).flat() : [];
                                 const blocked = nextEquipIssues.length > 0;
-                                return <article key={`${activeSlot}-${item.id}`} className={`${styles.itemCard} ${blocked ? styles.itemCardInvalid : RARITY_SURFACE[item.rarity] || styles.raritySurfaceCommon} ${previewItemId === item.id ? styles.itemCardPreview : ''}`.trim()} onClick={() => setPreviewItemId(item.id)}><div className={styles.itemIconBox}><BuilderItemStatsHover language={language} item={{ id: item.id, title: item.title, description: item.description, level: item.level, stats: item.stats }}><ItemIcon item={item} alt={getText(item.title, language)} className={styles.itemIconImg} fallback={getText(item.itemTypeName, language).slice(0, 1)} /></BuilderItemStatsHover></div><div className={styles.itemBody}><div className={styles.itemHeader}><div><h4>{getText(item.title, language)}</h4><p>{getText(item.itemTypeName, language)} - Lv. {item.level}</p></div><span className={`${styles.rarityTag} ${RARITY_TONES[item.rarity] || ''}`}>{rarityLabel ? getText(rarityLabel.label, language) : `R${item.rarity}`}</span></div><div className={styles.statChips}>
+                                return <article key={`${activeSlot}-${item.id}`} className={`${styles.itemCard} ${blocked ? styles.itemCardInvalid : RARITY_SURFACE[item.rarity] || styles.raritySurfaceCommon} ${previewItemId === item.id ? styles.itemCardPreview : ''}`.trim()} onClick={() => setPreviewItemId(item.id)}><div className={styles.itemIconBox}><BuilderItemStatsHover language={language} item={{ id: item.id, title: item.title, description: item.description, level: item.level, stats: item.stats }}><ItemIcon item={item} alt={getText(item.title, language)} className={styles.itemIconImg} fallback={getText(item.itemTypeName, language).slice(0, 1)} /></BuilderItemStatsHover></div><div className={styles.itemBody}><div className={styles.itemHeader}><div><h4>{getText(item.title, language)}</h4><p>{getText(item.itemTypeName, language)} - {copy.levelShort} {item.level}</p></div><span className={`${styles.rarityTag} ${RARITY_TONES[item.rarity] || ''}`}>{rarityLabel ? getText(rarityLabel.label, language) : `R${item.rarity}`}</span></div><div className={styles.statChips}>
                                                                     {item.stats.slice(0, 6).map((entry, index) => (
                                                                         <span key={`${item.id}-${entry.key}-${entry.value}-${index}`} className={styles.statChip}>
                                                                             <span className={styles.statChipValue}>{formatStatValue(entry.actionId, entry.value, { signed: true, label: entry.label })}</span>
                                                                             <BuilderStatLabel actionId={entry.actionId} label={entry.label} iconClassName={styles.statChipIcon} />
                                                                         </span>
                                                                     ))}
-                                                                </div>{blocked ? <div className={styles.itemConditionWarning}>{COPY.invalidCondition}: {Array.from(new Set(nextEquipIssues)).join(', ')}</div> : null}</div><button type="button" className={`btn ${equipped ? 'btn-secondary' : 'btn-primary'}`} disabled={blocked} onClick={(event) => { event.stopPropagation(); if (!activeSlot || blocked) return; setEquippedBySlot((current) => ({ ...current, [activeSlot]: item })); setInspectedSlot(activeSlot); }}>{blocked ? COPY.cannotEquip : equipped ? COPY.equipped : COPY.equip}</button></article>;
+                                                                </div>{blocked ? <div className={styles.itemConditionWarning}>{copy.invalidCondition}: {Array.from(new Set(nextEquipIssues)).join(', ')}</div> : null}</div><button type="button" className={`btn ${equipped ? 'btn-secondary' : 'btn-primary'}`} disabled={blocked} onClick={(event) => { event.stopPropagation(); if (!activeSlot || blocked) return; setEquippedBySlot((current) => ({ ...current, [activeSlot]: item })); setInspectedSlot(activeSlot); }}>{blocked ? copy.cannotEquip : equipped ? copy.equipped : copy.equip}</button></article>;
                             })}</div>
                         </div>}
 
                         {tab === 'characteristics' && <div className={styles.aptitudeLayout}>
-                            {APTITUDE_SECTIONS.map((section) => <section key={section.id} className={styles.aptitudeSection}><header className={`${styles.aptitudeSectionHeader} ${APTITUDE_SECTION_TONES[section.id]}`}><h3>{section.label}</h3><strong>{spentBySection[section.id]}/{availableBySection[section.id]} pts</strong></header><div className={styles.aptitudeTable}><div className={styles.aptitudeTableHead}><span>Aptitud</span><span>Max. niveles</span><span>Valor actual</span></div><div className={styles.aptitudeRows}>{section.lines.map((line) => { const spent = aptitudes[line.id] || 0; const maxLabel = formatAptitudeMax(line.max); return <div key={line.id} className={styles.aptitudeRow}><div className={styles.aptitudeName}>{line.label}</div><div className={styles.aptitudeLimit}><span className={`${styles.aptitudePill} ${Number.isFinite(line.max) ? styles.aptitudePillLimit : styles.aptitudePillSoft}`}>{maxLabel}</span></div><div className={styles.aptitudeValueCell}><span className={`${styles.aptitudePill} ${spent > 0 ? styles.aptitudePillActive : styles.aptitudePillSoft}`}>{spent} {spent === 1 ? 'pt' : 'pts'}</span><div className={styles.aptitudeControls}><button type="button" className={styles.aptitudeButton} onClick={(event) => changeAptitude(section, line, spent - (event.shiftKey ? 10 : 1))}>-</button><strong>{spent}</strong><button type="button" className={styles.aptitudeButton} onClick={(event) => changeAptitude(section, line, spent + (event.shiftKey ? 10 : 1))}>+</button></div></div></div>; })}</div></div></section>)}
-                            <section className={`${styles.aptitudeSection} ${styles.aptitudeSummarySection}`}><header className={`${styles.aptitudeSectionHeader} ${styles.aptitudeToneSummary}`}><h3>{COPY.aptitudeSummary}</h3><strong>{Object.values(spentBySection).reduce((sum, value) => sum + value, 0)} pts</strong></header><div className={styles.aptitudeSummaryBody}>{aptitudeSummary.length === 0 ? <div className={styles.emptyState}>{COPY.basePoints}</div> : aptitudeSummary.map((entry) => <div key={entry.id} className={styles.statRow}><span>{entry.label}</span><strong>{entry.value} {COPY.points}</strong></div>)}</div></section>
+                            {localizedAptitudeSections.map((section) => <section key={section.id} className={styles.aptitudeSection}><header className={`${styles.aptitudeSectionHeader} ${APTITUDE_SECTION_TONES[section.id]}`}><h3>{section.label}</h3><strong>{spentBySection[section.id]}/{availableBySection[section.id]} {copy.points}</strong></header><div className={styles.aptitudeTable}><div className={styles.aptitudeTableHead}><span>{copy.aptitude}</span><span>{copy.maxLevels}</span><span>{copy.currentValue}</span></div><div className={styles.aptitudeRows}>{section.lines.map((line) => { const spent = aptitudes[line.id] || 0; const maxLabel = formatAptitudeMax(line.max, copy.noLimit); return <div key={line.id} className={styles.aptitudeRow}><div className={styles.aptitudeName}>{line.label}</div><div className={styles.aptitudeLimit}><span className={`${styles.aptitudePill} ${Number.isFinite(line.max) ? styles.aptitudePillLimit : styles.aptitudePillSoft}`}>{maxLabel}</span></div><div className={styles.aptitudeValueCell}><span className={`${styles.aptitudePill} ${spent > 0 ? styles.aptitudePillActive : styles.aptitudePillSoft}`}>{spent} {spent === 1 ? copy.pointShort : copy.pointsShort}</span><div className={styles.aptitudeControls}><button type="button" className={styles.aptitudeButton} onClick={(event) => changeAptitude(section, line, spent - (event.shiftKey ? 10 : 1))}>-</button><strong>{spent}</strong><button type="button" className={styles.aptitudeButton} onClick={(event) => changeAptitude(section, line, spent + (event.shiftKey ? 10 : 1))}>+</button></div></div></div>; })}</div></div></section>)}
+                            <section className={`${styles.aptitudeSection} ${styles.aptitudeSummarySection}`}><header className={`${styles.aptitudeSectionHeader} ${styles.aptitudeToneSummary}`}><h3>{copy.aptitudeSummary}</h3><strong>{Object.values(spentBySection).reduce((sum, value) => sum + value, 0)} {copy.points}</strong></header><div className={styles.aptitudeSummaryBody}>{aptitudeSummary.length === 0 ? <div className={styles.emptyState}>{copy.basePoints}</div> : aptitudeSummary.map((entry) => <div key={entry.id} className={styles.statRow}><span>{entry.label}</span><strong>{entry.value} {copy.points}</strong></div>)}</div></section>
                         </div>}
 
                         <div className={tab === 'enchantments' ? undefined : styles.enchantmentPanelHostHidden}>
@@ -1302,21 +1339,34 @@ export default function BuilderPage() {
                                             ) : null}
                                         </div>
                                         <div className={styles.summaryHeroCopy}>
-                                            <h3>{buildName || COPY.summary}</h3>
-                                            <p>{getText(selectedClass?.names, language) || '-'} · Lv. {buildLevel}</p>
+                                            <h3>{buildName || copy.summary}</h3>
+                                            <p>{getText(selectedClass?.names, language) || '-'} · {copy.levelShort} {buildLevel}</p>
                                         </div>
                                     </div>
                                     <div className={styles.summaryHeroMeta}>
-                                        <span className={styles.summaryMetaChip}>{equippedItems.length} eq.</span>
-                                        <span className={styles.summaryMetaChip}>{relicCount} rel.</span>
-                                        <span className={styles.summaryMetaChip}>{epicCount} epic.</span>
-                                        <span className={styles.summaryMetaChip}>{souvenirCount} souv.</span>
+                                        <span className={styles.summaryMetaChip}>{equippedItems.length} {copy.summaryEquippedShort}</span>
+                                        <span className={styles.summaryMetaChip}>{relicCount} {copy.summaryRelicsShort}</span>
+                                        <span className={styles.summaryMetaChip}>{epicCount} {copy.summaryEpicsShort}</span>
+                                        <span className={styles.summaryMetaChip}>{souvenirCount} {copy.summarySouvenirsShort}</span>
                                     </div>
                                 </div>
                                 <div className={styles.summaryPrimaryStrip}>
                                     {primaryStats.map((entry) => (
                                         <div key={`summary-primary-${entry.id}`} className={styles.summaryPrimaryCard}>
-                                            <span>{entry.label}</span>
+                                            <div className={styles.summaryPrimaryHead}>
+                                                {getPrimaryStatIconAssetPath(entry.id as PrimaryStatLayoutId, isHuppermage ? 'brisa' : 'pw') ? (
+                                                    <img
+                                                        src={getAssetUrl(getPrimaryStatIconAssetPath(entry.id as PrimaryStatLayoutId, isHuppermage ? 'brisa' : 'pw')!)}
+                                                        alt=""
+                                                        className={styles.summaryPrimaryIcon}
+                                                        aria-hidden
+                                                    />
+                                                ) : null}
+                                                <div className={styles.summaryInfoHeader}>
+                                                    <span>{entry.label}</span>
+                                                    <InfoBadge label={entry.label} description={getBuilderStatInfo(entry.actionId, entry.label, language as Language)} />
+                                                </div>
+                                            </div>
                                             <strong>{formatStatValue(entry.actionId, entry.value, { label: entry.label, effectiveResistance: true })}</strong>
                                         </div>
                                     ))}
@@ -1324,35 +1374,35 @@ export default function BuilderPage() {
                             </div>
                             <div className={styles.summarySectionsGrid}>
                                 <div className={`${styles.panel} ${styles.summaryPanel} ${styles.summarySectionPanel}`}>
-                                    <h3>{COPY.elementalStats}</h3>
+                                    <h3>{copy.elementalStats}</h3>
                                     <div className={styles.summaryElementGrid}>
-                                        <ElementCard element="fire" label="Fuego" resistance={elementalResistanceReduction.fire} mastery={elementalMastery.fire} />
-                                        <ElementCard element="water" label="Agua" resistance={elementalResistanceReduction.water} mastery={elementalMastery.water} />
-                                        <ElementCard element="earth" label="Tierra" resistance={elementalResistanceReduction.earth} mastery={elementalMastery.earth} />
-                                        <ElementCard element="air" label="Aire" resistance={elementalResistanceReduction.air} mastery={elementalMastery.air} />
+                                        <ElementCard element="fire" label={getBuilderElementLabel('fire', language as Language)} resistance={elementalResistanceReduction.fire} mastery={elementalMastery.fire} language={language as Language} showInfo />
+                                        <ElementCard element="water" label={getBuilderElementLabel('water', language as Language)} resistance={elementalResistanceReduction.water} mastery={elementalMastery.water} language={language as Language} showInfo />
+                                        <ElementCard element="earth" label={getBuilderElementLabel('earth', language as Language)} resistance={elementalResistanceReduction.earth} mastery={elementalMastery.earth} language={language as Language} showInfo />
+                                        <ElementCard element="air" label={getBuilderElementLabel('air', language as Language)} resistance={elementalResistanceReduction.air} mastery={elementalMastery.air} language={language as Language} showInfo />
                                     </div>
                                 </div>
                                 <div className={`${styles.panel} ${styles.summaryPanel} ${styles.summarySectionPanel}`}>
-                                    <h3>{COPY.enchantments}</h3>
+                                    <h3>{copy.enchantments}</h3>
                                     {enchantmentSummary.length === 0 ? (
-                                        <div className={styles.emptyState}>{COPY.summaryPlaceholder}</div>
+                                        <div className={styles.emptyState}>{copy.summaryPlaceholder}</div>
                                     ) : (
                                         <div className={styles.summaryEnchantmentsGrid}>
                                             {enchantmentSummary.map((entry) => (
                                                 <div key={`summary-enchant-${entry.itemId}-${entry.slotId}`} className={styles.summaryEnchantmentCard}>
                                                     <div className={styles.summaryEnchantmentHead}>
                                                         <strong>{entry.itemName}</strong>
-                                                        <small>{entry.sublimations.length + entry.runes.length} efectos</small>
+                                                        <small>{entry.sublimations.length + entry.runes.length} {copy.summaryEffects}</small>
                                                     </div>
                                                     <div className={styles.summaryTagList}>
                                                         {entry.sublimations.length > 0
                                                             ? entry.sublimations.map((label) => <span key={`${entry.itemId}-s-${label}`} className={styles.summaryTag}>{label}</span>)
-                                                            : <span className={styles.summaryTagMuted}>Sin sublimaciones</span>}
+                                                            : <span className={styles.summaryTagMuted}>{copy.summaryNoSublimations}</span>}
                                                     </div>
                                                     <div className={styles.summaryTagList}>
                                                         {entry.runes.length > 0
                                                             ? entry.runes.map((label) => <span key={`${entry.itemId}-r-${label}`} className={styles.summaryTag}>{label}</span>)
-                                                            : <span className={styles.summaryTagMuted}>Sin runas</span>}
+                                                            : <span className={styles.summaryTagMuted}>{copy.summaryNoRunes}</span>}
                                                     </div>
                                                 </div>
                                             ))}
@@ -1361,11 +1411,11 @@ export default function BuilderPage() {
                                 </div>
                             </div>
                             <div className={`${styles.panel} ${styles.summaryPanel} ${styles.summarySectionPanel}`}>
-                                <h3>{COPY.secondaryStats}</h3>
+                                <h3>{copy.secondaryStats}</h3>
                                 <div className={styles.summarySecondaryGrid}>
                                     {summarySecondaryStats.map((entry) => (
                                         <div key={`summary-secondary-${entry.id}`} className={styles.summarySecondaryCard}>
-                                            <BuilderStatLabel actionId={entry.id} label={entry.id === 20 ? 'PdV' : entry.label} labelClassName={styles.summaryStatLabel} />
+                                            <div className={styles.summaryInfoHeader}><BuilderStatLabel actionId={entry.id} label={entry.id === 20 ? copy.hpShort : entry.label} labelClassName={styles.summaryStatLabel} /><InfoBadge label={entry.label} description={getBuilderStatInfo(entry.id, entry.label, language as Language)} /></div>
                                             <strong>{formatStatValue(entry.id, entry.value, { label: entry.label, effectiveResistance: true })}</strong>
                                         </div>
                                     ))}
@@ -1375,17 +1425,17 @@ export default function BuilderPage() {
                     </section>
 
                     <aside className={`${styles.rightRail} ${tab === 'characteristics' || tab === 'enchantments' || tab === 'summary' ? `${styles.rightRailSecondary} ${styles.characteristicsAuxHidden}` : ''}`}>
-                        <div className={styles.panel}>{inspectedItem ? <div className={`${styles.inspectCard} ${inspectedIssues.length === 0 ? RARITY_SURFACE[inspectedItem.rarity] || styles.raritySurfaceCommon : ''} ${inspectedIssues.length > 0 ? styles.inspectCardInvalid : ''}`.trim()}><div className={styles.inspectHead}><div className={styles.inspectIconBox}><ItemIcon item={inspectedItem} alt={getText(inspectedItem.title, language)} className={styles.inspectIconImg} fallback={getText(inspectedItem.itemTypeName, language).slice(0, 1)} /></div><div><h3>{getText(inspectedItem.title, language)}</h3><p>{getText(inspectedItem.itemTypeName, language)} - Lv. {inspectedItem.level}</p></div></div><div className={styles.inspectActions}><button type="button" className="btn btn-secondary" onClick={() => inspectedSlot && unequipSlot(inspectedSlot)}>{COPY.unequip}</button></div>{inspectedIssues.length > 0 ? <div className={styles.itemConditionWarning}>{COPY.invalidCondition}: {Array.from(new Set(inspectedIssues)).join(', ')}</div> : null}<p className={styles.inspectDescription}>{getText(inspectedItem.description, language)}</p><div className={styles.inspectStats}>
+                        <div className={styles.panel}>{inspectedItem ? <div className={`${styles.inspectCard} ${inspectedIssues.length === 0 ? RARITY_SURFACE[inspectedItem.rarity] || styles.raritySurfaceCommon : ''} ${inspectedIssues.length > 0 ? styles.inspectCardInvalid : ''}`.trim()}><div className={styles.inspectHead}><div className={styles.inspectIconBox}><ItemIcon item={inspectedItem} alt={getText(inspectedItem.title, language)} className={styles.inspectIconImg} fallback={getText(inspectedItem.itemTypeName, language).slice(0, 1)} /></div><div><h3>{getText(inspectedItem.title, language)}</h3><p>{getText(inspectedItem.itemTypeName, language)} - {copy.levelShort} {inspectedItem.level}</p></div></div><div className={styles.inspectActions}><button type="button" className="btn btn-secondary" onClick={() => inspectedSlot && unequipSlot(inspectedSlot)}>{copy.unequip}</button></div>{inspectedIssues.length > 0 ? <div className={styles.itemConditionWarning}>{copy.invalidCondition}: {Array.from(new Set(inspectedIssues)).join(', ')}</div> : null}<p className={styles.inspectDescription}>{getText(inspectedItem.description, language)}</p><div className={styles.inspectStats}>
                                                 {inspectedItem.stats.map((entry, index) => (
                                                     <div key={`inspect-${inspectedItem.id}-${entry.key}-${entry.value}-${index}`} className={styles.statRow}>
                                                         <BuilderStatLabel actionId={entry.actionId} label={entry.label} />
                                                         <strong>{formatStatValue(entry.actionId, entry.value, { signed: true, label: entry.label })}</strong>
                                                     </div>
                                                 ))}
-                                            </div></div> : <div className={styles.emptyState}>{COPY.noItem}</div>}</div>
+                                            </div></div> : <div className={styles.emptyState}>{copy.noItem}</div>}</div>
                         {tab === 'equipment' ? (
                             <div className={styles.panel}>
-                                <h3>{COPY.compare}</h3>
+                                <h3>{copy.compare}</h3>
                                 {previewItem ? (
                                     <div className={`${styles.compareCard} ${RARITY_SURFACE[previewItem.rarity] || styles.raritySurfaceCommon}`}>
                                         <div className={styles.compareHead}>
@@ -1393,18 +1443,18 @@ export default function BuilderPage() {
                                                 <strong>{getText(previewItem.title, language)}</strong>
                                                 <span>
                                                     {equippedInActiveSlot
-                                                        ? `${COPY.compareVsEquipped}: ${getText(equippedInActiveSlot.title, language)}`
-                                                        : COPY.compareNoEquipped}
+                                                        ? `${copy.compareVsEquipped}: ${getText(equippedInActiveSlot.title, language)}`
+                                                        : copy.compareNoEquipped}
                                                 </span>
                                             </div>
                                         </div>
                                         {equippedInActiveSlot?.id === previewItem.id ? (
-                                            <div className={styles.emptyState}>{COPY.compareSame}</div>
+                                            <div className={styles.emptyState}>{copy.compareSame}</div>
                                         ) : (
                                             <>
-                                                <p className={styles.compareSectionLabel}>{COPY.compareBuildDelta}</p>
+                                                <p className={styles.compareSectionLabel}>{copy.compareBuildDelta}</p>
                                                 {comparisonRows.length === 0 ? (
-                                                    <div className={styles.emptyState}>{COPY.compareNoStatChange}</div>
+                                                    <div className={styles.emptyState}>{copy.compareNoStatChange}</div>
                                                 ) : (
                                                     <div className={styles.compareList}>
                                                         {comparisonRows.map((row) => (
@@ -1427,7 +1477,7 @@ export default function BuilderPage() {
                                         )}
                                     </div>
                                 ) : (
-                                    <div className={styles.emptyState}>{COPY.compareEmpty}</div>
+                                    <div className={styles.emptyState}>{copy.compareEmpty}</div>
                                 )}
                             </div>
                         ) : null}
@@ -1439,8 +1489,33 @@ export default function BuilderPage() {
 }
 
 function Badge({ label, value, tone }: { label: string; value: number; tone: string }) { return <span className={`${styles.rarityTag} ${tone}`}>{label}: {value}</span>; }
-function SummaryCard({ label, value }: { label: string; value: string }) { return <div className={styles.summaryCard}><span>{label}</span><strong>{value}</strong></div>; }
-function ElementCard({ element, label, resistance, mastery }: { element: ElementKey; label: string; resistance: number; mastery: number }) {
+function InfoBadge({ label, description }: { label: string; description: string }) {
+    return (
+        <span className={`${styles.tooltipAnchor} ${styles.infoBadgeAnchor}`}>
+            <span className={styles.infoBadgeIcon} aria-hidden="true">i</span>
+            <span className={`${styles.hoverCard} ${styles.infoBadgeTooltip}`} role="tooltip">
+                <strong>{label}</strong>
+                <p>{description}</p>
+            </span>
+        </span>
+    );
+}
+
+function ElementCard({
+    element,
+    label,
+    resistance,
+    mastery,
+    language,
+    showInfo = false,
+}: {
+    element: ElementKey;
+    label: string;
+    resistance: number;
+    mastery: number;
+    language: Language;
+    showInfo?: boolean;
+}) {
     return (
         <div className={styles.elementCard}>
             <div className={styles.elementCardHead}>
@@ -1448,8 +1523,20 @@ function ElementCard({ element, label, resistance, mastery }: { element: Element
                 <strong>{label}</strong>
             </div>
             <div className={styles.elementValues}>
-                <span>RES {resistance}%</span>
-                <span>DOM {mastery}</span>
+                <div className={styles.elementMetric}>
+                    <div className={styles.elementMetricLabel}>
+                        <span>{getBuilderCopy(language).resShort}</span>
+                        {showInfo ? <InfoBadge label={`${label} ${getBuilderCopy(language).resShort}`} description={getElementMetricInfo(element, 'resistance', language)} /> : null}
+                    </div>
+                    <strong>{resistance}%</strong>
+                </div>
+                <div className={styles.elementMetric}>
+                    <div className={styles.elementMetricLabel}>
+                        <span>{getBuilderCopy(language).masteryShort}</span>
+                        {showInfo ? <InfoBadge label={`${label} ${getBuilderCopy(language).masteryShort}`} description={getElementMetricInfo(element, 'mastery', language)} /> : null}
+                    </div>
+                    <strong>{mastery}</strong>
+                </div>
             </div>
         </div>
     );

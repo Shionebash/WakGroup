@@ -8,6 +8,8 @@ import CustomSelect from '@/components/CustomSelect';
 import { BuilderStatLabel } from '@/components/BuilderStatLabel';
 import { BuilderItemStatsHover } from '@/components/BuilderItemStatsHover';
 import { getSublimationControls, getSublimationStackInfo, resolveSublimationStats } from '@/lib/builder-sublimations';
+import type { Language } from '@/lib/language-context';
+import { getEnchantmentCopy, getRuneColorLabels } from './i18n';
 
 type LocaleText = Record<string, string | undefined>;
 type RuneColorUi = 0 | 1 | 2 | 3;
@@ -104,19 +106,6 @@ interface PerItemSublimationPick {
     rarity: number | null;
 }
 
-const DOUBLE_BONUS_BY_SLOT: Record<string, number[]> = {
-    helmet: [1052, 20],
-    breastplate: [120, 83, 84, 85],
-    epaulettes: [26, 83],
-    belt: [180, 82],
-    boots: [1052, 84],
-    cloak: [1055, 120, 171],
-    amulet: [1055, 26],
-    ring_left: [173, 175],
-    ring_right: [173, 175],
-    main_hand: [149, 1053, 20],
-};
-
 const COLOR_OPTIONS: Array<{ value: RuneColorUi; label: string; tone: string }> = [
     { value: 0, label: 'Blanco', tone: styles.runeColor0 },
     { value: 1, label: 'Rojo', tone: styles.runeColor1 },
@@ -129,6 +118,19 @@ const RUNE_COLOR_LABELS: Record<number, string> = {
     1: 'Rojo',
     2: 'Verde',
     3: 'Azul',
+};
+
+const DOUBLE_BONUS_BY_SLOT: Record<string, number[]> = {
+    helmet: [1052, 20],
+    breastplate: [120, 83, 84, 85],
+    epaulettes: [26, 83],
+    belt: [180, 82],
+    boots: [1052, 84],
+    cloak: [1055, 120, 171],
+    amulet: [1055, 26],
+    ring_left: [173, 175],
+    ring_right: [173, 175],
+    main_hand: [149, 1053, 20],
 };
 
 const RUNE_ICON_BY_COLOR: Record<RuneColorUi, { empty: string; full: string }> = {
@@ -191,17 +193,17 @@ function patternMatchesFirstThree(slotColors: RuneColorUi[], pattern: number[]) 
     return pattern.every((entry, index) => slotColors[index] === 0 || slotColors[index] === entry);
 }
 
-function getSublimationTierLabel(entry: EnchantmentSublimationEntry) {
-    if (entry.isRelic) return 'Reliquia';
-    if (entry.isEpic) return 'Epica';
-    return 'Normal';
+function getSublimationTierLabel(entry: EnchantmentSublimationEntry, copy: ReturnType<typeof getEnchantmentCopy> = getEnchantmentCopy('es')) {
+    if (entry.isRelic) return copy.relicTier;
+    if (entry.isEpic) return copy.epicTier;
+    return copy.normalTier;
 }
 
-function getSublimationPatternLabel(entry: EnchantmentSublimationEntry) {
-    if (entry.slotColorPattern.length > 0) return entry.slotColorPattern.map((color) => RUNE_COLOR_LABELS[color]).join(' / ');
-    if (entry.isEpic) return 'Solo equipo epico';
-    if (entry.isRelic) return 'Solo reliquia';
-    return 'Sin patron';
+function getSublimationPatternLabel(entry: EnchantmentSublimationEntry, copy: ReturnType<typeof getEnchantmentCopy> = getEnchantmentCopy('es'), runeColorLabels: Record<number, string> = RUNE_COLOR_LABELS) {
+    if (entry.slotColorPattern.length > 0) return entry.slotColorPattern.map((color) => runeColorLabels[color]).join(' / ');
+    if (entry.isEpic) return copy.epicOnly;
+    if (entry.isRelic) return copy.relicOnly;
+    return copy.noPattern;
 }
 
 function getShardValue(shard: EnchantmentShardEntry, level: number, slotId: string) {
@@ -354,8 +356,8 @@ export function EnchantmentsPanel({
 }: {
     equippedBySlot: Record<string, EnchantmentItem>;
     slotOrder: string[];
-    language: string;
-    /** Nivel máximo del tramo elegido (p. ej. 245); usado para «X% del nivel» en sublimaciones. */
+    language: Language;
+    /** Nivel mÃ¡ximo del tramo elegido (p. ej. 245); usado para Â«X% del nivelÂ» en sublimaciones. */
     buildLevel: number;
     baseStats: Map<number, number>;
     initialSnapshot?: EnchantmentsSnapshot | null;
@@ -364,6 +366,14 @@ export function EnchantmentsPanel({
     onSnapshotChange?: (snapshot: EnchantmentsSnapshot) => void;
     onEnchantmentSummaryChange?: (summary: EnchantmentSummaryEntry[]) => void;
 }) {
+    const copy = useMemo(() => getEnchantmentCopy(language), [language]);
+    const runeColorLabels = useMemo(() => getRuneColorLabels(language), [language]);
+    const colorOptions = useMemo<Array<{ value: RuneColorUi; label: string; tone: string }>>(() => ([
+        { value: 0, label: copy.runeColorWhite, tone: styles.runeColor0 },
+        { value: 1, label: copy.runeColorRed, tone: styles.runeColor1 },
+        { value: 2, label: copy.runeColorGreen, tone: styles.runeColor2 },
+        { value: 3, label: copy.runeColorBlue, tone: styles.runeColor3 },
+    ]), [copy]);
     const [catalog, setCatalog] = useState<EnchantmentCatalogResponse | null>(null);
     const [loadError, setLoadError] = useState('');
     const [runeState, setRuneState] = useState<Record<number, PerItemRuneState>>({});
@@ -640,7 +650,7 @@ export function EnchantmentsPanel({
                 const shardId = state.shardIds[index];
                 const shard = shardId ? shardById.get(shardId) : null;
                 if (!shard) continue;
-                runes.push(`${getText(shard.title, language)} Lv. ${Math.min(state.levels[index], maxRuneLevel)}`);
+                runes.push(`${getText(shard.title, language)} ${copy.level} ${Math.min(state.levels[index], maxRuneLevel)}`);
             }
 
             const sublimations = [itemPicks.normal, itemPicks.rarity]
@@ -725,7 +735,7 @@ export function EnchantmentsPanel({
     }
 
     if (!catalog) {
-        return <div className={styles.panel}><div className={styles.emptyState}>Cargando encantamientos...</div></div>;
+        return <div className={styles.panel}><div className={styles.emptyState}>{copy.loadingEnchantments}</div></div>;
     }
 
     return (
@@ -734,11 +744,11 @@ export function EnchantmentsPanel({
                 <section className={`${styles.panel} ${styles.enchantmentColumn} ${styles.enchantmentSublimationPanel}`}>
                     <div className={styles.enchantmentHeaderRow}>
                         <div>
-                            <h3 className={styles.enchantmentColumnTitle}>Sublimaciones</h3>
+                            <h3 className={styles.enchantmentColumnTitle}>{copy.titleSublimations}</h3>
                             <p className={styles.enchantmentHelp}>
                                 {selectedRow
-                                    ? `Pieza: ${getText(selectedRow.item.title, language)}`
-                                    : 'Selecciona una pieza en Mis runas (columna derecha).'}
+                                    ? `${copy.pieceLabel}: ${getText(selectedRow.item.title, language)}`
+                                    : copy.selectPieceInRunes}
                             </p>
                         </div>
                     </div>
@@ -759,13 +769,13 @@ export function EnchantmentsPanel({
                                 <div className={styles.selectedEquipmentCopy}>
                                     <strong>{getText(selectedRow.item.title, language)}</strong>
                                     <span>
-                                        {selectedState?.colors.slice(0, 3).map((entry) => RUNE_COLOR_LABELS[entry]).join(' / ')} ·{' '}
-                                        {selectedRow.item.rarity === 7 ? 'Epico' : selectedRow.item.rarity === 5 ? 'Reliquia' : 'Normal'}
+                                        {selectedState?.colors.slice(0, 3).map((entry) => runeColorLabels[entry]).join(' / ')} ·{' '}
+                                        {selectedRow.item.rarity === 7 ? copy.epicTier : selectedRow.item.rarity === 5 ? copy.relicTier : copy.normalTier}
                                     </span>
                                     <small className={styles.selectedSublimationHint}>
                                         {selectedSublimation
-                                            ? `${selectedSublimationSlot === 'normal' ? 'Slot normal' : (selectedRow.item.rarity === 7 ? 'Slot epico' : 'Slot reliquia')}: ${getText(selectedSublimation.title, language)}`
-                                            : `${selectedSublimationSlot === 'normal' ? 'Slot normal' : (selectedRow.item.rarity === 7 ? 'Slot epico' : 'Slot reliquia')}: vacio`}
+                                            ? `${selectedSublimationSlot === 'normal' ? copy.normalSlot : (selectedRow.item.rarity === 7 ? copy.epicSlot : copy.relicSlot)}: ${getText(selectedSublimation.title, language)}`
+                                            : `${selectedSublimationSlot === 'normal' ? copy.normalSlot : (selectedRow.item.rarity === 7 ? copy.epicSlot : copy.relicSlot)}: ${copy.emptySlot}`}
                                     </small>
                                 </div>
                             </div>
@@ -776,22 +786,22 @@ export function EnchantmentsPanel({
                                         className={`${styles.filterChip} ${selectedSublimationSlot === 'normal' ? styles.filterChipActive : ''}`.trim()}
                                         onClick={() => setSelectedSublimationSlot('normal')}
                                     >
-                                        Normal
+                                        {copy.normalTier}
                                     </button>
                                     <button
                                         type="button"
                                         className={`${styles.filterChip} ${selectedSublimationSlot === 'rarity' ? styles.filterChipActive : ''}`.trim()}
                                         onClick={() => setSelectedSublimationSlot('rarity')}
                                     >
-                                        {selectedRow.item.rarity === 7 ? 'Epica' : 'Reliquia'}
+                                        {selectedRow.item.rarity === 7 ? copy.epicTier : copy.relicTier}
                                     </button>
                                 </div>
                             ) : null}
                             {selectedSublimation && selectedSublimationControls.length > 0 ? (
                                 <div className={styles.sublimationConditionsCard}>
                                     <div className={styles.sublimationConditionsHeader}>
-                                        <strong>Condiciones</strong>
-                                        <span>Activa la situacion que quieras simular</span>
+                                        <strong>{copy.conditions}</strong>
+                                        <span>{copy.conditionsHelp}</span>
                                     </div>
                                     <div className={styles.sublimationConditionsList}>
                                         {selectedSublimationControls.map((control) => {
@@ -800,7 +810,7 @@ export function EnchantmentsPanel({
                                                 <div key={control.key} className={styles.sublimationConditionRow}>
                                                     <div className={styles.sublimationConditionCopy}>
                                                         <strong>{control.label}</strong>
-                                                        <small>{control.kind === 'count' ? 'Acumulaciones o intensidad' : 'Interruptor de simulacion'}</small>
+                                                        <small>{control.kind === 'count' ? copy.conditionCountKind : copy.conditionToggleKind}</small>
                                                     </div>
                                                     {control.kind === 'toggle' ? (
                                                         <button
@@ -820,7 +830,7 @@ export function EnchantmentsPanel({
                                                                 }));
                                                             }}
                                                         >
-                                                            {currentValue > 0 ? 'Activo' : 'Inactivo'}
+                                                            {currentValue > 0 ? copy.active : copy.inactive}
                                                         </button>
                                                     ) : (
                                                         <div className={styles.levelStepper}>
@@ -876,14 +886,14 @@ export function EnchantmentsPanel({
                                     className={styles.sublimationSearch}
                                     value={sublimationQuery}
                                     onChange={(event) => setSublimationQuery(event.target.value)}
-                                    placeholder="Buscar..."
+                                    placeholder={copy.searchPlaceholder}
                                 />
                                 <div className={styles.sublimationFilters}>
                                     {[
-                                        { id: 'all', label: 'Todas' },
-                                        { id: 'normal', label: 'Norm.' },
-                                        { id: 'epic', label: 'Epic.' },
-                                        { id: 'relic', label: 'Rel.' },
+                                        { id: 'all', label: copy.filterAll },
+                                        { id: 'normal', label: copy.filterNormal },
+                                        { id: 'epic', label: copy.filterEpicShort },
+                                        { id: 'relic', label: copy.filterRelicShort },
                                     ].map((filter) => (
                                         <button
                                             key={filter.id}
@@ -908,7 +918,7 @@ export function EnchantmentsPanel({
                                         },
                                     }))}
                                 >
-                                    Quitar
+                                    {copy.clear}
                                 </button>
                                 <div className={styles.sublimationCatalogScroll}>
                                     {selectedCompatibleSublimations.map((entry) => (
@@ -939,19 +949,19 @@ export function EnchantmentsPanel({
                                             </div>
                                             <div className={styles.sublimationCatalogMain}>
                                                 <strong>{getText(entry.title, language)}</strong>
-                                                <span>{getSublimationPatternLabel(entry)}</span>
+                                                <span>{getSublimationPatternLabel(entry, copy, runeColorLabels)}</span>
                                             </div>
-                                            <span className={styles.sublimationTier}>{getSublimationTierLabel(entry)}</span>
+                                            <span className={styles.sublimationTier}>{getSublimationTierLabel(entry, copy)}</span>
                                         </button>
                                     ))}
                                     {selectedCompatibleSublimations.length === 0 ? (
-                                        <div className={styles.emptyState}>Ninguna compatible con los filtros.</div>
+                                        <div className={styles.emptyState}>{copy.noneCompatible}</div>
                                     ) : null}
                                 </div>
                             </div>
                         </>
                     ) : (
-                        <div className={styles.emptyState}>Selecciona pieza en Mis runas.</div>
+                        <div className={styles.emptyState}>{copy.selectPieceMyRunes}</div>
                     )}
                 </section>
             </div>
@@ -959,12 +969,12 @@ export function EnchantmentsPanel({
             <section className={`${styles.panel} ${styles.enchantmentColumn} ${styles.enchantmentRunesColumn}`}>
                 <div className={styles.enchantmentHeaderRow}>
                     <div>
-                        <h3 className={styles.enchantmentColumnTitle}>Mis runas</h3>
-                        <p className={styles.enchantmentHelp}>Engarce · color · runa · nivel. Sublimación: panel izquierdo.</p>
+                        <h3 className={styles.enchantmentColumnTitle}>{copy.myRunes}</h3>
+                        <p className={styles.enchantmentHelp}>{copy.myRunesHelp}</p>
                     </div>
                 </div>
                 {equippedRows.length === 0 ? (
-                    <div className={styles.emptyState}>Equipa piezas para empezar a planificar runas y sublimaciones.</div>
+                    <div className={styles.emptyState}>{copy.equipToPlan}</div>
                 ) : (
                     <div className={styles.enchantmentMyList}>
                         {equippedRows.map(({ slotId, item }) => {
@@ -1003,9 +1013,9 @@ export function EnchantmentsPanel({
                                     <article key={`${slotId}-${item.id}`} className={`${styles.enchantmentGearRow} ${RARITY_SURFACE[item.rarity] || styles.raritySurfaceCommon}`}>
                                         <div className={styles.enchantmentGearHeading}>
                                             <span className={styles.enchantmentGearName}>{getText(item.title, language)}</span>
-                                            <span className={styles.enchantmentGearSlots}>Lv. {item.level}</span>
+                                            <span className={styles.enchantmentGearSlots}>{copy.level} {item.level}</span>
                                         </div>
-                                        <div className={styles.enchantmentNoSlots}>Este objeto no acepta runas en el builder.</div>
+                                        <div className={styles.enchantmentNoSlots}>{copy.noRuneSlots}</div>
                                     </article>
                                 );
                             }
@@ -1035,15 +1045,15 @@ export function EnchantmentsPanel({
                                                         <span className={styles.compactSocketVisual}>
                                                             <img
                                                                 src={getRuneIconPath(color, Boolean(shard))}
-                                                                alt={`${RUNE_COLOR_LABELS[color]} ${shard ? 'activa' : 'vacia'}`}
+                                                                alt={`${runeColorLabels[color]} ${shard ? 'activa' : 'vacia'}`}
                                                                 className={styles.compactSocketGemImage}
                                                             />
                                                             <small className={styles.compactSocketLevelBadge}>{level}</small>
                                                         </span>
                                                         <span className={styles.compactSocketCopy}>
                                                             <strong>S{index + 1}</strong>
-                                                            <span>{shard ? getText(shard.title, language) : RUNE_COLOR_LABELS[color]}</span>
-                                                            <small>{shard ? `+${value}` : 'Sin efecto'}</small>
+                                                            <span>{shard ? getText(shard.title, language) : runeColorLabels[color]}</span>
+                                                            <small>{shard ? `+${value}` : copy.noEffect}</small>
                                                         </span>
                                                     </button>
                                                 );
@@ -1070,11 +1080,11 @@ export function EnchantmentsPanel({
                                                     )}
                                                 </div>
                                                 <div className={styles.sublimationMiniCopy}>
-                                                    <strong>{selectedNormalSublimation ? getText(selectedNormalSublimation.title, language) : 'Sin sublimacion normal'}</strong>
-                                                    <span>{state.colors.slice(0, 3).map((entry) => RUNE_COLOR_LABELS[entry]).join(' / ')}</span>
+                                                    <strong>{selectedNormalSublimation ? getText(selectedNormalSublimation.title, language) : copy.noNormalSublimation}</strong>
+                                                    <span>{state.colors.slice(0, 3).map((entry) => runeColorLabels[entry]).join(' / ')}</span>
                                                 </div>
                                                 <span className={styles.sublimationMiniTier}>
-                                                    {selectedNormalSublimation ? 'Normal' : 'Elegir'}
+                                                    {selectedNormalSublimation ? copy.normalTier : copy.choose}
                                                 </span>
                                             </button>
                                             {itemHasRaritySublimationSlot(item) ? (
@@ -1098,11 +1108,11 @@ export function EnchantmentsPanel({
                                                         )}
                                                     </div>
                                                     <div className={styles.sublimationMiniCopy}>
-                                                        <strong>{selectedRaritySublimation ? getText(selectedRaritySublimation.title, language) : `Sin sublimacion ${item.rarity === 7 ? 'epica' : 'reliquia'}`}</strong>
-                                                        <span>{item.rarity === 7 ? 'Slot epico' : 'Slot reliquia'}</span>
+                                                        <strong>{selectedRaritySublimation ? getText(selectedRaritySublimation.title, language) : (item.rarity === 7 ? copy.noEpicSublimation : copy.noRelicSublimation)}</strong>
+                                                        <span>{item.rarity === 7 ? copy.epicSlot : copy.relicSlot}</span>
                                                     </div>
                                                     <span className={styles.sublimationMiniTier}>
-                                                        {selectedRaritySublimation ? getSublimationTierLabel(selectedRaritySublimation) : 'Elegir'}
+                                                        {selectedRaritySublimation ? getSublimationTierLabel(selectedRaritySublimation, copy) : copy.choose}
                                                     </span>
                                                 </button>
                                             ) : null}
@@ -1145,11 +1155,11 @@ export function EnchantmentsPanel({
                                         return (
                                             <div className={styles.socketEditorCard}>
                                                 <div className={styles.socketEditorHeader}>
-                                                    <strong>Engarce {activeSlotIndex + 1}</strong>
-                                                    <span>{shard ? `+${slotValue} ${getText(shard.title, language)}` : 'Sin efecto'}</span>
+                                                    <strong>{copy.socket} {activeSlotIndex + 1}</strong>
+                                                    <span>{shard ? `+${slotValue} ${getText(shard.title, language)}` : copy.noEffect}</span>
                                                 </div>
                                                 <div className={styles.colorPills}>
-                                                    {COLOR_OPTIONS.map((entry) => (
+                                                    {colorOptions.map((entry) => (
                                                         <button
                                                             key={`${item.id}-${activeSlotIndex}-${entry.value}`}
                                                             type="button"
@@ -1182,7 +1192,7 @@ export function EnchantmentsPanel({
                                                 </div>
                                                 <div className={styles.socketEditorGrid}>
                                                     <label className={styles.socketEditorField}>
-                                                        <span>Efecto</span>
+                                                        <span>{copy.effect}</span>
                                                         <CustomSelect
                                                             className={styles.compactSelect}
                                                             menuClassName={styles.compactSelectMenu}
@@ -1200,13 +1210,13 @@ export function EnchantmentsPanel({
                                                                 });
                                                             }}
                                                             options={[
-                                                                { value: '', label: 'Sin efecto' },
+                                                                { value: '', label: copy.noEffect },
                                                                 ...availableShards.map((entry) => ({ value: String(entry.id), label: getText(entry.title, language) })),
                                                             ]}
                                                         />
                                                     </label>
                                                     <label className={styles.socketEditorField}>
-                                                        <span>Nivel</span>
+                                                        <span>{copy.level}</span>
                                                         <div className={styles.levelStepper}>
                                                             <button
                                                                 type="button"
@@ -1256,7 +1266,7 @@ export function EnchantmentsPanel({
                                                 <span key={`${item.id}-${actionId}`} className={styles.enchantmentTotalChip}>+{entry.value} {entry.label}</span>
                                             ))
                                         ) : (
-                                            <span className={styles.enchantmentHint}>Sin runas en esta pieza.</span>
+                                            <span className={styles.enchantmentHint}>{copy.noRunesOnPiece}</span>
                                         )}
                                     </div>
                                 </article>
@@ -1338,7 +1348,7 @@ export function EnchantmentsPanel({
                                 })()}
                             </div>
                         ) : (
-                            <p className={styles.sublimationTooltipMuted}>Sin efectos detectados en gamedata.</p>
+                            <p className={styles.sublimationTooltipMuted}>{copy.noGamedataEffects}</p>
                         )}
                     </div>,
                     document.body,
@@ -1347,3 +1357,4 @@ export function EnchantmentsPanel({
         </div>
     );
 }
+

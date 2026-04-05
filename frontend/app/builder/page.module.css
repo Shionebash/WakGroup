@@ -748,13 +748,10 @@
 
 .elementValues {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
-    font-size: 11px;
-    text-transform: uppercase;
 }
 
-.elementValues span {
+.elementMetric {
     display: grid;
     gap: 3px;
     padding: 6px 7px;
@@ -762,8 +759,19 @@
     background: rgba(255, 255, 255, 0.04);
 }
 
+.elementMetricLabel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-soft);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
 .elementValues strong {
-    font-size: 0.95rem;
+    font-size: 1rem;
+    color: var(--text-strong);
 }
 
 .averageRow {
@@ -1233,7 +1241,7 @@
 .summaryHero {
     display: grid;
     gap: 12px;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .summaryHeroHead {
@@ -1279,13 +1287,14 @@
 .summaryHeroCopy h3 {
     margin: 0;
     color: var(--text-strong);
-    font-size: 1.08rem;
+    font-size: 1.22rem;
 }
 
 .summaryHeroCopy p {
     margin: 0;
     color: var(--text-soft);
-    font-size: 0.84rem;
+    font-size: 0.98rem;
+    line-height: 1.35;
 }
 
 .summaryHeroMeta {
@@ -1303,7 +1312,7 @@
     border: 1px solid rgba(212, 165, 116, 0.16);
     background: rgba(255, 255, 255, 0.045);
     color: var(--text-strong);
-    font-size: 0.76rem;
+    font-size: 0.9rem;
     font-weight: 700;
 }
 
@@ -1326,18 +1335,35 @@
         rgba(25, 21, 18, 0.9);
 }
 
-.summaryPrimaryCard span {
+.summaryPrimaryHead {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.summaryPrimaryIcon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    flex-shrink: 0;
+    opacity: 0.96;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.22));
+}
+
+.summaryPrimaryCard > span,
+.summaryInfoHeader > span {
     color: var(--text-soft);
-    font-size: 0.68rem;
-    line-height: 1.1;
+    font-size: 0.86rem;
+    line-height: 1.25;
     text-transform: uppercase;
     letter-spacing: 0.04em;
 }
 
 .summaryPrimaryCard strong {
     color: var(--text-strong);
-    font-size: 1.02rem;
-    line-height: 1;
+    font-size: 1.18rem;
+    line-height: 1.1;
 }
 
 .summarySectionsGrid {
@@ -1356,7 +1382,7 @@
 .summarySectionPanel h3 {
     margin: 0;
     color: var(--text-strong);
-    font-size: 0.95rem;
+    font-size: 1.08rem;
 }
 
 .summaryElementGrid {
@@ -1423,12 +1449,12 @@
 
 .summaryEnchantmentCard strong {
     color: var(--text-strong);
-    font-size: 0.9rem;
+    font-size: 1rem;
 }
 
 .summaryEnchantmentHead small {
     color: var(--text-soft);
-    font-size: 0.72rem;
+    font-size: 0.86rem;
 }
 
 .summaryTagList {
@@ -1447,7 +1473,7 @@
     border: 1px solid rgba(212, 165, 116, 0.14);
     background: rgba(255, 255, 255, 0.045);
     color: var(--text-strong);
-    font-size: 0.76rem;
+    font-size: 0.88rem;
 }
 
 .summaryTagMuted {
@@ -1478,8 +1504,48 @@
 
 .summarySecondaryCard strong {
     color: var(--text-strong);
-    font-size: 0.9rem;
+    font-size: 1.02rem;
+    line-height: 1.1;
+}
+
+.summaryInfoHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.infoBadgeAnchor {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.infoBadgeIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    border: 1px solid rgba(212, 165, 116, 0.28);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-strong);
+    font-size: 0.72rem;
+    font-weight: 700;
     line-height: 1;
+    cursor: help;
+}
+
+.infoBadgeTooltip {
+    width: min(280px, 70vw);
+}
+
+.infoBadgeTooltip strong {
+    color: var(--text-strong);
+    font-size: 0.9rem;
 }
 
 .summaryCard {
