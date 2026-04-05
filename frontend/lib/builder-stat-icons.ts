@@ -37,6 +37,7 @@ const ACTION_ICON: Record<number, string> = {
     150: 'FEROCITY.png',
     160: 'RANGE.png',
     161: 'RANGE.png',
+    162: 'PROSPECTION.png',
     166: 'WISDOM.png',
     171: 'INIT.png',
     173: 'TACKLE.png',
@@ -83,6 +84,7 @@ export function inferBuilderStatIconFromLabel(label: string): string | null {
     if (t.includes('placaje') || t.includes('tackle')) return 'TACKLE.png';
     if (t.includes('esquiva') || t.includes('dodge') || t.includes('esquive')) return 'DODGE.png';
     if (t.includes('iniciativa') || t.includes('initiative')) return 'INIT.png';
+    if (t.includes('prospe')) return 'PROSPECTION.png';
     if (t.includes('voluntad') || t.includes('willpower') || t.includes('volonte')) return 'WILLPOWER.png';
     if (t.includes('parada') || t.includes('block') || t.includes('parade')) return 'BLOCK.png';
     if (t.includes('melee') || t.includes('cuerpo')) return 'MELEE_DMG.png';

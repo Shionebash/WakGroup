@@ -27,6 +27,7 @@ const builderCopy = {
     statAll: text('Todas', 'All', 'Toutes', 'Todas'),
     equipment: text('Buscar', 'Gear', 'Equipement', 'Equipamento'),
     characteristics: text('Caracteristicas', 'Characteristics', 'Caracteristiques', 'Caracteristicas'),
+    adjustments: text('Ajustes', 'Adjustments', 'Ajustements', 'Ajustes'),
     enchantments: text('Encantamientos', 'Enchantments', 'Enchantements', 'Encantamentos'),
     summary: text('Resumen', 'Summary', 'Resume', 'Resumo'),
     equip: text('Equipar', 'Equip', 'Equiper', 'Equipar'),
@@ -84,6 +85,22 @@ const builderCopy = {
     levelShort: text('Lv.', 'Lv.', 'Nv.', 'Nv.'),
     resShort: text('RES', 'RES', 'RES', 'RES'),
     masteryShort: text('DOM', 'MAS', 'MAI', 'DOM'),
+    guildBonusTitle: text('Bonus de gremio', 'Guild bonus', 'Bonus de guilde', 'Bonus de guilda'),
+    guildBonusHelp: text('Activa el preset de bonus del gremio para sumarlo al build.', 'Enable the guild preset bonus and add it to the build.', 'Active le preset de bonus de guilde pour l ajouter au build.', 'Ative o preset de bonus da guilda para soma-lo a build.'),
+    guildBonusPreset: text('Preset visible en la imagen del gremio', 'Preset shown in the guild screenshot', 'Preset visible sur la capture de guilde', 'Preset visivel na imagem da guilda'),
+    guildBonusEnabled: text('Activo', 'Active', 'Actif', 'Ativo'),
+    guildBonusDisabled: text('Inactivo', 'Inactive', 'Inactif', 'Inativo'),
+    guildBonusButton: text('Gremio', 'Guild', 'Guilde', 'Guilda'),
+    manualStatsTitle: text('Ajustes manuales', 'Manual adjustments', 'Ajustements manuels', 'Ajustes manuais'),
+    manualStatsHelp: text('Suma o resta stats manualmente para simular bonus externos o configuraciones especiales. La vida queda fuera de esta herramienta.', 'Add or subtract stats manually to simulate external bonuses or special setups. Health is excluded from this tool.', 'Ajoutez ou retirez des stats manuellement pour simuler des bonus externes ou des configurations speciales. La vie est exclue de cet outil.', 'Some ou subtraia stats manualmente para simular bonus externos ou configuracoes especiais. Vida fica fora desta ferramenta.'),
+    manualStatsAdd: text('Agregar stat', 'Add stat', 'Ajouter une stat', 'Adicionar stat'),
+    manualStatsAvailable: text('Estadistica disponible', 'Available stat', 'Stat disponible', 'Estatistica disponivel'),
+    manualStatsEmpty: text('Aun no hay ajustes manuales activos.', 'There are no active manual adjustments yet.', 'Aucun ajustement manuel actif pour le moment.', 'Ainda nao ha ajustes manuais ativos.'),
+    manualStatsReset: text('Resetear', 'Reset', 'Reinitialiser', 'Redefinir'),
+    manualStatsRemove: text('Quitar', 'Remove', 'Retirer', 'Remover'),
+    manualStatsValue: text('Valor manual', 'Manual value', 'Valeur manuelle', 'Valor manual'),
+    manualStatsQuickStep: text('Pasos rapidos', 'Quick steps', 'Pas rapides', 'Passos rapidos'),
+    manualStatsEditHint: text('Haz clic en una fila para escribir un valor positivo o negativo.', 'Click a row to type a positive or negative value.', 'Cliquez sur une ligne pour saisir une valeur positive ou negative.', 'Clique em uma linha para digitar um valor positivo ou negativo.'),
 } as const;
 
 const enchantmentCopy = {
@@ -190,6 +207,49 @@ const exclusiveRuleLabels = {
     20: text('Solo 1 item con ranura reliquia', 'Only 1 item with a relic slot', 'Un seul objet avec emplacement relique', 'Apenas 1 item com slot reliquia'),
 } as const;
 
+const builderStatLabels: Record<number, LocalizedText> = {
+    20: text('PdV', 'HP', 'PV', 'PV'),
+    26: text('Dominio cura', 'Healing mastery', 'Maitrise soin', 'Dominio de cura'),
+    31: text('PA', 'AP', 'PA', 'PA'),
+    39: text('Armadura recibida', 'Armor received', 'Armure recue', 'Armadura recebida'),
+    40: text('Armadura dada', 'Armor given', 'Armure donnee', 'Armadura concedida'),
+    41: text('PM', 'MP', 'PM', 'PM'),
+    71: text('Resistencia espalda', 'Rear resistance', 'Resistance dos', 'Resistencia costas'),
+    80: text('Resistencia elemental', 'Elemental resistance', 'Resistance elementaire', 'Resistencia elemental'),
+    82: text('Resistencia fuego', 'Fire resistance', 'Resistance feu', 'Resistencia fogo'),
+    83: text('Resistencia agua', 'Water resistance', 'Resistance eau', 'Resistencia agua'),
+    84: text('Resistencia tierra', 'Earth resistance', 'Resistance terre', 'Resistencia terra'),
+    85: text('Resistencia aire', 'Air resistance', 'Resistance air', 'Resistencia ar'),
+    120: text('Dominio elemental', 'Elemental mastery', 'Maitrise elementaire', 'Dominio elemental'),
+    122: text('Dominio fuego', 'Fire mastery', 'Maitrise feu', 'Dominio fogo'),
+    123: text('Dominio tierra', 'Earth mastery', 'Maitrise terre', 'Dominio terra'),
+    124: text('Dominio agua', 'Water mastery', 'Maitrise eau', 'Dominio agua'),
+    125: text('Dominio aire', 'Air mastery', 'Maitrise air', 'Dominio ar'),
+    126: text('Danos infligidos', 'Damage inflicted', 'Degats infliges', 'Danos infligidos'),
+    900001: text('Danos indirectos', 'Indirect damage', 'Degats indirects', 'Danos indiretos'),
+    900002: text('Danos directos', 'Direct damage', 'Degats directs', 'Danos diretos'),
+    149: text('Dominio critico', 'Critical mastery', 'Maitrise critique', 'Dominio critico'),
+    150: text('% Golpe critico', '% Critical hit', '% Coup critique', '% Golpe critico'),
+    160: text('Alcance', 'Range', 'Portee', 'Alcance'),
+    162: text('Prospeccion', 'Prospecting', 'Prospection', 'Prospeccao'),
+    166: text('Sabiduria', 'Wisdom', 'Sagesse', 'Sabedoria'),
+    171: text('Iniciativa', 'Initiative', 'Initiative', 'Iniciativa'),
+    173: text('Placaje', 'Lock', 'Tacle', 'Trava'),
+    175: text('Esquiva', 'Dodge', 'Esquive', 'Esquiva'),
+    177: text('Voluntad', 'Willpower', 'Volonte', 'Vontade'),
+    180: text('Dominio espalda', 'Rear mastery', 'Maitrise dos', 'Dominio costas'),
+    191: text('PW', 'WP', 'PW', 'PW'),
+    304: text('Control', 'Control', 'Controle', 'Controle'),
+    875: text('% Parada', '% Block', '% Parade', '% Bloqueio'),
+    988: text('Resistencia critica', 'Critical resistance', 'Resistance critique', 'Resistencia critica'),
+    1052: text('Dominio melee', 'Melee mastery', 'Maitrise melee', 'Dominio corpo a corpo'),
+    1053: text('Dominio distancia', 'Distance mastery', 'Maitrise distance', 'Dominio distancia'),
+    1055: text('Dominio berserker', 'Berserk mastery', 'Maitrise berserk', 'Dominio berserk'),
+    1095: text('Curas realizadas', 'Heals performed', 'Soins realises', 'Curas realizadas'),
+    45897: text('Armadura', 'Armor', 'Armure', 'Armadura'),
+    191191: text('Brisa', 'Breeze', 'Brise', 'Brisa'),
+};
+
 export function getBuilderCopy(language: Language) {
     return pickTable(builderCopy, language);
 }
@@ -219,6 +279,11 @@ export function getAptitudeLineLabel(lineId: string, language: Language) {
 
 export function getExclusivePropertyRuleLabel(propertyId: number, language: Language) {
     return pick(exclusiveRuleLabels[propertyId as keyof typeof exclusiveRuleLabels] || exclusiveRuleLabels[8], language);
+}
+
+export function getBuilderStatLabel(actionId: number, language: Language, fallback?: string) {
+    const localized = builderStatLabels[actionId];
+    return localized ? pick(localized, language) : (fallback || `Stat ${actionId}`);
 }
 
 export function getRuneColorLabels(language: Language) {
@@ -274,6 +339,8 @@ export function getBuilderStatInfo(actionId: number, label: string, language: La
         crit: text('Aumenta tu probabilidad de golpe critico.', 'Increases your critical hit chance.', 'Augmente votre chance de coup critique.', 'Aumenta sua chance de golpe critico.'),
         block: text('Reduce parte del dano recibido cuando se activa.', 'Reduces part of incoming damage when triggered.', 'Reduit une partie des degats recus lorsqu elle s active.', 'Reduz parte do dano recebido quando ativa.'),
         initiative: text('Ayuda a actuar antes en el orden de turno.', 'Helps you act earlier in turn order.', 'Aide a jouer plus tot dans l ordre des tours.', 'Ajuda a agir antes na ordem de turno.'),
+        wisdom: text('Mejora ganancias relacionadas con experiencia y progresion.', 'Improves gains related to experience and progression.', 'Ameliore les gains lies a l experience et a la progression.', 'Melhora ganhos ligados a experiencia e progressao.'),
+        prospecting: text('Mejora el potencial de botin y recoleccion fuera del dano directo.', 'Improves loot and gathering potential outside direct damage.', 'Ameliore le potentiel de butin et de collecte en dehors des degats directs.', 'Melhora o potencial de saque e coleta fora do dano direto.'),
         dodge: text('Facilita salir del cuerpo a cuerpo.', 'Makes it easier to leave close combat.', 'Facilite la sortie du corps a corps.', 'Facilita sair do corpo a corpo.'),
         lock: text('Dificulta que el objetivo se aleje de ti.', 'Makes it harder for enemies to move away from you.', 'Rend plus difficile la fuite des ennemis.', 'Dificulta que o alvo se afaste de voce.'),
         range: text('Extiende el alcance de tus hechizos y acciones.', 'Extends the range of your spells and actions.', 'Etend la portee de vos sorts et actions.', 'Aumenta o alcance de seus feitiços e acoes.'),
@@ -296,6 +363,8 @@ export function getBuilderStatInfo(actionId: number, label: string, language: La
                                     : normalized.includes('crit') ? (normalized.includes('res') ? 'resistance' : 'crit')
                                         : normalized.includes('parada') || normalized.includes('block') ? 'block'
                                             : normalized.includes('inici') ? 'initiative'
+                                                : normalized.includes('sabid') || normalized.includes('wisdom') || normalized.includes('sagesse') ? 'wisdom'
+                                                    : normalized.includes('prospe') ? 'prospecting'
                                                 : normalized.includes('esqu') || normalized.includes('dodge') ? 'dodge'
                                                     : normalized.includes('plac') || normalized.includes('lock') ? 'lock'
                                                         : normalized.includes('alcance') || normalized.includes('portee') || normalized.includes('range') ? 'range'

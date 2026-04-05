@@ -14,6 +14,13 @@ interface BuilderStatMeta {
     visible?: boolean;
 }
 
+export interface BuilderVisibleStatDefinition {
+    actionId: number;
+    label: string;
+    order: number;
+    group: BuilderStatEntry['group'];
+}
+
 interface BuilderRelatedStat {
     sourceActionId: number;
     targetActionId: number;
@@ -54,6 +61,7 @@ const STAT_META: Record<number, BuilderStatMeta> = {
     150: { label: '% Golpe critico', order: 12, group: 'secondary', visible: true },
     160: { label: 'Alcance', order: 4, group: 'secondary', visible: true },
     161: { label: 'Alcance', order: 4, group: 'secondary', visible: false },
+    162: { label: 'Prospeccion', order: 10, group: 'secondary', visible: true },
     166: { label: 'Sabiduria', order: 11, group: 'secondary', visible: true },
     171: { label: 'Iniciativa', order: 9, group: 'secondary', visible: true },
     173: { label: 'Placaje', order: 7, group: 'secondary', visible: true },
@@ -119,6 +127,21 @@ function getMeta(actionId: number): BuilderStatMeta {
         group: 'secondary',
         visible: true,
     };
+}
+
+export function getVisibleBuilderStatDefinitions() {
+    return Object.entries(STAT_META)
+        .map(([actionIdText, meta]) => ({
+            actionId: Number(actionIdText),
+            label: meta.label,
+            order: meta.order,
+            group: meta.group,
+            visible: meta.visible !== false,
+        }))
+        .filter((entry) => entry.visible)
+        .filter((entry) => entry.actionId !== 20)
+        .sort((left, right) => left.order - right.order || left.label.localeCompare(right.label))
+        .map(({ actionId, label, order, group }) => ({ actionId, label, order, group })) satisfies BuilderVisibleStatDefinition[];
 }
 
 export function createBuilderStatMap(context: BuilderBaseContext) {

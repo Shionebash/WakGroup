@@ -14,6 +14,7 @@ import {
     BUILDER_SECONDARY_MASTERY_ACTION_IDS,
     createBuilderStatMap,
     getBuilderStatEntries,
+    getVisibleBuilderStatDefinitions,
     getBuilderStatValue,
     SUBLIMATION_MAX_HP_PERCENT_ACTION_IDS,
     type BuilderStatEntry,
@@ -25,13 +26,14 @@ import {
     getBuilderCopy,
     getBuilderElementLabel,
     getBuilderElementOptions,
+    getBuilderStatLabel,
     getBuilderStatInfo,
     getElementMetricInfo,
     getExclusivePropertyRuleLabel,
 } from './i18n';
 
 type LocaleText = Record<string, string | undefined>;
-type TabId = 'equipment' | 'characteristics' | 'enchantments' | 'summary';
+type TabId = 'equipment' | 'characteristics' | 'adjustments' | 'enchantments' | 'summary';
 type SectionId = 'intelligence' | 'strength' | 'agility' | 'chance' | 'major';
 type ElementKey = 'fire' | 'water' | 'earth' | 'air';
 
@@ -87,6 +89,8 @@ interface ImportedBuildBuilderState {
     mastery_preference?: ElementKey[];
     resistance_preference?: ElementKey[];
     enchantments?: EnchantmentsSnapshot | null;
+    guild_bonus_enabled?: boolean;
+    manual_stats?: Record<string, number | string>;
 }
 interface ImportedBuildPayload {
     id_build?: number | string | null;
@@ -205,7 +209,7 @@ const COPY = {
     equipmentRequirementNotMet: 'No cumples los requisitos para equipar este item',
 };
 
-const TABS: TabId[] = ['equipment', 'characteristics', 'enchantments', 'summary'];
+const TABS: TabId[] = ['equipment', 'characteristics', 'adjustments', 'enchantments', 'summary'];
 const SLOT_GROUPS = [
     ['helmet', 'amulet', 'cloak', 'breastplate', 'epaulettes', 'belt', 'boots'],
     ['ring_left', 'ring_right', 'main_hand', 'off_hand'],
@@ -304,6 +308,21 @@ const APTITUDE_SECTIONS: AptitudeSection[] = [
 ];
 
 const DEFAULT_ELEMENT_PREFERENCE: ElementKey[] = ['fire', 'water', 'earth', 'air'];
+const VISIBLE_MANUAL_STAT_IDS = new Set(getVisibleBuilderStatDefinitions().map((entry) => entry.actionId));
+const GUILD_BONUS_PRESET: Array<{ actionId: number; value: number }> = [
+    { actionId: 20, value: 55 },
+    { actionId: 82, value: 20 },
+    { actionId: 83, value: 20 },
+    { actionId: 84, value: 20 },
+    { actionId: 85, value: 20 },
+    { actionId: 126, value: 8 },
+    { actionId: 162, value: 10 },
+    { actionId: 166, value: 10 },
+    { actionId: 171, value: 10 },
+    { actionId: 173, value: 20 },
+    { actionId: 175, value: 20 },
+    { actionId: 1095, value: 8 },
+];
 
 function normalizeImportedAptitudes(source: ImportedBuildPayload['aptitudes'], buildLevel: number) {
     const next: Record<string, number> = {};
@@ -342,6 +361,22 @@ function normalizeElementPreference(source: unknown) {
         if (!normalized.includes(entry)) normalized.push(entry);
     }
     return normalized;
+}
+
+function normalizeImportedManualStats(source: unknown) {
+    const next: Record<number, number> = {};
+    if (!source || typeof source !== 'object') return next;
+
+    for (const [actionIdText, rawValue] of Object.entries(source as Record<string, unknown>)) {
+        const actionId = Math.round(Number(actionIdText));
+        const value = Math.round(Number(rawValue));
+        if (!Number.isFinite(actionId) || actionId <= 0 || actionId === 20) continue;
+        if (!VISIBLE_MANUAL_STAT_IDS.has(actionId)) continue;
+        if (!Number.isFinite(value) || value === 0) continue;
+        next[actionId] = value;
+    }
+
+    return next;
 }
 
 function getText(text: LocaleText | undefined, language: string) { return text?.[language] || text?.es || text?.en || ''; }
@@ -521,6 +556,8 @@ function buildFinalStatMap(params: {
     isHuppermage: boolean;
     aptitudes: Record<string, number>;
     aptitudeBonusMap: Map<number, number>;
+    guildBonusMap?: Map<number, number>;
+    manualStatMap?: Map<number, number>;
     equippedItems: BuilderItem[];
     runeStats?: EnchantmentStatMap;
 }) {
@@ -535,6 +572,8 @@ function buildFinalStatMap(params: {
     }
     for (const stat of equipmentTotals.values()) addBuilderStatValue(totals, stat.actionId, stat.value, stat.label);
     params.aptitudeBonusMap.forEach((value, actionId) => addBuilderStatValue(totals, actionId, value));
+    params.guildBonusMap?.forEach((value, actionId) => addBuilderStatValue(totals, actionId, value));
+    params.manualStatMap?.forEach((value, actionId) => addBuilderStatValue(totals, actionId, value));
 
     let sublimationMaxHpPercent = 0;
     params.runeStats?.forEach((entry, actionId) => {
@@ -764,6 +803,10 @@ export default function BuilderPage() {
     const [enchantmentSummary, setEnchantmentSummary] = useState<EnchantmentSummaryEntry[]>([]);
     const [enchantmentSnapshot, setEnchantmentSnapshot] = useState<EnchantmentsSnapshot | null>(null);
     const [enchantmentSnapshotResetKey, setEnchantmentSnapshotResetKey] = useState(0);
+    const [guildBonusesEnabled, setGuildBonusesEnabled] = useState(false);
+    const [manualStatAdjustments, setManualStatAdjustments] = useState<Record<number, number>>({});
+    const [activeManualStatId, setActiveManualStatId] = useState<number | null>(null);
+    const [manualInputDrafts, setManualInputDrafts] = useState<Record<number, string>>({});
     const importBuildInputRef = useRef<HTMLInputElement | null>(null);
 
     useEffect(() => {
@@ -852,6 +895,22 @@ export default function BuilderPage() {
         }
         return totals;
     }, [aptitudes]);
+    const guildBonusMap = useMemo(() => {
+        const totals = new Map<number, number>();
+        if (!guildBonusesEnabled) return totals;
+        for (const entry of GUILD_BONUS_PRESET) totals.set(entry.actionId, (totals.get(entry.actionId) || 0) + entry.value);
+        return totals;
+    }, [guildBonusesEnabled]);
+    const manualStatMap = useMemo(() => {
+        const totals = new Map<number, number>();
+        for (const [actionIdText, value] of Object.entries(manualStatAdjustments)) {
+            const actionId = Number(actionIdText);
+            if (!Number.isFinite(actionId) || actionId <= 0 || actionId === 20 || !value) continue;
+            if (!VISIBLE_MANUAL_STAT_IDS.has(actionId)) continue;
+            totals.set(actionId, value);
+        }
+        return totals;
+    }, [manualStatAdjustments]);
 
     const baseStatsBeforeEnchantments = useMemo(() => buildFinalStatMap({
         buildLevel,
@@ -859,8 +918,10 @@ export default function BuilderPage() {
         isHuppermage,
         aptitudes,
         aptitudeBonusMap,
+        guildBonusMap,
+        manualStatMap,
         equippedItems: activeEquippedItems,
-    }), [activeEquippedItems, aptitudeBonusMap, aptitudes, buildLevel, isHuppermage, isIop]);
+    }), [activeEquippedItems, aptitudeBonusMap, aptitudes, buildLevel, guildBonusMap, isHuppermage, isIop, manualStatMap]);
 
     const baseStatValues = useMemo(
         () => new Map(Array.from(baseStatsBeforeEnchantments.entries()).map(([actionId, entry]) => [actionId, entry.value])),
@@ -873,9 +934,11 @@ export default function BuilderPage() {
         isHuppermage,
         aptitudes,
         aptitudeBonusMap,
+        guildBonusMap,
+        manualStatMap,
         equippedItems: activeEquippedItems,
         runeStats,
-    }), [activeEquippedItems, aptitudeBonusMap, aptitudes, buildLevel, isHuppermage, isIop, runeStats]);
+    }), [activeEquippedItems, aptitudeBonusMap, aptitudes, buildLevel, guildBonusMap, isHuppermage, isIop, manualStatMap, runeStats]);
 
     const stat = (ids: number[]) => getBuilderStatValue(finalStats, ids);
     const preferredMastery = useMemo(() => distributePreferredElementStat(activeEquippedItems.flatMap((item) => item.stats), 1068, masteryPreference), [activeEquippedItems, masteryPreference]);
@@ -943,6 +1006,31 @@ export default function BuilderPage() {
         () => summaryStatEntries.filter((entry) => entry.group === 'secondary'),
         [summaryStatEntries],
     );
+    const manualStatOptions = useMemo(
+        () => getVisibleBuilderStatDefinitions().map((entry) => ({
+            value: String(entry.actionId),
+            label: getBuilderStatLabel(entry.actionId, language as Language, entry.label),
+            actionId: entry.actionId,
+            order: entry.order,
+        })),
+        [language],
+    );
+    const manualVisibleStatIds = useMemo(
+        () => manualStatOptions.map((entry) => entry.actionId),
+        [manualStatOptions],
+    );
+    const manualStatOptionById = useMemo(
+        () => new Map(manualStatOptions.map((entry) => [entry.actionId, entry])),
+        [manualStatOptions],
+    );
+    const manualStatRows = useMemo(
+        () => manualVisibleStatIds.map((actionId) => ({
+            actionId,
+            label: manualStatOptionById.get(actionId)?.label || getBuilderStatLabel(actionId, language as Language),
+            value: manualStatAdjustments[actionId] || 0,
+        })),
+        [language, manualStatAdjustments, manualStatOptionById, manualVisibleStatIds],
+    );
 
     const relicCount = equippedItems.filter((item) => item.rarity === 5).length;
     const epicCount = equippedItems.filter((item) => item.rarity === 7).length;
@@ -959,10 +1047,12 @@ export default function BuilderPage() {
             isHuppermage,
             aptitudes,
             aptitudeBonusMap,
+            guildBonusMap,
+            manualStatMap,
             equippedItems: hypoItems,
             runeStats,
         });
-    }, [activeEquippedItems, activeSlot, aptitudeBonusMap, aptitudes, buildLevel, equippedBySlot, isHuppermage, isIop, previewItem, runeStats]);
+    }, [activeEquippedItems, activeSlot, aptitudeBonusMap, aptitudes, buildLevel, equippedBySlot, guildBonusMap, isHuppermage, isIop, manualStatMap, previewItem, runeStats]);
     const comparisonRows = useMemo(() => {
         if (!previewItem || !comparisonFinalStats) return [];
         const currentEntries = new Map(Array.from(finalStats.values()).map((entry) => [entry.actionId, entry]));
@@ -1005,6 +1095,67 @@ export default function BuilderPage() {
         setAptitudes((currentState) => ({ ...currentState, [line.id]: clamped }));
     }
 
+    function setManualStatValue(actionId: number, nextValue: number) {
+        if (!Number.isFinite(actionId) || actionId <= 0 || actionId === 20) return;
+        if (!VISIBLE_MANUAL_STAT_IDS.has(actionId)) return;
+        const rounded = Math.round(nextValue);
+        setManualStatAdjustments((current) => ({ ...current, [actionId]: rounded }));
+    }
+
+    function sanitizeManualInput(value: string) {
+        const onlyNumeric = value.replace(/[^\d-]/g, '');
+        const sign = onlyNumeric.startsWith('-') ? '-' : '';
+        const digits = onlyNumeric.replace(/-/g, '');
+        return `${sign}${digits}`;
+    }
+
+    function startManualStatEdit(actionId: number) {
+        if (!VISIBLE_MANUAL_STAT_IDS.has(actionId)) return;
+        setActiveManualStatId(actionId);
+        setManualInputDrafts((current) => ({
+            ...current,
+            [actionId]: String(manualStatAdjustments[actionId] || 0),
+        }));
+    }
+
+    function updateManualInputDraft(actionId: number, rawValue: string) {
+        setManualInputDrafts((current) => ({
+            ...current,
+            [actionId]: sanitizeManualInput(rawValue),
+        }));
+    }
+
+    function commitManualInputDraft(actionId: number) {
+        const rawValue = manualInputDrafts[actionId];
+        const nextValue = rawValue === undefined || rawValue === '' || rawValue === '-' ? 0 : parseInt(rawValue, 10);
+        setManualStatValue(actionId, Number.isFinite(nextValue) ? nextValue : 0);
+        setManualInputDrafts((current) => ({
+            ...current,
+            [actionId]: String(Number.isFinite(nextValue) ? nextValue : 0),
+        }));
+        setActiveManualStatId((current) => (current === actionId ? null : current));
+    }
+
+    function removeManualStatRow(actionId: number) {
+        setManualStatAdjustments((current) => {
+            const next = { ...current };
+            delete next[actionId];
+            return next;
+        });
+        setManualInputDrafts((current) => {
+            const next = { ...current };
+            delete next[actionId];
+            return next;
+        });
+        setActiveManualStatId((current) => (current === actionId ? null : current));
+    }
+
+    function resetManualStats() {
+        setManualStatAdjustments({});
+        setManualInputDrafts({});
+        setActiveManualStatId(null);
+    }
+
     async function importBuildFromJson(sourceText: string) {
         try {
             const parsed = JSON.parse(sourceText) as ImportedBuildPayload;
@@ -1027,6 +1178,7 @@ export default function BuilderPage() {
             if (Number.isFinite(nextBuildLevel) && nextBuildLevel > 0) setBuildLevel(nextBuildLevel);
             const nextClassId = Number(parsed.id_job);
             if (Number.isFinite(nextClassId) && nextClassId > 0) setSelectedClassId(nextClassId);
+            const importedManualStats = normalizeImportedManualStats(builderState?.manual_stats);
             setAptitudes(normalizeImportedAptitudes(parsed.aptitudes, nextBuildLevel > 0 ? nextBuildLevel : buildLevel));
             setMasteryPreference(normalizeElementPreference(builderState?.mastery_preference ?? parsed.mastery_preference));
             setResistancePreference(normalizeElementPreference(builderState?.resistance_preference ?? parsed.resistance_preference));
@@ -1035,6 +1187,10 @@ export default function BuilderPage() {
             setEnchantmentSummary([]);
             setEnchantmentSnapshot(builderState?.enchantments ?? parsed.enchantments ?? null);
             setEnchantmentSnapshotResetKey((current) => current + 1);
+            setGuildBonusesEnabled(Boolean(builderState?.guild_bonus_enabled));
+            setManualStatAdjustments(importedManualStats);
+            setManualInputDrafts(Object.fromEntries(Object.entries(importedManualStats).map(([actionId, value]) => [actionId, String(value)])));
+            setActiveManualStatId(null);
 
             const importedItemsById = new Map(importedItems.map((item) => [item.id, item]));
             const resolvedEntries = importedEquipments
@@ -1068,6 +1224,10 @@ export default function BuilderPage() {
                 mastery_preference: masteryPreference,
                 resistance_preference: resistancePreference,
                 enchantments: enchantmentSnapshot,
+                guild_bonus_enabled: guildBonusesEnabled,
+                manual_stats: Object.fromEntries(
+                    Object.entries(manualStatAdjustments).filter(([, value]) => value !== 0),
+                ),
             },
             equipments: Object.entries(equippedBySlot).map(([slotId, item]) => ({
                 id_equipment: item.id,
@@ -1165,7 +1325,34 @@ export default function BuilderPage() {
                         <div className={styles.identityCopy}>
                             <input className={styles.buildNameInput} value={buildName} onChange={(event) => setBuildName(event.target.value)} aria-label={copy.buildName} />
                             <div className={styles.identityMeta}><span>{buildLevel}</span><span>{getText(selectedClass?.names, language)}</span><span>{copy.basePoints}</span></div>
-                            <div className={styles.limitStrip}><Badge label={copy.relics} value={relicCount} tone={styles.rarityRelic} /><Badge label={copy.epics} value={epicCount} tone={styles.rarityEpic} /><Badge label={copy.souvenirs} value={souvenirCount} tone={styles.raritySouvenir} /></div>
+                            <div className={styles.limitStrip}>
+                                <span className={`${styles.tooltipAnchor} ${styles.guildBonusAnchor}`}>
+                                    <button
+                                        type="button"
+                                        className={`${styles.guildBonusLimitButton} ${guildBonusesEnabled ? styles.guildBonusLimitButtonActive : ''}`.trim()}
+                                        onClick={() => setGuildBonusesEnabled((current) => !current)}
+                                    >
+                                        {copy.guildBonusButton}
+                                    </button>
+                                    <span className={`${styles.hoverCard} ${styles.guildBonusTooltip}`} role="tooltip">
+                                        <strong>{copy.guildBonusTitle}</strong>
+                                        <div className={styles.guildBonusTooltipList}>
+                                            {GUILD_BONUS_PRESET.map((entry) => {
+                                                const label = getBuilderStatLabel(entry.actionId, language as Language);
+                                                return (
+                                                    <div key={`header-guild-${entry.actionId}`} className={styles.guildBonusTooltipRow}>
+                                                        <BuilderStatLabel actionId={entry.actionId} label={label} className={styles.guildBonusTooltipLabel} />
+                                                        <strong>{formatStatValue(entry.actionId, entry.value, { signed: true, label })}</strong>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </span>
+                                </span>
+                                <Badge label={copy.relics} value={relicCount} tone={styles.rarityRelic} />
+                                <Badge label={copy.epics} value={epicCount} tone={styles.rarityEpic} />
+                                <Badge label={copy.souvenirs} value={souvenirCount} tone={styles.raritySouvenir} />
+                            </div>
                         </div>
                     </div>
                     <div className={styles.topControls}>
@@ -1239,8 +1426,8 @@ export default function BuilderPage() {
 
                 <nav className={styles.tabBar}>{TABS.map((tabId) => <button key={tabId} type="button" className={`${styles.tabButton} ${tab === tabId ? styles.tabButtonActive : ''}`} onClick={() => setTab(tabId)}>{copy[tabId]}</button>)}</nav>
 
-                <div className={`${styles.contentGrid} ${tab === 'characteristics' || tab === 'enchantments' || tab === 'summary' ? styles.contentGridCharacteristics : ''}`}>
-                    <section className={`${styles.leftRail} ${tab === 'characteristics' || tab === 'enchantments' || tab === 'summary' ? styles.characteristicsAuxHidden : ''}`}>
+                <div className={`${styles.contentGrid} ${tab === 'characteristics' || tab === 'adjustments' || tab === 'enchantments' || tab === 'summary' ? styles.contentGridCharacteristics : ''}`}>
+                    <section className={`${styles.leftRail} ${tab === 'characteristics' || tab === 'adjustments' || tab === 'enchantments' || tab === 'summary' ? styles.characteristicsAuxHidden : ''}`}>
                         <div className={styles.panel}>
                             <h3>{copy.mainStats}</h3>
                             <div className={styles.mainStatsGrid}>
@@ -1280,7 +1467,7 @@ export default function BuilderPage() {
                         </div>
                     </section>
 
-                    <section className={`${styles.centerStage} ${tab === 'characteristics' || tab === 'enchantments' || tab === 'summary' ? styles.centerStageWide : ''}`}>
+                    <section className={`${styles.centerStage} ${tab === 'characteristics' || tab === 'adjustments' || tab === 'enchantments' || tab === 'summary' ? styles.centerStageWide : ''}`}>
                         {tab === 'equipment' && <div className={styles.panel}>
                             <div className={styles.filterGrid}>
                                 <label className={styles.filterField}><span>{copy.search}</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={copy.searchPlaceholder} /></label>
@@ -1305,10 +1492,129 @@ export default function BuilderPage() {
                             })}</div>
                         </div>}
 
-                        {tab === 'characteristics' && <div className={styles.aptitudeLayout}>
-                            {localizedAptitudeSections.map((section) => <section key={section.id} className={styles.aptitudeSection}><header className={`${styles.aptitudeSectionHeader} ${APTITUDE_SECTION_TONES[section.id]}`}><h3>{section.label}</h3><strong>{spentBySection[section.id]}/{availableBySection[section.id]} {copy.points}</strong></header><div className={styles.aptitudeTable}><div className={styles.aptitudeTableHead}><span>{copy.aptitude}</span><span>{copy.maxLevels}</span><span>{copy.currentValue}</span></div><div className={styles.aptitudeRows}>{section.lines.map((line) => { const spent = aptitudes[line.id] || 0; const maxLabel = formatAptitudeMax(line.max, copy.noLimit); return <div key={line.id} className={styles.aptitudeRow}><div className={styles.aptitudeName}>{line.label}</div><div className={styles.aptitudeLimit}><span className={`${styles.aptitudePill} ${Number.isFinite(line.max) ? styles.aptitudePillLimit : styles.aptitudePillSoft}`}>{maxLabel}</span></div><div className={styles.aptitudeValueCell}><span className={`${styles.aptitudePill} ${spent > 0 ? styles.aptitudePillActive : styles.aptitudePillSoft}`}>{spent} {spent === 1 ? copy.pointShort : copy.pointsShort}</span><div className={styles.aptitudeControls}><button type="button" className={styles.aptitudeButton} onClick={(event) => changeAptitude(section, line, spent - (event.shiftKey ? 10 : 1))}>-</button><strong>{spent}</strong><button type="button" className={styles.aptitudeButton} onClick={(event) => changeAptitude(section, line, spent + (event.shiftKey ? 10 : 1))}>+</button></div></div></div>; })}</div></div></section>)}
-                            <section className={`${styles.aptitudeSection} ${styles.aptitudeSummarySection}`}><header className={`${styles.aptitudeSectionHeader} ${styles.aptitudeToneSummary}`}><h3>{copy.aptitudeSummary}</h3><strong>{Object.values(spentBySection).reduce((sum, value) => sum + value, 0)} {copy.points}</strong></header><div className={styles.aptitudeSummaryBody}>{aptitudeSummary.length === 0 ? <div className={styles.emptyState}>{copy.basePoints}</div> : aptitudeSummary.map((entry) => <div key={entry.id} className={styles.statRow}><span>{entry.label}</span><strong>{entry.value} {copy.points}</strong></div>)}</div></section>
-                        </div>}
+                        {tab === 'characteristics' && (
+                            <div className={styles.characteristicsStack}>
+                                <div className={styles.aptitudeLayout}>
+                                    {localizedAptitudeSections.map((section) => (
+                                        <section key={section.id} className={styles.aptitudeSection}>
+                                            <header className={`${styles.aptitudeSectionHeader} ${APTITUDE_SECTION_TONES[section.id]}`}>
+                                                <h3>{section.label}</h3>
+                                                <strong>{spentBySection[section.id]}/{availableBySection[section.id]} {copy.points}</strong>
+                                            </header>
+                                            <div className={styles.aptitudeTable}>
+                                                <div className={styles.aptitudeTableHead}>
+                                                    <span>{copy.aptitude}</span>
+                                                    <span>{copy.maxLevels}</span>
+                                                    <span>{copy.currentValue}</span>
+                                                </div>
+                                                <div className={styles.aptitudeRows}>
+                                                    {section.lines.map((line) => {
+                                                        const spent = aptitudes[line.id] || 0;
+                                                        const maxLabel = formatAptitudeMax(line.max, copy.noLimit);
+                                                        return (
+                                                            <div key={line.id} className={styles.aptitudeRow}>
+                                                                <div className={styles.aptitudeName}>{line.label}</div>
+                                                                <div className={styles.aptitudeLimit}>
+                                                                    <span className={`${styles.aptitudePill} ${Number.isFinite(line.max) ? styles.aptitudePillLimit : styles.aptitudePillSoft}`}>
+                                                                        {maxLabel}
+                                                                    </span>
+                                                                </div>
+                                                                <div className={styles.aptitudeValueCell}>
+                                                                    <span className={`${styles.aptitudePill} ${spent > 0 ? styles.aptitudePillActive : styles.aptitudePillSoft}`}>
+                                                                        {spent} {spent === 1 ? copy.pointShort : copy.pointsShort}
+                                                                    </span>
+                                                                    <div className={styles.aptitudeControls}>
+                                                                        <button type="button" className={styles.aptitudeButton} onClick={(event) => changeAptitude(section, line, spent - (event.shiftKey ? 10 : 1))}>-</button>
+                                                                        <strong>{spent}</strong>
+                                                                        <button type="button" className={styles.aptitudeButton} onClick={(event) => changeAptitude(section, line, spent + (event.shiftKey ? 10 : 1))}>+</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        </section>
+                                    ))}
+
+                                    <section className={`${styles.aptitudeSection} ${styles.aptitudeSummarySection}`}>
+                                        <header className={`${styles.aptitudeSectionHeader} ${styles.aptitudeToneSummary}`}>
+                                            <h3>{copy.aptitudeSummary}</h3>
+                                            <strong>{Object.values(spentBySection).reduce((sum, value) => sum + value, 0)} {copy.points}</strong>
+                                        </header>
+                                        <div className={styles.aptitudeSummaryBody}>
+                                            {aptitudeSummary.length === 0 ? (
+                                                <div className={styles.emptyState}>{copy.basePoints}</div>
+                                            ) : aptitudeSummary.map((entry) => (
+                                                <div key={entry.id} className={styles.statRow}>
+                                                    <span>{entry.label}</span>
+                                                    <strong>{entry.value} {copy.points}</strong>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </section>
+                            </div>
+                            </div>
+                        )}
+
+                        {tab === 'adjustments' && (
+                                <section className={`${styles.panel} ${styles.manualAdjustmentsPanel}`}>
+                                    <div className={styles.manualAdjustmentsHeader}>
+                                        <div className={styles.supportSectionHeaderCopy}>
+                                            <h3>{copy.manualStatsTitle}</h3>
+                                            <p className={styles.supportSectionHelp}>{copy.manualStatsEditHint}</p>
+                                        </div>
+                                        <button type="button" className={`btn btn-secondary ${styles.manualToolbarAction}`} onClick={resetManualStats} disabled={manualStatRows.length === 0}>
+                                            {copy.manualStatsReset}
+                                        </button>
+                                    </div>
+                                    <div className={styles.manualAdjustmentsBody}>
+                                        <p className={styles.supportSectionMeta}>{copy.manualStatsHelp}</p>
+                                    {manualStatRows.length === 0 ? (
+                                        <p className={styles.supportSectionMeta}>{copy.manualStatsEmpty}</p>
+                                    ) : (
+                                            <div className={styles.manualStatGrid}>
+                                                {manualStatRows.map((entry) => (
+                                                    <div key={`manual-${entry.actionId}`} className={`${styles.manualStatCard} ${activeManualStatId === entry.actionId ? styles.manualStatCardEditing : ''}`.trim()}>
+                                                        <button type="button" className={styles.manualStatButton} onClick={() => startManualStatEdit(entry.actionId)}>
+                                                            <BuilderStatLabel actionId={entry.actionId} label={entry.label} className={styles.manualStatLabel} />
+                                                            {activeManualStatId === entry.actionId ? (
+                                                                <input
+                                                                    type="text"
+                                                                    inputMode="numeric"
+                                                                    pattern="-?[0-9]*"
+                                                                    className={styles.manualInlineInput}
+                                                                    value={manualInputDrafts[entry.actionId] ?? String(entry.value)}
+                                                                    onChange={(event) => updateManualInputDraft(entry.actionId, event.target.value)}
+                                                                    onBlur={() => commitManualInputDraft(entry.actionId)}
+                                                                    onKeyDown={(event) => {
+                                                                        if (event.key === 'Enter') {
+                                                                            event.preventDefault();
+                                                                            commitManualInputDraft(entry.actionId);
+                                                                        }
+                                                                        if (event.key === 'Escape') {
+                                                                            event.preventDefault();
+                                                                            setManualInputDrafts((current) => ({ ...current, [entry.actionId]: String(entry.value) }));
+                                                                            setActiveManualStatId(null);
+                                                                        }
+                                                                    }}
+                                                                    onClick={(event) => event.stopPropagation()}
+                                                                    autoFocus
+                                                                />
+                                                            ) : (
+                                                                <strong className={styles.manualInlineValue}>{entry.value}</strong>
+                                                            )}
+                                                        </button>
+                                                        <button type="button" className={styles.manualInlineRemove} onClick={() => removeManualStatRow(entry.actionId)} aria-label={`${copy.manualStatsRemove} ${entry.label}`}>
+                                                            ×
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                </section>
+                        )}
 
                         <div className={tab === 'enchantments' ? undefined : styles.enchantmentPanelHostHidden}>
                             <EnchantmentsPanel
@@ -1424,7 +1730,7 @@ export default function BuilderPage() {
                         </div>}
                     </section>
 
-                    <aside className={`${styles.rightRail} ${tab === 'characteristics' || tab === 'enchantments' || tab === 'summary' ? `${styles.rightRailSecondary} ${styles.characteristicsAuxHidden}` : ''}`}>
+                    <aside className={`${styles.rightRail} ${tab === 'characteristics' || tab === 'adjustments' || tab === 'enchantments' || tab === 'summary' ? `${styles.rightRailSecondary} ${styles.characteristicsAuxHidden}` : ''}`}>
                         <div className={styles.panel}>{inspectedItem ? <div className={`${styles.inspectCard} ${inspectedIssues.length === 0 ? RARITY_SURFACE[inspectedItem.rarity] || styles.raritySurfaceCommon : ''} ${inspectedIssues.length > 0 ? styles.inspectCardInvalid : ''}`.trim()}><div className={styles.inspectHead}><div className={styles.inspectIconBox}><ItemIcon item={inspectedItem} alt={getText(inspectedItem.title, language)} className={styles.inspectIconImg} fallback={getText(inspectedItem.itemTypeName, language).slice(0, 1)} /></div><div><h3>{getText(inspectedItem.title, language)}</h3><p>{getText(inspectedItem.itemTypeName, language)} - {copy.levelShort} {inspectedItem.level}</p></div></div><div className={styles.inspectActions}><button type="button" className="btn btn-secondary" onClick={() => inspectedSlot && unequipSlot(inspectedSlot)}>{copy.unequip}</button></div>{inspectedIssues.length > 0 ? <div className={styles.itemConditionWarning}>{copy.invalidCondition}: {Array.from(new Set(inspectedIssues)).join(', ')}</div> : null}<p className={styles.inspectDescription}>{getText(inspectedItem.description, language)}</p><div className={styles.inspectStats}>
                                                 {inspectedItem.stats.map((entry, index) => (
                                                     <div key={`inspect-${inspectedItem.id}-${entry.key}-${entry.value}-${index}`} className={styles.statRow}>

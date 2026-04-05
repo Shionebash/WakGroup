@@ -30,6 +30,7 @@
     position: relative;
     isolation: isolate;
     overflow: visible;
+    z-index: 24;
     display: grid;
     grid-template-columns: minmax(280px, 0.9fr) minmax(250px, 0.76fr) minmax(460px, 1.5fr);
     gap: 8px;
@@ -92,6 +93,7 @@
     gap: 8px;
     align-items: center;
     align-self: center;
+    z-index: 30;
 }
 
 .classPortrait {
@@ -144,6 +146,9 @@
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
+    align-items: center;
+    position: relative;
+    z-index: 40;
 }
 
 .topControls {
@@ -166,6 +171,82 @@
     justify-self: end;
     align-self: start;
     padding-top: 15px;
+}
+
+.guildBonusAnchor {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    isolation: isolate;
+    z-index: 120;
+}
+
+.guildBonusAnchor:hover {
+    z-index: 32000;
+}
+
+.guildBonusLimitButton {
+    min-height: 31px;
+    padding: 0 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(212, 165, 116, 0.18);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-strong);
+    font-size: 0.82rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: border-color 0.16s ease, background 0.16s ease, color 0.16s ease;
+}
+
+.guildBonusLimitButton:hover {
+    border-color: rgba(255, 207, 92, 0.34);
+    background: rgba(255, 207, 92, 0.08);
+}
+
+.guildBonusLimitButtonActive {
+    border-color: rgba(120, 177, 103, 0.34);
+    background: rgba(120, 177, 103, 0.18);
+    color: #d9efca;
+}
+
+.guildBonusTooltip {
+    left: 0;
+    right: auto;
+    top: calc(100% + 8px);
+    z-index: 33000;
+    width: min(360px, 80vw);
+    max-height: min(420px, 60vh);
+    overflow: auto;
+}
+
+.guildBonusTooltip > strong {
+    color: var(--text-strong);
+    font-size: 0.92rem;
+    margin-bottom: 2px;
+}
+
+.guildBonusTooltipList {
+    display: grid;
+    gap: 4px;
+}
+
+.guildBonusTooltipRow {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+    padding: 6px 8px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.guildBonusTooltipRow strong {
+    color: var(--text-strong);
+    font-size: 0.88rem;
+}
+
+.guildBonusTooltipLabel {
+    font-size: 0.8rem;
 }
 
 .hiddenFileInput {
@@ -1032,6 +1113,197 @@
         linear-gradient(90deg, rgba(212, 165, 116, 0.18), rgba(104, 87, 61, 0.08));
 }
 
+.aptitudeSectionWide {
+    grid-column: span 2;
+}
+
+.characteristicsStack {
+    display: grid;
+    gap: 12px;
+}
+
+.supportSectionHeaderCopy {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+}
+
+.supportSectionHelp,
+.supportSectionMeta {
+    margin: 0;
+    color: var(--text-soft);
+}
+
+.supportSectionHelp {
+    font-size: 0.82rem;
+    line-height: 1.35;
+}
+
+.supportSectionMeta {
+    font-size: 0.84rem;
+    line-height: 1.35;
+}
+
+.supportSectionBody {
+    display: grid;
+    gap: 12px;
+    padding: 10px;
+    align-content: start;
+}
+
+.supportSectionToggle {
+    min-height: 34px;
+    padding: 0 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(212, 165, 116, 0.18);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-soft);
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: border-color 0.16s ease, background 0.16s ease, color 0.16s ease;
+}
+
+.supportSectionToggle:hover {
+    border-color: rgba(255, 207, 92, 0.3);
+    color: var(--text-strong);
+}
+
+.supportSectionToggleActive {
+    border-color: rgba(120, 177, 103, 0.32);
+    background: rgba(120, 177, 103, 0.16);
+    color: #d7efc8;
+}
+
+.manualToolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: end;
+}
+
+.manualToolbarAction {
+    min-height: 40px;
+    align-self: end;
+}
+
+.manualAdjustmentsPanel {
+    display: grid;
+    gap: 0;
+    padding: 0;
+    overflow: visible;
+}
+
+.manualAdjustmentsHeader {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(212, 165, 116, 0.14);
+    background:
+        linear-gradient(180deg, rgba(54, 48, 40, 0.94), rgba(31, 26, 21, 0.98)),
+        linear-gradient(90deg, rgba(212, 165, 116, 0.18), rgba(104, 87, 61, 0.08));
+}
+
+.manualAdjustmentsBody {
+    display: grid;
+    gap: 12px;
+    padding: 12px 14px 14px;
+    align-content: start;
+}
+
+.manualStatLabel {
+    color: var(--text-strong);
+    font-size: 0.88rem;
+    font-weight: 700;
+}
+
+.manualStatGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 6px;
+    align-content: start;
+}
+
+.manualStatCard {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px;
+    align-items: center;
+    min-height: 42px;
+    padding: 4px;
+    border-radius: 10px;
+    border: 1px solid rgba(212, 165, 116, 0.12);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015)),
+        rgba(27, 22, 18, 0.94);
+}
+
+.manualStatCardEditing {
+    border-color: rgba(255, 207, 92, 0.32);
+    box-shadow: 0 0 0 1px rgba(255, 207, 92, 0.12);
+}
+
+.manualStatButton {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    align-items: center;
+    min-height: 32px;
+    padding: 0 8px;
+    border: 0;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    cursor: text;
+}
+
+.manualInlineValue {
+    color: var(--text-strong);
+    font-size: 0.95rem;
+    line-height: 1;
+}
+
+.manualInlineInput {
+    width: 72px;
+    min-height: 24px;
+    padding: 0 6px;
+    border-radius: 6px;
+    border: 1px solid rgba(212, 165, 116, 0.2);
+    background: #fff;
+    color: #1d1712;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-align: right;
+}
+
+.manualInlineInput:focus {
+    outline: none;
+    border-color: rgba(255, 207, 92, 0.5);
+    box-shadow: 0 0 0 2px rgba(255, 207, 92, 0.14);
+}
+
+.manualInlineRemove {
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-soft);
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.16s ease, color 0.16s ease;
+}
+
+.manualInlineRemove:hover {
+    background: rgba(160, 56, 56, 0.2);
+    color: #ffd1d1;
+}
+
 .catalogList,
 .enchantList {
     display: grid;
@@ -1893,6 +2165,10 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
+    .aptitudeSectionWide {
+        grid-column: span 2;
+    }
+
     .aptitudeTableHead,
     .aptitudeRow {
         grid-template-columns: minmax(0, 1fr) 132px;
@@ -1907,6 +2183,14 @@
         grid-column: 1 / -1;
         align-items: flex-start;
         flex-wrap: wrap;
+    }
+
+    .manualToolbar {
+        grid-template-columns: 1fr;
+    }
+
+    .manualStatGrid {
+        grid-template-columns: 1fr;
     }
 
     .itemCard {
@@ -1968,6 +2252,10 @@
         grid-template-columns: 1fr;
     }
 
+    .aptitudeSectionWide {
+        grid-column: auto;
+    }
+
     .aptitudeTableHead,
     .aptitudeRow {
         grid-template-columns: 1fr;
@@ -1985,6 +2273,10 @@
         grid-column: auto;
         flex-wrap: wrap;
         align-items: stretch;
+    }
+
+    .manualStatButton {
+        grid-template-columns: minmax(0, 1fr) 84px;
     }
 
     .enchantRow {
