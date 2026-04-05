@@ -28,7 +28,7 @@ import { startGroupInactivityMonitor } from './services/group-inactivity.js';
 import { startWakfuGamedataScheduler } from './services/wakfu-gamedata.js';
 
 const app = express();
-app.set('trust proxy', 3);
+app.set('trust proxy', 1);
 const server = http.createServer(app);
 
 // ESM __dirname equivalent
