@@ -303,6 +303,8 @@ const APTITUDE_SECTIONS: AptitudeSection[] = [
         { id: 'maj-wp', label: 'Punto de Wakfu', max: 1, bonuses: [{ actionId: 191, value: 2 }] },
         { id: 'maj-control', label: 'Control y daños', max: 1, bonuses: [{ actionId: 304, value: 1 }, { actionId: 120, value: 20 }] },
         { id: 'maj-damage', label: '% Daños infligidos', max: 1, bonuses: [{ actionId: 126, value: 10 }] },
+        { id: 'maj-indirect-damage', label: '% Danos indirectos', max: 1, bonuses: [{ actionId: 900001, value: 10 }] },
+        { id: 'maj-heals-performed', label: '% Curas realizadas', max: 1, bonuses: [{ actionId: 1095, value: 10 }] },
         { id: 'maj-res', label: 'Resistencia elemental', max: 1, bonuses: [{ actionId: 80, value: 50 }] },
     ]},
 ];
@@ -382,7 +384,7 @@ function normalizeImportedManualStats(source: unknown) {
 function getText(text: LocaleText | undefined, language: string) { return text?.[language] || text?.es || text?.en || ''; }
 function getItemIconUrl(item: BuilderItem) { return item.gfxId ? getAssetUrl(`assets/items/${item.gfxId}.png`) : ''; }
 function isPercentStat(actionId: number, label?: string) {
-    if (actionId === 150 || actionId === 168) return true;
+    if ([126, 150, 168, 1095, 900001].includes(actionId)) return true;
     return (label || '').trim().startsWith('%');
 }
 function isResistanceStat(actionId: number, label?: string) {
@@ -531,7 +533,10 @@ function parseEquipmentRequirements(description: LocaleText): EquipmentRequireme
     return requirements;
 }
 function getAptitudeAvailable(sectionId: SectionId, level: number) {
-    if (sectionId === 'major') return Math.min(Math.floor(Math.max(level - 1, 0) / 50), 4);
+    if (sectionId === 'major') {
+        if (level < 25) return 0;
+        return Math.min(Math.floor((level - 25) / 50) + 1, 5);
+    }
     return Math.floor(Math.max(level - 1, 0) / 4);
 }
 function formatAptitudeMax(max: number, noLimitLabel: string) { return Number.isFinite(max) ? String(max) : noLimitLabel; }

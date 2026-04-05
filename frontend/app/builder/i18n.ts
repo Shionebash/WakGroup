@@ -197,6 +197,8 @@ const aptitudeLineLabels = {
     'maj-wp': text('Punto de Wakfu', 'Wakfu point', 'Point de Wakfu', 'Ponto de Wakfu'),
     'maj-control': text('Control y danos', 'Control and damage', 'Controle et degats', 'Controle e dano'),
     'maj-damage': text('% Danos infligidos', '% Damage inflicted', '% Degats infliges', '% Danos infligidos'),
+    'maj-indirect-damage': text('% Danos indirectos', '% Indirect damage', '% Degats indirects', '% Danos indiretos'),
+    'maj-heals-performed': text('% Curas realizadas', '% Heals performed', '% Soins realises', '% Curas realizadas'),
     'maj-res': text('Resistencia elemental', 'Elemental resistance', 'Resistance elementaire', 'Resistencia elemental'),
 } as const;
 
