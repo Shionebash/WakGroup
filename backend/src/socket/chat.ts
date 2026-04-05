@@ -8,6 +8,7 @@ import { touchDungeonGroupActivity, touchPvpGroupActivity } from '../services/gr
 
 // In-memory map of userId -> socket ids
 const userSockets = new Map<string, string>();
+let latestDesktopUpdatePayload: Record<string, unknown> | null = null;
 
 async function isDungeonGroupMember(groupId: string, userId: string): Promise<boolean> {
     const db = getDb();
@@ -56,6 +57,13 @@ export function initSocket(server: HttpServer): SocketServer {
             ok: true,
             time: new Date().toISOString(),
         });
+
+        if (latestDesktopUpdatePayload) {
+            socket.emit('desktop_update_available', {
+                ...latestDesktopUpdatePayload,
+                replayed: true,
+            });
+        }
     });
 
     io.use((socket, next) => {
@@ -226,8 +234,14 @@ export function emitNotification(io: SocketServer, userId: string, event: string
 }
 
 export function broadcastDesktopUpdate(io: SocketServer, data: Record<string, unknown> = {}): void {
-    io.of('/updates').emit('desktop_update_available', {
+    latestDesktopUpdatePayload = {
         issuedAt: new Date().toISOString(),
         ...data,
-    });
+    };
+
+    io.of('/updates').emit('desktop_update_available', latestDesktopUpdatePayload);
+}
+
+export function getDesktopUpdateSubscriberCount(io: SocketServer): number {
+    return io.of('/updates').sockets.size;
 }

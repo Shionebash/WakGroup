@@ -10,6 +10,7 @@ const router = Router();
 const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID!;
 const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET!;
 const DISCORD_REDIRECT_URI = process.env.DISCORD_REDIRECT_URI!;
+const IS_DEV = process.env.NODE_ENV !== 'production';
 
 // Step 1: redirect to Discord OAuth
 router.get('/discord', (req, res) => {
@@ -52,6 +53,15 @@ router.get('/discord', (req, res) => {
         scope: 'identify',
         state,
     });
+    if (IS_DEV) {
+        console.log('[auth] Starting Discord OAuth', {
+            from: req.query.from || 'web',
+            redirectUri: DISCORD_REDIRECT_URI,
+            host: req.get('host'),
+            secureCookies: isSecure,
+            desktopCallbackPort,
+        });
+    }
     res.redirect(`https://discord.com/api/oauth2/authorize?${params}`);
 });
 
@@ -59,6 +69,14 @@ router.get('/discord', (req, res) => {
 router.get('/discord/callback', async (req: Request, res: Response): Promise<void> => {
     const { code, state } = req.query;
     const savedState = req.cookies?.oauth_state;
+    if (IS_DEV) {
+        console.log('[auth] Received Discord callback', {
+            hasCode: Boolean(code),
+            hasState: Boolean(state),
+            savedStatePresent: Boolean(savedState),
+            redirectTarget: req.cookies?.oauth_redirect_target || 'web',
+        });
+    }
 
     // Validate state to prevent CSRF
     if (!state || !savedState || state !== savedState) {
@@ -87,6 +105,11 @@ router.get('/discord/callback', async (req: Request, res: Response): Promise<voi
         );
 
         const accessToken = tokenRes.data.access_token;
+        if (IS_DEV) {
+            console.log('[auth] Discord token exchange ok', {
+                accessTokenPresent: Boolean(accessToken),
+            });
+        }
 
         // Fetch user info from Discord
         const userRes = await axios.get('https://discord.com/api/users/@me', {
@@ -114,6 +137,14 @@ router.get('/discord/callback', async (req: Request, res: Response): Promise<voi
                 [userId, discordUser.id, discordUser.username, discordUser.discriminator || '0', discordUser.avatar]
             );
         }
+        if (IS_DEV) {
+            console.log('[auth] User upsert ok', {
+                userId,
+                discordId: discordUser.id,
+                username: discordUser.username,
+                existingUser: Boolean(existing),
+            });
+        }
 
         // Issue JWT in httpOnly cookie
         const token = generateToken({
@@ -122,6 +153,12 @@ router.get('/discord/callback', async (req: Request, res: Response): Promise<voi
             username: discordUser.username,
         });
         setCookieSession(res, token, req);
+        if (IS_DEV) {
+            console.log('[auth] Session token issued', {
+                userId,
+                redirectTarget: req.cookies?.oauth_redirect_target || 'web',
+            });
+        }
 
         // Si el login vino de la mini app, redirigir al callback local de Electron
         const redirectTarget = req.cookies?.oauth_redirect_target;
@@ -188,6 +225,12 @@ router.get('/me', requireAuth, async (req: Request, res: Response): Promise<void
         if (!user) {
             res.status(404).json({ error: 'Usuario no encontrado' });
             return;
+        }
+        if (IS_DEV) {
+            console.log('[auth] /me ok', {
+                userId: req.user!.userId,
+                username: user.username,
+            });
         }
         res.json(user);
     } catch (err) {

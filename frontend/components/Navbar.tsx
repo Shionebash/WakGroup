@@ -62,6 +62,7 @@ export default function Navbar() {
                     <div className="navbar-links">
                         <Link href="/" className="nav-link nav-link-rich">{t('nav.groups', language)}</Link>
                         <Link href="/dungeons" className="nav-link nav-link-rich">{t('nav.dungeons', language)}</Link>
+                        <Link href="/builder" className="nav-link nav-link-rich">Builder</Link>
                         <Link href="/vspvp" className="nav-link nav-link-rich">{t('nav.pvp', language)}</Link>
                         <Link href="/wiki" className="nav-link nav-link-rich">{t('nav.wiki', language)}</Link>
                     </div>

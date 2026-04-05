@@ -1,0 +1,24 @@
+{
+  "version": "1.91.1.54",
+  "lastCheckedAt": "2026-04-04T21:47:08.793Z",
+  "lastSyncedAt": "2026-04-02T16:41:10.501Z",
+  "configUrl": "https://wakfu.cdn.ankama.com/gamedata/config.json",
+  "downloadedTypes": [
+    "actions",
+    "blueprints",
+    "collectibleResources",
+    "equipmentItemTypes",
+    "harvestLoots",
+    "itemTypes",
+    "itemProperties",
+    "items",
+    "jobsItems",
+    "recipeCategories",
+    "recipeIngredients",
+    "recipeResults",
+    "recipes",
+    "resourceTypes",
+    "resources",
+    "states"
+  ]
+}

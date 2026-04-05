@@ -68,11 +68,11 @@ export default function CustomSelect({
 
             {open && !disabled && (
                 <div className={`custom-select-menu ${menuClassName}`.trim()} role="listbox">
-                    {options.map((option) => {
+                    {options.map((option, index) => {
                         const active = option.value === value;
                         return (
                             <button
-                                key={option.value}
+                                key={`${option.value}-${index}`}
                                 type="button"
                                 className={`custom-select-option ${active ? 'active' : ''}`.trim()}
                                 onClick={() => {

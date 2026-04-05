@@ -12,7 +12,8 @@
         "dev:watch": "tsx watch src/index.ts",
         "build": "tsc",
         "start": "node dist/index.js",
-        "seed": "tsx src/db/seed.ts"
+        "seed": "tsx src/db/seed.ts",
+        "sync:wakfu-data": "tsx src/scripts/sync-wakfu-data.ts"
     },
     "dependencies": {
         "@types/cookie-parser": "^1.4.7",

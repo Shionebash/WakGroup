@@ -52,6 +52,10 @@ function loadData() {
 
 loadData();
 
+export function reloadMobRouteData() {
+    loadData();
+}
+
 router.get('/:id/drops', (req: Request, res: Response) => {
     const { id } = req.params;
     const mob = mobsData[id] || mobsData[String(id)];
