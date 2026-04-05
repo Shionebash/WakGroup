@@ -712,7 +712,7 @@
 
 .filterGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 8px;
 }
 
@@ -720,8 +720,35 @@
     min-width: 0;
 }
 
-.filterGrid > :first-child {
+.filterFieldWide {
     grid-column: span 2;
+}
+
+.filterField:has(:global(.custom-select-trigger.is-open)) {
+    z-index: 400;
+}
+
+.filterField :global(.custom-select-trigger),
+.filterField :global(.custom-select-trigger:hover),
+.filterField :global(.custom-select-trigger.is-open) {
+    background: linear-gradient(180deg, #4a4238 0%, #3a322a 100%) !important;
+    backdrop-filter: none;
+    opacity: 1;
+}
+
+.filterField :global(.custom-select-menu) {
+    background: linear-gradient(180deg, #231d16 0%, #18130f 100%) !important;
+    backdrop-filter: none;
+    opacity: 1;
+}
+
+.filterField :global(.custom-select-option) {
+    background: #231d16;
+}
+
+.filterField :global(.custom-select-option:hover),
+.filterField :global(.custom-select-option.active) {
+    background: #4a3d2c;
 }
 
 .mainStatsGrid {
@@ -1320,7 +1347,7 @@
     display: grid;
     grid-template-columns: 54px minmax(0, 1fr) auto;
     gap: 10px;
-    align-items: center;
+    align-items: start;
     padding: 10px;
     border-radius: 14px;
     border: 1px solid rgba(212, 165, 116, 0.1);
@@ -1376,7 +1403,7 @@
 .itemBody {
     min-width: 0;
     display: grid;
-    gap: 6px;
+    gap: 8px;
 }
 
 .itemHeader {
@@ -1415,6 +1442,81 @@
 .inspectHead p {
     margin: 4px 0 0;
     font-size: 0.85rem;
+}
+
+.itemSummaryGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 6px;
+}
+
+.itemSummaryMetric {
+    display: grid;
+    gap: 4px;
+    min-height: 56px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(212, 165, 116, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.itemSummaryMetric span,
+.itemDetailHint,
+.itemDetailsTitle {
+    color: var(--text-soft);
+}
+
+.itemSummaryMetric span {
+    font-size: 0.72rem;
+    line-height: 1.15;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.itemSummaryMetric strong {
+    color: var(--text-strong);
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.itemSummaryMetricFocus {
+    border-color: rgba(255, 207, 92, 0.24);
+    background:
+        linear-gradient(180deg, rgba(255, 207, 92, 0.08), rgba(255, 255, 255, 0.03)),
+        rgba(43, 34, 24, 0.95);
+}
+
+.itemDetailHint {
+    font-size: 0.8rem;
+    line-height: 1.3;
+}
+
+.itemDetailsPanel {
+    display: grid;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(212, 165, 116, 0.14);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015)),
+        rgba(24, 19, 16, 0.96);
+}
+
+.itemDetailsTitle {
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.itemActions {
+    display: flex;
+    align-items: center;
+    align-self: stretch;
+}
+
+.itemActions > button {
+    align-self: center;
 }
 
 .statChips {
@@ -2140,7 +2242,7 @@
         flex: 1 1 100%;
     }
 
-    .filterGrid > :first-child {
+    .filterFieldWide {
         grid-column: span 1;
     }
 
@@ -2197,8 +2299,14 @@
         grid-template-columns: 62px minmax(0, 1fr);
     }
 
-    .itemCard > button {
+    .itemActions {
         grid-column: 1 / -1;
+        justify-content: flex-start;
+    }
+
+    .itemActions > button {
+        grid-column: 1 / -1;
+        width: 100%;
     }
 }
 

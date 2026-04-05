@@ -36,6 +36,7 @@ type LocaleText = Record<string, string | undefined>;
 type TabId = 'equipment' | 'characteristics' | 'adjustments' | 'enchantments' | 'summary';
 type SectionId = 'intelligence' | 'strength' | 'agility' | 'chance' | 'major';
 type ElementKey = 'fire' | 'water' | 'earth' | 'air';
+type StatSortDirection = 'desc' | 'asc';
 
 interface BuilderSlot { id: string; label: LocaleText; typeIds?: number[]; includePosition?: string; }
 interface BuilderClass {
@@ -325,6 +326,8 @@ const GUILD_BONUS_PRESET: Array<{ actionId: number; value: number }> = [
     { actionId: 175, value: 20 },
     { actionId: 1095, value: 8 },
 ];
+const ITEM_SUMMARY_MASTERY_ACTION_IDS = new Set([26, 120, 122, 123, 124, 125, 149, 180, 1052, 1053, 1055, 1068]);
+const ITEM_SUMMARY_RESISTANCE_ACTION_IDS = new Set([80, 82, 83, 84, 85]);
 
 function normalizeImportedAptitudes(source: ImportedBuildPayload['aptitudes'], buildLevel: number) {
     const next: Record<string, number> = {};
@@ -383,6 +386,17 @@ function normalizeImportedManualStats(source: unknown) {
 
 function getText(text: LocaleText | undefined, language: string) { return text?.[language] || text?.es || text?.en || ''; }
 function getItemIconUrl(item: BuilderItem) { return item.gfxId ? getAssetUrl(`assets/items/${item.gfxId}.png`) : ''; }
+function getItemStatTotalByKey(item: BuilderItem, statKey: string) {
+    if (!statKey) return 0;
+    return item.stats.reduce((sum, stat) => sum + (stat.key === statKey ? stat.value : 0), 0);
+}
+function getItemSummaryTotal(item: BuilderItem, actionIds: Set<number>) {
+    return item.stats.reduce((sum, stat) => {
+        if (!actionIds.has(stat.actionId)) return sum;
+        if (stat.actionId === 80) return sum + (stat.value * 4);
+        return sum + stat.value;
+    }, 0);
+}
 function isPercentStat(actionId: number, label?: string) {
     if ([126, 150, 168, 1095, 900001].includes(actionId)) return true;
     return (label || '').trim().startsWith('%');
@@ -789,10 +803,12 @@ export default function BuilderPage() {
     const [selectedClassId, setSelectedClassId] = useState(1);
     const [query, setQuery] = useState('');
     const [buildLevel, setBuildLevel] = useState(230);
+    const [minItemLevel, setMinItemLevel] = useState(0);
     const [maxItemLevel, setMaxItemLevel] = useState(0); // 0 = sin filtro de nivel
     const [rarity, setRarity] = useState(0);
     const [itemTypeId, setItemTypeId] = useState(0);
     const [statKey, setStatKey] = useState('');
+    const [statSortDirection, setStatSortDirection] = useState<StatSortDirection>('desc');
     const [items, setItems] = useState<BuilderItem[]>([]);
     const [loadingItems, setLoadingItems] = useState(false);
     const [equippedBySlot, setEquippedBySlot] = useState<Record<string, BuilderItem>>({});
@@ -823,14 +839,37 @@ export default function BuilderPage() {
             .catch(() => setMetadata({ slots: [], classes: [], equipmentTypes: [], statOptions: [], rarities: [], totalItems: 0 }));
     }, []);
 
+    const handleMinItemLevelChange = (value: string) => {
+        const next = Number(value) || 0;
+        setMinItemLevel(next);
+        if (next > 0 && maxItemLevel > 0 && next > maxItemLevel) setMaxItemLevel(next);
+    };
+
+    const handleMaxItemLevelChange = (value: string) => {
+        const next = Number(value) || 0;
+        setMaxItemLevel(next);
+        if (next > 0 && minItemLevel > 0 && next < minItemLevel) setMinItemLevel(next);
+    };
+
     useEffect(() => {
         if (!activeSlot) return;
         setLoadingItems(true);
-        const params = { slot: activeSlot, query, rarity: rarity || undefined, maxLevel: maxItemLevel > 0 ? maxItemLevel : undefined, itemTypeId: itemTypeId || undefined, statKey: statKey || undefined, limit: 80 };
+        const params = {
+            slot: activeSlot,
+            query,
+            rarity: rarity || undefined,
+            minLevel: minItemLevel > 0 ? minItemLevel : undefined,
+            maxLevel: maxItemLevel > 0 ? maxItemLevel : undefined,
+            itemTypeId: itemTypeId || undefined,
+            statKey: statKey || undefined,
+            sortBy: statKey ? 'stat' : undefined,
+            sortDirection: statKey ? statSortDirection : undefined,
+            limit: 120,
+        };
         api.get<BuilderItemsResponse>('/builder/items', { params })
             .then((response) => setItems(response.data.items || []))
             .finally(() => setLoadingItems(false));
-    }, [activeSlot, query, rarity, maxItemLevel, itemTypeId, statKey]);
+    }, [activeSlot, query, rarity, minItemLevel, maxItemLevel, itemTypeId, statKey, statSortDirection]);
 
     const slotMap = useMemo(() => new Map((metadata?.slots || []).map((slot) => [slot.id, slot])), [metadata]);
     const activeSlotDefinition = useMemo(() => activeSlot ? slotMap.get(activeSlot) || null : null, [activeSlot, slotMap]);
@@ -844,9 +883,27 @@ export default function BuilderPage() {
     const inspectedItem = inspectedSlot ? equippedBySlot[inspectedSlot] || null : null;
     const inspectedIssues = inspectedSlot ? equippedConditionState.invalidBySlot.get(inspectedSlot) || [] : [];
     const previewItem = useMemo(() => items.find((entry) => entry.id === previewItemId) || null, [items, previewItemId]);
-    const levelBracketOptions = useMemo(
-        () => [{ value: '0', label: language === 'en' ? 'All levels' : language === 'fr' ? 'Tous les niveaux' : language === 'pt' ? 'Todos os niveis' : 'Todos los niveles' }, ...LEVEL_BRACKETS.map((entry) => ({ value: String(entry.max), label: String(entry.max) }))],
-        [language],
+    const minLevelOptions = useMemo(
+        () => [
+            { value: '0', label: copy.minLevelAny },
+            ...LEVEL_BRACKETS
+                .filter((entry) => !maxItemLevel || entry.min <= maxItemLevel)
+                .map((entry) => ({ value: String(entry.min), label: String(entry.min) })),
+        ],
+        [copy.minLevelAny, maxItemLevel],
+    );
+    const buildLevelOptions = useMemo(
+        () => LEVEL_BRACKETS.map((entry) => ({ value: String(entry.max), label: String(entry.max) })),
+        [],
+    );
+    const maxLevelOptions = useMemo(
+        () => [
+            { value: '0', label: copy.maxLevelAny },
+            ...LEVEL_BRACKETS
+                .filter((entry) => !minItemLevel || entry.max >= minItemLevel)
+                .map((entry) => ({ value: String(entry.max), label: String(entry.max) })),
+        ],
+        [copy.maxLevelAny, minItemLevel],
     );
     const classOptions = useMemo(() => (metadata?.classes || []).map((entry) => ({ value: String(entry.id), label: getText(entry.names, language) })), [language, metadata]);
     const rarityOptions = useMemo(() => [{ value: '0', label: copy.rarityAll }, ...(metadata?.rarities || []).map((entry) => ({ value: String(entry.id), label: getText(entry.label, language) }))], [copy.rarityAll, language, metadata]);
@@ -855,6 +912,13 @@ export default function BuilderPage() {
         const allTypes = metadata?.equipmentTypes || [];
         return [{ value: '0', label: copy.itemTypeAll }, ...allTypes.map((entry) => ({ value: String(entry.id), label: getText(entry.label, language) }))];
     }, [copy.itemTypeAll, language, metadata]);
+    const statSortOptions = useMemo(
+        () => [
+            { value: 'desc', label: copy.statSortDesc },
+            { value: 'asc', label: copy.statSortAsc },
+        ],
+        [copy.statSortAsc, copy.statSortDesc],
+    );
 
     useEffect(() => {
         if (!itemTypeId || !activeSlotDefinition) return;
@@ -867,6 +931,7 @@ export default function BuilderPage() {
         if (!stillValid) setItemTypeId(0);
     }, [activeSlotDefinition, itemTypeId, metadata]);
     const statOptions = useMemo(() => [{ value: '', label: copy.statAll }, ...(metadata?.statOptions || []).map((entry) => ({ value: entry.key, label: getText(entry.label, language) }))], [copy.statAll, language, metadata]);
+    const selectedStatOption = useMemo(() => (metadata?.statOptions || []).find((entry) => entry.key === statKey) || null, [metadata, statKey]);
     const selectedClassNames = selectedClass?.names;
     const isIop = useMemo(() => {
         const names = [selectedClassNames?.es, selectedClassNames?.en, selectedClassNames?.fr, selectedClassNames?.pt];
@@ -1040,7 +1105,7 @@ export default function BuilderPage() {
     const relicCount = equippedItems.filter((item) => item.rarity === 5).length;
     const epicCount = equippedItems.filter((item) => item.rarity === 7).length;
     const souvenirCount = equippedItems.filter((item) => item.rarity === 6).length;
-    const activeFiltersCount = [rarity > 0, itemTypeId > 0, statKey !== '', query.trim() !== ''].filter(Boolean).length;
+    const activeFiltersCount = [rarity > 0, itemTypeId > 0, statKey !== '', query.trim() !== '', minItemLevel > 0, maxItemLevel > 0].filter(Boolean).length;
     const aptitudeSummary = localizedAptitudeSections.flatMap((section) => section.lines.filter((line) => (aptitudes[line.id] || 0) > 0).map((line) => ({ id: line.id, label: line.label, value: aptitudes[line.id] || 0 })));
     const equippedInActiveSlot = activeSlot ? equippedBySlot[activeSlot] || null : null;
     const comparisonFinalStats = useMemo(() => {
@@ -1362,7 +1427,7 @@ export default function BuilderPage() {
                     </div>
                     <div className={styles.topControls}>
                         <label className={`${styles.topControl} ${styles.classTopControl}`.trim()}><span>{copy.class}</span><CustomSelect value={String(selectedClassId)} onChange={(value) => setSelectedClassId(Number(value))} options={classOptions} /></label>
-                        <label className={`${styles.topControl} ${styles.levelTopControl}`.trim()}><span>{copy.level}</span><CustomSelect value={String(buildLevel)} onChange={(value) => setBuildLevel(Number(value))} options={levelBracketOptions} className={styles.levelHeaderSelect} menuClassName={styles.levelHeaderSelectMenu} /></label>
+                        <label className={`${styles.topControl} ${styles.levelTopControl}`.trim()}><span>{copy.level}</span><CustomSelect value={String(buildLevel)} onChange={(value) => setBuildLevel(Number(value))} options={buildLevelOptions} className={styles.levelHeaderSelect} menuClassName={styles.levelHeaderSelectMenu} /></label>
                     </div>
                     <div className={styles.topActions}>
                         <input
@@ -1475,25 +1540,45 @@ export default function BuilderPage() {
                     <section className={`${styles.centerStage} ${tab === 'characteristics' || tab === 'adjustments' || tab === 'enchantments' || tab === 'summary' ? styles.centerStageWide : ''}`}>
                         {tab === 'equipment' && <div className={styles.panel}>
                             <div className={styles.filterGrid}>
-                                <label className={styles.filterField}><span>{copy.search}</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={copy.searchPlaceholder} /></label>
-                                <label className={styles.filterField}><span>{copy.maxLevel}</span><CustomSelect value={String(maxItemLevel)} onChange={(value) => setMaxItemLevel(Number(value) || 0)} options={levelBracketOptions} /></label>
+                                <label className={`${styles.filterField} ${styles.filterFieldWide}`}><span>{copy.search}</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={copy.searchPlaceholder} /></label>
+                                <label className={styles.filterField}><span>{copy.minLevel}</span><CustomSelect value={String(minItemLevel)} onChange={handleMinItemLevelChange} options={minLevelOptions} /></label>
+                                <label className={styles.filterField}><span>{copy.maxLevel}</span><CustomSelect value={String(maxItemLevel)} onChange={handleMaxItemLevelChange} options={maxLevelOptions} /></label>
                                 <label className={styles.filterField}><span>{copy.rarity}</span><CustomSelect value={String(rarity)} onChange={(value) => setRarity(Number(value) || 0)} options={rarityOptions} /></label>
                                 <label className={styles.filterField}><span>{copy.itemType}</span><CustomSelect value={String(itemTypeId)} onChange={(value) => setItemTypeId(Number(value) || 0)} options={itemTypeOptions} /></label>
                                 <label className={styles.filterField}><span>{copy.statFilter}</span><CustomSelect value={statKey} onChange={setStatKey} options={statOptions} /></label>
+                                <label className={styles.filterField}><span>{copy.statSort}</span><CustomSelect value={statSortDirection} onChange={(value) => setStatSortDirection(value === 'asc' ? 'asc' : 'desc')} options={statSortOptions} disabled={!statKey} /></label>
                             </div>
                             <div className={styles.catalogList}>{loadingItems ? <div className={styles.emptyState}>{copy.loading}</div> : items.length === 0 ? <div className={styles.emptyState}>{copy.noResults}</div> : items.map((item) => {
                                 const rarityLabel = metadata?.rarities.find((entry) => entry.id === item.rarity);
                                 const equipped = activeSlot && equippedBySlot[activeSlot]?.id === item.id;
                                 const nextEquipIssues = activeSlot ? Array.from(getEquippedConditionState({ ...equippedBySlot, [activeSlot]: item }, exclusivePropertyRules, copy).invalidBySlot.values()).flat() : [];
                                 const blocked = nextEquipIssues.length > 0;
-                                return <article key={`${activeSlot}-${item.id}`} className={`${styles.itemCard} ${blocked ? styles.itemCardInvalid : RARITY_SURFACE[item.rarity] || styles.raritySurfaceCommon} ${previewItemId === item.id ? styles.itemCardPreview : ''}`.trim()} onClick={() => setPreviewItemId(item.id)}><div className={styles.itemIconBox}><BuilderItemStatsHover language={language} item={{ id: item.id, title: item.title, description: item.description, level: item.level, stats: item.stats }}><ItemIcon item={item} alt={getText(item.title, language)} className={styles.itemIconImg} fallback={getText(item.itemTypeName, language).slice(0, 1)} /></BuilderItemStatsHover></div><div className={styles.itemBody}><div className={styles.itemHeader}><div><h4>{getText(item.title, language)}</h4><p>{getText(item.itemTypeName, language)} - {copy.levelShort} {item.level}</p></div><span className={`${styles.rarityTag} ${RARITY_TONES[item.rarity] || ''}`}>{rarityLabel ? getText(rarityLabel.label, language) : `R${item.rarity}`}</span></div><div className={styles.statChips}>
-                                                                    {item.stats.slice(0, 6).map((entry, index) => (
+                                const expanded = previewItemId === item.id;
+                                const masteryTotal = getItemSummaryTotal(item, ITEM_SUMMARY_MASTERY_ACTION_IDS);
+                                const resistanceTotal = getItemSummaryTotal(item, ITEM_SUMMARY_RESISTANCE_ACTION_IDS);
+                                const focusStatEntry = statKey ? item.stats.find((entry) => entry.key === statKey) || null : null;
+                                const focusStatValue = statKey ? getItemStatTotalByKey(item, statKey) : 0;
+                                return <article key={`${activeSlot}-${item.id}`} className={`${styles.itemCard} ${blocked ? styles.itemCardInvalid : RARITY_SURFACE[item.rarity] || styles.raritySurfaceCommon} ${expanded ? styles.itemCardPreview : ''}`.trim()} onClick={() => setPreviewItemId((current) => current === item.id ? null : item.id)}><div className={styles.itemIconBox}><BuilderItemStatsHover language={language} item={{ id: item.id, title: item.title, description: item.description, level: item.level, stats: item.stats }}><ItemIcon item={item} alt={getText(item.title, language)} className={styles.itemIconImg} fallback={getText(item.itemTypeName, language).slice(0, 1)} /></BuilderItemStatsHover></div><div className={styles.itemBody}><div className={styles.itemHeader}><div><h4>{getText(item.title, language)}</h4><p>{getText(item.itemTypeName, language)} - {copy.levelShort} {item.level}</p></div><span className={`${styles.rarityTag} ${RARITY_TONES[item.rarity] || ''}`}>{rarityLabel ? getText(rarityLabel.label, language) : `R${item.rarity}`}</span></div><div className={styles.itemSummaryGrid}>
+                                                                    <div className={styles.itemSummaryMetric}>
+                                                                        <span>{copy.itemMasteryTotal}</span>
+                                                                        <strong>{formatStatValue(120, masteryTotal, { signed: true, label: copy.itemMasteryTotal })}</strong>
+                                                                    </div>
+                                                                    <div className={styles.itemSummaryMetric}>
+                                                                        <span>{copy.itemResistanceTotal}</span>
+                                                                        <strong>{formatStatValue(80, resistanceTotal, { signed: true, label: copy.itemResistanceTotal })}</strong>
+                                                                    </div>
+                                                                    {focusStatEntry ? <div className={`${styles.itemSummaryMetric} ${styles.itemSummaryMetricFocus}`}>
+                                                                        <span>{getText(selectedStatOption?.label, language) || copy.itemFocusStat}</span>
+                                                                        <strong>{formatStatValue(focusStatEntry.actionId, focusStatValue, { signed: true, label: focusStatEntry.label })}</strong>
+                                                                    </div> : null}
+                                                                </div><div className={styles.itemDetailHint}>{expanded ? copy.itemCollapseDetails : copy.itemExpandDetails}</div>{expanded ? <div className={styles.itemDetailsPanel}><div className={styles.itemDetailsTitle}>{copy.itemDetailsTitle}</div><div className={styles.statChips}>
+                                                                    {item.stats.map((entry, index) => (
                                                                         <span key={`${item.id}-${entry.key}-${entry.value}-${index}`} className={styles.statChip}>
                                                                             <span className={styles.statChipValue}>{formatStatValue(entry.actionId, entry.value, { signed: true, label: entry.label })}</span>
                                                                             <BuilderStatLabel actionId={entry.actionId} label={entry.label} iconClassName={styles.statChipIcon} />
                                                                         </span>
                                                                     ))}
-                                                                </div>{blocked ? <div className={styles.itemConditionWarning}>{copy.invalidCondition}: {Array.from(new Set(nextEquipIssues)).join(', ')}</div> : null}</div><button type="button" className={`btn ${equipped ? 'btn-secondary' : 'btn-primary'}`} disabled={blocked} onClick={(event) => { event.stopPropagation(); if (!activeSlot || blocked) return; setEquippedBySlot((current) => ({ ...current, [activeSlot]: item })); setInspectedSlot(activeSlot); }}>{blocked ? copy.cannotEquip : equipped ? copy.equipped : copy.equip}</button></article>;
+                                                                </div></div> : null}{blocked ? <div className={styles.itemConditionWarning}>{copy.invalidCondition}: {Array.from(new Set(nextEquipIssues)).join(', ')}</div> : null}</div><div className={styles.itemActions}><button type="button" className={`btn ${equipped ? 'btn-secondary' : 'btn-primary'}`} disabled={blocked} onClick={(event) => { event.stopPropagation(); if (!activeSlot || blocked) return; setEquippedBySlot((current) => ({ ...current, [activeSlot]: item })); setInspectedSlot(activeSlot); }}>{blocked ? copy.cannotEquip : equipped ? copy.equipped : copy.equip}</button></div></article>;
                             })}</div>
                         </div>}
 

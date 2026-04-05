@@ -208,6 +208,8 @@ const ACTION_LABELS = new Map<number, LocaleText>([
     [45897, { es: 'Armadura', en: 'Armor', fr: 'Armure', pt: 'Armadura' }],
 ]);
 
+const HIDDEN_STAT_FILTER_ACTION_IDS = new Set([82, 83, 84, 85, 122, 123, 124, 125]);
+
 let builderItems: NormalizedBuilderItem[] = [];
 let equipmentTypeMap = new Map<number, EquipmentTypeData>();
 let actionMap = new Map<number, ActionData>();
@@ -240,6 +242,60 @@ function sanitizeLocaleText(text: LocaleText | undefined): LocaleText {
         fr: sanitizeGrammarMarkers(text?.fr),
         pt: sanitizeGrammarMarkers(text?.pt),
     };
+}
+
+function mirrorLocaleText(value: string): LocaleText {
+    return {
+        es: value,
+        en: value,
+        fr: value,
+        pt: value,
+    };
+}
+
+function getBuilderStatKey(actionId: number, elementCount?: number) {
+    if ((actionId === 1068 || actionId === 1069) && Number.isFinite(elementCount) && Number(elementCount) > 0) {
+        return `action:${actionId}:${Number(elementCount)}`;
+    }
+
+    return `action:${actionId}`;
+}
+
+function buildElementCountLabel(actionId: number, elementCount: number): LocaleText {
+    const plural = elementCount > 1;
+    if (actionId === 1068) {
+        return {
+            es: `Dominio en ${elementCount} elemento${plural ? 's' : ''}`,
+            en: `${elementCount}-element mastery`,
+            fr: `Maitrise sur ${elementCount} element${plural ? 's' : ''}`,
+            pt: `Dominio em ${elementCount} elemento${plural ? 's' : ''}`,
+        };
+    }
+
+    return {
+        es: `Resistencia en ${elementCount} elemento${plural ? 's' : ''}`,
+        en: `${elementCount}-element resistance`,
+        fr: `Resistance sur ${elementCount} element${plural ? 's' : ''}`,
+        pt: `Resistencia em ${elementCount} elemento${plural ? 's' : ''}`,
+    };
+}
+
+function buildStatOptionLabel(stat: NormalizedBuilderStat): LocaleText {
+    if ((stat.actionId === 1068 || stat.actionId === 1069) && (stat.elementCount || 0) > 0) {
+        return buildElementCountLabel(stat.actionId, stat.elementCount || 0);
+    }
+
+    const knownLabel = ACTION_LABELS.get(stat.actionId);
+    if (knownLabel) {
+        return sanitizeLocaleText(knownLabel);
+    }
+
+    const actionDescription = sanitizeLocaleText(actionMap.get(stat.actionId)?.description);
+    if (Object.values(actionDescription).some(Boolean)) {
+        return actionDescription;
+    }
+
+    return mirrorLocaleText(stat.label || `Action ${stat.actionId}`);
 }
 
 function parseEquipmentRequirements(description: LocaleText): EquipmentRequirement[] {
@@ -396,7 +452,7 @@ function normalizeStat(
     }
 
     return {
-        key: `action:${actionId}`,
+        key: getBuilderStatKey(actionId, elementCount),
         actionId,
         label,
         value: rawValue * (NEGATIVE_ACTION_IDS.has(originalActionId) ? -1 : 1),
@@ -553,7 +609,8 @@ router.get('/metadata', (_req: Request, res: Response) => {
         new Map(
             builderItems
                 .flatMap((item) => item.stats)
-                .map((stat) => [stat.key, { key: stat.key, actionId: stat.actionId, label: buildStatLabel(stat.actionId) }])
+                .filter((stat) => !HIDDEN_STAT_FILTER_ACTION_IDS.has(stat.actionId))
+                .map((stat) => [stat.key, { key: stat.key, actionId: stat.actionId, label: buildStatOptionLabel(stat) }])
         ).values()
     ).sort((left, right) => {
         const leftText = typeof left.label === 'string' ? left.label : getLocalizedText(left.label);
@@ -594,9 +651,14 @@ router.get('/items', (req: Request, res: Response) => {
     const rarity = Number(req.query.rarity || 0);
     const itemTypeId = Number(req.query.itemTypeId || 0);
     const statKey = String(req.query.statKey || '').trim();
+    const sortBy = String(req.query.sortBy || '').trim();
+    const sortDirection = String(req.query.sortDirection || 'desc').trim().toLowerCase() === 'asc' ? 'asc' : 'desc';
     const maxLevel = Number(req.query.maxLevel || 0);
     const minLevel = Number(req.query.minLevel || 0);
     const limit = Math.min(120, Math.max(1, Number(req.query.limit || 48)));
+
+    const getStatTotalByKey = (item: NormalizedBuilderItem, key: string) =>
+        item.stats.reduce((sum, stat) => sum + (stat.key === key ? stat.value : 0), 0);
 
     const items = builderItems
         .filter((item) => matchesSlot(item, slot))
@@ -606,6 +668,17 @@ router.get('/items', (req: Request, res: Response) => {
         .filter((item) => !maxLevel || item.level <= maxLevel)
         .filter((item) => !minLevel || item.level >= minLevel)
         .filter((item) => !query || item.searchText.includes(query))
+        .sort((left, right) => {
+            if (sortBy === 'stat' && statKey) {
+                const leftTotal = getStatTotalByKey(left, statKey);
+                const rightTotal = getStatTotalByKey(right, statKey);
+                const statDiff = sortDirection === 'asc' ? leftTotal - rightTotal : rightTotal - leftTotal;
+                if (statDiff !== 0) return statDiff;
+            }
+
+            if (right.level !== left.level) return right.level - left.level;
+            return left.id - right.id;
+        })
         .slice(0, limit);
 
     res.json({
