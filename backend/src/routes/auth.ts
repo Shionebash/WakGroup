@@ -11,6 +11,80 @@ const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID!;
 const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET!;
 const DISCORD_REDIRECT_URI = process.env.DISCORD_REDIRECT_URI!;
 const IS_DEV = process.env.NODE_ENV !== 'production';
+const OAUTH_CODE_TTL_MS = 2 * 60 * 1000;
+const oauthCodeLocks = new Map<string, number>();
+
+function cleanupOauthCodeLocks() {
+    const now = Date.now();
+    for (const [storedCode, expiresAt] of oauthCodeLocks.entries()) {
+        if (expiresAt <= now) {
+            oauthCodeLocks.delete(storedCode);
+        }
+    }
+}
+
+function reserveOauthCode(code: string) {
+    cleanupOauthCodeLocks();
+    if (oauthCodeLocks.has(code)) {
+        return false;
+    }
+
+    oauthCodeLocks.set(code, Date.now() + OAUTH_CODE_TTL_MS);
+    return true;
+}
+
+function releaseOauthCode(code: string) {
+    oauthCodeLocks.delete(code);
+}
+
+function getAxiosErrorDetails(err: unknown) {
+    if (!axios.isAxiosError(err)) {
+        return null;
+    }
+
+    return {
+        message: err.message,
+        code: err.code,
+        status: err.response?.status,
+        retryAfterHeader: err.response?.headers?.['retry-after'],
+        data: err.response?.data,
+    };
+}
+
+function buildFrontendAuthErrorUrl(message: string, retryAfterSeconds?: number) {
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const params = new URLSearchParams({ error: message });
+    if (typeof retryAfterSeconds === 'number' && Number.isFinite(retryAfterSeconds)) {
+        params.set('retryAfterSeconds', String(retryAfterSeconds));
+    }
+
+    return `${frontendUrl}/auth/callback?${params.toString()}`;
+}
+
+function sendDesktopAuthError(res: Response, message: string, retryAfterSeconds?: number) {
+    const retryText =
+        typeof retryAfterSeconds === 'number' && Number.isFinite(retryAfterSeconds)
+            ? `<p style="color:#aaa;margin-bottom:20px;">Reintenta en aproximadamente ${retryAfterSeconds} segundos.</p>`
+            : '';
+
+    res.status(503).send(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <title>Discord Login Error</title>
+        </head>
+        <body style="font-family:sans-serif;background:#1a1a2e;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;margin:0;padding:24px;text-align:center;">
+            <div style="max-width:460px;">
+                <p style="font-size:24px;margin-bottom:16px;">No se pudo iniciar sesion</p>
+                <p style="color:#ddd;margin-bottom:12px;">${message}</p>
+                ${retryText}
+                <p style="color:#666;font-size:12px;">Puedes cerrar esta ventana y volver a intentarlo.</p>
+            </div>
+        </body>
+        </html>
+    `);
+}
 
 // Step 1: redirect to Discord OAuth
 router.get('/discord', (req, res) => {
@@ -69,12 +143,13 @@ router.get('/discord', (req, res) => {
 router.get('/discord/callback', async (req: Request, res: Response): Promise<void> => {
     const { code, state } = req.query;
     const savedState = req.cookies?.oauth_state;
+    const redirectTarget = req.cookies?.oauth_redirect_target || 'web';
     if (IS_DEV) {
         console.log('[auth] Received Discord callback', {
             hasCode: Boolean(code),
             hasState: Boolean(state),
             savedStatePresent: Boolean(savedState),
-            redirectTarget: req.cookies?.oauth_redirect_target || 'web',
+            redirectTarget,
         });
     }
 
@@ -91,6 +166,16 @@ router.get('/discord/callback', async (req: Request, res: Response): Promise<voi
     }
 
     try {
+        if (!reserveOauthCode(code)) {
+            const message = 'El codigo OAuth ya se esta procesando o fue reutilizado. Intenta iniciar sesion otra vez.';
+            if (redirectTarget === 'desktop') {
+                sendDesktopAuthError(res, message);
+                return;
+            }
+            res.redirect(buildFrontendAuthErrorUrl(message));
+            return;
+        }
+
         // Exchange code for access token
         const tokenRes = await axios.post(
             'https://discord.com/api/oauth2/token',
@@ -161,7 +246,6 @@ router.get('/discord/callback', async (req: Request, res: Response): Promise<voi
         }
 
         // Si el login vino de la mini app, redirigir al callback local de Electron
-        const redirectTarget = req.cookies?.oauth_redirect_target;
         const desktopCallbackPort = Number(req.cookies?.oauth_desktop_callback_port || 45678);
         res.clearCookie('oauth_redirect_target');
         res.clearCookie('oauth_desktop_callback_port');
@@ -179,8 +263,43 @@ router.get('/discord/callback', async (req: Request, res: Response): Promise<voi
         const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
         res.redirect(`${frontendUrl}/auth/callback?token=${encodeURIComponent(token)}`);
     } catch (err) {
-        console.error('Discord OAuth error:', err);
+        const errorDetails = getAxiosErrorDetails(err);
+        if (errorDetails) {
+            console.error('Discord OAuth error:', errorDetails);
+            if (errorDetails.status === 429) {
+                const retryAfterSeconds =
+                    Number(errorDetails.retryAfterHeader) ||
+                    (typeof errorDetails.data === 'object' &&
+                    errorDetails.data &&
+                    'retry_after' in errorDetails.data &&
+                    typeof errorDetails.data.retry_after === 'number'
+                        ? errorDetails.data.retry_after
+                        : 30);
+
+                const message = 'Discord esta limitando temporalmente el inicio de sesion. Intenta de nuevo en unos segundos.';
+                if (redirectTarget === 'desktop') {
+                    sendDesktopAuthError(res, message, retryAfterSeconds);
+                    return;
+                }
+                res.redirect(buildFrontendAuthErrorUrl(message, retryAfterSeconds));
+                return;
+            }
+        } else {
+            console.error('Discord OAuth error:', err);
+        }
         res.status(500).json({ error: 'Error durante la autenticación con Discord' });
+        if (res.headersSent) {
+            return;
+        }
+        const genericMessage = 'Error durante la autenticacion con Discord';
+        if (redirectTarget === 'desktop') {
+            sendDesktopAuthError(res, genericMessage);
+            return;
+        }
+        res.redirect(buildFrontendAuthErrorUrl(genericMessage));
+        return;
+    } finally {
+        releaseOauthCode(code);
     }
 });
 
