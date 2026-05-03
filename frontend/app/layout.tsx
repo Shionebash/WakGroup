@@ -8,6 +8,7 @@ import Footer from '@/components/Footer';
 import ToastContainer from '@/components/ToastContainer';
 import FloatingChatBar from '@/components/FloatingChatBar';
 import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar';
+import SplashScreen from '@/components/SplashScreen';
 
 const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL ||
@@ -51,8 +52,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="es">
-            <body>
+        <html lang="es" style={{ backgroundColor: '#1a1410' }}>
+            <body style={{ backgroundColor: '#1a1410' }}>
+                <SplashScreen />
                 <ServiceWorkerRegistrar />
                 <AuthProvider>
                     <LanguageProvider>
