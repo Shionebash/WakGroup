@@ -1,0 +1,37 @@
+{
+  "name": "WakGroup — Party Finder",
+  "short_name": "WakGroup",
+  "description": "Plataforma para encontrar grupo y hacer mazmorras en Wakfu.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1410",
+  "theme_color": "#d4a574",
+  "orientation": "portrait-primary",
+  "categories": ["games", "utilities"],
+  "lang": "es",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Grupos",
+      "short_name": "Grupos",
+      "description": "Ver grupos activos",
+      "url": "/",
+      "icons": [{ "src": "/logo.png", "sizes": "any" }]
+    },
+    {
+      "name": "Mazmorras",
+      "short_name": "Dungeons",
+      "description": "Explorar mazmorras",
+      "url": "/dungeons",
+      "icons": [{ "src": "/logo.png", "sizes": "any" }]
+    }
+  ]
+}
