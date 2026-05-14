@@ -1,0 +1,174 @@
+{
+  "metadata": {
+    "source_items": "D:\\Wakfu\\gamedata_items.json",
+    "source_states": "D:\\Wakfu\\gamedata_states.json",
+    "item_type_id": 647,
+    "apply_state_action_id": 304,
+    "notes": [
+      "Real costumes extracted from gamedata_items.json entries where baseParameters.itemTypeId == 647.",
+      "Names are intentionally omitted from the manifest; gfxId/femaleGfxId can be used as the visual reference.",
+      "primary_state_id comes from the first equip effect using actionId 304 (apply state)."
+    ]
+  },
+  "summary": {
+    "total_costumes": 7,
+    "with_state": 7,
+    "with_direct_bundle_anm": 7
+  },
+  "costumes": [
+    {
+      "item_id": 14499,
+      "icon_gfx_id": 51314499,
+      "icon_female_gfx_id": 51314499,
+      "primary_state_id": 1478,
+      "state_ids": [
+        1478
+      ],
+      "apply_state_effect_ids": [
+        71359
+      ],
+      "state_label": "Insignia de bruja",
+      "direct_bundle": {
+        "appearance_id": "equipment/51314499",
+        "anm_exists": true,
+        "atlas_exists": true,
+        "anm_path": "D:\\wakreverse\\equipments\\equipments\\51314499.anm",
+        "atlas_path": "D:\\wakreverse\\equipments\\equipments\\Atlas\\51314499_0.png",
+        "hmi_string": "start|1|end|12|type|19|data|weight=5;appearance=equipment/51314499|broadcast|false"
+      },
+      "costume_id": "costume_01"
+    },
+    {
+      "item_id": 14501,
+      "icon_gfx_id": 51314501,
+      "icon_female_gfx_id": 51314501,
+      "primary_state_id": 1480,
+      "state_ids": [
+        1480
+      ],
+      "apply_state_effect_ids": [
+        71363
+      ],
+      "state_label": "Insignia de Jacko",
+      "direct_bundle": {
+        "appearance_id": "equipment/51314501",
+        "anm_exists": true,
+        "atlas_exists": true,
+        "anm_path": "D:\\wakreverse\\equipments\\equipments\\51314501.anm",
+        "atlas_path": "D:\\wakreverse\\equipments\\equipments\\Atlas\\51314501_0.png",
+        "hmi_string": "start|1|end|12|type|19|data|weight=5;appearance=equipment/51314501|broadcast|false"
+      },
+      "costume_id": "costume_02"
+    },
+    {
+      "item_id": 14503,
+      "icon_gfx_id": 51314503,
+      "icon_female_gfx_id": 51314503,
+      "primary_state_id": 1482,
+      "state_ids": [
+        1482
+      ],
+      "apply_state_effect_ids": [
+        71367
+      ],
+      "state_label": "Traje de Ghul",
+      "direct_bundle": {
+        "appearance_id": "equipment/51314503",
+        "anm_exists": true,
+        "atlas_exists": true,
+        "anm_path": "D:\\wakreverse\\equipments\\equipments\\51314503.anm",
+        "atlas_path": "D:\\wakreverse\\equipments\\equipments\\Atlas\\51314503_0.png",
+        "hmi_string": "start|1|end|12|type|19|data|weight=5;appearance=equipment/51314503|broadcast|false"
+      },
+      "costume_id": "costume_03"
+    },
+    {
+      "item_id": 17074,
+      "icon_gfx_id": 51317074,
+      "icon_female_gfx_id": 51317074,
+      "primary_state_id": 1973,
+      "state_ids": [
+        1973
+      ],
+      "apply_state_effect_ids": [
+        95928
+      ],
+      "state_label": "Traje de Wabbit",
+      "direct_bundle": {
+        "appearance_id": "equipment/51317074",
+        "anm_exists": true,
+        "atlas_exists": true,
+        "anm_path": "D:\\wakreverse\\equipments\\equipments\\51317074.anm",
+        "atlas_path": "D:\\wakreverse\\equipments\\equipments\\Atlas\\51317074_0.png",
+        "hmi_string": "start|1|end|12|type|19|data|weight=5;appearance=equipment/51317074|broadcast|false"
+      },
+      "costume_id": "costume_04"
+    },
+    {
+      "item_id": 18608,
+      "icon_gfx_id": 51318608,
+      "icon_female_gfx_id": 51318608,
+      "primary_state_id": 2848,
+      "state_ids": [
+        2848
+      ],
+      "apply_state_effect_ids": [
+        114956
+      ],
+      "state_label": "Traje del Festival del Agua",
+      "direct_bundle": {
+        "appearance_id": "equipment/51318608",
+        "anm_exists": true,
+        "atlas_exists": true,
+        "anm_path": "D:\\wakreverse\\equipments\\equipments\\51318608.anm",
+        "atlas_path": "D:\\wakreverse\\equipments\\equipments\\Atlas\\51318608_0.png",
+        "hmi_string": "start|1|end|12|type|19|data|weight=5;appearance=equipment/51318608|broadcast|false"
+      },
+      "costume_id": "costume_05"
+    },
+    {
+      "item_id": 18615,
+      "icon_gfx_id": 51318615,
+      "icon_female_gfx_id": 51318615,
+      "primary_state_id": 2931,
+      "state_ids": [
+        2931
+      ],
+      "apply_state_effect_ids": [
+        115907
+      ],
+      "state_label": "Traje de Paso",
+      "direct_bundle": {
+        "appearance_id": "equipment/51318615",
+        "anm_exists": true,
+        "atlas_exists": true,
+        "anm_path": "D:\\wakreverse\\equipments\\equipments\\51318615.anm",
+        "atlas_path": "D:\\wakreverse\\equipments\\equipments\\Atlas\\51318615_0.png",
+        "hmi_string": "start|1|end|12|type|19|data|weight=5;appearance=equipment/51318615|broadcast|false"
+      },
+      "costume_id": "costume_06"
+    },
+    {
+      "item_id": 18616,
+      "icon_gfx_id": 51318616,
+      "icon_female_gfx_id": 51318616,
+      "primary_state_id": 2932,
+      "state_ids": [
+        2932
+      ],
+      "apply_state_effect_ids": [
+        115910
+      ],
+      "state_label": "Traje de Adal",
+      "direct_bundle": {
+        "appearance_id": "equipment/51318616",
+        "anm_exists": true,
+        "atlas_exists": true,
+        "anm_path": "D:\\wakreverse\\equipments\\equipments\\51318616.anm",
+        "atlas_path": "D:\\wakreverse\\equipments\\equipments\\Atlas\\51318616_0.png",
+        "hmi_string": "start|1|end|12|type|19|data|weight=5;appearance=equipment/51318616|broadcast|false"
+      },
+      "costume_id": "costume_07"
+    }
+  ]
+}

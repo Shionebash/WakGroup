@@ -307,7 +307,7 @@ router.delete('/:id/members/:characterId', requireAuth, async (req: Request, res
     const group = groupResult.rows[0];
     
     // Check if user is the leader or the member leaving
-    const isLeader = group.leader_char_id === userCharIds[0];
+    const isLeader = userCharIds.includes(group.leader_char_id);
     const isMemberLeaving = userCharIds.includes(characterId);
     
     // Leader can kick any member, member can leave their own group

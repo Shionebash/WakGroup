@@ -1,0 +1,1231 @@
+{
+  "metadata": {
+    "generator": "generate_hupper_render_data.py",
+    "note": "This file stores only slot/source/transform relations verified from the Huppermage .anm files. Markers without a direct transform key are omitted instead of being guessed.",
+    "default_prefix": "5"
+  },
+  "atlases": {
+    "191": {
+      "path": "hupper/191_0.png",
+      "width": 512,
+      "height": 256,
+      "page_to_tile": {
+        "0": [
+          0,
+          0
+        ],
+        "1": [
+          1,
+          0
+        ]
+      }
+    },
+    "193": {
+      "path": "hupper/193_0.png",
+      "width": 512,
+      "height": 512,
+      "page_to_tile": {
+        "0": [
+          0,
+          1
+        ],
+        "1": [
+          1,
+          1
+        ]
+      }
+    }
+  },
+  "entries_by_prefix": {
+    "4": [
+      {
+        "asset": "191",
+        "slot": "Bouche04",
+        "order": 146855,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 57,
+        "src": {
+          "x": 125,
+          "y": 142,
+          "w": 8,
+          "h": 8
+        },
+        "transform": {
+          "x": -12.0,
+          "y": -7.0,
+          "w": 30,
+          "h": 16
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "Bouche03",
+        "order": 146886,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 59,
+        "src": {
+          "x": 129,
+          "y": 206,
+          "w": 4,
+          "h": 4
+        },
+        "transform": {
+          "x": -10.4,
+          "y": -6.0,
+          "w": 24,
+          "h": 14
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "Bouche02",
+        "order": 146917,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 61,
+        "src": {
+          "x": 134,
+          "y": 114,
+          "w": 10,
+          "h": 9
+        },
+        "transform": {
+          "x": -5.0,
+          "y": -0.4,
+          "w": 8,
+          "h": 2
+        }
+      }
+    ],
+    "3": [
+      {
+        "asset": "191",
+        "slot": "Bouche12",
+        "order": 146948,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 63,
+        "src": {
+          "x": 134,
+          "y": 139,
+          "w": 13,
+          "h": 20
+        },
+        "transform": {
+          "x": -2.1,
+          "y": -1.4,
+          "w": 38,
+          "h": 22
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "Bouche11",
+        "order": 146979,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 65,
+        "src": {
+          "x": 134,
+          "y": 183,
+          "w": 31,
+          "h": 28
+        },
+        "transform": {
+          "x": -4.4,
+          "y": -2.0,
+          "w": 38,
+          "h": 40
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "Bouche10",
+        "order": 147010,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 67,
+        "src": {
+          "x": 150,
+          "y": 113,
+          "w": 10,
+          "h": 8
+        },
+        "transform": {
+          "x": -6.0,
+          "y": -16.4,
+          "w": 16,
+          "h": 32
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "Bouche09",
+        "order": 147041,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 69,
+        "src": {
+          "x": 150,
+          "y": 140,
+          "w": 19,
+          "h": 20
+        },
+        "transform": {
+          "x": -0.9,
+          "y": -1.4,
+          "w": 12,
+          "h": 10
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "Bouche08",
+        "order": 147072,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 71,
+        "src": {
+          "x": 161,
+          "y": 113,
+          "w": 9,
+          "h": 8
+        },
+        "transform": {
+          "x": -0.2,
+          "y": -3.8,
+          "w": 28,
+          "h": 10
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "Bouche07",
+        "order": 147103,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 73,
+        "src": {
+          "x": 166,
+          "y": 195,
+          "w": 6,
+          "h": 6
+        },
+        "transform": {
+          "x": -2.0,
+          "y": -2.0,
+          "w": 34,
+          "h": 22
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "Bouche06",
+        "order": 147134,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 75,
+        "src": {
+          "x": 174,
+          "y": 113,
+          "w": 10,
+          "h": 8
+        },
+        "transform": {
+          "x": -2.0,
+          "y": -2.0,
+          "w": 36,
+          "h": 22
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "Bouche05",
+        "order": 147165,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 77,
+        "src": {
+          "x": 174,
+          "y": 140,
+          "w": 19,
+          "h": 20
+        },
+        "transform": {
+          "x": -2.0,
+          "y": -2.0,
+          "w": 34,
+          "h": 14
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "Bouche04",
+        "order": 147196,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 79,
+        "src": {
+          "x": 174,
+          "y": 184,
+          "w": 13,
+          "h": 27
+        },
+        "transform": {
+          "x": -2.0,
+          "y": -2.0,
+          "w": 38,
+          "h": 20
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "Bouche03",
+        "order": 147227,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 81,
+        "src": {
+          "x": 188,
+          "y": 192,
+          "w": 7,
+          "h": 3
+        },
+        "transform": {
+          "x": 0.0,
+          "y": -1.1,
+          "w": 14,
+          "h": 6
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "Bouche02",
+        "order": 147258,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 83,
+        "src": {
+          "x": 188,
+          "y": 203,
+          "w": 6,
+          "h": 8
+        },
+        "transform": {
+          "x": 0.0,
+          "y": 0.0,
+          "w": 20,
+          "h": 6
+        }
+      },
+      {
+        "asset": "193",
+        "slot": "PiedHabit02",
+        "order": 151701,
+        "marker": 192,
+        "source_page": 1,
+        "source_local": 2,
+        "src": {
+          "x": 258,
+          "y": 364,
+          "w": 18,
+          "h": 6
+        },
+        "transform": {
+          "x": -17.4,
+          "y": -11.4,
+          "w": 40,
+          "h": 30
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "PiedPeau02",
+        "order": 151732,
+        "marker": 193,
+        "source_page": 1,
+        "source_local": 42,
+        "src": {
+          "x": 368,
+          "y": 186,
+          "w": 11,
+          "h": 30
+        },
+        "transform": {
+          "x": -14.6,
+          "y": -12.5,
+          "w": 34,
+          "h": 30
+        }
+      },
+      {
+        "asset": "193",
+        "slot": "PiedHabit01",
+        "order": 151808,
+        "marker": 192,
+        "source_page": 1,
+        "source_local": 7,
+        "src": {
+          "x": 281,
+          "y": 343,
+          "w": 19,
+          "h": 29
+        },
+        "transform": {
+          "x": -15.4,
+          "y": -14.8,
+          "w": 34,
+          "h": 38
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "PiedPeau01",
+        "order": 151840,
+        "marker": 193,
+        "source_page": 1,
+        "source_local": 46,
+        "src": {
+          "x": 386,
+          "y": 124,
+          "w": 11,
+          "h": 12
+        },
+        "transform": {
+          "x": -11.5,
+          "y": -15.5,
+          "w": 30,
+          "h": 38
+        }
+      },
+      {
+        "asset": "193",
+        "slot": "JambeVetement",
+        "order": 151914,
+        "marker": 201,
+        "source_page": 1,
+        "source_local": 12,
+        "src": {
+          "x": 302,
+          "y": 376,
+          "w": 19,
+          "h": 39
+        },
+        "transform": {
+          "x": -14.8,
+          "y": -30.6,
+          "w": 34,
+          "h": 78
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "JambePeau",
+        "order": 151948,
+        "marker": 193,
+        "source_page": 1,
+        "source_local": 50,
+        "src": {
+          "x": 386,
+          "y": 217,
+          "w": 18,
+          "h": 38
+        },
+        "transform": {
+          "x": -14.5,
+          "y": -30.0,
+          "w": 36,
+          "h": 76
+        }
+      },
+      {
+        "asset": "193",
+        "slot": "CuisseVetement",
+        "order": 152017,
+        "marker": 201,
+        "source_page": 1,
+        "source_local": 17,
+        "src": {
+          "x": 323,
+          "y": 311,
+          "w": 11,
+          "h": 28
+        },
+        "transform": {
+          "x": -26.3,
+          "y": -36.1,
+          "w": 52,
+          "h": 90
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "CuissePeau",
+        "order": 152051,
+        "marker": 193,
+        "source_page": 1,
+        "source_local": 54,
+        "src": {
+          "x": 403,
+          "y": 125,
+          "w": 18,
+          "h": 12
+        },
+        "transform": {
+          "x": -15.5,
+          "y": -37.3,
+          "w": 38,
+          "h": 90
+        }
+      },
+      {
+        "asset": "193",
+        "slot": "BrasVetement",
+        "order": 153162,
+        "marker": 201,
+        "source_page": 1,
+        "source_local": 72,
+        "src": {
+          "x": 462,
+          "y": 388,
+          "w": 11,
+          "h": 30
+        },
+        "transform": {
+          "x": -8.5,
+          "y": -21.1,
+          "w": 22,
+          "h": 56
+        }
+      },
+      {
+        "asset": "193",
+        "slot": "EpauleVetement",
+        "order": 153230,
+        "marker": 201,
+        "source_page": 1,
+        "source_local": 76,
+        "src": {
+          "x": 475,
+          "y": 419,
+          "w": 19,
+          "h": 45
+        },
+        "transform": {
+          "x": -8.0,
+          "y": -23.1,
+          "w": 22,
+          "h": 58
+        }
+      },
+      {
+        "asset": "193",
+        "slot": "Epaulette-G",
+        "order": 153267,
+        "marker": 192,
+        "source_page": 1,
+        "source_local": 78,
+        "src": {
+          "x": 493,
+          "y": 276,
+          "w": 15,
+          "h": 23
+        },
+        "transform": {
+          "x": -15.3,
+          "y": -8.0,
+          "w": 34,
+          "h": 32
+        }
+      }
+    ],
+    "2": [
+      {
+        "asset": "191",
+        "slot": "bouche14",
+        "order": 147289,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 85,
+        "src": {
+          "x": 194,
+          "y": 119,
+          "w": 12,
+          "h": 11
+        },
+        "transform": {
+          "x": -6.4,
+          "y": -6.4,
+          "w": 12,
+          "h": 12
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "bouche13",
+        "order": 147320,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 87,
+        "src": {
+          "x": 194,
+          "y": 146,
+          "w": 12,
+          "h": 14
+        },
+        "transform": {
+          "x": -10.0,
+          "y": -18.9,
+          "w": 20,
+          "h": 38
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "Bouche12",
+        "order": 147351,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 89,
+        "src": {
+          "x": 196,
+          "y": 182,
+          "w": 10,
+          "h": 30
+        },
+        "transform": {
+          "x": -10.0,
+          "y": -2.5,
+          "w": 44,
+          "h": 20
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "Bouche11",
+        "order": 147382,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 91,
+        "src": {
+          "x": 207,
+          "y": 124,
+          "w": 15,
+          "h": 14
+        },
+        "transform": {
+          "x": -2.0,
+          "y": -2.0,
+          "w": 42,
+          "h": 30
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "Bouche08",
+        "order": 147413,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 93,
+        "src": {
+          "x": 207,
+          "y": 160,
+          "w": 16,
+          "h": 22
+        },
+        "transform": {
+          "x": -10.1,
+          "y": -1.1,
+          "w": 40,
+          "h": 12
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "Bouche07",
+        "order": 147444,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 95,
+        "src": {
+          "x": 212,
+          "y": 111,
+          "w": 13,
+          "h": 7
+        },
+        "transform": {
+          "x": -2.0,
+          "y": -2.0,
+          "w": 40,
+          "h": 20
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "Bouche06",
+        "order": 147475,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 97,
+        "src": {
+          "x": 223,
+          "y": 120,
+          "w": 10,
+          "h": 9
+        },
+        "transform": {
+          "x": -2.0,
+          "y": -2.0,
+          "w": 40,
+          "h": 18
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "Bouche05",
+        "order": 147506,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 99,
+        "src": {
+          "x": 223,
+          "y": 145,
+          "w": 10,
+          "h": 14
+        },
+        "transform": {
+          "x": -2.0,
+          "y": -2.0,
+          "w": 38,
+          "h": 16
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "Bouche04",
+        "order": 147537,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 101,
+        "src": {
+          "x": 224,
+          "y": 171,
+          "w": 9,
+          "h": 11
+        },
+        "transform": {
+          "x": -2.0,
+          "y": -2.0,
+          "w": 44,
+          "h": 16
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "Bouche03",
+        "order": 147568,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 103,
+        "src": {
+          "x": 234,
+          "y": 113,
+          "w": 11,
+          "h": 10
+        },
+        "transform": {
+          "x": 0.0,
+          "y": 0.0,
+          "w": 24,
+          "h": 4
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "Bouche02",
+        "order": 147599,
+        "marker": 192,
+        "source_page": 0,
+        "source_local": 105,
+        "src": {
+          "x": 234,
+          "y": 139,
+          "w": 15,
+          "h": 20
+        },
+        "transform": {
+          "x": 0.0,
+          "y": 0.0,
+          "w": 26,
+          "h": 10
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "BajouePeau",
+        "order": 147630,
+        "marker": 193,
+        "source_page": 0,
+        "source_local": 107,
+        "src": {
+          "x": 234,
+          "y": 183,
+          "w": 35,
+          "h": 29
+        },
+        "transform": {
+          "x": -12.1,
+          "y": -15.4,
+          "w": 28,
+          "h": 30
+        }
+      }
+    ],
+    "9": [
+      {
+        "asset": "191",
+        "slot": "PiedPeau02",
+        "order": 147663,
+        "marker": 193,
+        "source_page": 0,
+        "source_local": 109,
+        "src": {
+          "x": 252,
+          "y": 106,
+          "w": 12,
+          "h": 7
+        },
+        "transform": {
+          "x": -11.8,
+          "y": -16.3,
+          "w": 26,
+          "h": 32
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "PiedPeau01",
+        "order": 147771,
+        "marker": 193,
+        "source_page": 0,
+        "source_local": 113,
+        "src": {
+          "x": 252,
+          "y": 161,
+          "w": 15,
+          "h": 21
+        },
+        "transform": {
+          "x": -16.4,
+          "y": -12.5,
+          "w": 38,
+          "h": 38
+        }
+      }
+    ],
+    "5": [
+      {
+        "asset": "191",
+        "slot": "BrasPeau",
+        "order": 151594,
+        "marker": 193,
+        "source_page": 1,
+        "source_local": 36,
+        "src": {
+          "x": 366,
+          "y": 217,
+          "w": 19,
+          "h": 38
+        },
+        "transform": {
+          "x": -9.9,
+          "y": -20.5,
+          "w": 24,
+          "h": 52
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "EpaulePeau",
+        "order": 151661,
+        "marker": 193,
+        "source_page": 1,
+        "source_local": 39,
+        "src": {
+          "x": 368,
+          "y": 124,
+          "w": 15,
+          "h": 14
+        },
+        "transform": {
+          "x": -8.5,
+          "y": -23.3,
+          "w": 20,
+          "h": 56
+        }
+      },
+      {
+        "asset": "193",
+        "slot": "PiedHabit02",
+        "order": 152122,
+        "marker": 192,
+        "source_page": 1,
+        "source_local": 22,
+        "src": {
+          "x": 335,
+          "y": 312,
+          "w": 14,
+          "h": 27
+        },
+        "transform": {
+          "x": -17.5,
+          "y": -15.4,
+          "w": 44,
+          "h": 38
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "PiedPeau02",
+        "order": 152157,
+        "marker": 193,
+        "source_page": 1,
+        "source_local": 58,
+        "src": {
+          "x": 415,
+          "y": 188,
+          "w": 8,
+          "h": 11
+        },
+        "transform": {
+          "x": -14.1,
+          "y": -13.0,
+          "w": 38,
+          "h": 34
+        }
+      },
+      {
+        "asset": "193",
+        "slot": "PiedHabit01",
+        "order": 152229,
+        "marker": 192,
+        "source_page": 1,
+        "source_local": 27,
+        "src": {
+          "x": 346,
+          "y": 409,
+          "w": 6,
+          "h": 8
+        },
+        "transform": {
+          "x": -14.5,
+          "y": -14.5,
+          "w": 36,
+          "h": 38
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "PiedPeau01",
+        "order": 152265,
+        "marker": 193,
+        "source_page": 1,
+        "source_local": 62,
+        "src": {
+          "x": 424,
+          "y": 113,
+          "w": 20,
+          "h": 10
+        },
+        "transform": {
+          "x": -13.8,
+          "y": -16.0,
+          "w": 32,
+          "h": 38
+        }
+      },
+      {
+        "asset": "193",
+        "slot": "JambeVetement",
+        "order": 152335,
+        "marker": 201,
+        "source_page": 1,
+        "source_local": 32,
+        "src": {
+          "x": 353,
+          "y": 375,
+          "w": 21,
+          "h": 43
+        },
+        "transform": {
+          "x": -15.3,
+          "y": -30.8,
+          "w": 36,
+          "h": 78
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "JambePeau",
+        "order": 152373,
+        "marker": 193,
+        "source_page": 1,
+        "source_local": 66,
+        "src": {
+          "x": 424,
+          "y": 184,
+          "w": 28,
+          "h": 32
+        },
+        "transform": {
+          "x": -15.3,
+          "y": -30.1,
+          "w": 36,
+          "h": 76
+        }
+      },
+      {
+        "asset": "193",
+        "slot": "CuisseVetement",
+        "order": 152438,
+        "marker": 201,
+        "source_page": 1,
+        "source_local": 37,
+        "src": {
+          "x": 366,
+          "y": 318,
+          "w": 8,
+          "h": 11
+        },
+        "transform": {
+          "x": -23.5,
+          "y": -35.8,
+          "w": 50,
+          "h": 88
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "CuissePeau",
+        "order": 152476,
+        "marker": 193,
+        "source_page": 1,
+        "source_local": 70,
+        "src": {
+          "x": 443,
+          "y": 217,
+          "w": 18,
+          "h": 38
+        },
+        "transform": {
+          "x": -16.4,
+          "y": -36.0,
+          "w": 40,
+          "h": 88
+        }
+      },
+      {
+        "asset": "193",
+        "slot": "BassinVetement",
+        "order": 152543,
+        "marker": 201,
+        "source_page": 1,
+        "source_local": 42,
+        "src": {
+          "x": 376,
+          "y": 261,
+          "w": 21,
+          "h": 20
+        },
+        "transform": {
+          "x": -24.1,
+          "y": -21.8,
+          "w": 60,
+          "h": 54
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "BassinPeau",
+        "order": 152582,
+        "marker": 193,
+        "source_page": 1,
+        "source_local": 74,
+        "src": {
+          "x": 458,
+          "y": 138,
+          "w": 16,
+          "h": 18
+        },
+        "transform": {
+          "x": -25.8,
+          "y": -23.4,
+          "w": 62,
+          "h": 56
+        }
+      },
+      {
+        "asset": "193",
+        "slot": "TroncVetement",
+        "order": 152648,
+        "marker": 201,
+        "source_page": 1,
+        "source_local": 47,
+        "src": {
+          "x": 376,
+          "y": 418,
+          "w": 19,
+          "h": 46
+        },
+        "transform": {
+          "x": -14.3,
+          "y": -16.6,
+          "w": 36,
+          "h": 42
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "TroncPeau",
+        "order": 152689,
+        "marker": 193,
+        "source_page": 1,
+        "source_local": 78,
+        "src": {
+          "x": 480,
+          "y": 107,
+          "w": 13,
+          "h": 6
+        },
+        "transform": {
+          "x": -15.5,
+          "y": -15.5,
+          "w": 38,
+          "h": 40
+        }
+      },
+      {
+        "asset": "193",
+        "slot": "CorpsVetement",
+        "order": 152716,
+        "marker": 201,
+        "source_page": 1,
+        "source_local": 51,
+        "src": {
+          "x": 396,
+          "y": 419,
+          "w": 26,
+          "h": 45
+        },
+        "transform": {
+          "x": -22.1,
+          "y": -17.5,
+          "w": 54,
+          "h": 54
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "CorpsPeau",
+        "order": 152758,
+        "marker": 193,
+        "source_page": 1,
+        "source_local": 81,
+        "src": {
+          "x": 480,
+          "y": 139,
+          "w": 17,
+          "h": 20
+        },
+        "transform": {
+          "x": -22.5,
+          "y": -29.8,
+          "w": 56,
+          "h": 64
+        }
+      },
+      {
+        "asset": "193",
+        "slot": "CheveuxBas",
+        "order": 152885,
+        "marker": 194,
+        "source_page": 1,
+        "source_local": 58,
+        "src": {
+          "x": 423,
+          "y": 337,
+          "w": 18,
+          "h": 38
+        },
+        "transform": {
+          "x": -42.3,
+          "y": -32.8,
+          "w": 84,
+          "h": 88
+        }
+      },
+      {
+        "asset": "193",
+        "slot": "CheveuxHaut",
+        "order": 152918,
+        "marker": 194,
+        "source_page": 1,
+        "source_local": 60,
+        "src": {
+          "x": 423,
+          "y": 439,
+          "w": 15,
+          "h": 25
+        },
+        "transform": {
+          "x": -56.8,
+          "y": -41.1,
+          "w": 112,
+          "h": 100
+        }
+      },
+      {
+        "asset": "191",
+        "slot": "Crane",
+        "order": 152932,
+        "marker": 193,
+        "source_page": 1,
+        "source_local": 87,
+        "src": {
+          "x": 495,
+          "y": 124,
+          "w": 14,
+          "h": 14
+        },
+        "transform": {
+          "x": -30.3,
+          "y": -34.0,
+          "w": 74,
+          "h": 84
+        }
+      },
+      {
+        "asset": "193",
+        "slot": "Chapeau",
+        "order": 153012,
+        "marker": 192,
+        "source_page": 1,
+        "source_local": 64,
+        "src": {
+          "x": 442,
+          "y": 310,
+          "w": 12,
+          "h": 27
+        },
+        "transform": {
+          "x": -46.3,
+          "y": -47.0,
+          "w": 104,
+          "h": 92
+        }
+      }
+    ]
+  }
+}

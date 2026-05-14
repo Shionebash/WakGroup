@@ -1,0 +1,62 @@
+{
+  "900032": {
+    "version": 1,
+    "geocentric": false,
+    "behind_mobile": false,
+    "night_color": false,
+    "src_blend": 1,
+    "dst_blend": 771,
+    "texture_id": 900032,
+    "duration_ms": 0,
+    "render_radius": 0,
+    "emitters": []
+  },
+  "900033": {
+    "version": 1,
+    "geocentric": false,
+    "behind_mobile": false,
+    "night_color": false,
+    "src_blend": 1,
+    "dst_blend": 771,
+    "texture_id": 900033,
+    "duration_ms": 0,
+    "render_radius": 0,
+    "emitters": []
+  },
+  "900051": {
+    "version": 1,
+    "geocentric": false,
+    "behind_mobile": false,
+    "night_color": false,
+    "src_blend": 1,
+    "dst_blend": 771,
+    "texture_id": 7615001,
+    "duration_ms": 0,
+    "render_radius": 0,
+    "emitters": []
+  },
+  "900082": {
+    "version": 1,
+    "geocentric": false,
+    "behind_mobile": false,
+    "night_color": false,
+    "src_blend": 1,
+    "dst_blend": 771,
+    "texture_id": 900082,
+    "duration_ms": 0,
+    "render_radius": 0,
+    "emitters": []
+  },
+  "900121": {
+    "version": 1,
+    "geocentric": false,
+    "behind_mobile": false,
+    "night_color": false,
+    "src_blend": 1,
+    "dst_blend": 771,
+    "texture_id": 900121,
+    "duration_ms": 0,
+    "render_radius": 0,
+    "emitters": []
+  }
+}

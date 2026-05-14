@@ -353,6 +353,89 @@ body {
     min-height: calc(100vh - 60px);
 }
 
+.creator-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 10px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border-soft);
+    background: rgba(24, 19, 15, 0.82);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+}
+
+.creator-toolbar-copy {
+    min-width: 0;
+}
+
+.creator-title {
+    margin-bottom: 2px;
+    font-size: clamp(1.35rem, 2.1vw, 1.9rem);
+    line-height: 1.08;
+}
+
+.creator-toolbar-copy p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.86rem;
+    line-height: 1.25;
+}
+
+.creator-toolbar-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    min-width: min(380px, 100%);
+}
+
+.creator-character-select {
+    min-width: 240px;
+}
+
+.creator-frame-shell {
+    position: relative;
+    min-height: 820px;
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid rgba(212, 165, 116, 0.22);
+    background: #1a1410;
+    box-shadow: 0 28px 60px rgba(0, 0, 0, 0.26);
+}
+
+.creator-frame {
+    display: block;
+    width: 100%;
+    min-height: 900px;
+    height: calc(100vh - 180px);
+    border: 0;
+    background: #1a1410;
+}
+
+.creator-save-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 2;
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(212, 165, 116, 0.35);
+    background: rgba(18, 13, 9, 0.82);
+    color: var(--primary-color);
+    font-size: 12px;
+    font-weight: 700;
+    backdrop-filter: blur(8px);
+}
+
+.creator-empty {
+    margin-bottom: 18px;
+}
+
 /* Typography */
 h1,
 h2,
@@ -2806,6 +2889,33 @@ h6 {
     }
 
     /* ── Filters ── */
+    .creator-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 12px;
+        border-radius: 14px;
+    }
+
+    .creator-toolbar-actions {
+        flex-direction: column;
+        align-items: stretch;
+        min-width: 0;
+    }
+
+    .creator-character-select {
+        min-width: 0;
+    }
+
+    .creator-frame-shell {
+        min-height: 780px;
+        border-radius: 18px;
+    }
+
+    .creator-frame {
+        min-height: 920px;
+        height: 920px;
+    }
+
     .filters-shell {
         padding: 14px;
         border-radius: 16px;

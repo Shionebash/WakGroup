@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WakGroup - Creador visual</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/character-creator/character_creator/styles.css" />
+  <style>
+    html, body { min-height: 100%; }
+    body { margin: 0; background: #1a1410; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script>
+    window.CC_ASSET_BASE = '/assets/character-creator';
+    document.getElementById('root').innerHTML = '<div style="color:#d4a574;padding:20px">Cargando creador...</div>';
+    window.addEventListener('error', function (event) {
+      // ResizeObserver loop warnings are benign browser notifications — ignore them.
+      if (event.message && event.message.indexOf('ResizeObserver') !== -1) return;
+      var root = document.getElementById('root');
+      if (!root) return;
+      root.innerHTML = '<pre style="color:#f5c2c2;padding:20px;white-space:pre-wrap">Error: ' +
+        String(event.message || 'unknown') + '\\n' +
+        String(event.filename || '') + ':' + String(event.lineno || '') +
+        '</pre>';
+    });
+  </script>
+  <script src="/assets/character-creator/scripts/anm_engine.v4.js"></script>
+  <script src="/assets/character-creator/js/xps_renderer.js"></script>
+  <script src="/assets/character-creator/vendor/react.development.js"></script>
+  <script src="/assets/character-creator/vendor/react-dom.development.js"></script>
+  <script src="/assets/character-creator/character_creator/data.js?v=i18n-costumes-5"></script>
+  <script src="/assets/character-creator/character_creator/icons.js"></script>
+  <script src="/assets/character-creator/character_creator/app.compiled.v4.js"></script>
+</body>
+</html>
+
+

@@ -1,0 +1,326 @@
+{
+  "34727204": {
+    "pair_key": "27204",
+    "provides": [
+      "Tete",
+      "Torse",
+      "Epaule"
+    ],
+    "hideParts": [
+      "CheveuxHaut",
+      "CheveuxBas",
+      "CheveuxArriere",
+      "CheveuxNatteBasse",
+      "CheveuxNatteHaute",
+      "CheuveuxNatteHaute",
+      "Chapeau",
+      "Chapeau02",
+      "Barbe",
+      "Visage",
+      "CorpsHabit"
+    ],
+    "fullReplacement": true
+  },
+  "34727305": {
+    "pair_key": "27305",
+    "provides": [
+      "Tete",
+      "Torse"
+    ],
+    "hideParts": [
+      "CheveuxHaut",
+      "CheveuxBas",
+      "CheveuxArriere",
+      "CheveuxNatteBasse",
+      "CheveuxNatteHaute",
+      "CheuveuxNatteHaute",
+      "Chapeau",
+      "Chapeau02",
+      "Barbe",
+      "Visage",
+      "CorpsHabit"
+    ],
+    "fullReplacement": true
+  },
+  "34727963": {
+    "pair_key": "27963",
+    "provides": [
+      "Tete",
+      "Pied",
+      "Bras",
+      "Epaule"
+    ],
+    "hideParts": [
+      "CheveuxHaut",
+      "CheveuxBas",
+      "CheveuxArriere",
+      "CheveuxNatteBasse",
+      "CheveuxNatteHaute",
+      "CheuveuxNatteHaute",
+      "Chapeau",
+      "Chapeau02",
+      "Barbe",
+      "Visage"
+    ],
+    "fullReplacement": true
+  },
+  "34728107": {
+    "pair_key": "28107",
+    "provides": [
+      "Torse",
+      "Pied"
+    ],
+    "hideParts": [
+      "CorpsHabit"
+    ],
+    "fullReplacement": true
+  },
+  "34728112": {
+    "pair_key": "28112",
+    "provides": [
+      "Tete",
+      "Torse",
+      "Pied",
+      "Bras",
+      "Epaule"
+    ],
+    "hideParts": [
+      "CheveuxHaut",
+      "CheveuxBas",
+      "CheveuxArriere",
+      "CheveuxNatteBasse",
+      "CheveuxNatteHaute",
+      "CheuveuxNatteHaute",
+      "Chapeau",
+      "Chapeau02",
+      "Barbe",
+      "Visage",
+      "CorpsHabit"
+    ],
+    "fullReplacement": true
+  },
+  "34728945": {
+    "pair_key": "28945",
+    "provides": [
+      "Torse",
+      "Bras"
+    ],
+    "hideParts": [
+      "CorpsHabit"
+    ],
+    "fullReplacement": true
+  },
+  "34728946": {
+    "pair_key": "28946",
+    "provides": [
+      "Torse",
+      "Bras"
+    ],
+    "hideParts": [
+      "CorpsHabit"
+    ],
+    "fullReplacement": true
+  },
+  "34728947": {
+    "pair_key": "28947",
+    "provides": [
+      "Torse",
+      "Bras"
+    ],
+    "hideParts": [
+      "CorpsHabit"
+    ],
+    "fullReplacement": true
+  },
+  "34729015": {
+    "pair_key": "29015",
+    "provides": [
+      "Visage",
+      "Pied"
+    ],
+    "hideParts": [
+      "CheveuxHaut",
+      "CheveuxBas",
+      "CheveuxArriere",
+      "CheveuxNatteBasse",
+      "CheveuxNatteHaute",
+      "CheuveuxNatteHaute",
+      "Chapeau",
+      "Chapeau02",
+      "Barbe"
+    ],
+    "fullReplacement": true
+  },
+  "34730447": {
+    "pair_key": "30447",
+    "provides": [
+      "Tete",
+      "Torse"
+    ],
+    "hideParts": [
+      "CheveuxHaut",
+      "CheveuxBas",
+      "CheveuxArriere",
+      "CheveuxNatteBasse",
+      "CheveuxNatteHaute",
+      "CheuveuxNatteHaute",
+      "Chapeau",
+      "Chapeau02",
+      "Barbe",
+      "Visage",
+      "CorpsHabit"
+    ],
+    "fullReplacement": true
+  },
+  "51327204": {
+    "pair_key": "27204",
+    "provides": [
+      "Tete",
+      "Torse",
+      "Bras",
+      "Epaule"
+    ],
+    "hideParts": [
+      "CheveuxHaut",
+      "CheveuxBas",
+      "CheveuxArriere",
+      "CheveuxNatteBasse",
+      "CheveuxNatteHaute",
+      "CheuveuxNatteHaute",
+      "Chapeau",
+      "Chapeau02",
+      "Barbe",
+      "Visage",
+      "CorpsHabit"
+    ],
+    "fullReplacement": true
+  },
+  "51327305": {
+    "pair_key": "27305",
+    "provides": [
+      "Tete",
+      "Torse"
+    ],
+    "hideParts": [
+      "CheveuxHaut",
+      "CheveuxBas",
+      "CheveuxArriere",
+      "CheveuxNatteBasse",
+      "CheveuxNatteHaute",
+      "CheuveuxNatteHaute",
+      "Chapeau",
+      "Chapeau02",
+      "Barbe",
+      "Visage",
+      "CorpsHabit"
+    ],
+    "fullReplacement": true
+  },
+  "51327963": {
+    "pair_key": "27963",
+    "provides": [
+      "Tete",
+      "Pied",
+      "Epaule"
+    ],
+    "hideParts": [
+      "CheveuxHaut",
+      "CheveuxBas",
+      "CheveuxArriere",
+      "CheveuxNatteBasse",
+      "CheveuxNatteHaute",
+      "CheuveuxNatteHaute",
+      "Chapeau",
+      "Chapeau02",
+      "Barbe",
+      "Visage"
+    ],
+    "fullReplacement": true
+  },
+  "51328107": {
+    "pair_key": "28107",
+    "provides": [
+      "Torse",
+      "Pied"
+    ],
+    "hideParts": [
+      "CorpsHabit"
+    ],
+    "fullReplacement": true
+  },
+  "51328112": {
+    "pair_key": "28112",
+    "provides": [
+      "Tete",
+      "Torse",
+      "Pied",
+      "Bras",
+      "Epaule"
+    ],
+    "hideParts": [
+      "CheveuxHaut",
+      "CheveuxBas",
+      "CheveuxArriere",
+      "CheveuxNatteBasse",
+      "CheveuxNatteHaute",
+      "CheuveuxNatteHaute",
+      "Chapeau",
+      "Chapeau02",
+      "Barbe",
+      "Visage",
+      "CorpsHabit"
+    ],
+    "fullReplacement": true
+  },
+  "51328946": {
+    "pair_key": "28946",
+    "provides": [
+      "Torse",
+      "Bras"
+    ],
+    "hideParts": [
+      "CorpsHabit"
+    ],
+    "fullReplacement": true
+  },
+  "51329015": {
+    "pair_key": "29015",
+    "provides": [
+      "Visage",
+      "Pied"
+    ],
+    "hideParts": [
+      "CheveuxHaut",
+      "CheveuxBas",
+      "CheveuxArriere",
+      "CheveuxNatteBasse",
+      "CheveuxNatteHaute",
+      "CheuveuxNatteHaute",
+      "Chapeau",
+      "Chapeau02",
+      "Barbe"
+    ],
+    "fullReplacement": true
+  },
+  "51330447": {
+    "pair_key": "30447",
+    "provides": [
+      "Tete",
+      "Torse"
+    ],
+    "hideParts": [
+      "CheveuxHaut",
+      "CheveuxBas",
+      "CheveuxArriere",
+      "CheveuxNatteBasse",
+      "CheveuxNatteHaute",
+      "CheuveuxNatteHaute",
+      "Chapeau",
+      "Chapeau02",
+      "Barbe",
+      "Visage",
+      "CorpsHabit"
+    ],
+    "fullReplacement": true
+  }
+}

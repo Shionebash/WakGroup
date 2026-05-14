@@ -1,0 +1,2282 @@
+{
+  "metadata": {
+    "generator": "generate_hupper_default_equipment.py",
+    "note": "Default creator equipment mapping for female Huppermage: skin 191, hair 201910001, clothes 211910100."
+  },
+  "assets": [
+    {
+      "asset": "201910001",
+      "atlasPath": "hupper/201910001_0.png",
+      "width": 256,
+      "height": 128,
+      "mappingMode": "hair",
+      "recordCount": 24,
+      "componentCount": 10,
+      "mappedCount": 10,
+      "entries": [
+        {
+          "asset": "201910001",
+          "name": "6_CheveuxHaut",
+          "slot": "CheveuxHaut",
+          "marker": 6,
+          "kind": 2,
+          "primaryHash": "0190446e",
+          "sourceHash": "8ad2b443",
+          "src": {
+            "x": 1,
+            "y": 39,
+            "w": 36,
+            "h": 39
+          }
+        },
+        {
+          "asset": "201910001",
+          "name": "6_CheveuxBas",
+          "slot": "CheveuxBas",
+          "marker": 6,
+          "kind": 2,
+          "primaryHash": "4bb4541c",
+          "sourceHash": "a27cfd3b",
+          "src": {
+            "x": 1,
+            "y": 79,
+            "w": 49,
+            "h": 48
+          }
+        },
+        {
+          "asset": "201910001",
+          "name": "5_CheveuxHaut",
+          "slot": "CheveuxHaut",
+          "marker": 5,
+          "kind": 2,
+          "primaryHash": "8089c17f",
+          "sourceHash": "8ad2b443",
+          "src": {
+            "x": 51,
+            "y": 37,
+            "w": 40,
+            "h": 42
+          }
+        },
+        {
+          "asset": "201910001",
+          "name": "5_CheveuxBas",
+          "slot": "CheveuxBas",
+          "marker": 5,
+          "kind": 2,
+          "primaryHash": "ec0ea314",
+          "sourceHash": "a27cfd3b",
+          "src": {
+            "x": 51,
+            "y": 80,
+            "w": 54,
+            "h": 47
+          }
+        },
+        {
+          "asset": "201910001",
+          "name": "4_CheveuxHaut",
+          "slot": "CheveuxHaut",
+          "marker": 4,
+          "kind": 2,
+          "primaryHash": "ff823e91",
+          "sourceHash": "8ad2b443",
+          "src": {
+            "x": 106,
+            "y": 34,
+            "w": 50,
+            "h": 46
+          }
+        },
+        {
+          "asset": "201910001",
+          "name": "4_CheveuxBas",
+          "slot": "CheveuxBas",
+          "marker": 4,
+          "kind": 2,
+          "primaryHash": "8d69f10c",
+          "sourceHash": "a27cfd3b",
+          "src": {
+            "x": 106,
+            "y": 81,
+            "w": 56,
+            "h": 46
+          }
+        },
+        {
+          "asset": "201910001",
+          "name": "3_CheveuxHaut",
+          "slot": "CheveuxHaut",
+          "marker": 3,
+          "kind": 2,
+          "primaryHash": "7e7cbba2",
+          "sourceHash": "8ad2b443",
+          "src": {
+            "x": 163,
+            "y": 36,
+            "w": 40,
+            "h": 44
+          }
+        },
+        {
+          "asset": "201910001",
+          "name": "3_CheveuxBas",
+          "slot": "CheveuxBas",
+          "marker": 3,
+          "kind": 2,
+          "primaryHash": "2ec43f05",
+          "sourceHash": "a27cfd3b",
+          "src": {
+            "x": 163,
+            "y": 81,
+            "w": 51,
+            "h": 46
+          }
+        },
+        {
+          "asset": "201910001",
+          "name": "2_CheveuxHaut",
+          "slot": "CheveuxHaut",
+          "marker": 2,
+          "kind": 2,
+          "primaryHash": "fd7538b4",
+          "sourceHash": "8ad2b443",
+          "src": {
+            "x": 204,
+            "y": 37,
+            "w": 40,
+            "h": 43
+          }
+        },
+        {
+          "asset": "201910001",
+          "name": "2_CheveuxBas",
+          "slot": "CheveuxBas",
+          "marker": 2,
+          "kind": 2,
+          "primaryHash": "cf1e8efd",
+          "sourceHash": "a27cfd3b",
+          "src": {
+            "x": 215,
+            "y": 84,
+            "w": 35,
+            "h": 43
+          }
+        }
+      ]
+    },
+    {
+      "asset": "211910100",
+      "atlasPath": "hupper/211910100_0.png",
+      "width": 512,
+      "height": 256,
+      "mappingMode": "clothes",
+      "recordCount": 980,
+      "componentCount": 173,
+      "mappedCount": 140,
+      "entries": [
+        {
+          "asset": "211910100",
+          "name": "7_Epaulette-G",
+          "slot": "Epaulette-G",
+          "marker": 7,
+          "kind": 3,
+          "primaryHash": "5f59c3c6",
+          "sourceHash": "6795b0ad",
+          "src": {
+            "x": 1,
+            "y": 109,
+            "w": 18,
+            "h": 9
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "6_Epaulette-G",
+          "slot": "Epaulette-G",
+          "marker": 6,
+          "kind": 3,
+          "primaryHash": "de5240d8",
+          "sourceHash": "6795b0ad",
+          "src": {
+            "x": 1,
+            "y": 119,
+            "w": 20,
+            "h": 12
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "5_Epaulette-G",
+          "slot": "Epaulette-G",
+          "marker": 5,
+          "kind": 3,
+          "primaryHash": "5d4cbde9",
+          "sourceHash": "6795b0ad",
+          "src": {
+            "x": 1,
+            "y": 132,
+            "w": 24,
+            "h": 11
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "3_Epaulette-D",
+          "slot": "Epaulette-D",
+          "marker": 3,
+          "kind": 3,
+          "primaryHash": "583fb70c",
+          "sourceHash": "6495b0ad",
+          "src": {
+            "x": 1,
+            "y": 148,
+            "w": 18,
+            "h": 17
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "2_Epaulette-D",
+          "slot": "Epaulette-D",
+          "marker": 2,
+          "kind": 3,
+          "primaryHash": "d738341e",
+          "sourceHash": "6495b0ad",
+          "src": {
+            "x": 1,
+            "y": 166,
+            "w": 23,
+            "h": 19
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "1_Epaulette-D",
+          "slot": "Epaulette-D",
+          "marker": 1,
+          "kind": 3,
+          "primaryHash": "5632b12f",
+          "sourceHash": "6495b0ad",
+          "src": {
+            "x": 1,
+            "y": 186,
+            "w": 33,
+            "h": 26
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "9_PiedHabit02",
+          "slot": "PiedHabit02",
+          "marker": 9,
+          "kind": 3,
+          "primaryHash": "d897824e",
+          "sourceHash": "dec66958",
+          "src": {
+            "x": 1,
+            "y": 213,
+            "w": 20,
+            "h": 26
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "9_PiedHabit01",
+          "slot": "PiedHabit01",
+          "marker": 9,
+          "kind": 3,
+          "primaryHash": "d797824e",
+          "sourceHash": "ddc66958",
+          "src": {
+            "x": 19,
+            "y": 241,
+            "w": 21,
+            "h": 14
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "8_PiedHabit02",
+          "slot": "PiedHabit02",
+          "marker": 8,
+          "kind": 3,
+          "primaryHash": "5791ff5f",
+          "sourceHash": "dec66958",
+          "src": {
+            "x": 20,
+            "y": 155,
+            "w": 14,
+            "h": 10
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "8_PiedHabit01",
+          "slot": "PiedHabit01",
+          "marker": 8,
+          "kind": 3,
+          "primaryHash": "5691ff5f",
+          "sourceHash": "ddc66958",
+          "src": {
+            "x": 26,
+            "y": 109,
+            "w": 16,
+            "h": 9
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "6_NatteHauteVetement",
+          "slot": "NatteHauteVetement",
+          "marker": 6,
+          "kind": 3,
+          "primaryHash": "82f05779",
+          "sourceHash": "d971fa4a",
+          "src": {
+            "x": 26,
+            "y": 119,
+            "w": 19,
+            "h": 12
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "6_NatteBasseVetement",
+          "slot": "NatteBasseVetement",
+          "marker": 6,
+          "kind": 3,
+          "primaryHash": "dbf232c4",
+          "sourceHash": "3274d595",
+          "src": {
+            "x": 26,
+            "y": 132,
+            "w": 18,
+            "h": 15
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "4_Epaulette-D",
+          "slot": "Epaulette-D",
+          "marker": 4,
+          "kind": 3,
+          "primaryHash": "d9453afb",
+          "sourceHash": "6495b0ad",
+          "src": {
+            "x": 35,
+            "y": 148,
+            "w": 16,
+            "h": 18
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "4_Epaulette-G",
+          "slot": "Epaulette-G",
+          "marker": 4,
+          "kind": 3,
+          "primaryHash": "dc453afb",
+          "sourceHash": "6795b0ad",
+          "src": {
+            "x": 35,
+            "y": 167,
+            "w": 24,
+            "h": 18
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "6_Cape",
+          "slot": "Cape",
+          "marker": 6,
+          "kind": 3,
+          "primaryHash": "5c598061",
+          "sourceHash": "f3ee1f00",
+          "src": {
+            "x": 35,
+            "y": 186,
+            "w": 27,
+            "h": 26
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "6_CapeBas",
+          "slot": "CapeBas",
+          "marker": 6,
+          "kind": 3,
+          "primaryHash": "18dd1f57",
+          "sourceHash": "21cc2084",
+          "src": {
+            "x": 41,
+            "y": 235,
+            "w": 16,
+            "h": 17
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "6_JupeVetement",
+          "slot": "JupeVetement",
+          "marker": 6,
+          "kind": 3,
+          "primaryHash": "e7b0975c",
+          "sourceHash": "7ebf2f35",
+          "src": {
+            "x": 52,
+            "y": 109,
+            "w": 22,
+            "h": 8
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "6_Chapeau",
+          "slot": "Chapeau",
+          "marker": 6,
+          "kind": 3,
+          "primaryHash": "5cec4362",
+          "sourceHash": "65db448f",
+          "src": {
+            "x": 52,
+            "y": 118,
+            "w": 15,
+            "h": 13
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "6_Barbe",
+          "slot": "Barbe",
+          "marker": 6,
+          "kind": 3,
+          "primaryHash": "2dc27cce",
+          "sourceHash": "76dfcf03",
+          "src": {
+            "x": 52,
+            "y": 132,
+            "w": 18,
+            "h": 16
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "6_CorpsHabit",
+          "slot": "CorpsHabit",
+          "marker": 6,
+          "kind": 3,
+          "primaryHash": "b45c9d48",
+          "sourceHash": "0b254668",
+          "src": {
+            "x": 52,
+            "y": 149,
+            "w": 22,
+            "h": 17
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "6_CorpsVetement",
+          "slot": "CorpsVetement",
+          "marker": 6,
+          "kind": 3,
+          "primaryHash": "7e8fcde0",
+          "sourceHash": "c753371b",
+          "src": {
+            "x": 58,
+            "y": 215,
+            "w": 20,
+            "h": 40
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "6_TroncVetement",
+          "slot": "TroncVetement",
+          "marker": 6,
+          "kind": 3,
+          "primaryHash": "9b030ee3",
+          "sourceHash": "e4c7771d",
+          "src": {
+            "x": 60,
+            "y": 167,
+            "w": 17,
+            "h": 18
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "6_BassinVetement",
+          "slot": "BassinVetement",
+          "marker": 6,
+          "kind": 3,
+          "primaryHash": "6b524457",
+          "sourceHash": "4217136a",
+          "src": {
+            "x": 63,
+            "y": 192,
+            "w": 15,
+            "h": 20
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "4_CuisseHabit",
+          "slot": "CuisseHabit",
+          "marker": 4,
+          "kind": 3,
+          "primaryHash": "fb2118d9",
+          "sourceHash": "86718e8b",
+          "src": {
+            "x": 79,
+            "y": 109,
+            "w": 12,
+            "h": 9
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "4_CuisseVetement",
+          "slot": "CuisseVetement",
+          "marker": 4,
+          "kind": 3,
+          "primaryHash": "d7f0c01f",
+          "sourceHash": "6c71b3f5",
+          "src": {
+            "x": 79,
+            "y": 119,
+            "w": 16,
+            "h": 11
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "4_JambeHabit",
+          "slot": "JambeHabit",
+          "marker": 4,
+          "kind": 3,
+          "primaryHash": "26219dc7",
+          "sourceHash": "3b34a9f6",
+          "src": {
+            "x": 79,
+            "y": 131,
+            "w": 16,
+            "h": 15
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "4_JambeVetement",
+          "slot": "JambeVetement",
+          "marker": 4,
+          "kind": 3,
+          "primaryHash": "cc1dbbe6",
+          "sourceHash": "97b6dbd4",
+          "src": {
+            "x": 79,
+            "y": 147,
+            "w": 16,
+            "h": 18
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "4_EpauleVetement",
+          "slot": "EpauleVetement",
+          "marker": 4,
+          "kind": 3,
+          "primaryHash": "41862779",
+          "sourceHash": "d6061a4f",
+          "src": {
+            "x": 79,
+            "y": 166,
+            "w": 24,
+            "h": 20
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "4_BrasVetement",
+          "slot": "BrasVetement",
+          "marker": 4,
+          "kind": 3,
+          "primaryHash": "ab4b1168",
+          "sourceHash": "80ed6404",
+          "src": {
+            "x": 79,
+            "y": 187,
+            "w": 30,
+            "h": 28
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "5_NatteHauteVetement",
+          "slot": "NatteHauteVetement",
+          "marker": 5,
+          "kind": 3,
+          "primaryHash": "231ab691",
+          "sourceHash": "d971fa4a",
+          "src": {
+            "x": 79,
+            "y": 239,
+            "w": 7,
+            "h": 16
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "5_NatteBasseVetement",
+          "slot": "NatteBasseVetement",
+          "marker": 5,
+          "kind": 3,
+          "primaryHash": "7c1c91dc",
+          "sourceHash": "3274d595",
+          "src": {
+            "x": 92,
+            "y": 102,
+            "w": 19,
+            "h": 7
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "3_Epaulette-G",
+          "slot": "Epaulette-G",
+          "marker": 3,
+          "kind": 3,
+          "primaryHash": "5b3fb70c",
+          "sourceHash": "6795b0ad",
+          "src": {
+            "x": 92,
+            "y": 110,
+            "w": 24,
+            "h": 8
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "3_EpauleVetement",
+          "slot": "EpauleVetement",
+          "marker": 3,
+          "kind": 3,
+          "primaryHash": "62a89597",
+          "sourceHash": "d6061a4f",
+          "src": {
+            "x": 96,
+            "y": 119,
+            "w": 18,
+            "h": 12
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "3_BrasVetement",
+          "slot": "BrasVetement",
+          "marker": 3,
+          "kind": 3,
+          "primaryHash": "0c823386",
+          "sourceHash": "80ed6404",
+          "src": {
+            "x": 96,
+            "y": 132,
+            "w": 20,
+            "h": 14
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "5_Cape",
+          "slot": "Cape",
+          "marker": 5,
+          "kind": 3,
+          "primaryHash": "bd80cb5f",
+          "sourceHash": "f3ee1f00",
+          "src": {
+            "x": 110,
+            "y": 169,
+            "w": 20,
+            "h": 21
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "5_CapeBas",
+          "slot": "CapeBas",
+          "marker": 5,
+          "kind": 3,
+          "primaryHash": "176edbc2",
+          "sourceHash": "21cc2084",
+          "src": {
+            "x": 110,
+            "y": 191,
+            "w": 21,
+            "h": 24
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "5_Chapeau",
+          "slot": "Chapeau",
+          "marker": 5,
+          "kind": 3,
+          "primaryHash": "5b7dffcd",
+          "sourceHash": "65db448f",
+          "src": {
+            "x": 113,
+            "y": 216,
+            "w": 21,
+            "h": 16
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "5_Barbe",
+          "slot": "Barbe",
+          "marker": 5,
+          "kind": 3,
+          "primaryHash": "ec869699",
+          "sourceHash": "76dfcf03",
+          "src": {
+            "x": 117,
+            "y": 101,
+            "w": 19,
+            "h": 7
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "5_CorpsHabit",
+          "slot": "CorpsHabit",
+          "marker": 5,
+          "kind": 3,
+          "primaryHash": "55b7eb40",
+          "sourceHash": "0b254668",
+          "src": {
+            "x": 117,
+            "y": 109,
+            "w": 23,
+            "h": 10
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "5_CorpsVetement",
+          "slot": "CorpsVetement",
+          "marker": 5,
+          "kind": 3,
+          "primaryHash": "3d25f286",
+          "sourceHash": "c753371b",
+          "src": {
+            "x": 117,
+            "y": 124,
+            "w": 6,
+            "h": 7
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "5_TroncVetement",
+          "slot": "TroncVetement",
+          "marker": 5,
+          "kind": 3,
+          "primaryHash": "5a993289",
+          "sourceHash": "e4c7771d",
+          "src": {
+            "x": 117,
+            "y": 132,
+            "w": 18,
+            "h": 14
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "5_JupeVetement",
+          "slot": "JupeVetement",
+          "marker": 5,
+          "kind": 3,
+          "primaryHash": "48e7b97a",
+          "sourceHash": "7ebf2f35",
+          "src": {
+            "x": 125,
+            "y": 120,
+            "w": 15,
+            "h": 9
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "5_BassinVetement",
+          "slot": "BassinVetement",
+          "marker": 5,
+          "kind": 3,
+          "primaryHash": "8c74b275",
+          "sourceHash": "4217136a",
+          "src": {
+            "x": 133,
+            "y": 147,
+            "w": 16,
+            "h": 18
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "5_CuisseHabit",
+          "slot": "CuisseHabit",
+          "marker": 5,
+          "kind": 3,
+          "primaryHash": "7c289bc7",
+          "sourceHash": "86718e8b",
+          "src": {
+            "x": 135,
+            "y": 166,
+            "w": 20,
+            "h": 20
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "5_CuisseVetement",
+          "slot": "CuisseVetement",
+          "marker": 5,
+          "kind": 3,
+          "primaryHash": "b6ce5201",
+          "sourceHash": "6c71b3f5",
+          "src": {
+            "x": 135,
+            "y": 187,
+            "w": 13,
+            "h": 28
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "5_JambeHabit",
+          "slot": "JambeHabit",
+          "marker": 5,
+          "kind": 3,
+          "primaryHash": "85c64ecf",
+          "sourceHash": "3b34a9f6",
+          "src": {
+            "x": 135,
+            "y": 244,
+            "w": 10,
+            "h": 11
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "5_JambeVetement",
+          "slot": "JambeVetement",
+          "marker": 5,
+          "kind": 3,
+          "primaryHash": "0d889640",
+          "sourceHash": "97b6dbd4",
+          "src": {
+            "x": 136,
+            "y": 132,
+            "w": 16,
+            "h": 14
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "5_PiedHabit01",
+          "slot": "PiedHabit01",
+          "marker": 5,
+          "kind": 3,
+          "primaryHash": "d37d7694",
+          "sourceHash": "ddc66958",
+          "src": {
+            "x": 141,
+            "y": 102,
+            "w": 10,
+            "h": 7
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "5_PiedHabit02",
+          "slot": "PiedHabit02",
+          "marker": 5,
+          "kind": 3,
+          "primaryHash": "d47d7694",
+          "sourceHash": "dec66958",
+          "src": {
+            "x": 141,
+            "y": 110,
+            "w": 20,
+            "h": 9
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "3_CuisseHabit",
+          "slot": "CuisseHabit",
+          "marker": 3,
+          "kind": 3,
+          "primaryHash": "7a1b95ea",
+          "sourceHash": "86718e8b",
+          "src": {
+            "x": 141,
+            "y": 120,
+            "w": 18,
+            "h": 11
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "3_CuisseVetement",
+          "slot": "CuisseVetement",
+          "marker": 3,
+          "kind": 3,
+          "primaryHash": "f8122f3e",
+          "sourceHash": "6c71b3f5",
+          "src": {
+            "x": 144,
+            "y": 216,
+            "w": 17,
+            "h": 28
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "3_JambeHabit",
+          "slot": "JambeHabit",
+          "marker": 3,
+          "kind": 3,
+          "primaryHash": "c77bebbf",
+          "sourceHash": "3b34a9f6",
+          "src": {
+            "x": 149,
+            "y": 191,
+            "w": 12,
+            "h": 11
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "3_JambeVetement",
+          "slot": "JambeVetement",
+          "marker": 3,
+          "kind": 3,
+          "primaryHash": "8bb3df8c",
+          "sourceHash": "97b6dbd4",
+          "src": {
+            "x": 149,
+            "y": 203,
+            "w": 12,
+            "h": 12
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "3_PiedHabit01",
+          "slot": "PiedHabit01",
+          "marker": 3,
+          "kind": 3,
+          "primaryHash": "d17070b7",
+          "sourceHash": "ddc66958",
+          "src": {
+            "x": 152,
+            "y": 102,
+            "w": 11,
+            "h": 7
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "3_PiedHabit02",
+          "slot": "PiedHabit02",
+          "marker": 3,
+          "kind": 3,
+          "primaryHash": "d27070b7",
+          "sourceHash": "dec66958",
+          "src": {
+            "x": 162,
+            "y": 119,
+            "w": 19,
+            "h": 12
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "5_EpauleVetement",
+          "slot": "EpauleVetement",
+          "marker": 5,
+          "kind": 3,
+          "primaryHash": "2064b95a",
+          "sourceHash": "d6061a4f",
+          "src": {
+            "x": 162,
+            "y": 132,
+            "w": 20,
+            "h": 15
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "5_BrasVetement",
+          "slot": "BrasVetement",
+          "marker": 5,
+          "kind": 3,
+          "primaryHash": "4a15ef49",
+          "sourceHash": "80ed6404",
+          "src": {
+            "x": 162,
+            "y": 148,
+            "w": 18,
+            "h": 17
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "7_Epaulette-D",
+          "slot": "Epaulette-D",
+          "marker": 7,
+          "kind": 3,
+          "primaryHash": "5c59c3c6",
+          "sourceHash": "6495b0ad",
+          "src": {
+            "x": 162,
+            "y": 166,
+            "w": 20,
+            "h": 20
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "4_NatteHauteVetement",
+          "slot": "NatteHauteVetement",
+          "marker": 4,
+          "kind": 3,
+          "primaryHash": "c44314aa",
+          "sourceHash": "d971fa4a",
+          "src": {
+            "x": 162,
+            "y": 187,
+            "w": 13,
+            "h": 28
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "2_Epaulette-G",
+          "slot": "Epaulette-G",
+          "marker": 2,
+          "kind": 3,
+          "primaryHash": "da38341e",
+          "sourceHash": "6795b0ad",
+          "src": {
+            "x": 162,
+            "y": 216,
+            "w": 20,
+            "h": 39
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "2_EpauleVetement",
+          "slot": "EpauleVetement",
+          "marker": 2,
+          "kind": 3,
+          "primaryHash": "83ca03b6",
+          "sourceHash": "d6061a4f",
+          "src": {
+            "x": 164,
+            "y": 102,
+            "w": 17,
+            "h": 7
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "2_BrasVetement",
+          "slot": "BrasVetement",
+          "marker": 2,
+          "kind": 3,
+          "primaryHash": "6db855a4",
+          "sourceHash": "80ed6404",
+          "src": {
+            "x": 182,
+            "y": 109,
+            "w": 19,
+            "h": 10
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "4_Cape",
+          "slot": "Cape",
+          "marker": 4,
+          "kind": 3,
+          "primaryHash": "1ea8165e",
+          "sourceHash": "f3ee1f00",
+          "src": {
+            "x": 182,
+            "y": 120,
+            "w": 19,
+            "h": 11
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "4_CapeBas",
+          "slot": "CapeBas",
+          "marker": 4,
+          "kind": 3,
+          "primaryHash": "16ff962e",
+          "sourceHash": "21cc2084",
+          "src": {
+            "x": 183,
+            "y": 132,
+            "w": 25,
+            "h": 15
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "4_Chapeau",
+          "slot": "Chapeau",
+          "marker": 4,
+          "kind": 3,
+          "primaryHash": "5a0ebb39",
+          "sourceHash": "65db448f",
+          "src": {
+            "x": 183,
+            "y": 148,
+            "w": 16,
+            "h": 18
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "4_Barbe",
+          "slot": "Barbe",
+          "marker": 4,
+          "kind": 3,
+          "primaryHash": "ab4bb064",
+          "sourceHash": "76dfcf03",
+          "src": {
+            "x": 183,
+            "y": 167,
+            "w": 18,
+            "h": 19
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "4_NatteBasseVetement",
+          "slot": "NatteBasseVetement",
+          "marker": 4,
+          "kind": 3,
+          "primaryHash": "1d46eff4",
+          "sourceHash": "3274d595",
+          "src": {
+            "x": 183,
+            "y": 187,
+            "w": 13,
+            "h": 28
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "4_CorpsHabit",
+          "slot": "CorpsHabit",
+          "marker": 4,
+          "kind": 3,
+          "primaryHash": "f6113a39",
+          "sourceHash": "0b254668",
+          "src": {
+            "x": 183,
+            "y": 216,
+            "w": 19,
+            "h": 39
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "4_CorpsVetement",
+          "slot": "CorpsVetement",
+          "marker": 4,
+          "kind": 3,
+          "primaryHash": "fcba162d",
+          "sourceHash": "c753371b",
+          "src": {
+            "x": 203,
+            "y": 148,
+            "w": 18,
+            "h": 17
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "4_TroncVetement",
+          "slot": "TroncVetement",
+          "marker": 4,
+          "kind": 3,
+          "primaryHash": "192f572f",
+          "sourceHash": "e4c7771d",
+          "src": {
+            "x": 203,
+            "y": 166,
+            "w": 20,
+            "h": 20
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "4_Jupe2Vetement",
+          "slot": "Jupe2Vetement",
+          "marker": 4,
+          "kind": 3,
+          "primaryHash": "a5578492",
+          "sourceHash": "70f0a480",
+          "src": {
+            "x": 203,
+            "y": 187,
+            "w": 13,
+            "h": 28
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "4_JupeVetement",
+          "slot": "JupeVetement",
+          "marker": 4,
+          "kind": 3,
+          "primaryHash": "a91ddc98",
+          "sourceHash": "7ebf2f35",
+          "src": {
+            "x": 203,
+            "y": 216,
+            "w": 18,
+            "h": 39
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "6_CuisseHabit",
+          "slot": "CuisseHabit",
+          "marker": 6,
+          "kind": 3,
+          "primaryHash": "fd2e1eb6",
+          "sourceHash": "86718e8b",
+          "src": {
+            "x": 209,
+            "y": 109,
+            "w": 17,
+            "h": 9
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "6_CuisseVetement",
+          "slot": "CuisseVetement",
+          "marker": 6,
+          "kind": 3,
+          "primaryHash": "95ace4e2",
+          "sourceHash": "6c71b3f5",
+          "src": {
+            "x": 209,
+            "y": 120,
+            "w": 4,
+            "h": 11
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "6_JambeHabit",
+          "slot": "JambeHabit",
+          "marker": 6,
+          "kind": 3,
+          "primaryHash": "e46b00d7",
+          "sourceHash": "3b34a9f6",
+          "src": {
+            "x": 209,
+            "y": 132,
+            "w": 19,
+            "h": 15
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "6_JambeVetement",
+          "slot": "JambeVetement",
+          "marker": 6,
+          "kind": 3,
+          "primaryHash": "4ef2719a",
+          "sourceHash": "97b6dbd4",
+          "src": {
+            "x": 214,
+            "y": 119,
+            "w": 14,
+            "h": 8
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "6_PiedHabit01",
+          "slot": "PiedHabit01",
+          "marker": 6,
+          "kind": 3,
+          "primaryHash": "5484f982",
+          "sourceHash": "ddc66958",
+          "src": {
+            "x": 222,
+            "y": 148,
+            "w": 12,
+            "h": 7
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "6_PiedHabit02",
+          "slot": "PiedHabit02",
+          "marker": 6,
+          "kind": 3,
+          "primaryHash": "5584f982",
+          "sourceHash": "dec66958",
+          "src": {
+            "x": 222,
+            "y": 156,
+            "w": 13,
+            "h": 9
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "4_BassinVetement",
+          "slot": "BassinVetement",
+          "marker": 4,
+          "kind": 3,
+          "primaryHash": "ad962094",
+          "sourceHash": "4217136a",
+          "src": {
+            "x": 222,
+            "y": 187,
+            "w": 13,
+            "h": 28
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "2_CuisseHabit",
+          "slot": "CuisseHabit",
+          "marker": 2,
+          "kind": 3,
+          "primaryHash": "f91412fc",
+          "sourceHash": "86718e8b",
+          "src": {
+            "x": 222,
+            "y": 216,
+            "w": 18,
+            "h": 39
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "2_CuisseVetement",
+          "slot": "CuisseVetement",
+          "marker": 2,
+          "kind": 3,
+          "primaryHash": "19359d5c",
+          "sourceHash": "6c71b3f5",
+          "src": {
+            "x": 236,
+            "y": 102,
+            "w": 17,
+            "h": 6
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "2_JambeHabit",
+          "slot": "JambeHabit",
+          "marker": 2,
+          "kind": 3,
+          "primaryHash": "68d639b8",
+          "sourceHash": "3b34a9f6",
+          "src": {
+            "x": 236,
+            "y": 109,
+            "w": 21,
+            "h": 9
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "2_JambeVetement",
+          "slot": "JambeVetement",
+          "marker": 2,
+          "kind": 3,
+          "primaryHash": "4a490433",
+          "sourceHash": "97b6dbd4",
+          "src": {
+            "x": 236,
+            "y": 119,
+            "w": 19,
+            "h": 13
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "2_PiedHabit01",
+          "slot": "PiedHabit01",
+          "marker": 2,
+          "kind": 3,
+          "primaryHash": "506aedc8",
+          "sourceHash": "ddc66958",
+          "src": {
+            "x": 236,
+            "y": 133,
+            "w": 17,
+            "h": 17
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "2_PiedHabit02",
+          "slot": "PiedHabit02",
+          "marker": 2,
+          "kind": 3,
+          "primaryHash": "516aedc8",
+          "sourceHash": "dec66958",
+          "src": {
+            "x": 236,
+            "y": 151,
+            "w": 24,
+            "h": 18
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "6_EpauleVetement",
+          "slot": "EpauleVetement",
+          "marker": 6,
+          "kind": 3,
+          "primaryHash": "ff414b3c",
+          "sourceHash": "d6061a4f",
+          "src": {
+            "x": 236,
+            "y": 170,
+            "w": 22,
+            "h": 22
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "6_BrasVetement",
+          "slot": "BrasVetement",
+          "marker": 6,
+          "kind": 3,
+          "primaryHash": "e9decc2b",
+          "sourceHash": "80ed6404",
+          "src": {
+            "x": 236,
+            "y": 193,
+            "w": 22,
+            "h": 22
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "6_Epaulette-D",
+          "slot": "Epaulette-D",
+          "marker": 6,
+          "kind": 3,
+          "primaryHash": "db5240d8",
+          "sourceHash": "6495b0ad",
+          "src": {
+            "x": 241,
+            "y": 216,
+            "w": 17,
+            "h": 39
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "4_PiedHabit01",
+          "slot": "PiedHabit01",
+          "marker": 4,
+          "kind": 3,
+          "primaryHash": "5277f3a5",
+          "sourceHash": "ddc66958",
+          "src": {
+            "x": 259,
+            "y": 187,
+            "w": 13,
+            "h": 29
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "4_PiedHabit02",
+          "slot": "PiedHabit02",
+          "marker": 4,
+          "kind": 3,
+          "primaryHash": "5377f3a5",
+          "sourceHash": "dec66958",
+          "src": {
+            "x": 259,
+            "y": 217,
+            "w": 21,
+            "h": 26
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "1_Epaulette-G",
+          "slot": "Epaulette-G",
+          "marker": 1,
+          "kind": 3,
+          "primaryHash": "5932b12f",
+          "sourceHash": "6795b0ad",
+          "src": {
+            "x": 261,
+            "y": 105,
+            "w": 19,
+            "h": 3
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "1_EpauleVetement",
+          "slot": "EpauleVetement",
+          "marker": 1,
+          "kind": 3,
+          "primaryHash": "a4ec71d4",
+          "sourceHash": "d6061a4f",
+          "src": {
+            "x": 261,
+            "y": 109,
+            "w": 9,
+            "h": 9
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "1_BrasVetement",
+          "slot": "BrasVetement",
+          "marker": 1,
+          "kind": 3,
+          "primaryHash": "ceee77c2",
+          "sourceHash": "80ed6404",
+          "src": {
+            "x": 261,
+            "y": 119,
+            "w": 18,
+            "h": 13
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "3_JupeVetement",
+          "slot": "JupeVetement",
+          "marker": 3,
+          "kind": 3,
+          "primaryHash": "0a54feb6",
+          "sourceHash": "7ebf2f35",
+          "src": {
+            "x": 261,
+            "y": 133,
+            "w": 17,
+            "h": 17
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "3_Chapeau",
+          "slot": "Chapeau",
+          "marker": 3,
+          "kind": 3,
+          "primaryHash": "599f76a5",
+          "sourceHash": "65db448f",
+          "src": {
+            "x": 261,
+            "y": 151,
+            "w": 23,
+            "h": 18
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "3_Barbe",
+          "slot": "Barbe",
+          "marker": 3,
+          "kind": 3,
+          "primaryHash": "6a10ca2f",
+          "sourceHash": "76dfcf03",
+          "src": {
+            "x": 271,
+            "y": 109,
+            "w": 9,
+            "h": 8
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "3_CorpsHabit",
+          "slot": "CorpsHabit",
+          "marker": 3,
+          "kind": 3,
+          "primaryHash": "976c8831",
+          "sourceHash": "0b254668",
+          "src": {
+            "x": 273,
+            "y": 187,
+            "w": 11,
+            "h": 29
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "3_CorpsVetement",
+          "slot": "CorpsVetement",
+          "marker": 3,
+          "kind": 3,
+          "primaryHash": "bb503bd3",
+          "sourceHash": "c753371b",
+          "src": {
+            "x": 279,
+            "y": 133,
+            "w": 16,
+            "h": 17
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "3_TroncVetement",
+          "slot": "TroncVetement",
+          "marker": 3,
+          "kind": 3,
+          "primaryHash": "d8c47bd5",
+          "sourceHash": "e4c7771d",
+          "src": {
+            "x": 280,
+            "y": 119,
+            "w": 17,
+            "h": 13
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "3_BassinVetement",
+          "slot": "BassinVetement",
+          "marker": 3,
+          "kind": 3,
+          "primaryHash": "ceb88eb2",
+          "sourceHash": "4217136a",
+          "src": {
+            "x": 280,
+            "y": 245,
+            "w": 29,
+            "h": 10
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "7_CuisseHabit",
+          "slot": "CuisseHabit",
+          "marker": 7,
+          "kind": 3,
+          "primaryHash": "7e35a1a4",
+          "sourceHash": "86718e8b",
+          "src": {
+            "x": 281,
+            "y": 103,
+            "w": 16,
+            "h": 6
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "7_CuisseVetement",
+          "slot": "CuisseVetement",
+          "marker": 7,
+          "kind": 3,
+          "primaryHash": "748a76c4",
+          "sourceHash": "6c71b3f5",
+          "src": {
+            "x": 281,
+            "y": 110,
+            "w": 15,
+            "h": 8
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "7_JambeHabit",
+          "slot": "JambeHabit",
+          "marker": 7,
+          "kind": 3,
+          "primaryHash": "4311b2de",
+          "sourceHash": "3b34a9f6",
+          "src": {
+            "x": 285,
+            "y": 165,
+            "w": 26,
+            "h": 22
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "7_JambeVetement",
+          "slot": "JambeVetement",
+          "marker": 7,
+          "kind": 3,
+          "primaryHash": "8f5c4df4",
+          "sourceHash": "97b6dbd4",
+          "src": {
+            "x": 285,
+            "y": 188,
+            "w": 32,
+            "h": 28
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "7_PiedHabit01",
+          "slot": "PiedHabit01",
+          "marker": 7,
+          "kind": 3,
+          "primaryHash": "d58a7c71",
+          "sourceHash": "ddc66958",
+          "src": {
+            "x": 296,
+            "y": 137,
+            "w": 15,
+            "h": 13
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "7_PiedHabit02",
+          "slot": "PiedHabit02",
+          "marker": 7,
+          "kind": 3,
+          "primaryHash": "d68a7c71",
+          "sourceHash": "dec66958",
+          "src": {
+            "x": 298,
+            "y": 104,
+            "w": 18,
+            "h": 8
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "1_CuisseHabit",
+          "slot": "CuisseHabit",
+          "marker": 1,
+          "kind": 3,
+          "primaryHash": "780e8f0d",
+          "sourceHash": "86718e8b",
+          "src": {
+            "x": 298,
+            "y": 113,
+            "w": 13,
+            "h": 9
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "1_CuisseVetement",
+          "slot": "CuisseVetement",
+          "marker": 1,
+          "kind": 3,
+          "primaryHash": "3a570b7b",
+          "sourceHash": "6c71b3f5",
+          "src": {
+            "x": 298,
+            "y": 123,
+            "w": 13,
+            "h": 9
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "1_JambeHabit",
+          "slot": "JambeHabit",
+          "marker": 1,
+          "kind": 3,
+          "primaryHash": "093188b0",
+          "sourceHash": "3b34a9f6",
+          "src": {
+            "x": 309,
+            "y": 217,
+            "w": 21,
+            "h": 26
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "1_JambeVetement",
+          "slot": "JambeVetement",
+          "marker": 1,
+          "kind": 3,
+          "primaryHash": "09df28d9",
+          "sourceHash": "97b6dbd4",
+          "src": {
+            "x": 312,
+            "y": 119,
+            "w": 17,
+            "h": 11
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "1_PiedHabit01",
+          "slot": "PiedHabit01",
+          "marker": 1,
+          "kind": 3,
+          "primaryHash": "cf636ada",
+          "sourceHash": "ddc66958",
+          "src": {
+            "x": 312,
+            "y": 131,
+            "w": 16,
+            "h": 16
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "1_PiedHabit02",
+          "slot": "PiedHabit02",
+          "marker": 1,
+          "kind": 3,
+          "primaryHash": "d0636ada",
+          "sourceHash": "dec66958",
+          "src": {
+            "x": 312,
+            "y": 148,
+            "w": 16,
+            "h": 18
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "7_EpauleVetement",
+          "slot": "EpauleVetement",
+          "marker": 7,
+          "kind": 3,
+          "primaryHash": "de1fdd1d",
+          "sourceHash": "d6061a4f",
+          "src": {
+            "x": 312,
+            "y": 167,
+            "w": 17,
+            "h": 20
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "7_BrasVetement",
+          "slot": "BrasVetement",
+          "marker": 7,
+          "kind": 3,
+          "primaryHash": "88a8aa0d",
+          "sourceHash": "80ed6404",
+          "src": {
+            "x": 317,
+            "y": 104,
+            "w": 13,
+            "h": 8
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "5_Epaulette-D",
+          "slot": "Epaulette-D",
+          "marker": 5,
+          "kind": 3,
+          "primaryHash": "5a4cbde9",
+          "sourceHash": "6495b0ad",
+          "src": {
+            "x": 318,
+            "y": 188,
+            "w": 11,
+            "h": 28
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "3_Cape",
+          "slot": "Cape",
+          "marker": 3,
+          "kind": 3,
+          "primaryHash": "7fcf615c",
+          "sourceHash": "f3ee1f00",
+          "src": {
+            "x": 331,
+            "y": 109,
+            "w": 22,
+            "h": 10
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "3_CapeBas",
+          "slot": "CapeBas",
+          "marker": 3,
+          "kind": 3,
+          "primaryHash": "1590529a",
+          "sourceHash": "21cc2084",
+          "src": {
+            "x": 331,
+            "y": 120,
+            "w": 22,
+            "h": 11
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "3_NatteHauteVetement",
+          "slot": "NatteHauteVetement",
+          "marker": 3,
+          "kind": 3,
+          "primaryHash": "656d72c2",
+          "sourceHash": "d971fa4a",
+          "src": {
+            "x": 331,
+            "y": 132,
+            "w": 25,
+            "h": 13
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "3_NatteBasseVetement",
+          "slot": "NatteBasseVetement",
+          "marker": 3,
+          "kind": 3,
+          "primaryHash": "be6f4d0d",
+          "sourceHash": "3274d595",
+          "src": {
+            "x": 331,
+            "y": 146,
+            "w": 18,
+            "h": 17
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "0_Epaulette-D",
+          "slot": "Epaulette-D",
+          "marker": 0,
+          "kind": 3,
+          "primaryHash": "d52b2e41",
+          "sourceHash": "6495b0ad",
+          "src": {
+            "x": 331,
+            "y": 164,
+            "w": 26,
+            "h": 22
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "0_Epaulette-G",
+          "slot": "Epaulette-G",
+          "marker": 0,
+          "kind": 3,
+          "primaryHash": "d82b2e41",
+          "sourceHash": "6795b0ad",
+          "src": {
+            "x": 331,
+            "y": 187,
+            "w": 11,
+            "h": 29
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "2_JupeVetement",
+          "slot": "JupeVetement",
+          "marker": 2,
+          "kind": 3,
+          "primaryHash": "6b8a20d5",
+          "sourceHash": "7ebf2f35",
+          "src": {
+            "x": 331,
+            "y": 217,
+            "w": 18,
+            "h": 38
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "2_Chapeau",
+          "slot": "Chapeau",
+          "marker": 2,
+          "kind": 3,
+          "primaryHash": "58303211",
+          "sourceHash": "65db448f",
+          "src": {
+            "x": 350,
+            "y": 146,
+            "w": 18,
+            "h": 17
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "2_Barbe",
+          "slot": "Barbe",
+          "marker": 2,
+          "kind": 3,
+          "primaryHash": "29d5e3fa",
+          "sourceHash": "76dfcf03",
+          "src": {
+            "x": 350,
+            "y": 188,
+            "w": 13,
+            "h": 29
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "2_CorpsHabit",
+          "slot": "CorpsHabit",
+          "marker": 2,
+          "kind": 3,
+          "primaryHash": "38c7d629",
+          "sourceHash": "0b254668",
+          "src": {
+            "x": 350,
+            "y": 218,
+            "w": 18,
+            "h": 37
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "2_CorpsVetement",
+          "slot": "CorpsVetement",
+          "marker": 2,
+          "kind": 3,
+          "primaryHash": "7ae65f79",
+          "sourceHash": "c753371b",
+          "src": {
+            "x": 357,
+            "y": 101,
+            "w": 19,
+            "h": 7
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "2_TroncVetement",
+          "slot": "TroncVetement",
+          "marker": 2,
+          "kind": 3,
+          "primaryHash": "975aa07b",
+          "sourceHash": "e4c7771d",
+          "src": {
+            "x": 357,
+            "y": 109,
+            "w": 20,
+            "h": 10
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "2_BassinVetement",
+          "slot": "BassinVetement",
+          "marker": 2,
+          "kind": 3,
+          "primaryHash": "efdafcd0",
+          "sourceHash": "4217136a",
+          "src": {
+            "x": 357,
+            "y": 120,
+            "w": 21,
+            "h": 11
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "0_CuisseHabit",
+          "slot": "CuisseHabit",
+          "marker": 0,
+          "kind": 3,
+          "primaryHash": "f7070c1f",
+          "sourceHash": "86718e8b",
+          "src": {
+            "x": 357,
+            "y": 132,
+            "w": 24,
+            "h": 13
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "0_CuisseVetement",
+          "slot": "CuisseVetement",
+          "marker": 0,
+          "kind": 3,
+          "primaryHash": "5b797999",
+          "sourceHash": "6c71b3f5",
+          "src": {
+            "x": 369,
+            "y": 147,
+            "w": 18,
+            "h": 17
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "0_JambeHabit",
+          "slot": "JambeHabit",
+          "marker": 0,
+          "kind": 3,
+          "primaryHash": "aa8bd6a8",
+          "sourceHash": "3b34a9f6",
+          "src": {
+            "x": 369,
+            "y": 165,
+            "w": 35,
+            "h": 25
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "0_JambeVetement",
+          "slot": "JambeVetement",
+          "marker": 0,
+          "kind": 3,
+          "primaryHash": "c8744d7f",
+          "sourceHash": "97b6dbd4",
+          "src": {
+            "x": 369,
+            "y": 191,
+            "w": 21,
+            "h": 19
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "0_PiedHabit01",
+          "slot": "PiedHabit01",
+          "marker": 0,
+          "kind": 3,
+          "primaryHash": "4e5de7eb",
+          "sourceHash": "ddc66958",
+          "src": {
+            "x": 369,
+            "y": 241,
+            "w": 36,
+            "h": 14
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "0_PiedHabit02",
+          "slot": "PiedHabit02",
+          "marker": 0,
+          "kind": 3,
+          "primaryHash": "4f5de7eb",
+          "sourceHash": "dec66958",
+          "src": {
+            "x": 388,
+            "y": 109,
+            "w": 13,
+            "h": 9
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "0_EpauleVetement",
+          "slot": "EpauleVetement",
+          "marker": 0,
+          "kind": 3,
+          "primaryHash": "c50ee0f2",
+          "sourceHash": "d6061a4f",
+          "src": {
+            "x": 388,
+            "y": 119,
+            "w": 19,
+            "h": 12
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "0_BrasVetement",
+          "slot": "BrasVetement",
+          "marker": 0,
+          "kind": 3,
+          "primaryHash": "2f259ae0",
+          "sourceHash": "80ed6404",
+          "src": {
+            "x": 388,
+            "y": 132,
+            "w": 28,
+            "h": 14
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "2_Cape",
+          "slot": "Cape",
+          "marker": 2,
+          "kind": 3,
+          "primaryHash": "e0f6ac5a",
+          "sourceHash": "f3ee1f00",
+          "src": {
+            "x": 388,
+            "y": 147,
+            "w": 16,
+            "h": 17
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "2_CapeBas",
+          "slot": "CapeBas",
+          "marker": 2,
+          "kind": 3,
+          "primaryHash": "14210e06",
+          "sourceHash": "21cc2084",
+          "src": {
+            "x": 390,
+            "y": 210,
+            "w": 29,
+            "h": 10
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "2_NatteHauteVetement",
+          "slot": "NatteHauteVetement",
+          "marker": 2,
+          "kind": 3,
+          "primaryHash": "0697d0da",
+          "sourceHash": "d971fa4a",
+          "src": {
+            "x": 405,
+            "y": 148,
+            "w": 17,
+            "h": 18
+          }
+        },
+        {
+          "asset": "211910100",
+          "name": "2_NatteBasseVetement",
+          "slot": "NatteBasseVetement",
+          "marker": 2,
+          "kind": 3,
+          "primaryHash": "5f99ab25",
+          "sourceHash": "3274d595",
+          "src": {
+            "x": 405,
+            "y": 167,
+            "w": 23,
+            "h": 23
+          }
+        }
+      ]
+    }
+  ]
+}

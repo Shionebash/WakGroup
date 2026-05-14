@@ -1,0 +1,332 @@
+{
+  "metadata": {
+    "source_catalog": "D:\\wakreverse\\web\\catalog.json",
+    "female_markers": [
+      75,
+      82,
+      83,
+      111
+    ],
+    "notes": [
+      "Candidates extracted from catalog.json entries containing HMICostumeAction-style appearance strings.",
+      "Only rows near IsSex(\"female\") markers are kept.",
+      "This is a heuristic candidate list, not yet a final in-game costume manifest."
+    ]
+  },
+  "summary": {
+    "total_candidates": 8,
+    "validated_candidates": 3,
+    "partial_candidates": 5
+  },
+  "candidates": [
+    {
+      "candidate_id": "female_costume_01",
+      "appearance_ids": [
+        "13413984",
+        "13210285",
+        "1"
+      ],
+      "components": [
+        {
+          "appearance_id": "13413984",
+          "parts": [
+            "Chapeau"
+          ],
+          "anm_exists": true
+        },
+        {
+          "appearance_id": "13210285",
+          "parts": [
+            "Cape",
+            "CapeBas"
+          ],
+          "anm_exists": true
+        },
+        {
+          "appearance_id": "1",
+          "parts": [],
+          "anm_exists": false
+        }
+      ],
+      "source_rows": [
+        {
+          "index": 81,
+          "source_id": 349695,
+          "raw_name": "start|1|end|12|type|19|data|weight=5;appearance=equipment/13413984,Chapeau;appearance=equipment/13210285,Cape,CapeBas;appearance=equipment/1"
+        }
+      ],
+      "nearest_female_marker_distance": 1,
+      "existing_component_count": 2,
+      "label": "Costume femenino 01",
+      "invalid_component_ids": [
+        "1"
+      ],
+      "validation_status": "partial"
+    },
+    {
+      "candidate_id": "female_costume_02",
+      "appearance_ids": [
+        "13410437",
+        "13"
+      ],
+      "components": [
+        {
+          "appearance_id": "13410437",
+          "parts": [
+            "Chapeau"
+          ],
+          "anm_exists": true
+        },
+        {
+          "appearance_id": "13",
+          "parts": [],
+          "anm_exists": false
+        }
+      ],
+      "source_rows": [
+        {
+          "index": 74,
+          "source_id": 9426,
+          "raw_name": "start|1|end|12|type|19|data|weight=5;appearance=equipment/13410437,Chapeau;appearance=equipment/13"
+        }
+      ],
+      "nearest_female_marker_distance": 1,
+      "existing_component_count": 1,
+      "label": "Costume femenino 02",
+      "invalid_component_ids": [
+        "13"
+      ],
+      "validation_status": "partial"
+    },
+    {
+      "candidate_id": "female_costume_03",
+      "appearance_ids": [
+        "13420393",
+        "132"
+      ],
+      "components": [
+        {
+          "appearance_id": "13420393",
+          "parts": [
+            "Chapeau"
+          ],
+          "anm_exists": true
+        },
+        {
+          "appearance_id": "132",
+          "parts": [],
+          "anm_exists": false
+        }
+      ],
+      "source_rows": [
+        {
+          "index": 84,
+          "source_id": 180187,
+          "raw_name": "start|1|end|12|type|19|data|weight=5;appearance=equipment/13420393,Chapeau;appearance=equipment/132"
+        }
+      ],
+      "nearest_female_marker_distance": 1,
+      "existing_component_count": 1,
+      "label": "Costume femenino 03",
+      "invalid_component_ids": [
+        "132"
+      ],
+      "validation_status": "partial"
+    },
+    {
+      "candidate_id": "female_costume_04",
+      "appearance_ids": [
+        "13414962",
+        "13210299",
+        "11914026"
+      ],
+      "components": [
+        {
+          "appearance_id": "13414962",
+          "parts": [
+            "Chapeau"
+          ],
+          "anm_exists": true
+        },
+        {
+          "appearance_id": "13210299",
+          "parts": [
+            "Cape",
+            "CapeBas"
+          ],
+          "anm_exists": true
+        },
+        {
+          "appearance_id": "11914026",
+          "parts": [
+            "PiedHa"
+          ],
+          "anm_exists": true
+        }
+      ],
+      "source_rows": [
+        {
+          "index": 109,
+          "source_id": 336920,
+          "raw_name": "rt|1|end|12|type|19|data|weight=5;appearance=equipment/13414962,Chapeau;appearance=equipment/13210299,Cape,CapeBas;appearance=equipment/11914026,PiedHa"
+        }
+      ],
+      "nearest_female_marker_distance": 2,
+      "existing_component_count": 3,
+      "label": "Costume femenino 04",
+      "invalid_component_ids": [],
+      "validation_status": "validated"
+    },
+    {
+      "candidate_id": "female_costume_05",
+      "appearance_ids": [
+        "13422095",
+        "13210773",
+        "1191"
+      ],
+      "components": [
+        {
+          "appearance_id": "13422095",
+          "parts": [
+            "Chapeau"
+          ],
+          "anm_exists": true
+        },
+        {
+          "appearance_id": "13210773",
+          "parts": [
+            "Cape",
+            "CapeBas"
+          ],
+          "anm_exists": true
+        },
+        {
+          "appearance_id": "1191",
+          "parts": [],
+          "anm_exists": false
+        }
+      ],
+      "source_rows": [
+        {
+          "index": 108,
+          "source_id": 274349,
+          "raw_name": "12|type|19|data|weight=5;appearance=equipment/13422095,Chapeau;appearance=equipment/13210773,Cape,CapeBas;appearance=equipment/1191"
+        }
+      ],
+      "nearest_female_marker_distance": 3,
+      "existing_component_count": 2,
+      "label": "Costume femenino 05",
+      "invalid_component_ids": [
+        "1191"
+      ],
+      "validation_status": "partial"
+    },
+    {
+      "candidate_id": "female_costume_06",
+      "appearance_ids": [
+        "13410437",
+        "13210299"
+      ],
+      "components": [
+        {
+          "appearance_id": "13410437",
+          "parts": [
+            "Chapeau"
+          ],
+          "anm_exists": true
+        },
+        {
+          "appearance_id": "13210299",
+          "parts": [
+            "Cape",
+            "CapeBas"
+          ],
+          "anm_exists": true
+        }
+      ],
+      "source_rows": [
+        {
+          "index": 72,
+          "source_id": 300001,
+          "raw_name": "start|1|end|12|type|19|data|weight=5;appearance=equipment/13410437,Chapeau;appearance=equipment/13210299,Cape,CapeBas;appearance"
+        }
+      ],
+      "nearest_female_marker_distance": 3,
+      "existing_component_count": 2,
+      "label": "Costume femenino 06",
+      "invalid_component_ids": [],
+      "validation_status": "validated"
+    },
+    {
+      "candidate_id": "female_costume_07",
+      "appearance_ids": [
+        "13410767",
+        "13210177"
+      ],
+      "components": [
+        {
+          "appearance_id": "13410767",
+          "parts": [
+            "Chapeau"
+          ],
+          "anm_exists": true
+        },
+        {
+          "appearance_id": "13210177",
+          "parts": [
+            "Cape",
+            "CapeBas"
+          ],
+          "anm_exists": true
+        }
+      ],
+      "source_rows": [
+        {
+          "index": 79,
+          "source_id": 139443,
+          "raw_name": "start|1|end|12|type|19|data|weight=5;appearance=equipment/13410767,Chapeau;appearance=equipment/13210177,Cape,CapeBas;appearance=equipme"
+        }
+      ],
+      "nearest_female_marker_distance": 3,
+      "existing_component_count": 2,
+      "label": "Costume femenino 07",
+      "invalid_component_ids": [],
+      "validation_status": "validated"
+    },
+    {
+      "candidate_id": "female_costume_08",
+      "appearance_ids": [
+        "13410396",
+        "1"
+      ],
+      "components": [
+        {
+          "appearance_id": "13410396",
+          "parts": [
+            "Chapeau"
+          ],
+          "anm_exists": true
+        },
+        {
+          "appearance_id": "1",
+          "parts": [],
+          "anm_exists": false
+        }
+      ],
+      "source_rows": [
+        {
+          "index": 78,
+          "source_id": 282640,
+          "raw_name": "start|1|end|12|type|19|data|weight=5;appearance=equipment/13410396,Chapeau;appearance=equipment/1"
+        }
+      ],
+      "nearest_female_marker_distance": 3,
+      "existing_component_count": 1,
+      "label": "Costume femenino 08",
+      "invalid_component_ids": [
+        "1"
+      ],
+      "validation_status": "partial"
+    }
+  ]
+}

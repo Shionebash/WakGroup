@@ -1,0 +1,51 @@
+[
+  {
+    "costume_id": "costume_01",
+    "item_id": 14499,
+    "icon_gfx_id": 51314499,
+    "primary_state_id": 1478,
+    "preview_path": "D:\\wakreverse\\web\\assets\\costume_previews\\costume_01_51314499.png"
+  },
+  {
+    "costume_id": "costume_02",
+    "item_id": 14501,
+    "icon_gfx_id": 51314501,
+    "primary_state_id": 1480,
+    "preview_path": "D:\\wakreverse\\web\\assets\\costume_previews\\costume_02_51314501.png"
+  },
+  {
+    "costume_id": "costume_03",
+    "item_id": 14503,
+    "icon_gfx_id": 51314503,
+    "primary_state_id": 1482,
+    "preview_path": "D:\\wakreverse\\web\\assets\\costume_previews\\costume_03_51314503.png"
+  },
+  {
+    "costume_id": "costume_04",
+    "item_id": 17074,
+    "icon_gfx_id": 51317074,
+    "primary_state_id": 1973,
+    "preview_path": "D:\\wakreverse\\web\\assets\\costume_previews\\costume_04_51317074.png"
+  },
+  {
+    "costume_id": "costume_05",
+    "item_id": 18608,
+    "icon_gfx_id": 51318608,
+    "primary_state_id": 2848,
+    "preview_path": "D:\\wakreverse\\web\\assets\\costume_previews\\costume_05_51318608.png"
+  },
+  {
+    "costume_id": "costume_06",
+    "item_id": 18615,
+    "icon_gfx_id": 51318615,
+    "primary_state_id": 2931,
+    "preview_path": "D:\\wakreverse\\web\\assets\\costume_previews\\costume_06_51318615.png"
+  },
+  {
+    "costume_id": "costume_07",
+    "item_id": 18616,
+    "icon_gfx_id": 51318616,
+    "primary_state_id": 2932,
+    "preview_path": "D:\\wakreverse\\web\\assets\\costume_previews\\costume_07_51318616.png"
+  }
+]

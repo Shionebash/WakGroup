@@ -1,0 +1,1651 @@
+{
+  "typeId": 710,
+  "typeName": "Auras & Lights",
+  "total": 152,
+  "has_local_anm_count": 33,
+  "subcategories": {
+    "finishers": 40,
+    "equipment_auras": 112
+  },
+  "items": [
+    {
+      "id": 10596,
+      "gfxId": 71010596,
+      "name": "Vino caliente de Nawidad",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71010596.webp",
+      "type": "finisher",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 18299,
+      "gfxId": 71018299,
+      "name": "Efluvios de Stasis",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71018299.webp",
+      "type": "finisher",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 18300,
+      "gfxId": 71018300,
+      "name": "Decocción del tormento",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71018300.webp",
+      "type": "finisher",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 18713,
+      "gfxId": 71018713,
+      "name": "Brebaje fanático",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71018713.webp",
+      "type": "finisher",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 20753,
+      "gfxId": 71020753,
+      "name": "Golpe de gracia de Evangelyne",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71020753.webp",
+      "type": "finisher",
+      "anmId": 20000,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20000_0.png",
+      "atlasSize": {
+        "w": 512,
+        "h": 256
+      }
+    },
+    {
+      "id": 20754,
+      "gfxId": 71020754,
+      "name": "Golpe de gracia de Tristepin",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71020754.webp",
+      "type": "finisher",
+      "anmId": 20001,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20001_0.png",
+      "atlasSize": {
+        "w": 1024,
+        "h": 1024
+      }
+    },
+    {
+      "id": 20755,
+      "gfxId": 71020755,
+      "name": "Golpe de gracia de Yugo",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71020755.webp",
+      "type": "finisher",
+      "anmId": 20002,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20002_0.png",
+      "atlasSize": {
+        "w": 512,
+        "h": 2048
+      }
+    },
+    {
+      "id": 20756,
+      "gfxId": 71020756,
+      "name": "Golpe de gracia de Gúltar",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71020756.webp",
+      "type": "finisher",
+      "anmId": 20003,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20003_0.png",
+      "atlasSize": {
+        "w": 1024,
+        "h": 1024
+      }
+    },
+    {
+      "id": 20792,
+      "gfxId": 71020792,
+      "name": "Golpe de gracia de Otomai",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71020792.webp",
+      "type": "finisher",
+      "anmId": 20004,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20004_0.png",
+      "atlasSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    {
+      "id": 21951,
+      "gfxId": 71021951,
+      "name": "Golpe de gracia de Amalia",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71021951.webp",
+      "type": "finisher",
+      "anmId": 20005,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20005_0.png",
+      "atlasSize": {
+        "w": 1024,
+        "h": 1024
+      }
+    },
+    {
+      "id": 23883,
+      "gfxId": 71023883,
+      "name": "Golpe de gracia del Dios Xelor",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71023883.webp",
+      "type": "finisher",
+      "anmId": 20006,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20006_0.png",
+      "atlasSize": {
+        "w": 1024,
+        "h": 1024
+      }
+    },
+    {
+      "id": 24156,
+      "gfxId": 71024156,
+      "name": "Golpe de gracia del dios Anutrof",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71024156.webp",
+      "type": "finisher",
+      "anmId": 20007,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20007_0.png",
+      "atlasSize": {
+        "w": 2048,
+        "h": 1024
+      }
+    },
+    {
+      "id": 24247,
+      "gfxId": 71024247,
+      "name": "Golpe de Gracia de la Diosa Ocra",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71024247.webp",
+      "type": "finisher",
+      "anmId": 20008,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20008_0.png",
+      "atlasSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    {
+      "id": 24295,
+      "gfxId": 71024295,
+      "name": "Golpe de gracia del dios Sram",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71024295.webp",
+      "type": "finisher",
+      "anmId": 20009,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20009_0.png",
+      "atlasSize": {
+        "w": 1024,
+        "h": 1024
+      }
+    },
+    {
+      "id": 24296,
+      "gfxId": 71024296,
+      "name": "Golpe de gracia del dios Zurcarák",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71024296.webp",
+      "type": "finisher",
+      "anmId": 20010,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20010_0.png",
+      "atlasSize": {
+        "w": 2048,
+        "h": 1024
+      }
+    },
+    {
+      "id": 24857,
+      "gfxId": 71024857,
+      "name": "Golpe de Gracia de la Diosa Aniripsa",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71024857.webp",
+      "type": "finisher",
+      "anmId": 20011,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20011_0.png",
+      "atlasSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    {
+      "id": 24858,
+      "gfxId": 71024858,
+      "name": "Golpe de Gracia de la Diosa Sacrógrito",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71024858.webp",
+      "type": "finisher",
+      "anmId": 20012,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20012_0.png",
+      "atlasSize": {
+        "w": 1024,
+        "h": 1024
+      }
+    },
+    {
+      "id": 25047,
+      "gfxId": 71025047,
+      "name": "Golpe de gracia de la diosa Feca",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71025047.webp",
+      "type": "finisher",
+      "anmId": 20013,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20013_0.png",
+      "atlasSize": {
+        "w": 1024,
+        "h": 1024
+      }
+    },
+    {
+      "id": 25048,
+      "gfxId": 71025048,
+      "name": "Golpe de gracia del dios Osamodas",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71025048.webp",
+      "type": "finisher",
+      "anmId": 20014,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20014_0.png",
+      "atlasSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    {
+      "id": 25108,
+      "gfxId": 71025108,
+      "name": "Golpe de Gracia de la Diosa Pandawa",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71025108.webp",
+      "type": "finisher",
+      "anmId": 20015,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20015_0.png",
+      "atlasSize": {
+        "w": 2048,
+        "h": 1024
+      }
+    },
+    {
+      "id": 25109,
+      "gfxId": 71025109,
+      "name": "Golpe de gracia del Dios Yopuka",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71025109.webp",
+      "type": "finisher",
+      "anmId": 20016,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20016_0.png",
+      "atlasSize": {
+        "w": 2048,
+        "h": 1024
+      }
+    },
+    {
+      "id": 26282,
+      "gfxId": 71026282,
+      "name": "Golpe de gracia de Rushu",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71026282.webp",
+      "type": "finisher",
+      "anmId": 20017,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20017_0.png",
+      "atlasSize": {
+        "w": 1024,
+        "h": 1024
+      }
+    },
+    {
+      "id": 26283,
+      "gfxId": 71026283,
+      "name": "Golpe de gracia del dios Sadida",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71026283.webp",
+      "type": "finisher",
+      "anmId": 20018,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20018_0.png",
+      "atlasSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    {
+      "id": 26389,
+      "gfxId": 71026389,
+      "name": "Golpe de gracia Rey-Dios",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71026389.webp",
+      "type": "finisher",
+      "anmId": 20019,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20019_0.png",
+      "atlasSize": {
+        "w": 1024,
+        "h": 2048
+      }
+    },
+    {
+      "id": 26390,
+      "gfxId": 71026390,
+      "name": "Golpe de gracia Balanza Krósmica",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71026390.webp",
+      "type": "finisher",
+      "anmId": 20020,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20020_0.png",
+      "atlasSize": {
+        "w": 1024,
+        "h": 1024
+      }
+    },
+    {
+      "id": 26744,
+      "gfxId": 71026744,
+      "name": "Golpe de gracia de Ogrest",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71026744.webp",
+      "type": "finisher",
+      "anmId": 20021,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20021_0.png",
+      "atlasSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    {
+      "id": 26745,
+      "gfxId": 71026745,
+      "name": "Golpe de gracia de Remington",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71026745.webp",
+      "type": "finisher",
+      "anmId": 20022,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20022_0.png",
+      "atlasSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    {
+      "id": 27318,
+      "gfxId": 71027318,
+      "name": "Golpe de gracia de Nogord",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71027318.webp",
+      "type": "finisher",
+      "anmId": 20023,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20023_0.png",
+      "atlasSize": {
+        "w": 1024,
+        "h": 1024
+      }
+    },
+    {
+      "id": 27319,
+      "gfxId": 71027319,
+      "name": "Golpe de gracia de Aguabrial",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71027319.webp",
+      "type": "finisher",
+      "anmId": 20024,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20024_0.png",
+      "atlasSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    {
+      "id": 27522,
+      "gfxId": 71027522,
+      "name": "Golpe de gracia del Cuervo Negro",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71027522.webp",
+      "type": "finisher",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 27523,
+      "gfxId": 71027523,
+      "name": "Golpe de gracia de Garras de Acero",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71027523.webp",
+      "type": "finisher",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 27524,
+      "gfxId": 71027524,
+      "name": "Golpe de gracia de Kontatrás",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71027524.webp",
+      "type": "finisher",
+      "anmId": 20027,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20027_0.png",
+      "atlasSize": {
+        "w": 512,
+        "h": 256
+      }
+    },
+    {
+      "id": 27892,
+      "gfxId": 71027892,
+      "name": "Golpe de gracia heroico",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71027892.webp",
+      "type": "finisher",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 27893,
+      "gfxId": 71027893,
+      "name": "Golpe de gracia amo de las bestias",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71027893.webp",
+      "type": "finisher",
+      "anmId": 20031,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20031_0.png",
+      "atlasSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    {
+      "id": 27894,
+      "gfxId": 71027894,
+      "name": "Golpe de gracia Wey Wabbit",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71027894.webp",
+      "type": "finisher",
+      "anmId": 20030,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20030_0.png",
+      "atlasSize": {
+        "w": 512,
+        "h": 512
+      }
+    },
+    {
+      "id": 27969,
+      "gfxId": 71027969,
+      "name": "Golpe de gracia de Magmog",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71027969.webp",
+      "type": "finisher",
+      "anmId": 20032,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20032_0.png",
+      "atlasSize": {
+        "w": 512,
+        "h": 512
+      }
+    },
+    {
+      "id": 27970,
+      "gfxId": 71027970,
+      "name": "Golpe de gracia de Sombría",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71027970.webp",
+      "type": "finisher",
+      "anmId": 20033,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20033_0.png",
+      "atlasSize": {
+        "w": 512,
+        "h": 512
+      }
+    },
+    {
+      "id": 27971,
+      "gfxId": 71027971,
+      "name": "Golpe de gracia de Dragocerdo",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71027971.webp",
+      "type": "finisher",
+      "anmId": 20034,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20034_0.png",
+      "atlasSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    {
+      "id": 28118,
+      "gfxId": 71028118,
+      "name": "Golpe de gracia de Agonía",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71028118.webp",
+      "type": "finisher",
+      "anmId": 20035,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20035_0.png",
+      "atlasSize": {
+        "w": 512,
+        "h": 256
+      }
+    },
+    {
+      "id": 28119,
+      "gfxId": 71028119,
+      "name": "Golpe de Gracia Réplica de Yugo",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71028119.webp",
+      "type": "finisher",
+      "anmId": 20036,
+      "atlasPath": "/assets/character-creator/assets/finisher_overlays/20036_0.png",
+      "atlasSize": {
+        "w": 1024,
+        "h": 1024
+      }
+    },
+    {
+      "id": 29720,
+      "gfxId": 71029720,
+      "name": "Aura de la peluca de Gúltar",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029720.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29721,
+      "gfxId": 71029721,
+      "name": "Aura del gelanillo",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029721.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29722,
+      "gfxId": 71029722,
+      "name": "Aura del cinturón Rasgabolario del Rasgabola",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029722.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29723,
+      "gfxId": 71029723,
+      "name": "Aura de los galones fred",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029723.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29724,
+      "gfxId": 71029724,
+      "name": "Aura de la insignia de los santos",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029724.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29725,
+      "gfxId": 71029725,
+      "name": "Aura de la armadura del discípulo de Otomai",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029725.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29727,
+      "gfxId": 71029727,
+      "name": "Aura del amuleto de Golosotrón Real",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029727.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29728,
+      "gfxId": 71029728,
+      "name": "Aura de la Poup Korn",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029728.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null,
+      "particleId": 900166
+    },
+    {
+      "id": 29729,
+      "gfxId": 71029729,
+      "name": "Aura de los memento mori",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029729.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29730,
+      "gfxId": 71029730,
+      "name": "Aura de La Pastosa",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029730.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null,
+      "particleId": 900123
+    },
+    {
+      "id": 29731,
+      "gfxId": 71029731,
+      "name": "Aura del Solomonk",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029731.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29732,
+      "gfxId": 71029732,
+      "name": "Aura del poderoso cinturón fulgurante",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029732.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null,
+      "particleId": 900054
+    },
+    {
+      "id": 29734,
+      "gfxId": 71029734,
+      "name": "Aura del vacío",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029734.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29735,
+      "gfxId": 71029735,
+      "name": "Aura de las Ortiz",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029735.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29736,
+      "gfxId": 71029736,
+      "name": "Aura de las botas focas",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029736.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29737,
+      "gfxId": 71029737,
+      "name": "Aura del escudo Rano",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029737.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29738,
+      "gfxId": 71029738,
+      "name": "Aura del Kel'Dwa",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029738.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29739,
+      "gfxId": 71029739,
+      "name": "Aura de las hombreras STIM",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029739.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29740,
+      "gfxId": 71029740,
+      "name": "Aura del sombrero de Roble Blando",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029740.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null,
+      "particleId": 900033
+    },
+    {
+      "id": 29741,
+      "gfxId": 71029741,
+      "name": "Aura de las hombreras de Dark Vlad",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029741.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29742,
+      "gfxId": 71029742,
+      "name": "Aura del talismán de Mihmol",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029742.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29743,
+      "gfxId": 71029743,
+      "name": "Aura del devoralmas",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029743.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29744,
+      "gfxId": 71029744,
+      "name": "Aura del llavero dorado",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029744.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null,
+      "particleId": 900082
+    },
+    {
+      "id": 29745,
+      "gfxId": 71029745,
+      "name": "Aura de las botas ceremoniales del Amo de las Ratas",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029745.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29746,
+      "gfxId": 71029746,
+      "name": "Aura del sombrero de Gúltar",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029746.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29747,
+      "gfxId": 71029747,
+      "name": "Aura del cinturón chafero",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029747.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29748,
+      "gfxId": 71029748,
+      "name": "Aura de anillo de sentimiento",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029748.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29749,
+      "gfxId": 71029749,
+      "name": "Aura de la capazar",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029749.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null,
+      "particleId": 900033
+    },
+    {
+      "id": 29750,
+      "gfxId": 71029750,
+      "name": "Aura de la aguja de más allá de los tiempos",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029750.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29751,
+      "gfxId": 71029751,
+      "name": "Aura de dora N.I.O",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029751.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29752,
+      "gfxId": 71029752,
+      "name": "Aura de las correas sangrientas",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029752.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null,
+      "particleId": 900134
+    },
+    {
+      "id": 29754,
+      "gfxId": 71029754,
+      "name": "Aura del sello fulgurante",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029754.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29755,
+      "gfxId": 71029755,
+      "name": "Aura del amuleto del Kam Asutra",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029755.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null,
+      "particleId": 900101
+    },
+    {
+      "id": 29756,
+      "gfxId": 71029756,
+      "name": "Aura del cinturón de los vientos",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029756.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null,
+      "particleId": 900038
+    },
+    {
+      "id": 29757,
+      "gfxId": 71029757,
+      "name": "Aura de las dagas de agresión",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029757.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29758,
+      "gfxId": 71029758,
+      "name": "Aura de las hombreras del Rey Mono",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029758.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29759,
+      "gfxId": 71029759,
+      "name": "Aura de las sandalias de peregrino de Otomai",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029759.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29761,
+      "gfxId": 71029761,
+      "name": "Aura de la ugahlureta",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029761.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29762,
+      "gfxId": 71029762,
+      "name": "Aura del velo de tinta",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029762.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29763,
+      "gfxId": 71029763,
+      "name": "Aura de las botas de persecución",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029763.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null,
+      "particleId": 900141
+    },
+    {
+      "id": 29764,
+      "gfxId": 71029764,
+      "name": "Aura del dofus prismático",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029764.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29765,
+      "gfxId": 71029765,
+      "name": "Aura del escudo ventiloso",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029765.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29766,
+      "gfxId": 71029766,
+      "name": "Aura de Mark VII",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029766.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29767,
+      "gfxId": 71029767,
+      "name": "Aura del manto del Rey Brujo",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029767.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29768,
+      "gfxId": 71029768,
+      "name": "Aura del amuleto Emental deluxe",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029768.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29769,
+      "gfxId": 71029769,
+      "name": "Aura de la furia de Ogrest",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029769.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29770,
+      "gfxId": 71029770,
+      "name": "Aura de Sulik",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029770.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29771,
+      "gfxId": 71029771,
+      "name": "Aura de Rod Gers",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029771.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29772,
+      "gfxId": 71029772,
+      "name": "Aura del cinturón de las sombras",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029772.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29773,
+      "gfxId": 71029773,
+      "name": "Aura de la espada de Amakna",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029773.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29774,
+      "gfxId": 71029774,
+      "name": "Aura de la espada de Sufokia",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029774.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29775,
+      "gfxId": 71029775,
+      "name": "Aura de la espada de Bonta",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029775.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29776,
+      "gfxId": 71029776,
+      "name": "Aura de la espada de Brakmar",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029776.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29777,
+      "gfxId": 71029777,
+      "name": "Aura de las botas plastao",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029777.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null,
+      "particleId": 900071
+    },
+    {
+      "id": 29778,
+      "gfxId": 71029778,
+      "name": "Aura de las preferombreras",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029778.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29779,
+      "gfxId": 71029779,
+      "name": "Aura de la caperforada",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029779.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29780,
+      "gfxId": 71029780,
+      "name": "Aura del escudo del capitán Amakna",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029780.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29781,
+      "gfxId": 71029781,
+      "name": "Aura de las botas de Kovak",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029781.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null,
+      "particleId": 900156
+    },
+    {
+      "id": 29782,
+      "gfxId": 71029782,
+      "name": "Aura de las hombreras de liquen",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029782.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29783,
+      "gfxId": 71029783,
+      "name": "Aura del casco de guerrero zoth",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029783.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29784,
+      "gfxId": 71029784,
+      "name": "Aura de la chaqueta bonita",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029784.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null,
+      "particleId": 900128
+    },
+    {
+      "id": 29785,
+      "gfxId": 71029785,
+      "name": "Aura del verdadero cinturón de potencia",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029785.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29786,
+      "gfxId": 71029786,
+      "name": "Aura del sombrero de Trankitronko",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029786.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29787,
+      "gfxId": 71029787,
+      "name": "Aura de la capa de mirable",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029787.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29788,
+      "gfxId": 71029788,
+      "name": "Aura del último anillo",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029788.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null,
+      "particleId": 900127
+    },
+    {
+      "id": 29789,
+      "gfxId": 71029789,
+      "name": "Aura del dofus Turquesa",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029789.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null,
+      "particleId": 900046
+    },
+    {
+      "id": 29790,
+      "gfxId": 71029790,
+      "name": "Aura de la espada eterna",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029790.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29791,
+      "gfxId": 71029791,
+      "name": "Aura de dantgul",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029791.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null,
+      "particleId": 900135
+    },
+    {
+      "id": 29792,
+      "gfxId": 71029792,
+      "name": "Aura del amuleto del espejismo",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029792.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29793,
+      "gfxId": 71029793,
+      "name": "Aura de la coraza de Béber",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029793.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29794,
+      "gfxId": 71029794,
+      "name": "Aura de los galones de Orf",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029794.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29795,
+      "gfxId": 71029795,
+      "name": "Aura de la capa nō",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029795.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 29796,
+      "gfxId": 71029796,
+      "name": "Aura del portal",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029796.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null,
+      "particleId": 900134
+    },
+    {
+      "id": 29797,
+      "gfxId": 71029797,
+      "name": "Aura del dofub'huritu",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029797.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null,
+      "particleId": 900121
+    },
+    {
+      "id": 29802,
+      "gfxId": 71029802,
+      "name": "Aura de las Botas antirrayos malauva",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71029802.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 30768,
+      "gfxId": 71030768,
+      "name": "Aura de espada de Caballero de Hielo",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71030768.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 30769,
+      "gfxId": 71030769,
+      "name": "Aura de las botas de Koko",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71030769.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null,
+      "particleId": 900088
+    },
+    {
+      "id": 30770,
+      "gfxId": 71030770,
+      "name": "Aura de la coraza de Sine",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71030770.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 30771,
+      "gfxId": 71030771,
+      "name": "Aura de las botas de Jr.",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71030771.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 30772,
+      "gfxId": 71030772,
+      "name": "Aura de cinturón de Ghast",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71030772.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 30773,
+      "gfxId": 71030773,
+      "name": "Aura de espada de Valdain",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71030773.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 31016,
+      "gfxId": 71031016,
+      "name": "Aura de sábana cónica",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71031016.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 31383,
+      "gfxId": 71031383,
+      "name": "Aura de cinturón frrrito",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71031383.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 31384,
+      "gfxId": 71031384,
+      "name": "Aura del collar de Lolzeolf",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71031384.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 31385,
+      "gfxId": 71031385,
+      "name": "Aura de la capa de Charon",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71031385.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 31386,
+      "gfxId": 71031386,
+      "name": "Aura de la raíz de floribundo",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71031386.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 31387,
+      "gfxId": 71031387,
+      "name": "Aura del espadón de Tal Kasha",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71031387.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 31388,
+      "gfxId": 71031388,
+      "name": "Aura del dofus Marfil",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71031388.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 31586,
+      "gfxId": 71031586,
+      "name": "Aura de la Hoja de Toross",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71031586.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32344,
+      "gfxId": 71032344,
+      "name": "Aura de la corona de Kwoknan",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032344.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32345,
+      "gfxId": 71032345,
+      "name": "Aura de la coraza de Kris",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032345.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32346,
+      "gfxId": 71032346,
+      "name": "Aura del cinturón de Akro",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032346.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32347,
+      "gfxId": 71032347,
+      "name": "Aura de los zapatiñones",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032347.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32348,
+      "gfxId": 71032348,
+      "name": "Aura de las hombreras de Wyze",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032348.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32349,
+      "gfxId": 71032349,
+      "name": "Aura del anillo de Reiem",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032349.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32355,
+      "gfxId": 71032355,
+      "name": "Aura de dofus Ébano",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032355.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32451,
+      "gfxId": 71032451,
+      "name": "Aura temporal",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032451.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32452,
+      "gfxId": 71032452,
+      "name": "Aura de selacubo",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032452.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32645,
+      "gfxId": 71032645,
+      "name": "Aura de la hopalanda de Nox",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032645.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32687,
+      "gfxId": 71032687,
+      "name": "Neoaura del Jalató Real",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032687.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32688,
+      "gfxId": 71032688,
+      "name": "Neoaura del Pío Real",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032688.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32689,
+      "gfxId": 71032689,
+      "name": "Neoaura de la Muuugresa Real",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032689.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32690,
+      "gfxId": 71032690,
+      "name": "Neoaura de Goel el Gólem",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032690.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32691,
+      "gfxId": 71032691,
+      "name": "Neoaura del Balí Real",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032691.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32692,
+      "gfxId": 71032692,
+      "name": "Neoaura de Vampyro",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032692.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32693,
+      "gfxId": 71032693,
+      "name": "Neoaura del Cuervo Negro",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032693.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32694,
+      "gfxId": 71032694,
+      "name": "Neoaura de Kya, Mizz Frizz",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032694.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32695,
+      "gfxId": 71032695,
+      "name": "Neoaura del Roble Blando",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032695.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32696,
+      "gfxId": 71032696,
+      "name": "Neoaura del Wey Wabbit",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032696.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32697,
+      "gfxId": 71032697,
+      "name": "Neoaura de Remington Smis",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032697.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32698,
+      "gfxId": 71032698,
+      "name": "Neoaura de Pandora",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032698.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null
+    },
+    {
+      "id": 32699,
+      "gfxId": 71032699,
+      "name": "Neoaura de Ogrest",
+      "imageUrl": "https://storage.googleapis.com/wakfu_nexus_data/img/items/71032699.webp",
+      "type": "equipment_aura",
+      "anmId": null,
+      "atlasPath": null,
+      "atlasSize": null,
+      "particleId": 900032
+    }
+  ]
+}

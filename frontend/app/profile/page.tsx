@@ -1,6 +1,7 @@
 'use client';
 import type { ReactNode } from 'react';
 import { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { api, getAssetUrl } from '@/lib/api';
@@ -220,9 +221,13 @@ function CharactersTab({ userId }: { userId: string }) {
 
     const deleteChar = async (id: string) => {
         if (!confirm(t('profile.deleteCharacterConfirm', language))) return;
-        await api.delete(`/characters/${id}`);
-        fetchChars();
-        addToast({ title: t('profile.characterDeleted', language) });
+        try {
+            await api.delete(`/characters/${id}`);
+            fetchChars();
+            addToast({ title: t('profile.characterDeleted', language) });
+        } catch (error: any) {
+            addToast({ title: 'Error', body: error.response?.data?.error || 'No se pudo eliminar el personaje.' });
+        }
     };
 
     const ROLE_COLORS: Record<string, string> = {
@@ -311,6 +316,7 @@ function CharactersTab({ userId }: { userId: string }) {
                                 {char.role.charAt(0).toUpperCase() + char.role.slice(1)}
                             </span>
                             <div className="profile-card-actions">
+                                <Link className="btn btn-secondary" href={`/character-creator?characterId=${char.id}`} style={{ fontSize: 12, padding: '8px 12px' }}>Editar apariencia</Link>
                                 <button className="btn btn-secondary" onClick={() => startEdit(char)} style={{ fontSize: 12, padding: '8px 12px' }}>{t('common.edit', language)}</button>
                                 <button className="btn btn-danger" onClick={() => deleteChar(char.id)} style={{ fontSize: 12, padding: '8px 12px' }}>{t('common.delete', language)}</button>
                             </div>
@@ -377,9 +383,13 @@ function IncomingApplicationsTab() {
     useEffect(() => { fetchApps(); }, [fetchApps]);
 
     const handleAction = async (appId: string, action: 'accepted' | 'rejected') => {
-        await api.patch(`/applications/${appId}`, { action });
-        addToast({ title: action === 'accepted' ? t('profile.applicationAccepted', language) : t('profile.applicationRejected', language) });
-        fetchApps();
+        try {
+            await api.patch(`/applications/${appId}`, { action });
+            addToast({ title: action === 'accepted' ? t('profile.applicationAccepted', language) : t('profile.applicationRejected', language) });
+            fetchApps();
+        } catch (error: any) {
+            addToast({ title: 'Error', body: error.response?.data?.error || 'No se pudo procesar la solicitud.' });
+        }
     };
 
     return (
@@ -513,9 +523,13 @@ function WikiPostsTab({ userId }: { userId: string }) {
 
     const deletePost = async (id: string) => {
         if (!confirm(t('profile.deleteGuideConfirm', language))) return;
-        await api.delete(`/wiki/${id}`);
-        setPosts((prev) => prev.filter((post) => post.id !== id));
-        addToast({ title: t('profile.guideDeleted', language) });
+        try {
+            await api.delete(`/wiki/${id}`);
+            setPosts((prev) => prev.filter((post) => post.id !== id));
+            addToast({ title: t('profile.guideDeleted', language) });
+        } catch (error: any) {
+            addToast({ title: 'Error', body: error.response?.data?.error || 'No se pudo eliminar la guía.' });
+        }
     };
 
     return (

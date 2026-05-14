@@ -22,6 +22,7 @@ import pvpApplicationRoutes from './routes/pvp-applications.js';
 import mobsRoutes from './routes/mobs.js';
 import { reloadMobRouteData } from './routes/mobs.js';
 import builderRoutes, { reloadBuilderRouteData } from './routes/builder.js';
+import characterCreatorRoutes, { reloadCharacterCreatorRouteData } from './routes/character-creator.js';
 
 console.log('[index] Builder routes imported:', typeof builderRoutes);
 import { startGroupInactivityMonitor } from './services/group-inactivity.js';
@@ -66,7 +67,7 @@ import { initDb } from './db/database.js';
 export let io: ReturnType<typeof initSocket> | null = null;
 initDb().then(() => {
     // Init Socket.io after db starts
-    io = initSocket(server);
+    io = initSocket(server, allowedOrigins);
     startGroupInactivityMonitor(getDb(), io);
 }).catch(console.error);
 
@@ -81,6 +82,7 @@ startWakfuGamedataScheduler((result) => {
 
     if (result.downloadedTypes.some((type) => ['items', 'actions', 'equipmentItemTypes'].includes(type))) {
         reloadBuilderRouteData();
+        reloadCharacterCreatorRouteData();
     }
 });
 
@@ -88,13 +90,16 @@ startWakfuGamedataScheduler((result) => {
 // Security headers
 app.use(helmet({
     crossOriginResourcePolicy: { policy: 'cross-origin' }, // for serving images
+    xFrameOptions: false,
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
             scriptSrc: ["'self'", "'unsafe-inline'"],
-            styleSrc: ["'self'", "'unsafe-inline'"],
-            imgSrc: ["'self'", 'data:', 'https://cdn.discordapp.com'],
+            styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+            fontSrc: ["'self'", 'data:', 'https://fonts.gstatic.com'],
+            imgSrc: ["'self'", 'data:', 'https://cdn.discordapp.com', 'https://storage.googleapis.com'],
             frameSrc: ['https://www.youtube.com', 'https://player.vimeo.com'],
+            frameAncestors: ["'self'", ...Array.from(allowedOrigins)],
         },
     },
 }));
@@ -114,6 +119,20 @@ app.use(cors({
 
 app.use(express.json({ limit: '2mb' }));
 app.use(cookieParser());
+
+// Serve character creator assets before the generic assets mount. These files
+// are loaded inside a canvas renderer and need predictable cross-origin headers.
+app.use('/assets/character-creator', express.static(path.join(__dirname, '../assets/character-creator'), {
+    etag: false,
+    lastModified: false,
+    setHeaders(res) {
+        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+        res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+    },
+}));
 
 // Serve static assets (class icons, dungeon images)
 app.use('/assets', express.static(path.join(__dirname, '../assets'), {
@@ -154,6 +173,7 @@ app.use('/pvp-groups', writeLimiter, pvpGroupRoutes);
 app.use('/pvp-applications', writeLimiter, pvpApplicationRoutes);
 app.use('/mobs', mobsRoutes);
 app.use('/builder', builderRoutes);
+app.use('/character-creator', characterCreatorRoutes);
 console.log('[index] Builder routes registered');
 
 // Health check

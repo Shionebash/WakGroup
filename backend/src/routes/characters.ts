@@ -17,7 +17,22 @@ const characterValidation = [
     body('class_id').isInt({ min: 1 }),
     body('role').isIn(VALID_ROLES),
     body('server').isIn(VALID_SERVERS),
+    body('appearance_config')
+        .optional({ nullable: true })
+        .custom((value) => {
+            if (typeof value === 'object') return true;
+            if (typeof value !== 'string') throw new Error('Invalid appearance_config');
+            if (value.length > 250000) throw new Error('appearance_config too large');
+            JSON.parse(value);
+            return true;
+        }),
 ];
+
+function normalizeAppearanceConfig(value: unknown): string | null {
+    if (value == null || value === '') return null;
+    if (typeof value === 'string') return value;
+    return JSON.stringify(value);
+}
 
 // GET all characters of authenticated user
 router.get('/', requireAuth, async (req: Request, res: Response) => {
@@ -41,6 +56,7 @@ router.get('/', requireAuth, async (req: Request, res: Response) => {
 router.post('/', requireAuth, characterValidation, validateRequest, async (req: Request, res: Response): Promise<void> => {
     const db = getDb();
     const { name, level, class_id, role, server } = req.body;
+    const appearanceConfig = normalizeAppearanceConfig(req.body.appearance_config);
 
     try {
         // Validate class exists
@@ -60,8 +76,8 @@ router.post('/', requireAuth, characterValidation, validateRequest, async (req: 
 
         const id = uuidv4();
         await db.query(
-            'INSERT INTO characters (id, user_id, name, level, class_id, role, server) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-            [id, req.user!.userId, name, level, class_id, role, server]
+            'INSERT INTO characters (id, user_id, name, level, class_id, role, server, appearance_config) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
+            [id, req.user!.userId, name, level, class_id, role, server, appearanceConfig]
         );
 
         const newCharResult = await db.query('SELECT * FROM characters WHERE id = $1', [id]);
@@ -77,6 +93,7 @@ router.put('/:id', requireAuth, characterValidation, validateRequest, async (req
     const db = getDb();
     const { id } = req.params;
     const { name, level, class_id, role, server } = req.body;
+    const appearanceConfig = normalizeAppearanceConfig(req.body.appearance_config);
 
     try {
         const existingResult = await db.query('SELECT * FROM characters WHERE id = $1 AND user_id = $2', [id, req.user!.userId]);
@@ -86,8 +103,8 @@ router.put('/:id', requireAuth, characterValidation, validateRequest, async (req
         }
 
         await db.query(
-            'UPDATE characters SET name = $1, level = $2, class_id = $3, role = $4, server = $5, updated_at = CURRENT_TIMESTAMP WHERE id = $6',
-            [name, level, class_id, role, server, id]
+            'UPDATE characters SET name = $1, level = $2, class_id = $3, role = $4, server = $5, appearance_config = $6, updated_at = CURRENT_TIMESTAMP WHERE id = $7',
+            [name, level, class_id, role, server, appearanceConfig, id]
         );
 
         res.json({ ok: true });

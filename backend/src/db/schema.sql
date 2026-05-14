@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS characters (
     class_id INTEGER NOT NULL,
     role TEXT NOT NULL CHECK (role IN ('dps', 'healer', 'tank', 'support', 'invocador', 'posicionador')),
     server TEXT NOT NULL CHECK (server IN ('Ogrest', 'Rubilax', 'Pandora')),
+    appearance_config TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
@@ -195,6 +196,7 @@ ALTER TABLE groups ADD COLUMN IF NOT EXISTS inactivity_prompt_sent_at TIMESTAMP;
 ALTER TABLE pvp_groups ADD COLUMN IF NOT EXISTS languages TEXT NOT NULL DEFAULT '["es","en","fr","pt"]';
 ALTER TABLE pvp_groups ADD COLUMN IF NOT EXISTS last_activity_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 ALTER TABLE pvp_groups ADD COLUMN IF NOT EXISTS inactivity_prompt_sent_at TIMESTAMP;
+ALTER TABLE characters ADD COLUMN IF NOT EXISTS appearance_config TEXT;
 UPDATE groups SET languages = '["es","en","fr","pt"]' WHERE languages IS NULL OR languages = '';
 UPDATE pvp_groups SET languages = '["es","en","fr","pt"]' WHERE languages IS NULL OR languages = '';
 

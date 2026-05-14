@@ -132,6 +132,7 @@ export default function NotificationBellV2() {
                         top: 'calc(100% + 10px)',
                         right: 0,
                         width: 360,
+                        maxWidth: 'calc(100vw - 16px)',
                         background: 'var(--background-light)',
                         border: '1px solid var(--border-color)',
                         borderRadius: 10,

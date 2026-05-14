@@ -222,7 +222,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         refreshNotifications();
         const interval = setInterval(refreshNotifications, 30_000);
         return () => clearInterval(interval);
-    }, [user, refreshNotifications, language]);
+    }, [user, refreshNotifications]);
 
     // â”€â”€ Chat session management â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     const openChat = useCallback(async (groupId: string, groupName: string) => {

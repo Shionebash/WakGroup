@@ -1,0 +1,125 @@
+{
+  "total": 30,
+  "map": [
+    {
+      "id": -293,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/BajouePeau/frame_0.png"
+    },
+    {
+      "id": 66,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/BassinPeau/frame_0.png"
+    },
+    {
+      "id": -296,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/Bouche02/frame_0.png"
+    },
+    {
+      "id": 58,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/Bouche03/frame_0.png"
+    },
+    {
+      "id": -264,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/Bouche04/frame_0.png"
+    },
+    {
+      "id": 70,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/Bouche05/frame_0.png"
+    },
+    {
+      "id": -279,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/Bouche06/frame_0.png"
+    },
+    {
+      "id": 0,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/Bouche07/frame_0.png"
+    },
+    {
+      "id": -253,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/Bouche08/frame_0.png"
+    },
+    {
+      "id": 38,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/Bouche09/frame_0.png"
+    },
+    {
+      "id": -74,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/Bouche10/frame_0.png"
+    },
+    {
+      "id": 73,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/Bouche11/frame_0.png"
+    },
+    {
+      "id": -279,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/Bouche12/frame_0.png"
+    },
+    {
+      "id": 39,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/BrasPeau/frame_0.png"
+    },
+    {
+      "id": -226,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/CorpsPeau/frame_0.png"
+    },
+    {
+      "id": 67,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/Crane/frame_0.png"
+    },
+    {
+      "id": -288,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/CuissePeau/frame_0.png"
+    },
+    {
+      "id": 65,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/EpaulePeau/frame_0.png"
+    },
+    {
+      "id": -308,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/JambePeau/frame_0.png"
+    },
+    {
+      "id": 57,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/PiedPeau01/frame_0.png"
+    },
+    {
+      "id": -90,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/PiedPeau02/frame_0.png"
+    },
+    {
+      "id": 60,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/TroncPeau/frame_0.png"
+    },
+    {
+      "id": -265,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/bouche13/frame_0.png"
+    },
+    {
+      "id": 55,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/191/bouche14/frame_0.png"
+    },
+    {
+      "id": -257,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/193/BassinVetement/frame_0.png"
+    },
+    {
+      "id": 59,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/193/BrasVetement/frame_0.png"
+    },
+    {
+      "id": -279,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/193/Chapeau/frame_0.png"
+    },
+    {
+      "id": 75,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/193/CheveuxBas/frame_0.png"
+    },
+    {
+      "id": -5,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/193/CheveuxHaut/frame_0.png"
+    },
+    {
+      "id": 48,
+      "frame": "/mnt/d/wakreverse/web/assets/hupper_sprites_from_atlas/193/CorpsVetement/frame_0.png"
+    }
+  ]
+}

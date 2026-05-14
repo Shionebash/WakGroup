@@ -38,6 +38,8 @@ export default function HomePage() {
             if (filterLanguage) params.language = filterLanguage;
             const res = await api.get('/groups', { params });
             setGroups(res.data);
+        } catch {
+            setGroups([]);
         } finally {
             setLoading(false);
         }

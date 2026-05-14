@@ -322,7 +322,6 @@ router.get('/desktop-callback', async (req: Request, res: Response): Promise<voi
             <div style="text-align:center;">
                 <p style="font-size:24px;margin-bottom:20px;">✅ Sesión iniciada</p>
                 <p style="color:#aaa;margin-bottom:20px;">El token se ha recibido. Cierra esta pestaña.</p>
-                <p style="color:#666;font-size:12px;">Token: ${token.toString().substring(0, 20)}...</p>
             </div>
             <script>
                 // Store in sessionStorage for Electron to read
@@ -366,7 +365,11 @@ router.get('/logout', (req: Request, res: Response) => {
         secure: isSecure,
         sameSite: isSecure ? 'none' : 'lax',
     });
-    const redirect = req.query.redirect as string || process.env.FRONTEND_URL || 'http://localhost:3000';
+    const allowedRedirects = (process.env.FRONTEND_URL || 'http://localhost:3000').split(',').map(s => s.trim());
+    const requested = req.query.redirect as string;
+    const redirect = (requested && allowedRedirects.some(o => requested.startsWith(o)))
+        ? requested
+        : allowedRedirects[0];
     res.redirect(redirect);
 });
 

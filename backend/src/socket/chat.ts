@@ -47,9 +47,12 @@ async function resolveGroupType(groupId: string): Promise<'dungeon' | 'pvp' | nu
     return null;
 }
 
-export function initSocket(server: HttpServer): SocketServer {
+export function initSocket(server: HttpServer, allowedOrigins?: Set<string>): SocketServer {
     const io = new SocketServer(server, {
-        cors: { origin: true, credentials: true },
+        cors: {
+            origin: allowedOrigins ? Array.from(allowedOrigins) : false,
+            credentials: true,
+        },
     });
 
     io.of('/updates').on('connection', (socket) => {
@@ -82,7 +85,9 @@ export function initSocket(server: HttpServer): SocketServer {
             if (!token && socket.handshake.auth?.token) token = socket.handshake.auth.token;
             if (!token) return next(new Error('No autenticado'));
 
-            const payload = jwt.verify(token, process.env.JWT_SECRET || 'change_this_secret') as JwtPayload;
+            const jwtSecret = process.env.JWT_SECRET;
+            if (!jwtSecret) throw new Error('JWT_SECRET not configured');
+            const payload = jwt.verify(token, jwtSecret) as JwtPayload;
             socket.data.user = payload;
             next();
         } catch {

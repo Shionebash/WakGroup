@@ -92,6 +92,7 @@ export default function Navbar() {
                             <Link href="/" className="nav-link nav-link-rich">{t('nav.groups', language)}</Link>
                             <Link href="/dungeons" className="nav-link nav-link-rich">{t('nav.dungeons', language)}</Link>
                             <Link href="/builder" className="nav-link nav-link-rich">Builder</Link>
+                            <Link href="/character-creator" className="nav-link nav-link-rich">Creador</Link>
                             <Link href="/vspvp" className="nav-link nav-link-rich">{t('nav.pvp', language)}</Link>
                             <Link href="/wiki" className="nav-link nav-link-rich">{t('nav.wiki', language)}</Link>
                         </div>
@@ -239,6 +240,10 @@ export default function Navbar() {
                     <Link href="/builder" className="mobile-drawer-link" onClick={closeMobileMenu}>
                         <span className="mobile-drawer-link-icon">🛡️</span>
                         Builder
+                    </Link>
+                    <Link href="/character-creator" className="mobile-drawer-link" onClick={closeMobileMenu}>
+                        <span className="mobile-drawer-link-icon">CC</span>
+                        Creador
                     </Link>
                     <Link href="/vspvp" className="mobile-drawer-link" onClick={closeMobileMenu}>
                         <span className="mobile-drawer-link-icon">🏆</span>

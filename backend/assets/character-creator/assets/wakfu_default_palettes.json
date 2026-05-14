@@ -1,0 +1,999 @@
+{
+  "version": 1,
+  "generatedAt": "2026-05-09T19:30:45.113577+00:00",
+  "sourceFolder": "C:\\Users\\Clarex\\Pictures\\wakfutrajes",
+  "notes": [
+    "Extracted from PNG swatches in C:/Users/Clarex/Pictures/wakfutrajes.",
+    "characters stores Pelo/Piel/Ojos as hairColor/skinColor/eyeColor.",
+    "palettes stores Traje 1..6 as costume1..costume6.",
+    "ARMADURA1 maps to outfit_100; ARMADURA2 maps to outfit_101."
+  ],
+  "characters": {
+    "eniripsa/female": {
+      "classId": "eniripsa",
+      "className": "Aniripsa",
+      "gender": "female",
+      "colors": {
+        "hairColor": "#FDE9C6",
+        "skinColor": "#D89C80",
+        "eyeColor": "#FF6D6B"
+      },
+      "sourceFile": "ANIRIPSA_FEMALE_BODY.png"
+    },
+    "eniripsa/male": {
+      "classId": "eniripsa",
+      "className": "Aniripsa",
+      "gender": "male",
+      "colors": {
+        "hairColor": "#64310C",
+        "skinColor": "#D89C80",
+        "eyeColor": "#000000"
+      },
+      "sourceFile": "ANIRIPSA_MALE_BODY.png"
+    },
+    "enutrof/female": {
+      "classId": "enutrof",
+      "className": "Anutrof",
+      "gender": "female",
+      "colors": {
+        "hairColor": "#FDE9C6",
+        "skinColor": "#D19579",
+        "eyeColor": "#000000"
+      },
+      "sourceFile": "ANUTROF_FEMALE_BODY.png"
+    },
+    "enutrof/male": {
+      "classId": "enutrof",
+      "className": "Anutrof",
+      "gender": "male",
+      "colors": {
+        "hairColor": "#DFE2E2",
+        "skinColor": "#D19579",
+        "eyeColor": "#000000"
+      },
+      "sourceFile": "ANUTROF_MALE_BODY.png"
+    },
+    "feca/female": {
+      "classId": "feca",
+      "className": "Feca",
+      "gender": "female",
+      "colors": {
+        "hairColor": "#5BD3B6",
+        "skinColor": "#F4CA8A",
+        "eyeColor": "#44BFC1"
+      },
+      "sourceFile": "FECA_FEMALE_BODY.png"
+    },
+    "feca/male": {
+      "classId": "feca",
+      "className": "Feca",
+      "gender": "male",
+      "colors": {
+        "hairColor": "#3F89A0",
+        "skinColor": "#F4CA8A",
+        "eyeColor": "#44BFC1"
+      },
+      "sourceFile": "FECA_MALE_BODY.png"
+    },
+    "cra/female": {
+      "classId": "cra",
+      "className": "Ocra",
+      "gender": "female",
+      "colors": {
+        "hairColor": "#FDE9C6",
+        "skinColor": "#F4CA8A",
+        "eyeColor": "#49C328"
+      },
+      "sourceFile": "OCRA_FEMALE_BODY.png"
+    },
+    "cra/male": {
+      "classId": "cra",
+      "className": "Ocra",
+      "gender": "male",
+      "colors": {
+        "hairColor": "#FDE9C6",
+        "skinColor": "#E4BC7C",
+        "eyeColor": "#49C328"
+      },
+      "sourceFile": "OCRA_MALE_BODY.png"
+    },
+    "osamodas/female": {
+      "classId": "osamodas",
+      "className": "Osamodas",
+      "gender": "female",
+      "colors": {
+        "hairColor": "#F6F9F9",
+        "skinColor": "#467CA0",
+        "eyeColor": "#000000"
+      },
+      "sourceFile": "OSAMODAS_FEMALE_BODY.png"
+    },
+    "osamodas/male": {
+      "classId": "osamodas",
+      "className": "Osamodas",
+      "gender": "male",
+      "colors": {
+        "hairColor": "#186279",
+        "skinColor": "#3F7599",
+        "eyeColor": "#000000"
+      },
+      "sourceFile": "OSAMODAS_MALE_BODY.png"
+    },
+    "pandawa/female": {
+      "classId": "pandawa",
+      "className": "Pandawa",
+      "gender": "female",
+      "colors": {
+        "hairColor": "#DFE2E2",
+        "skinColor": "#EFDFDB",
+        "eyeColor": "#000000"
+      },
+      "sourceFile": "PANDAWA_FEMALE_BODY.png"
+    },
+    "pandawa/male": {
+      "classId": "pandawa",
+      "className": "Pandawa",
+      "gender": "male",
+      "colors": {
+        "hairColor": "#DFE2E2",
+        "skinColor": "#EFDFDB",
+        "eyeColor": "#000000"
+      },
+      "sourceFile": "PANDAWA_MALE_BODY.png"
+    },
+    "sacrier/female": {
+      "classId": "sacrier",
+      "className": "Sacrogrito",
+      "gender": "female",
+      "colors": {
+        "hairColor": "#F9821D",
+        "skinColor": "#E4BC7C",
+        "eyeColor": "#808080"
+      },
+      "sourceFile": "SACROGRITO_FEMALE_BODY.png"
+    },
+    "sacrier/male": {
+      "classId": "sacrier",
+      "className": "Sacrogrito",
+      "gender": "male",
+      "colors": {
+        "hairColor": "#E8720E",
+        "skinColor": "#E6AC90",
+        "eyeColor": "#808080"
+      },
+      "sourceFile": "SACROGRITO_MALE_BODY.png"
+    },
+    "sadida/female": {
+      "classId": "sadida",
+      "className": "Sadida",
+      "gender": "female",
+      "colors": {
+        "hairColor": "#B3CF44",
+        "skinColor": "#A16E49",
+        "eyeColor": "#A56021"
+      },
+      "sourceFile": "SADIDA_FEMALE_BODY.png"
+    },
+    "sadida/male": {
+      "classId": "sadida",
+      "className": "Sadida",
+      "gender": "male",
+      "colors": {
+        "hairColor": "#ACC83D",
+        "skinColor": "#A16E49",
+        "eyeColor": "#A56021"
+      },
+      "sourceFile": "SADIDA_MALE_BODY.png"
+    },
+    "sram/unknown": {
+      "classId": "sram",
+      "className": "Sram",
+      "gender": "unknown",
+      "colors": {
+        "hairColor": "#F8EEDA",
+        "skinColor": "#F8EEDA",
+        "eyeColor": "#000000"
+      },
+      "sourceFile": "SRAM_BODY_ARMADURA2.png"
+    },
+    "sram/female": {
+      "classId": "sram",
+      "className": "Sram",
+      "gender": "female",
+      "colors": {
+        "hairColor": "#DFE2E2",
+        "skinColor": "#DFB58C",
+        "eyeColor": "#287EFF"
+      },
+      "sourceFile": "SRAM_FEMALE_BODY_ARMADURA1.png"
+    },
+    "sram/male": {
+      "classId": "sram",
+      "className": "Sram",
+      "gender": "male",
+      "colors": {
+        "hairColor": "#DBDBD3",
+        "skinColor": "#1A4B64",
+        "eyeColor": "#000000"
+      },
+      "sourceFile": "SRAM_MALE_BODY.png"
+    },
+    "ouginak/female": {
+      "classId": "ouginak",
+      "className": "Uginak",
+      "gender": "female",
+      "colors": {
+        "hairColor": "#FFC841",
+        "skinColor": "#F6DFC1",
+        "eyeColor": "#FF8221"
+      },
+      "sourceFile": "UGINAK_FEMALE_BODY.png"
+    },
+    "ouginak/male": {
+      "classId": "ouginak",
+      "className": "Uginak",
+      "gender": "male",
+      "colors": {
+        "hairColor": "#FBBF38",
+        "skinColor": "#A87E67",
+        "eyeColor": "#FF8221"
+      },
+      "sourceFile": "UGINAK_MALE_BODY.png"
+    },
+    "xelor/female": {
+      "classId": "xelor",
+      "className": "Xelor",
+      "gender": "female",
+      "colors": {
+        "hairColor": "#DFE2E2",
+        "skinColor": "#DFD1CC",
+        "eyeColor": "#808080"
+      },
+      "sourceFile": "XELOR_FEMALE_BODY.png"
+    },
+    "xelor/male": {
+      "classId": "xelor",
+      "className": "Xelor",
+      "gender": "male",
+      "colors": {
+        "hairColor": "#DFE2E2",
+        "skinColor": "#DFD1CC",
+        "eyeColor": "#808080"
+      },
+      "sourceFile": "XELOR_MALE_BODY.png"
+    },
+    "iop/female": {
+      "classId": "iop",
+      "className": "Yopuka",
+      "gender": "female",
+      "colors": {
+        "hairColor": "#F07916",
+        "skinColor": "#E6AC90",
+        "eyeColor": "#808080"
+      },
+      "sourceFile": "YOPUKA_FEMALE_BODY.png"
+    },
+    "iop/male": {
+      "classId": "iop",
+      "className": "Yopuka",
+      "gender": "male",
+      "colors": {
+        "hairColor": "#E8720E",
+        "skinColor": "#E6AC90",
+        "eyeColor": "#808080"
+      },
+      "sourceFile": "YOPUKA_MALE_BODY.png"
+    },
+    "zobal/female": {
+      "classId": "zobal",
+      "className": "Zobal",
+      "gender": "female",
+      "colors": {
+        "hairColor": "#D33A1F",
+        "skinColor": "#E6BC93",
+        "eyeColor": "#000000"
+      },
+      "sourceFile": "ZOBAL_FEMALE_BODY.png"
+    },
+    "zobal/male": {
+      "classId": "zobal",
+      "className": "Zobal",
+      "gender": "male",
+      "colors": {
+        "hairColor": "#D33A1F",
+        "skinColor": "#C6AF93",
+        "eyeColor": "#000000"
+      },
+      "sourceFile": "ZOBAL_MALE_BODY.png"
+    },
+    "ecaflip/female": {
+      "classId": "ecaflip",
+      "className": "Zurcarak",
+      "gender": "female",
+      "colors": {
+        "hairColor": "#E6D3AF",
+        "skinColor": "#8A5731",
+        "eyeColor": "#000000"
+      },
+      "sourceFile": "ZURCARAK_FEMALE_BODY.png"
+    },
+    "ecaflip/male": {
+      "classId": "ecaflip",
+      "className": "Zurcarak",
+      "gender": "male",
+      "colors": {
+        "hairColor": "#64310C",
+        "skinColor": "#83502A",
+        "eyeColor": "#000000"
+      },
+      "sourceFile": "ZURCARAK_MALE_BODY.png"
+    }
+  },
+  "palettes": {
+    "eniripsa/female/eniripsa_outfit_100": {
+      "classId": "eniripsa",
+      "className": "Aniripsa",
+      "gender": "female",
+      "outfitId": "eniripsa_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#C2B58F",
+        "costume2": "#C2B58F",
+        "costume3": "#CBCBC8",
+        "costume4": "#CBCBC8",
+        "costume5": "#CBCBC8",
+        "costume6": "#B72713"
+      },
+      "sourceFile": "ANIRIPSA_FEMALE_ARMADURA1.png"
+    },
+    "eniripsa/female/eniripsa_outfit_101": {
+      "classId": "eniripsa",
+      "className": "Aniripsa",
+      "gender": "female",
+      "outfitId": "eniripsa_outfit_101",
+      "outfitLabel": "Armadura 2",
+      "armorNumber": 2,
+      "colors": {
+        "costume1": "#FFF9DD",
+        "costume2": "#BF2844",
+        "costume3": "#C4A063",
+        "costume4": "#C4A05E",
+        "costume5": "#EAFF5B",
+        "costume6": "#FF6B54"
+      },
+      "sourceFile": "ANIRIPSA_FEMALE_ARMADURA2.png"
+    },
+    "eniripsa/male/eniripsa_outfit_100": {
+      "classId": "eniripsa",
+      "className": "Aniripsa",
+      "gender": "male",
+      "outfitId": "eniripsa_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#5D4D2E",
+        "costume2": "#423523",
+        "costume3": "#4C3C2B",
+        "costume4": "#B39B66",
+        "costume5": "#241D17",
+        "costume6": "#832710"
+      },
+      "sourceFile": "ANIRIPSA_MALE_ARMADURA1.png"
+    },
+    "eniripsa/male/eniripsa_outfit_101": {
+      "classId": "eniripsa",
+      "className": "Aniripsa",
+      "gender": "male",
+      "outfitId": "eniripsa_outfit_101",
+      "outfitLabel": "Armadura 2",
+      "armorNumber": 2,
+      "colors": {
+        "costume1": "#FFF9DD",
+        "costume2": "#BF2844",
+        "costume3": "#C4A063",
+        "costume4": "#C4A05E",
+        "costume5": "#EAFF5B",
+        "costume6": "#FF6B54"
+      },
+      "sourceFile": "ANIRIPSA_MALE_ARMADURA2.png"
+    },
+    "enutrof/female/enutrof_outfit_100": {
+      "classId": "enutrof",
+      "className": "Anutrof",
+      "gender": "female",
+      "outfitId": "enutrof_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#A43030",
+        "costume2": "#3E2E1A",
+        "costume3": "#201710",
+        "costume4": "#CBCBB8",
+        "costume5": "#801A1A",
+        "costume6": "#BF9A04"
+      },
+      "sourceFile": "ANUTROF_FEMALE_ARMADURA1.png"
+    },
+    "enutrof/female/enutrof_outfit_101": {
+      "classId": "enutrof",
+      "className": "Anutrof",
+      "gender": "female",
+      "outfitId": "enutrof_outfit_101",
+      "outfitLabel": "Armadura 2",
+      "armorNumber": 2,
+      "colors": {
+        "costume1": "#D5C295",
+        "costume2": "#4A3A20",
+        "costume3": "#9D371B",
+        "costume4": "#8B7C4F",
+        "costume5": "#9D371B",
+        "costume6": "#C3870F"
+      },
+      "sourceFile": "ANUTROF_FEMALE_ARMADURA2.png"
+    },
+    "enutrof/male/enutrof_outfit_100": {
+      "classId": "enutrof",
+      "className": "Anutrof",
+      "gender": "male",
+      "outfitId": "enutrof_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#352C1E",
+        "costume2": "#4A3A21",
+        "costume3": "#C4AD7D",
+        "costume4": "#1C1E12",
+        "costume5": "#801A1A",
+        "costume6": "#C48810"
+      },
+      "sourceFile": "ANUTROF_MALE_ARMADURA1.png"
+    },
+    "enutrof/male/enutrof_outfit_101": {
+      "classId": "enutrof",
+      "className": "Anutrof",
+      "gender": "male",
+      "outfitId": "enutrof_outfit_101",
+      "outfitLabel": "Armadura 2",
+      "armorNumber": 2,
+      "colors": {
+        "costume1": "#D5C295",
+        "costume2": "#2B291B",
+        "costume3": "#4A3A20",
+        "costume4": "#9D371B",
+        "costume5": "#9D371B",
+        "costume6": "#C3870F"
+      },
+      "sourceFile": "ANUTROF_MALE_ARMADURA2.png"
+    },
+    "feca/female/feca_outfit_100": {
+      "classId": "feca",
+      "className": "Feca",
+      "gender": "female",
+      "outfitId": "feca_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#CBC4A9",
+        "costume2": "#59B3AC",
+        "costume3": "#659D7C",
+        "costume4": "#90B5A4",
+        "costume5": "#B48E42",
+        "costume6": "#716D5F"
+      },
+      "sourceFile": "FECA_FEMALE_ARMADURA1.png"
+    },
+    "feca/female/feca_outfit_101": {
+      "classId": "feca",
+      "className": "Feca",
+      "gender": "female",
+      "outfitId": "feca_outfit_101",
+      "outfitLabel": "Armadura 2",
+      "armorNumber": 2,
+      "colors": {
+        "costume1": "#D68711",
+        "costume2": "#2D6693",
+        "costume3": "#2D6693",
+        "costume4": "#D68711",
+        "costume5": "#686868",
+        "costume6": "#604930"
+      },
+      "sourceFile": "FECA_FEMALE_ARMADURA2.png"
+    },
+    "feca/male/feca_outfit_100": {
+      "classId": "feca",
+      "className": "Feca",
+      "gender": "male",
+      "outfitId": "feca_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#807F7E",
+        "costume2": "#497981",
+        "costume3": "#C9A353",
+        "costume4": "#C6C3B9",
+        "costume5": "#716D5F",
+        "costume6": "#C6C3B9"
+      },
+      "sourceFile": "FECA_MALE_ARMADURA1.png"
+    },
+    "feca/male/feca_outfit_101": {
+      "classId": "feca",
+      "className": "Feca",
+      "gender": "male",
+      "outfitId": "feca_outfit_101",
+      "outfitLabel": "Armadura 2",
+      "armorNumber": 2,
+      "colors": {
+        "costume1": "#D68711",
+        "costume2": "#2D6693",
+        "costume3": "#2D6693",
+        "costume4": "#D68711",
+        "costume5": "#686868",
+        "costume6": "#604930"
+      },
+      "sourceFile": "FECA_MALE_ARMADURA2.png"
+    },
+    "cra/female/cra_outfit_100": {
+      "classId": "cra",
+      "className": "Ocra",
+      "gender": "female",
+      "outfitId": "cra_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#605235",
+        "costume2": "#999812",
+        "costume3": "#B49B54",
+        "costume4": "#B49B54",
+        "costume5": "#605235",
+        "costume6": "#AC8002"
+      },
+      "sourceFile": "OCRA_FEMALE_ARMADURA1.png"
+    },
+    "cra/male/cra_outfit_100": {
+      "classId": "cra",
+      "className": "Ocra",
+      "gender": "male",
+      "outfitId": "cra_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#605235",
+        "costume2": "#999812",
+        "costume3": "#B49B54",
+        "costume4": "#B8A05D",
+        "costume5": "#605235",
+        "costume6": "#AC8002"
+      },
+      "sourceFile": "OCRA_MALE_ARMADURA1.png"
+    },
+    "osamodas/female/osamodas_outfit_100": {
+      "classId": "osamodas",
+      "className": "Osamodas",
+      "gender": "female",
+      "outfitId": "osamodas_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#7F6D4D",
+        "costume2": "#A79067",
+        "costume3": "#C6C4BF",
+        "costume4": "#2E2417",
+        "costume5": "#C6C4BF",
+        "costume6": "#7D6545"
+      },
+      "sourceFile": "OSAMODAS_FEMALE_ARMADURA1.png"
+    },
+    "osamodas/male/osamodas_outfit_100": {
+      "classId": "osamodas",
+      "className": "Osamodas",
+      "gender": "male",
+      "outfitId": "osamodas_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#C6C4BF",
+        "costume2": "#715E42",
+        "costume3": "#C6C4BF",
+        "costume4": "#1F3434",
+        "costume5": "#A28B64",
+        "costume6": "#7D6545"
+      },
+      "sourceFile": "OSAMODAS_MALE_ARMADURA1.png"
+    },
+    "pandawa/female/pandawa_outfit_100": {
+      "classId": "pandawa",
+      "className": "Pandawa",
+      "gender": "female",
+      "outfitId": "pandawa_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#CA1F08",
+        "costume2": "#C2B79B",
+        "costume3": "#CA1F08",
+        "costume4": "#7C8928",
+        "costume5": "#7C8928",
+        "costume6": "#BF985D"
+      },
+      "sourceFile": "PANDAWA_FEMALE_ARMADURA1.png"
+    },
+    "pandawa/female/pandawa_outfit_101": {
+      "classId": "pandawa",
+      "className": "Pandawa",
+      "gender": "female",
+      "outfitId": "pandawa_outfit_101",
+      "outfitLabel": "Armadura 2",
+      "armorNumber": 2,
+      "colors": {
+        "costume1": "#AF1E07",
+        "costume2": "#AF1E07",
+        "costume3": "#D3BA75",
+        "costume4": "#54471E",
+        "costume5": "#8C7F16",
+        "costume6": "#75892B"
+      },
+      "sourceFile": "PANDAWA_FEMALE_ARMADURA2.png"
+    },
+    "pandawa/male/pandawa_outfit_100": {
+      "classId": "pandawa",
+      "className": "Pandawa",
+      "gender": "male",
+      "outfitId": "pandawa_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#1A170F",
+        "costume2": "#38331E",
+        "costume3": "#637522",
+        "costume4": "#C2B79B",
+        "costume5": "#881111",
+        "costume6": "#881111"
+      },
+      "sourceFile": "PANDAWA_MALE_ARMADURA1.png"
+    },
+    "pandawa/male/pandawa_outfit_101": {
+      "classId": "pandawa",
+      "className": "Pandawa",
+      "gender": "male",
+      "outfitId": "pandawa_outfit_101",
+      "outfitLabel": "Armadura 2",
+      "armorNumber": 2,
+      "colors": {
+        "costume1": "#AF1E07",
+        "costume2": "#54471E",
+        "costume3": "#D3BA75",
+        "costume4": "#073656",
+        "costume5": "#8C7F16",
+        "costume6": "#75892B"
+      },
+      "sourceFile": "PANDAWA_MALE_ARMADURA2.png"
+    },
+    "sacrier/male/sacrier_outfit_100": {
+      "classId": "sacrier",
+      "className": "Sacrogrito",
+      "gender": "male",
+      "outfitId": "sacrier_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#95240E",
+        "costume2": "#705A2A",
+        "costume3": "#7B6845",
+        "costume4": "#AAA29C",
+        "costume5": "#938745",
+        "costume6": "#CB8314"
+      },
+      "sourceFile": "SACROGRITO_MALE_ARMADURA1.png"
+    },
+    "sadida/female/sadida_outfit_100": {
+      "classId": "sadida",
+      "className": "Sadida",
+      "gender": "female",
+      "outfitId": "sadida_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#788500",
+        "costume2": "#796445",
+        "costume3": "#C1B086",
+        "costume4": "#CBCBAD",
+        "costume5": "#796445",
+        "costume6": "#CB991E"
+      },
+      "sourceFile": "SADIDA_FEMALE_ARMADURA1.png"
+    },
+    "sadida/male/sadida_outfit_100": {
+      "classId": "sadida",
+      "className": "Sadida",
+      "gender": "male",
+      "outfitId": "sadida_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#788500",
+        "costume2": "#A8905A",
+        "costume3": "#381E0D",
+        "costume4": "#492511",
+        "costume5": "#362112",
+        "costume6": "#984F13"
+      },
+      "sourceFile": "SADIDA_MALE_ARMADURA1.png"
+    },
+    "sacrier/female/sacrier_outfit_100": {
+      "classId": "sacrier",
+      "className": "Sacrogrito",
+      "gender": "female",
+      "outfitId": "sacrier_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#95240E",
+        "costume2": "#7B6845",
+        "costume3": "#938745",
+        "costume4": "#AAA29C",
+        "costume5": "#CB8990",
+        "costume6": "#CB8314"
+      },
+      "sourceFile": "SAROGRITO_FEMALE_ARMADURA1.png"
+    },
+    "sram/male/sram_outfit_100": {
+      "classId": "sram",
+      "className": "Sram",
+      "gender": "male",
+      "outfitId": "sram_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#CBC2B0",
+        "costume2": "#CBC2B0",
+        "costume3": "#CBC2B0",
+        "costume4": "#CBC2B0",
+        "costume5": "#CBC2B0",
+        "costume6": "#CBC2B0"
+      },
+      "sourceFile": "SRAM__MALE_ARMADURA1.png"
+    },
+    "sram/female/sram_outfit_100": {
+      "classId": "sram",
+      "className": "Sram",
+      "gender": "female",
+      "outfitId": "sram_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#C6C3B9",
+        "costume2": "#3C5D66",
+        "costume3": "#3C5D66",
+        "costume4": "#3C5D66",
+        "costume5": "#3C5D66",
+        "costume6": "#3C5D66"
+      },
+      "sourceFile": "SRAM_FEMALE_AMADURA1.png"
+    },
+    "sram/male/sram_outfit_101": {
+      "classId": "sram",
+      "className": "Sram",
+      "gender": "male",
+      "outfitId": "sram_outfit_101",
+      "outfitLabel": "Armadura 2",
+      "armorNumber": 2,
+      "colors": {
+        "costume1": "#376261",
+        "costume2": "#20383A",
+        "costume3": "#20383A",
+        "costume4": "#F8EEDA",
+        "costume5": "#376261",
+        "costume6": "#20383A"
+      },
+      "sourceFile": "SRAM_MALE_ARMADURA2.png"
+    },
+    "ouginak/female/ouginak_outfit_100": {
+      "classId": "ouginak",
+      "className": "Uginak",
+      "gender": "female",
+      "outfitId": "ouginak_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#3D3735",
+        "costume2": "#A38857",
+        "costume3": "#3D3735",
+        "costume4": "#A55759",
+        "costume5": "#B77451",
+        "costume6": "#C96C00"
+      },
+      "sourceFile": "UGINAK_FEMALE_ARMADURA1.png"
+    },
+    "ouginak/male/ouginak_outfit_100": {
+      "classId": "ouginak",
+      "className": "Uginak",
+      "gender": "male",
+      "outfitId": "ouginak_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#3D3735",
+        "costume2": "#A38857",
+        "costume3": "#B77451",
+        "costume4": "#A55759",
+        "costume5": "#664533",
+        "costume6": "#C96C00"
+      },
+      "sourceFile": "UGINAK_MALE_ARMADURA1.png"
+    },
+    "xelor/female/xelor_outfit_100": {
+      "classId": "xelor",
+      "className": "Xelor",
+      "gender": "female",
+      "outfitId": "xelor_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#919FB7",
+        "costume2": "#CBC5B3",
+        "costume3": "#2F3446",
+        "costume4": "#171A20",
+        "costume5": "#2F3446",
+        "costume6": "#171A20"
+      },
+      "sourceFile": "XELOR_FEMALE_ARMADURA1.png"
+    },
+    "xelor/male/xelor_outfit_100": {
+      "classId": "xelor",
+      "className": "Xelor",
+      "gender": "male",
+      "outfitId": "xelor_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#717C94",
+        "costume2": "#CBC5B3",
+        "costume3": "#2F3446",
+        "costume4": "#171A20",
+        "costume5": "#2F3446",
+        "costume6": "#171A20"
+      },
+      "sourceFile": "XELOR_MALE_ARMADURA1.png"
+    },
+    "iop/female/iop_outfit_100": {
+      "classId": "iop",
+      "className": "Yopuka",
+      "gender": "female",
+      "outfitId": "iop_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#CBC4A9",
+        "costume2": "#B8A87F",
+        "costume3": "#C02B10",
+        "costume4": "#CBC4A9",
+        "costume5": "#B8A87F",
+        "costume6": "#C02B10"
+      },
+      "sourceFile": "YOPUKA_FEMALE_ARMADURA1.png"
+    },
+    "iop/female/iop_outfit_101": {
+      "classId": "iop",
+      "className": "Yopuka",
+      "gender": "female",
+      "outfitId": "iop_outfit_101",
+      "outfitLabel": "Armadura 2",
+      "armorNumber": 2,
+      "colors": {
+        "costume1": "#12281D",
+        "costume2": "#CBC4A9",
+        "costume3": "#C02B10",
+        "costume4": "#C02B10",
+        "costume5": "#C02B10",
+        "costume6": "#CBC4A9"
+      },
+      "sourceFile": "YOPUKA_FEMALE_ARMADURA2.png"
+    },
+    "iop/male/iop_outfit_101": {
+      "classId": "iop",
+      "className": "Yopuka",
+      "gender": "male",
+      "outfitId": "iop_outfit_101",
+      "outfitLabel": "Armadura 2",
+      "armorNumber": 2,
+      "colors": {
+        "costume1": "#12281D",
+        "costume2": "#CBC4A9",
+        "costume3": "#C02B10",
+        "costume4": "#C02B10",
+        "costume5": "#C02B10",
+        "costume6": "#CBC4A9"
+      },
+      "sourceFile": "YOPUKA_MALE_AMADURA2.png"
+    },
+    "iop/male/iop_outfit_100": {
+      "classId": "iop",
+      "className": "Yopuka",
+      "gender": "male",
+      "outfitId": "iop_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#CBC4A9",
+        "costume2": "#12281D",
+        "costume3": "#C02B10",
+        "costume4": "#CBC4A9",
+        "costume5": "#12281D",
+        "costume6": "#C02B10"
+      },
+      "sourceFile": "YOPUKA_MALE_ARMADURA1.png"
+    },
+    "zobal/female/zobal_outfit_100": {
+      "classId": "zobal",
+      "className": "Zobal",
+      "gender": "female",
+      "outfitId": "zobal_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#2A2826",
+        "costume2": "#302E2A",
+        "costume3": "#B7B3AD",
+        "costume4": "#886A3F",
+        "costume5": "#302E2A",
+        "costume6": "#8A1A1A"
+      },
+      "sourceFile": "ZOBAL_FEMALE_ARMADURA1.png"
+    },
+    "zobal/male/zobal_outfit_100": {
+      "classId": "zobal",
+      "className": "Zobal",
+      "gender": "male",
+      "outfitId": "zobal_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#2A2826",
+        "costume2": "#302E2A",
+        "costume3": "#B7B3AD",
+        "costume4": "#886A3F",
+        "costume5": "#302E2A",
+        "costume6": "#8A1A1A"
+      },
+      "sourceFile": "ZOBAL_MALE_ARMADURA1.png"
+    },
+    "ecaflip/female/ecaflip_outfit_100": {
+      "classId": "ecaflip",
+      "className": "Zurcarak",
+      "gender": "female",
+      "outfitId": "ecaflip_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#C37D3D",
+        "costume2": "#C37D3D",
+        "costume3": "#AC6931",
+        "costume4": "#CB6D10",
+        "costume5": "#CAC288",
+        "costume6": "#C3995F"
+      },
+      "sourceFile": "ZURCARAK_FEMALE_AMADURA1.png"
+    },
+    "ecaflip/male/ecaflip_outfit_100": {
+      "classId": "ecaflip",
+      "className": "Zurcarak",
+      "gender": "male",
+      "outfitId": "ecaflip_outfit_100",
+      "outfitLabel": "Armadura 1",
+      "armorNumber": 1,
+      "colors": {
+        "costume1": "#B47439",
+        "costume2": "#CBB381",
+        "costume3": "#98612B",
+        "costume4": "#CB760F",
+        "costume5": "#CAC288",
+        "costume6": "#C3995F"
+      },
+      "sourceFile": "ZURCARAK_MALE_ARMADURA1.png"
+    }
+  },
+  "unmapped": [],
+  "errors": []
+}

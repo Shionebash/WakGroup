@@ -1,0 +1,83 @@
+{
+  "metadata": {
+    "notes": [
+      "Catalogo construido a partir de gamedata_items.json, gamedata_states.json y rastreo HMI en 68_parsed.json.",
+      "Los bundles directos equipment/51314501, 51317074, 51318608, 51318615 y 51318616 aparecen marcados con IsSex(\"male\").",
+      "Para 51314499 y 51314503 no se encontro una marca femenina confirmada; por seguridad no se usan en el selector femenino.",
+      "Se detectaron fragmentos femeninos en la familia 5131446x, pero todavia no hay mapeo concluyente item/state -> traje femenino completo."
+    ]
+  },
+  "real_costumes": [
+    {
+      "item_id": 14499,
+      "state_id": 1478,
+      "label": "Traje de Bruja",
+      "direct_bundle": "equipment/51314499",
+      "gender_status": "unknown"
+    },
+    {
+      "item_id": 14501,
+      "state_id": 1480,
+      "label": "Traje de Jacko",
+      "direct_bundle": "equipment/51314501",
+      "gender_status": "male_confirmed"
+    },
+    {
+      "item_id": 14503,
+      "state_id": 1482,
+      "label": "Traje de Ghul",
+      "direct_bundle": "equipment/51314503",
+      "gender_status": "unknown"
+    },
+    {
+      "item_id": 17074,
+      "state_id": 1973,
+      "label": "Traje de Wabbit",
+      "direct_bundle": "equipment/51317074",
+      "gender_status": "male_confirmed"
+    },
+    {
+      "item_id": 18608,
+      "state_id": 2848,
+      "label": "Traje del Festival del Agua",
+      "direct_bundle": "equipment/51318608",
+      "gender_status": "male_confirmed"
+    },
+    {
+      "item_id": 18615,
+      "state_id": 2931,
+      "label": "Traje de Paso",
+      "direct_bundle": "equipment/51318615",
+      "gender_status": "male_confirmed"
+    },
+    {
+      "item_id": 18616,
+      "state_id": 2932,
+      "label": "Traje de Adal",
+      "direct_bundle": "equipment/51318616",
+      "gender_status": "male_confirmed"
+    }
+  ],
+  "female_fragments_detected": [
+    {
+      "appearance_id": "equipment/51314460",
+      "parts_hidden_by_hmi": [
+        "CorpsHabit",
+        "JambeHabit",
+        "PiedHabit01",
+        "PiedHabit02",
+        "CuisseHabit"
+      ],
+      "gender_status": "female_confirmed_fragment"
+    },
+    {
+      "appearance_id": "equipment/51314462",
+      "parts_hidden_by_hmi": [
+        "CorpsHabit",
+        "Cape",
+        "CapeBas"
+      ],
+      "gender_status": "female_confirmed_fragment"
+    }
+  ]
+}

@@ -1,0 +1,478 @@
+[
+  {
+    "id": 900023,
+    "has_texture": false,
+    "width": 0,
+    "height": 0,
+    "item_equip": false
+  },
+  {
+    "id": 900032,
+    "has_texture": true,
+    "width": 256,
+    "height": 128,
+    "item_equip": true
+  },
+  {
+    "id": 900033,
+    "has_texture": true,
+    "width": 128,
+    "height": 128,
+    "item_equip": true
+  },
+  {
+    "id": 900035,
+    "has_texture": true,
+    "width": 128,
+    "height": 128,
+    "item_equip": false
+  },
+  {
+    "id": 900036,
+    "has_texture": true,
+    "width": 256,
+    "height": 128,
+    "item_equip": false
+  },
+  {
+    "id": 900037,
+    "has_texture": false,
+    "width": 0,
+    "height": 0,
+    "item_equip": false
+  },
+  {
+    "id": 900038,
+    "has_texture": true,
+    "width": 128,
+    "height": 64,
+    "item_equip": true
+  },
+  {
+    "id": 900044,
+    "has_texture": true,
+    "width": 512,
+    "height": 256,
+    "item_equip": true
+  },
+  {
+    "id": 900046,
+    "has_texture": true,
+    "width": 128,
+    "height": 64,
+    "item_equip": true
+  },
+  {
+    "id": 900049,
+    "has_texture": true,
+    "width": 256,
+    "height": 256,
+    "item_equip": true
+  },
+  {
+    "id": 900050,
+    "has_texture": true,
+    "width": 128,
+    "height": 128,
+    "item_equip": true
+  },
+  {
+    "id": 900051,
+    "has_texture": false,
+    "width": 0,
+    "height": 0,
+    "item_equip": true
+  },
+  {
+    "id": 900052,
+    "has_texture": true,
+    "width": 64,
+    "height": 128,
+    "item_equip": true
+  },
+  {
+    "id": 900055,
+    "has_texture": true,
+    "width": 128,
+    "height": 128,
+    "item_equip": true
+  },
+  {
+    "id": 900056,
+    "has_texture": false,
+    "width": 0,
+    "height": 0,
+    "item_equip": true
+  },
+  {
+    "id": 900065,
+    "has_texture": false,
+    "width": 0,
+    "height": 0,
+    "item_equip": false
+  },
+  {
+    "id": 900068,
+    "has_texture": true,
+    "width": 256,
+    "height": 128,
+    "item_equip": true
+  },
+  {
+    "id": 900070,
+    "has_texture": true,
+    "width": 128,
+    "height": 128,
+    "item_equip": false
+  },
+  {
+    "id": 900071,
+    "has_texture": false,
+    "width": 0,
+    "height": 0,
+    "item_equip": true
+  },
+  {
+    "id": 900073,
+    "has_texture": true,
+    "width": 256,
+    "height": 256,
+    "item_equip": false
+  },
+  {
+    "id": 900080,
+    "has_texture": true,
+    "width": 128,
+    "height": 128,
+    "item_equip": false
+  },
+  {
+    "id": 900081,
+    "has_texture": true,
+    "width": 256,
+    "height": 256,
+    "item_equip": true
+  },
+  {
+    "id": 900082,
+    "has_texture": true,
+    "width": 128,
+    "height": 64,
+    "item_equip": true
+  },
+  {
+    "id": 900083,
+    "has_texture": true,
+    "width": 128,
+    "height": 64,
+    "item_equip": false
+  },
+  {
+    "id": 900084,
+    "has_texture": true,
+    "width": 128,
+    "height": 128,
+    "item_equip": false
+  },
+  {
+    "id": 900085,
+    "has_texture": true,
+    "width": 256,
+    "height": 128,
+    "item_equip": false
+  },
+  {
+    "id": 900086,
+    "has_texture": true,
+    "width": 128,
+    "height": 128,
+    "item_equip": true
+  },
+  {
+    "id": 900088,
+    "has_texture": false,
+    "width": 0,
+    "height": 0,
+    "item_equip": true
+  },
+  {
+    "id": 900089,
+    "has_texture": true,
+    "width": 128,
+    "height": 128,
+    "item_equip": true
+  },
+  {
+    "id": 900090,
+    "has_texture": true,
+    "width": 128,
+    "height": 128,
+    "item_equip": true
+  },
+  {
+    "id": 900091,
+    "has_texture": false,
+    "width": 0,
+    "height": 0,
+    "item_equip": false
+  },
+  {
+    "id": 900093,
+    "has_texture": true,
+    "width": 128,
+    "height": 128,
+    "item_equip": false
+  },
+  {
+    "id": 900094,
+    "has_texture": true,
+    "width": 128,
+    "height": 128,
+    "item_equip": true
+  },
+  {
+    "id": 900095,
+    "has_texture": true,
+    "width": 128,
+    "height": 128,
+    "item_equip": false
+  },
+  {
+    "id": 900100,
+    "has_texture": false,
+    "width": 0,
+    "height": 0,
+    "item_equip": true
+  },
+  {
+    "id": 900101,
+    "has_texture": true,
+    "width": 128,
+    "height": 128,
+    "item_equip": true
+  },
+  {
+    "id": 900103,
+    "has_texture": true,
+    "width": 256,
+    "height": 128,
+    "item_equip": true
+  },
+  {
+    "id": 900108,
+    "has_texture": false,
+    "width": 0,
+    "height": 0,
+    "item_equip": true
+  },
+  {
+    "id": 900114,
+    "has_texture": true,
+    "width": 256,
+    "height": 256,
+    "item_equip": true
+  },
+  {
+    "id": 900116,
+    "has_texture": true,
+    "width": 128,
+    "height": 64,
+    "item_equip": true
+  },
+  {
+    "id": 900120,
+    "has_texture": true,
+    "width": 256,
+    "height": 256,
+    "item_equip": true
+  },
+  {
+    "id": 900121,
+    "has_texture": true,
+    "width": 256,
+    "height": 256,
+    "item_equip": true
+  },
+  {
+    "id": 900123,
+    "has_texture": true,
+    "width": 256,
+    "height": 128,
+    "item_equip": true
+  },
+  {
+    "id": 900125,
+    "has_texture": true,
+    "width": 256,
+    "height": 128,
+    "item_equip": true
+  },
+  {
+    "id": 900127,
+    "has_texture": true,
+    "width": 256,
+    "height": 256,
+    "item_equip": true
+  },
+  {
+    "id": 900128,
+    "has_texture": true,
+    "width": 256,
+    "height": 128,
+    "item_equip": true
+  },
+  {
+    "id": 900132,
+    "has_texture": false,
+    "width": 0,
+    "height": 0,
+    "item_equip": false
+  },
+  {
+    "id": 900133,
+    "has_texture": true,
+    "width": 256,
+    "height": 256,
+    "item_equip": true
+  },
+  {
+    "id": 900134,
+    "has_texture": true,
+    "width": 512,
+    "height": 256,
+    "item_equip": true
+  },
+  {
+    "id": 900135,
+    "has_texture": false,
+    "width": 0,
+    "height": 0,
+    "item_equip": true
+  },
+  {
+    "id": 900137,
+    "has_texture": false,
+    "width": 0,
+    "height": 0,
+    "item_equip": true
+  },
+  {
+    "id": 900138,
+    "has_texture": true,
+    "width": 128,
+    "height": 256,
+    "item_equip": true
+  },
+  {
+    "id": 900141,
+    "has_texture": true,
+    "width": 128,
+    "height": 256,
+    "item_equip": true
+  },
+  {
+    "id": 900142,
+    "has_texture": false,
+    "width": 0,
+    "height": 0,
+    "item_equip": true
+  },
+  {
+    "id": 900147,
+    "has_texture": true,
+    "width": 256,
+    "height": 128,
+    "item_equip": false
+  },
+  {
+    "id": 900148,
+    "has_texture": false,
+    "width": 0,
+    "height": 0,
+    "item_equip": true
+  },
+  {
+    "id": 900149,
+    "has_texture": false,
+    "width": 0,
+    "height": 0,
+    "item_equip": false
+  },
+  {
+    "id": 900151,
+    "has_texture": true,
+    "width": 256,
+    "height": 128,
+    "item_equip": false
+  },
+  {
+    "id": 900155,
+    "has_texture": false,
+    "width": 0,
+    "height": 0,
+    "item_equip": true
+  },
+  {
+    "id": 900156,
+    "has_texture": true,
+    "width": 256,
+    "height": 128,
+    "item_equip": true
+  },
+  {
+    "id": 900159,
+    "has_texture": true,
+    "width": 256,
+    "height": 256,
+    "item_equip": true
+  },
+  {
+    "id": 900161,
+    "has_texture": true,
+    "width": 512,
+    "height": 256,
+    "item_equip": true
+  },
+  {
+    "id": 900163,
+    "has_texture": true,
+    "width": 128,
+    "height": 128,
+    "item_equip": true
+  },
+  {
+    "id": 900166,
+    "has_texture": true,
+    "width": 512,
+    "height": 256,
+    "item_equip": true
+  },
+  {
+    "id": 900179,
+    "has_texture": true,
+    "width": 256,
+    "height": 256,
+    "item_equip": false
+  },
+  {
+    "id": 900180,
+    "has_texture": true,
+    "width": 256,
+    "height": 128,
+    "item_equip": true
+  },
+  {
+    "id": 900181,
+    "has_texture": true,
+    "width": 64,
+    "height": 64,
+    "item_equip": true
+  },
+  {
+    "id": 900182,
+    "has_texture": true,
+    "width": 128,
+    "height": 256,
+    "item_equip": false
+  }
+]
