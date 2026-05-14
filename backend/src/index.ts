@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
 
-import { getDb } from './db/database.js';
+import { getDb, initDb } from './db/database.js';
 import { broadcastDesktopUpdate, getDesktopUpdateSubscriberCount, initSocket } from './socket/chat.js';
 
 import authRoutes from './routes/auth.js';
@@ -88,12 +88,12 @@ const frameAncestors = Array.from(new Set([
     'https://*.vercel.app',
 ]));
 
-// Initialize database (creates tables if not exist)
-import { initDb } from './db/database.js';
 export let io: ReturnType<typeof initSocket> | null = null;
+
+io = initSocket(server, allowedOrigins);
+
+// Initialize database (creates tables if not exist)
 initDb().then(() => {
-    // Init Socket.io after db starts
-    io = initSocket(server, allowedOrigins);
     startGroupInactivityMonitor(getDb(), io);
 }).catch(console.error);
 

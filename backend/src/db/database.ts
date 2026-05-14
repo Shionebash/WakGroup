@@ -4,6 +4,18 @@ import * as path from 'path';
 
 let pool: Pool;
 
+function shouldUseSsl(): boolean | { rejectUnauthorized: boolean } {
+    if (process.env.PGSSLMODE === 'disable') {
+        return false;
+    }
+
+    if (process.env.NODE_ENV !== 'production' && process.env.PGSSLMODE !== 'require') {
+        return false;
+    }
+
+    return { rejectUnauthorized: false };
+}
+
 export function getDb(): Pool {
     if (!pool) {
         if (!process.env.DATABASE_URL) {
@@ -13,7 +25,7 @@ export function getDb(): Pool {
         }
         pool = new Pool({
             connectionString: process.env.DATABASE_URL,
-            ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: true } : false
+            ssl: shouldUseSsl(),
         });
     }
     return pool;
