@@ -195,6 +195,18 @@ body {
     transform: translateY(-1px);
 }
 
+.nav-link-discord {
+    color: #f2d2ff;
+    border-color: rgba(116, 137, 218, 0.34);
+    background: linear-gradient(180deg, rgba(116, 137, 218, 0.18) 0%, rgba(116, 137, 218, 0.07) 100%);
+}
+
+.nav-link-discord:hover {
+    color: #ffffff;
+    border-color: rgba(116, 137, 218, 0.58);
+    background: linear-gradient(180deg, rgba(116, 137, 218, 0.28) 0%, rgba(116, 137, 218, 0.1) 100%);
+}
+
 .navbar-user {
     display: flex;
     align-items: center;

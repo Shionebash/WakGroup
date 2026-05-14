@@ -5,6 +5,7 @@ import { useAuth } from '@/lib/auth-context';
 import NotificationBell from '@/components/NotificationBellV2';
 import { useLanguage, LANGUAGE_LABELS, LANGUAGE_FLAGS, Language } from '@/lib/language-context';
 import { t } from '@/lib/translations';
+import { DISCORD_INVITE_URL } from '@/lib/discord';
 
 export default function Navbar() {
     const { user, loading, logout } = useAuth();
@@ -98,6 +99,15 @@ export default function Navbar() {
                         </div>
 
                         <div className="navbar-actions">
+                            <a
+                                href={DISCORD_INVITE_URL}
+                                className="nav-link nav-link-rich nav-link-discord"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {t('nav.discord', language)}
+                            </a>
+
                             <div className="language-menu" ref={languageMenuRef}>
                                 <button
                                     type="button"
@@ -253,6 +263,16 @@ export default function Navbar() {
                         <span className="mobile-drawer-link-icon">📖</span>
                         {t('nav.wiki', language)}
                     </Link>
+                    <a
+                        href={DISCORD_INVITE_URL}
+                        className="mobile-drawer-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={closeMobileMenu}
+                    >
+                        <span className="mobile-drawer-link-icon">DC</span>
+                        {t('nav.discord', language)}
+                    </a>
                     {user && (
                         <Link href="/profile" className="mobile-drawer-link" onClick={closeMobileMenu}>
                             <span className="mobile-drawer-link-icon">👤</span>

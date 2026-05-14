@@ -2,6 +2,7 @@
 
 import { useLanguage } from '@/lib/language-context';
 import { t } from '@/lib/translations';
+import { DISCORD_INVITE_URL } from '@/lib/discord';
 
 export default function Footer() {
     const { language } = useLanguage();
@@ -18,7 +19,20 @@ export default function Footer() {
                 background: 'linear-gradient(180deg, rgba(18, 12, 7, 0) 0%, rgba(18, 12, 7, 0.72) 100%)',
             }}
         >
-            {t('footer.owner', language)}
+            <span>{t('footer.owner', language)}</span>
+            <span style={{ margin: '0 10px', color: 'rgba(212, 165, 116, 0.55)' }}>·</span>
+            <a
+                href={DISCORD_INVITE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                    color: '#e7bf8c',
+                    fontWeight: 700,
+                    textDecoration: 'none',
+                }}
+            >
+                {t('footer.discord', language)}
+            </a>
         </footer>
     );
 }

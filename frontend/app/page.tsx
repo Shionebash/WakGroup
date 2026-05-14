@@ -9,6 +9,7 @@ import GroupCard from '@/components/GroupCard';
 import GroupDetailModal from '@/components/GroupDetailModal';
 import CreateGroupModal from '@/components/CreateGroupModal';
 import { GROUP_LANGUAGE_OPTIONS, getGroupLanguageLabel } from '@/lib/group-languages';
+import { DISCORD_INVITE_URL } from '@/lib/discord';
 
 const SERVERS = ['', 'Ogrest', 'Rubilax', 'Pandora'];
 const STASIS_OPTIONS = Array.from({ length: 10 }, (_, i) => i + 1);
@@ -73,6 +74,14 @@ export default function HomePage() {
                                     {t('home.createGroup', language)}
                                 </button>
                             )}
+                            <a
+                                className="btn btn-secondary btn-large"
+                                href={DISCORD_INVITE_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {t('home.joinDiscord', language)}
+                            </a>
                             <a
                                 className="btn btn-secondary btn-large"
                                 href={DESKTOP_DOWNLOAD_URL}

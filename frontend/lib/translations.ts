@@ -6,6 +6,7 @@ type TranslationKey =
   | 'nav.creator'
   | 'nav.pvp'
   | 'nav.wiki'
+  | 'nav.discord'
   | 'nav.login'
   | 'nav.logout'
   | 'nav.profile'
@@ -183,6 +184,7 @@ type TranslationKey =
   | 'home.allBands'
   | 'home.bandUpTo'
   | 'home.createGroup'
+  | 'home.joinDiscord'
   | 'home.downloadMiniApp'
   | 'home.emptyTitle'
   | 'home.emptyDesc'
@@ -318,7 +320,8 @@ type TranslationKey =
   | 'group.titlePlaceholder'
   | 'group.stelesCount'
   | 'group.creating'
-  | 'footer.owner';
+  | 'footer.owner'
+  | 'footer.discord';
 
 const translations: Record<TranslationKey, Record<Language, string>> = {
   'nav.groups': { es: 'Grupos', en: 'Groups', fr: 'Groupes', pt: 'Grupos' },
@@ -326,6 +329,7 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
   'nav.creator': { es: 'Creador', en: 'Creator', fr: 'Créateur', pt: 'Criador' },
   'nav.pvp': { es: '⚔ VS PVP', en: '⚔ VS PVP', fr: '⚔ VS PVP', pt: '⚔ VS PVP' },
   'nav.wiki': { es: 'Wiki', en: 'Wiki', fr: 'Wiki', pt: 'Wiki' },
+  'nav.discord': { es: 'Discord', en: 'Discord', fr: 'Discord', pt: 'Discord' },
   'nav.login': { es: '🔑 Login con Discord', en: '🔑 Login with Discord', fr: '🔑 Connexion Discord', pt: '🔑 Login com Discord' },
   'nav.logout': { es: 'Logout', en: 'Logout', fr: 'Déconnexion', pt: 'Sair' },
   'nav.profile': { es: 'Perfil', en: 'Profile', fr: 'Profil', pt: 'Perfil' },
@@ -439,6 +443,7 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
   'home.allBands': { es: 'Todas las franjas', en: 'All bands', fr: 'Toutes les tranches', pt: 'Todas as faixas' },
   'home.bandUpTo': { es: 'Hasta Nv. {level}', en: 'Up to Lv. {level}', fr: 'Jusqu\'au niv. {level}', pt: 'Até Nv. {level}' },
   'home.createGroup': { es: 'Crear Grupo', en: 'Create Group', fr: 'Créer un groupe', pt: 'Criar Grupo' },
+  'home.joinDiscord': { es: 'Unirse al Discord', en: 'Join Discord', fr: 'Rejoindre Discord', pt: 'Entrar no Discord' },
   'home.downloadMiniApp': { es: 'Descargar mini app', en: 'Download mini app', fr: 'Télécharger la mini app', pt: 'Baixar mini app' },
   'home.emptyTitle': { es: 'Sin grupos disponibles', en: 'No groups available', fr: 'Aucun groupe disponible', pt: 'Nenhum grupo disponível' },
   'home.emptyDesc': { es: 'No hay grupos activos con estos filtros. ¡Crea el tuyo!', en: 'No active groups with these filters. Create yours!', fr: 'Aucun groupe actif avec ces filtres. Créez le vôtre !', pt: 'Não há grupos ativos com esses filtros. Crie o seu!' },
@@ -639,6 +644,7 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
   'profile.deleteGuideConfirm': { es: 'Eliminar esta guia?', en: 'Delete this guide?', fr: 'Supprimer ce guide ?', pt: 'Excluir este guia?' },
   'profile.guideDeleted': { es: 'Guia eliminada', en: 'Guide deleted', fr: 'Guide supprime', pt: 'Guia excluido' },
   'footer.owner': { es: 'Hecho por Clarex', en: 'Made by Clarex', fr: 'Cree par Clarex', pt: 'Feito por Clarex' },
+  'footer.discord': { es: 'Servidor de Discord', en: 'Discord server', fr: 'Serveur Discord', pt: 'Servidor Discord' },
 };
 
 export function t(key: TranslationKey, language: Language): string {
