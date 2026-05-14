@@ -3,6 +3,7 @@ import { Language } from './language-context';
 type TranslationKey = 
   | 'nav.groups'
   | 'nav.dungeons'
+  | 'nav.creator'
   | 'nav.pvp'
   | 'nav.wiki'
   | 'nav.login'
@@ -322,6 +323,7 @@ type TranslationKey =
 const translations: Record<TranslationKey, Record<Language, string>> = {
   'nav.groups': { es: 'Grupos', en: 'Groups', fr: 'Groupes', pt: 'Grupos' },
   'nav.dungeons': { es: 'Mazmorras', en: 'Dungeons', fr: 'Donjons', pt: 'Calabouços' },
+  'nav.creator': { es: 'Creador', en: 'Creator', fr: 'Créateur', pt: 'Criador' },
   'nav.pvp': { es: '⚔ VS PVP', en: '⚔ VS PVP', fr: '⚔ VS PVP', pt: '⚔ VS PVP' },
   'nav.wiki': { es: 'Wiki', en: 'Wiki', fr: 'Wiki', pt: 'Wiki' },
   'nav.login': { es: '🔑 Login con Discord', en: '🔑 Login with Discord', fr: '🔑 Connexion Discord', pt: '🔑 Login com Discord' },

@@ -42,10 +42,16 @@ function buildAllowedOrigins(): Set<string> {
     const candidates = [
         configuredFrontendUrl,
         process.env.FRONTEND_URL,
+        process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined,
+        'https://wakgroup.vercel.app',
         'http://localhost:3000',
         'http://127.0.0.1:3000',
         'http://localhost:3001',
         'http://127.0.0.1:3001',
+        ...(process.env.FRONTEND_URLS || '')
+            .split(',')
+            .map((origin) => origin.trim())
+            .filter(Boolean),
     ].filter(Boolean) as string[];
 
     const origins = new Set<string>();
@@ -61,6 +67,26 @@ function buildAllowedOrigins(): Set<string> {
 }
 
 const allowedOrigins = buildAllowedOrigins();
+
+function isAllowedOrigin(origin: string): boolean {
+    if (allowedOrigins.has(origin)) {
+        return true;
+    }
+
+    try {
+        const { protocol, hostname } = new URL(origin);
+        return protocol === 'https:' && hostname.endsWith('.vercel.app');
+    } catch {
+        return false;
+    }
+}
+
+const frameAncestors = Array.from(new Set([
+    "'self'",
+    ...Array.from(allowedOrigins),
+    'https://wakgroup.vercel.app',
+    'https://*.vercel.app',
+]));
 
 // Initialize database (creates tables if not exist)
 import { initDb } from './db/database.js';
@@ -99,7 +125,7 @@ app.use(helmet({
             fontSrc: ["'self'", 'data:', 'https://fonts.gstatic.com'],
             imgSrc: ["'self'", 'data:', 'https://cdn.discordapp.com', 'https://storage.googleapis.com'],
             frameSrc: ['https://www.youtube.com', 'https://player.vimeo.com'],
-            frameAncestors: ["'self'", ...Array.from(allowedOrigins)],
+            frameAncestors,
         },
     },
 }));
@@ -107,7 +133,7 @@ app.use(helmet({
 // CORS - only allow configured frontend
 app.use(cors({
     origin(origin, callback) {
-        if (!origin || origin === 'null' || allowedOrigins.has(origin)) {
+        if (!origin || origin === 'null' || isAllowedOrigin(origin)) {
             callback(null, true);
             return;
         }

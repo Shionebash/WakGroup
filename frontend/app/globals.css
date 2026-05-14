@@ -69,7 +69,7 @@ body {
     background:
         linear-gradient(180deg, rgba(34, 27, 20, 0.96) 0%, rgba(24, 19, 15, 0.96) 100%);
     border-bottom: 1px solid var(--border-soft);
-    padding: 14px 0;
+    padding: 10px 0;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -87,7 +87,8 @@ body {
 }
 
 .navbar-container-rich {
-    gap: 18px;
+    gap: 14px;
+    max-width: 1360px;
 }
 
 .navbar-logo {
@@ -101,16 +102,17 @@ body {
 }
 
 .navbar-logo-rich {
-    gap: 12px;
+    gap: 10px;
+    flex-shrink: 0;
 }
 
 .navbar-logo-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 52px;
-    height: 52px;
-    border-radius: 16px;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
     border: 1px solid rgba(212, 165, 116, 0.18);
     background:
         radial-gradient(circle at top, rgba(243, 223, 197, 0.24), rgba(212, 165, 116, 0.08) 46%, rgba(0, 0, 0, 0) 78%);
@@ -124,13 +126,13 @@ body {
 }
 
 .navbar-logo-copy strong {
-    font-size: 18px;
+    font-size: 17px;
     color: #f5e5ca;
 }
 
 .navbar-logo-copy small {
     color: var(--text-secondary);
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -145,21 +147,24 @@ body {
 .navbar-menu-rich {
     justify-content: space-between;
     flex: 1;
-    gap: 18px;
+    gap: 12px;
+    min-width: 0;
 }
 
 .navbar-links {
     display: flex;
     align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
+    gap: 6px;
+    flex-wrap: nowrap;
+    min-width: 0;
 }
 
 .navbar-actions {
     display: flex;
     align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
+    gap: 8px;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
 }
 
 .nav-link {
@@ -171,12 +176,13 @@ body {
 .nav-link-rich {
     display: inline-flex;
     align-items: center;
-    min-height: 40px;
-    padding: 0 14px;
+    min-height: 38px;
+    padding: 0 12px;
     border-radius: 999px;
     border: 1px solid transparent;
     background: rgba(255, 255, 255, 0.025);
     transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+    white-space: nowrap;
 }
 
 .nav-link:hover {
@@ -228,10 +234,10 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
-    min-width: 166px;
-    min-height: 40px;
-    padding: 0 12px;
+    gap: 8px;
+    min-width: 154px;
+    min-height: 38px;
+    padding: 0 10px;
     border-radius: 12px;
     border: 1px solid rgba(212, 165, 116, 0.2);
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.055) 0%, rgba(255, 255, 255, 0.025) 100%);
@@ -340,6 +346,84 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+@media (min-width: 769px) and (max-width: 1180px) {
+    .navbar-container {
+        padding: 0 12px;
+    }
+
+    .navbar-container-rich {
+        gap: 10px;
+    }
+
+    .navbar-logo-rich {
+        gap: 8px;
+    }
+
+    .navbar-logo-badge {
+        width: 42px;
+        height: 42px;
+        border-radius: 13px;
+    }
+
+    .navbar-logo-badge img {
+        width: 28px !important;
+        height: 28px !important;
+    }
+
+    .navbar-logo-copy strong {
+        font-size: 16px;
+    }
+
+    .navbar-logo-copy small {
+        font-size: 9px;
+    }
+
+    .navbar-menu-rich,
+    .navbar-links,
+    .navbar-actions,
+    .navbar-user {
+        gap: 6px;
+    }
+
+    .nav-link-rich {
+        min-height: 36px;
+        padding: 0 10px;
+        font-size: 14px;
+    }
+
+    .language-trigger {
+        min-width: 136px;
+        min-height: 36px;
+        padding: 0 8px;
+    }
+
+    .language-trigger-value {
+        gap: 6px;
+        font-size: 12px;
+    }
+
+    .nav-user-link-rich {
+        min-height: 36px;
+        padding-right: 8px;
+    }
+
+    .user-avatar,
+    .user-avatar-placeholder {
+        width: 30px;
+        height: 30px;
+    }
+
+    .user-name {
+        max-width: 72px;
+    }
+
+    .navbar-actions .btn {
+        min-height: 36px;
+        padding: 0 12px;
+        white-space: nowrap;
+    }
 }
 
 /* Container and Layout */

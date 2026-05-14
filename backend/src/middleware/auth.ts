@@ -4,6 +4,7 @@ import { JwtPayload } from '../types/index.js';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) throw new Error('JWT_SECRET env var must be set');
+const jwtSecret: jwt.Secret = JWT_SECRET;
 
 function isLoopbackHost(hostname: string): boolean {
     const normalized = hostname.trim().toLowerCase();
@@ -54,7 +55,7 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
     }
 
     try {
-        const payload = jwt.verify(token, JWT_SECRET) as JwtPayload;
+        const payload = jwt.verify(token, jwtSecret) as unknown as JwtPayload;
         req.user = payload;
         next();
     } catch {
@@ -63,7 +64,7 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
 }
 
 export function generateToken(payload: JwtPayload): string {
-    return jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+    return jwt.sign(payload, jwtSecret, { expiresIn: '7d' });
 }
 
 export function setCookieSession(res: Response, token: string, req?: Request): void {
