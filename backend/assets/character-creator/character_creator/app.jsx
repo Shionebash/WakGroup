@@ -53,10 +53,13 @@ const repairMojibake = (value) => {
   return text;
 };
 const localizedText = (value, language = 'es', fallback = '') => {
-  if (!value) return repairMojibake(fallback);
-  if (typeof value === 'string') return repairMojibake(value || fallback);
   const lang = normalizeLanguage(language);
-  return repairMojibake(value[lang] || value.es || value.en || value.fr || value.pt || fallback);
+  const fallbackText = typeof fallback === 'string'
+    ? fallback
+    : (fallback?.[lang] || fallback?.es || fallback?.en || fallback?.fr || fallback?.pt || '');
+  if (!value) return repairMojibake(fallbackText);
+  if (typeof value === 'string') return repairMojibake(value || fallbackText);
+  return repairMojibake(value[lang] || value.es || value.en || value.fr || value.pt || fallbackText);
 };
 
 function Icon({ name, ...rest }) {
