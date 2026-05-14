@@ -19,7 +19,7 @@
     window.CC_ASSET_BASE = '/assets/character-creator';
     document.getElementById('root').innerHTML = '<div style="color:#d4a574;padding:20px">Cargando creador...</div>';
     window.addEventListener('error', function (event) {
-      // ResizeObserver loop warnings are benign browser notifications — ignore them.
+      // ResizeObserver loop warnings are benign browser notifications; ignore them.
       if (event.message && event.message.indexOf('ResizeObserver') !== -1) return;
       var root = document.getElementById('root');
       if (!root) return;
@@ -35,7 +35,7 @@
   <script src="/assets/character-creator/vendor/react-dom.development.js"></script>
   <script src="/assets/character-creator/character_creator/data.js?v=i18n-costumes-5"></script>
   <script src="/assets/character-creator/character_creator/icons.js"></script>
-  <script src="/assets/character-creator/character_creator/app.compiled.v4.js"></script>
+  <script src="/assets/character-creator/character_creator/app.compiled.v4.js?v=lazy-anims-1"></script>
 </body>
 </html>
 

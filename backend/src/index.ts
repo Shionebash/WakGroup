@@ -151,10 +151,17 @@ app.use(cookieParser());
 app.use('/assets/character-creator', express.static(path.join(__dirname, '../assets/character-creator'), {
     etag: false,
     lastModified: false,
-    setHeaders(res) {
-        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-        res.setHeader('Pragma', 'no-cache');
-        res.setHeader('Expires', '0');
+    setHeaders(res, filePath) {
+        const normalizedPath = filePath.replace(/\\/g, '/').toLowerCase();
+        if (normalizedPath.endsWith('/index.html')) {
+            res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', '0');
+        } else if (/\.(?:anm|png|webp|jpg|jpeg)$/i.test(normalizedPath)) {
+            res.setHeader('Cache-Control', 'public, max-age=2592000, immutable');
+        } else {
+            res.setHeader('Cache-Control', 'public, max-age=3600, must-revalidate');
+        }
         res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
         res.setHeader('Access-Control-Allow-Origin', '*');
     },

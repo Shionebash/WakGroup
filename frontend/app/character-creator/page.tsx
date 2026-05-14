@@ -141,7 +141,7 @@ export default function CharacterCreatorPage() {
     }, [ready, sendConfigToFrame]);
 
     const iframeSrc = useMemo(
-        () => `${API_URL}/assets/character-creator/index.html?v=wakgroup-creator-6&lang=${encodeURIComponent(language)}`,
+        () => `${API_URL}/assets/character-creator/index.html?v=wakgroup-creator-7&lang=${encodeURIComponent(language)}`,
         [language],
     );
 

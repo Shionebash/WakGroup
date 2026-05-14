@@ -411,10 +411,38 @@ const resolveGenderedAppearance = (appearanceId) => ({
   atlasPath: ccAsset(`equipments/equipments/Atlas/${appearanceId}_0.png`),
 });
 
-const buildAnimLibLayers = (gender) => ([
-  ...ANIM_LIBS,
-  ...(GENDER_ANIM_LIBS[gender] || []),
-]).map(lib => ({ ...lib, role: 'animlib' }));
+const buildAnimLibLayers = (gender, animationId) => {
+  const libs = new Map();
+  const sittingLibByAnimation = {
+    assis1: 'assis01',
+    assis2: 'assis02',
+    assis3: 'assis03',
+    assis4: 'assis04',
+    assis5: 'assis05',
+    assis6: 'assis06',
+    assis7: 'assis07',
+    assis8: 'assis08',
+    assis10: 'assis10',
+    assis11: 'assis11',
+  };
+  const add = (libId) => {
+    const lib = [...ANIM_LIBS, ...(GENDER_ANIM_LIBS[gender] || [])].find(item => item.id === libId);
+    if (lib) libs.set(lib.id, { ...lib, role: 'animlib' });
+  };
+
+  if (['walk', 'run', 'jump', 'levelup'].includes(animationId)) add('commons');
+  if (['repos', 'clap', 'yawn', 'drink', 'arms', 'defeat', 'no', 'point', 'read', 'scratch', 'coin'].includes(animationId)) add('emotes01');
+  if (animationId === 'repos') add('assis_base');
+  if (animationId === 'dormir') add('mkt23_dormir');
+  if (animationId === 'zen') add('mkt16_zen');
+  if (sittingLibByAnimation[animationId]) {
+    add('assis_base');
+    add(sittingLibByAnimation[animationId]);
+  }
+  if (['flirt', 'angry', 'wave', 'scared', 'laugh', 'victory', 'search'].includes(animationId)) add(gender === 'male' ? 'emotesmale' : 'emotesfem');
+
+  return Array.from(libs.values());
+};
 
 const outfitForGender = (outfit, gender) => (
   gender === 'male' ? outfit?.maleEquipId : outfit?.femaleEquipId
@@ -461,7 +489,7 @@ const buildManifest = (classData, state) => {
   }
 
   manifest.push(...buildRelicOverlayLayer(state.relicOverlayId, state.gender));
-  manifest.push(...buildAnimLibLayers(state.gender));
+  manifest.push(...buildAnimLibLayers(state.gender, state.animation));
 
   // If a weapon with a known stance is equipped, add its animation file as an
   // animlib layer so AnimStatique03-Boucle-{typeId} and AnimHit-{typeId} resolve.
@@ -858,20 +886,14 @@ function CharacterCreator() {
     img.src = entry.imageUrl;
   }, [auraCatalogById, state.auraLightsId]);
 
-  // Load XPS catalog once on mount
-  useEffect(() => {
-    if (xpsDataRef.current) return;
-    fetch(ccAsset('assets/xps_catalog.json'))
-      .then(r => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        return r.json();
-      })
-      .then(data => {
-        xpsDataRef.current = data;
-        setXpsReady(true);
-
-      })
-      .catch(err => console.warn('[CC] Failed to load XPS catalog:', err));
+  const loadXpsCatalog = useCallback(async () => {
+    if (xpsDataRef.current) return xpsDataRef.current;
+    const response = await fetch(ccAsset('assets/xps_catalog.json'));
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    xpsDataRef.current = data;
+    setXpsReady(true);
+    return data;
   }, []);
 
   // Resolve aura payloads in priority order: ANM -> XPS -> fallback.
@@ -913,10 +935,12 @@ function CharacterCreator() {
       }
 
       const particleId = entry.particleId != null ? String(entry.particleId) : null;
-      const xpsData = particleId ? xpsDataRef.current?.[particleId] : null;
-      if (!particleId || !xpsData || !window.XpsParticleSystem) return;
+      if (!particleId || !window.XpsParticleSystem) return;
 
       try {
+        const catalog = await loadXpsCatalog();
+        const xpsData = catalog?.[particleId];
+        if (!xpsData) return;
         const candidates = buildXpsTextureCandidates(particleId, xpsData);
         const loaded = await loadFirstImage(candidates);
         setIfCurrent(() => {
@@ -938,7 +962,7 @@ function CharacterCreator() {
         xpsRendererRef.current = null;
       }
     };
-  }, [auraCatalogById, state.auraLightsId, xpsReady]);
+  }, [auraCatalogById, state.auraLightsId, xpsReady, loadXpsCatalog]);
 
 
   const activeClass = CLASSES.find(c => c.id === state.classId) || CLASSES[0];
@@ -1130,7 +1154,7 @@ function CharacterCreator() {
     engine.reload(buildManifest(activeClass, state))
       .then(() => syncColors())
       .catch(err => console.error('[CC] reload failed:', err));
-  }, [activeClass, state.outfitId, state.hairStyleId, state.sharedCostumeId, state.hideHelmet, state.relicOverlayId, state.gender, state.classId, state.equipment]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [activeClass, state.outfitId, state.hairStyleId, state.sharedCostumeId, state.hideHelmet, state.relicOverlayId, state.gender, state.classId, state.equipment, state.animation]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const syncColors = useCallback(() => {
     const engine = engineRef.current;
