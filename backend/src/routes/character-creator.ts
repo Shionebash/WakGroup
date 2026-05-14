@@ -96,6 +96,45 @@ function readJsonFile<T>(filePath: string): T {
     return JSON.parse(fs.readFileSync(filePath, 'utf-8')) as T;
 }
 
+function getVisualEquipmentKey(item: CharacterCreatorEquipmentItem): string {
+    return [
+        item.slot,
+        item.gfxId,
+        item.femaleGfxId ?? item.gfxId,
+    ].join(':');
+}
+
+function preferVisualEquipmentItem(
+    current: CharacterCreatorEquipmentItem,
+    candidate: CharacterCreatorEquipmentItem,
+): CharacterCreatorEquipmentItem {
+    if (candidate.rarity !== current.rarity) {
+        return candidate.rarity < current.rarity ? candidate : current;
+    }
+
+    if (candidate.level !== current.level) {
+        return candidate.level < current.level ? candidate : current;
+    }
+
+    return candidate.id < current.id ? candidate : current;
+}
+
+function dedupeVisualEquipmentItems(items: CharacterCreatorEquipmentItem[]): CharacterCreatorEquipmentItem[] {
+    const byVisual = new Map<string, CharacterCreatorEquipmentItem>();
+
+    for (const item of items) {
+        const key = getVisualEquipmentKey(item);
+        const current = byVisual.get(key);
+        byVisual.set(key, current ? preferVisualEquipmentItem(current, item) : item);
+    }
+
+    return Array.from(byVisual.values()).sort((a, b) => {
+        const nameCompare = (a.title.es || a.title.en || '').localeCompare(b.title.es || b.title.en || '', 'es');
+        if (nameCompare !== 0) return nameCompare;
+        return a.id - b.id;
+    });
+}
+
 function loadCharacterCreatorEquipmentData() {
     try {
         const visualCatalogPath = path.join(__dirname, '../../assets/character-creator/assets/equipment_catalog.json');
@@ -141,7 +180,7 @@ function loadCharacterCreatorEquipmentData() {
                     })
                     .filter((item): item is CharacterCreatorEquipmentItem => Boolean(item));
 
-                return [slot, items];
+                return [slot, dedupeVisualEquipmentItems(items)];
             }),
         );
 
