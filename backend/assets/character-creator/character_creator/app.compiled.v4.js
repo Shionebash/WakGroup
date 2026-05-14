@@ -7,6 +7,18 @@ const CC_ASSET_BASE = window.CC_ASSET_BASE || "/assets/character-creator";
 const CC_API_BASE = window.CC_API_BASE || window.location.origin;
 const ccAsset = (relativePath) => `${CC_ASSET_BASE}/${String(relativePath).replace(/^\/+/, "")}`;
 const apiAsset = (relativePath) => `${CC_API_BASE}/${String(relativePath).replace(/^\/+/, "")}`;
+const getParentOrigin = () => {
+  try {
+    const fromQuery = new URLSearchParams(window.location.search).get("parentOrigin");
+    if (fromQuery) return new URL(fromQuery).origin;
+  } catch (err) {
+  }
+  try {
+    return new URL(document.referrer).origin;
+  } catch (err) {
+    return "*";
+  }
+};
 const SUPPORTED_LANGUAGES = /* @__PURE__ */ new Set(["es", "en", "fr", "pt"]);
 const normalizeLanguage = (language) => {
   const raw = String(language || "").toLowerCase();
@@ -129,6 +141,8 @@ const CC_COPY = {
     none: "Ninguno",
     searchByName: "Buscar por nombre...",
     loading: "Cargando...",
+    preparingCharacter: "Preparando apariencia...",
+    applyingAppearance: "Aplicando apariencia...",
     noResults: "Sin resultados",
     preparingPng: "Preparando PNG...",
     pngSaved: "PNG guardado.",
@@ -231,6 +245,8 @@ const CC_COPY = {
     none: "None",
     searchByName: "Search by name...",
     loading: "Loading...",
+    preparingCharacter: "Preparing appearance...",
+    applyingAppearance: "Applying appearance...",
     noResults: "No results",
     preparingPng: "Preparing PNG...",
     pngSaved: "PNG saved.",
@@ -333,6 +349,8 @@ const CC_COPY = {
     none: "Aucun",
     searchByName: "Rechercher par nom...",
     loading: "Chargement...",
+    preparingCharacter: "Preparation de l apparence...",
+    applyingAppearance: "Application de l apparence...",
     noResults: "Aucun resultat",
     preparingPng: "Preparation du PNG...",
     pngSaved: "PNG enregistre.",
@@ -435,6 +453,8 @@ const CC_COPY = {
     none: "Nenhum",
     searchByName: "Buscar por nome...",
     loading: "Carregando...",
+    preparingCharacter: "Preparando aparencia...",
+    applyingAppearance: "Aplicando aparencia...",
     noResults: "Sem resultados",
     preparingPng: "Preparando PNG...",
     pngSaved: "PNG salvo.",
@@ -917,6 +937,8 @@ function CharacterCreator() {
   const [paletteImportText, setPaletteImportText] = useState("");
   const [paletteStatus, setPaletteStatus] = useState("");
   const [saveStatus, setSaveStatus] = useState("");
+  const [stageLoading, setStageLoading] = useState(true);
+  const [stageLoadingLabel, setStageLoadingLabel] = useState("preparing");
   const [pngDefaultPalettes, setPngDefaultPalettes] = useState(null);
   const set = useCallback((patch) => setState((s) => ({ ...s, ...patch })), []);
   const canvasRef = useRef(null);
@@ -932,6 +954,7 @@ function CharacterCreator() {
   const rotationRef = useRef(rotation);
   const auraCatalogRef = useRef(auraCatalog);
   const auraLoadVersionRef = useRef(0);
+  const stageLoadingRef = useRef(true);
   useEffect(() => {
     stateRef.current = state;
   }, [state]);
@@ -942,9 +965,14 @@ function CharacterCreator() {
     auraCatalogRef.current = auraCatalog;
   }, [auraCatalog]);
   useEffect(() => {
+    stageLoadingRef.current = stageLoading;
+  }, [stageLoading]);
+  useEffect(() => {
     const onMessage = (event) => {
       const message = event.data || {};
       if (message.type === "wakgroup:appearance-load" && message.appearance) {
+        setStageLoading(true);
+        setStageLoadingLabel("appearance");
         setState((current) => ({ ...current, ...message.appearance }));
         if (typeof message.appearance.rotation === "number") setRotation(message.appearance.rotation);
         setSaveStatus(ccText(normalizeLanguage(message.language || language), "appearanceLoaded"));
@@ -957,7 +985,7 @@ function CharacterCreator() {
       }
     };
     window.addEventListener("message", onMessage);
-    window.parent?.postMessage({ type: "wakgroup:creator-ready" }, window.location.origin);
+    window.parent?.postMessage({ type: "wakgroup:creator-ready" }, getParentOrigin());
     return () => window.removeEventListener("message", onMessage);
   }, []);
   const saveToWakGroup = useCallback(() => {
@@ -968,7 +996,7 @@ function CharacterCreator() {
         rotation: rotationRef.current,
         savedAt: (/* @__PURE__ */ new Date()).toISOString()
       }
-    }, window.location.origin);
+    }, getParentOrigin());
     setSaveStatus(ccText(language, "savingAppearance"));
   }, []);
   useEffect(() => {
@@ -1126,12 +1154,18 @@ function CharacterCreator() {
     ro.observe(canvas);
     const engine = new window.AnmEngine(canvas);
     engineRef.current = engine;
+    setStageLoading(true);
+    setStageLoadingLabel("preparing");
     engine.load(buildManifest(activeClass, state)).then(() => {
       syncColors();
       startTsRef.current = null;
       const FRAME_INTERVAL_MS = 1e3 / 30;
       let lastFrameTs = 0;
       const loop = (ts) => {
+        if (stageLoadingRef.current) {
+          rafRef.current = requestAnimationFrame(loop);
+          return;
+        }
         if (document.hidden) {
           rafRef.current = requestAnimationFrame(loop);
           return;
@@ -1231,6 +1265,7 @@ function CharacterCreator() {
         }
         rafRef.current = requestAnimationFrame(loop);
       };
+      requestAnimationFrame(() => setStageLoading(false));
       rafRef.current = requestAnimationFrame(loop);
     }).catch((err) => {
       console.error("[CC] AnmEngine load failed:", err);
@@ -1251,7 +1286,16 @@ function CharacterCreator() {
     }
     const engine = engineRef.current;
     if (!engine) return;
-    engine.reload(buildManifest(activeClass, state)).then(() => syncColors()).catch((err) => console.error("[CC] reload failed:", err));
+    setStageLoading(true);
+    setStageLoadingLabel("appearance");
+    engine.reload(buildManifest(activeClass, state)).then(() => {
+      syncColors();
+      startTsRef.current = null;
+      requestAnimationFrame(() => setStageLoading(false));
+    }).catch((err) => {
+      console.error("[CC] reload failed:", err);
+      setStageLoading(false);
+    });
   }, [activeClass, state.outfitId, state.hairStyleId, state.sharedCostumeId, state.hideHelmet, state.relicOverlayId, state.gender, state.classId, state.equipment, state.animation]);
   const syncColors = useCallback(() => {
     const engine = engineRef.current;
@@ -1834,9 +1878,9 @@ function CharacterCreator() {
     {
       ref: canvasRef,
       id: "characterCanvas",
-      className: "cc-character-canvas"
+      className: "cc-character-canvas" + (stageLoading ? " is-loading" : "")
     }
-  )), /* @__PURE__ */ React.createElement("div", { className: "cc-stage-controls" }, /* @__PURE__ */ React.createElement("button", { className: "btn-icon", onClick: () => rotateBy(45), title: copy.rotateLeft }, /* @__PURE__ */ React.createElement(Icon, { name: "left", style: { width: 16, height: 16 } })), /* @__PURE__ */ React.createElement("button", { className: "btn-icon", onClick: resetRotation, title: copy.resetRotation }, /* @__PURE__ */ React.createElement(Icon, { name: "rotate", style: { width: 15, height: 15 } })), /* @__PURE__ */ React.createElement("span", { className: "cc-rotation-display" }, Math.round(rotNorm), "\xB0"), /* @__PURE__ */ React.createElement("button", { className: "btn-icon", onClick: () => rotateBy(-45), title: copy.rotateRight }, /* @__PURE__ */ React.createElement(Icon, { name: "right", style: { width: 16, height: 16 } }))), /* @__PURE__ */ React.createElement("div", { className: "cc-bg-switcher" }, BG_OPTIONS.map((b) => /* @__PURE__ */ React.createElement(
+  ), stageLoading && /* @__PURE__ */ React.createElement("div", { className: "cc-character-loading", "aria-live": "polite" }, /* @__PURE__ */ React.createElement("div", { className: "cc-character-silhouette" }), /* @__PURE__ */ React.createElement("span", null, stageLoadingLabel === "appearance" ? copy.applyingAppearance : copy.preparingCharacter))), /* @__PURE__ */ React.createElement("div", { className: "cc-stage-controls" }, /* @__PURE__ */ React.createElement("button", { className: "btn-icon", onClick: () => rotateBy(45), title: copy.rotateLeft }, /* @__PURE__ */ React.createElement(Icon, { name: "left", style: { width: 16, height: 16 } })), /* @__PURE__ */ React.createElement("button", { className: "btn-icon", onClick: resetRotation, title: copy.resetRotation }, /* @__PURE__ */ React.createElement(Icon, { name: "rotate", style: { width: 15, height: 15 } })), /* @__PURE__ */ React.createElement("span", { className: "cc-rotation-display" }, Math.round(rotNorm), "\xB0"), /* @__PURE__ */ React.createElement("button", { className: "btn-icon", onClick: () => rotateBy(-45), title: copy.rotateRight }, /* @__PURE__ */ React.createElement(Icon, { name: "right", style: { width: 16, height: 16 } }))), /* @__PURE__ */ React.createElement("div", { className: "cc-bg-switcher" }, BG_OPTIONS.map((b) => /* @__PURE__ */ React.createElement(
     "button",
     {
       key: b.id,

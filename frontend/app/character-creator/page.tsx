@@ -29,6 +29,7 @@ export default function CharacterCreatorPage() {
     const [loadingChars, setLoadingChars] = useState(false);
     const [saving, setSaving] = useState(false);
     const [ready, setReady] = useState(false);
+    const [clientOrigin, setClientOrigin] = useState('');
 
     const selectedCharacter = useMemo(
         () => characters.find((item) => item.id === selectedCharacterId) || null,
@@ -75,6 +76,10 @@ export default function CharacterCreatorPage() {
     useEffect(() => {
         fetchCharacters();
     }, [fetchCharacters]);
+
+    useEffect(() => {
+        setClientOrigin(window.location.origin);
+    }, []);
 
     useEffect(() => {
         if (ready) sendAppearanceToFrame(selectedCharacter);
@@ -141,8 +146,15 @@ export default function CharacterCreatorPage() {
     }, [ready, sendConfigToFrame]);
 
     const iframeSrc = useMemo(
-        () => `${API_URL}/assets/character-creator/index.html?v=wakgroup-creator-7&lang=${encodeURIComponent(language)}`,
-        [language],
+        () => {
+            const params = new URLSearchParams({
+                v: 'wakgroup-creator-8',
+                lang: language,
+            });
+            if (clientOrigin) params.set('parentOrigin', clientOrigin);
+            return `${API_URL}/assets/character-creator/index.html?${params.toString()}`;
+        },
+        [clientOrigin, language],
     );
 
     useEffect(() => {
@@ -193,13 +205,17 @@ export default function CharacterCreatorPage() {
 
             <section className="creator-frame-shell">
                 {saving && <div className="creator-save-badge">Guardando...</div>}
-                <iframe
-                    ref={iframeRef}
-                    className="creator-frame"
-                    src={iframeSrc}
-                    title="Creador visual WakGroup"
-                    allow="clipboard-write"
-                />
+                {clientOrigin ? (
+                    <iframe
+                        ref={iframeRef}
+                        className="creator-frame"
+                        src={iframeSrc}
+                        title="Creador visual WakGroup"
+                        allow="clipboard-write"
+                    />
+                ) : (
+                    <div className="creator-frame" />
+                )}
             </section>
         </div>
     );

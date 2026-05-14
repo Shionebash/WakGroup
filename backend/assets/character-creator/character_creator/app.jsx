@@ -10,6 +10,19 @@ const CC_ASSET_BASE = window.CC_ASSET_BASE || '/assets/character-creator';
 const CC_API_BASE = window.CC_API_BASE || window.location.origin;
 const ccAsset = (relativePath) => `${CC_ASSET_BASE}/${String(relativePath).replace(/^\/+/, '')}`;
 const apiAsset = (relativePath) => `${CC_API_BASE}/${String(relativePath).replace(/^\/+/, '')}`;
+const getParentOrigin = () => {
+  try {
+    const fromQuery = new URLSearchParams(window.location.search).get('parentOrigin');
+    if (fromQuery) return new URL(fromQuery).origin;
+  } catch (err) {
+    // Fall back to document.referrer below.
+  }
+  try {
+    return new URL(document.referrer).origin;
+  } catch (err) {
+    return '*';
+  }
+};
 
 const SUPPORTED_LANGUAGES = new Set(['es', 'en', 'fr', 'pt']);
 const normalizeLanguage = (language) => {
@@ -78,7 +91,7 @@ const CC_COPY = {
     channel1: 'Canal 1 - Tejido base', channel2: 'Canal 2 - Secundario', channel3: 'Canal 3 - Metalico', channel4: 'Canal 4 - Detalle A', channel5: 'Canal 5 - Detalle B', channel6: 'Canal 6 - Sombra',
     auras: 'Auras', equipmentAuras: 'Auras de equipo', noAura: 'Ninguna', saveAppearance: 'Guardar apariencia',
     wardrobeModal: 'Vestidor', wardrobeOf: 'Vestimenta de', closeWardrobe: 'Cerrar vestidor', catalog: 'catalogo', searchCostume: 'Buscar traje...', externalNoCostume: 'Sin traje externo',
-    visualEquipment: 'Equipamiento visual', visual: 'Visual', equipment: 'Equipamiento', none: 'Ninguno', searchByName: 'Buscar por nombre...', loading: 'Cargando...', noResults: 'Sin resultados',
+    visualEquipment: 'Equipamiento visual', visual: 'Visual', equipment: 'Equipamiento', none: 'Ninguno', searchByName: 'Buscar por nombre...', loading: 'Cargando...', preparingCharacter: 'Preparando apariencia...', applyingAppearance: 'Aplicando apariencia...', noResults: 'Sin resultados',
     preparingPng: 'Preparando PNG...', pngSaved: 'PNG guardado.', noCharacterExport: 'No hay personaje para exportar.', pngCreateError: 'No se pudo crear el PNG.', pngExportError: 'No se pudo exportar el PNG.',
     appearanceLoaded: 'Apariencia cargada desde WakGroup.', appearanceSaved: 'Apariencia guardada.', appearanceSaveError: 'No se pudo guardar la apariencia.', savingAppearance: 'Guardando apariencia...',
     element_fire: 'Fuego', element_water: 'Agua', element_earth: 'Tierra', element_air: 'Aire',
@@ -112,7 +125,7 @@ const CC_COPY = {
     channel1: 'Channel 1 - Base fabric', channel2: 'Channel 2 - Secondary', channel3: 'Channel 3 - Metal', channel4: 'Channel 4 - Detail A', channel5: 'Channel 5 - Detail B', channel6: 'Channel 6 - Shadow',
     auras: 'Auras', equipmentAuras: 'Equipment auras', noAura: 'None', saveAppearance: 'Save appearance',
     wardrobeModal: 'Wardrobe', wardrobeOf: 'Wardrobe for', closeWardrobe: 'Close wardrobe', catalog: 'catalog', searchCostume: 'Search costume...', externalNoCostume: 'No external costume',
-    visualEquipment: 'Visual equipment', visual: 'Visual', equipment: 'Equipment', none: 'None', searchByName: 'Search by name...', loading: 'Loading...', noResults: 'No results',
+    visualEquipment: 'Visual equipment', visual: 'Visual', equipment: 'Equipment', none: 'None', searchByName: 'Search by name...', loading: 'Loading...', preparingCharacter: 'Preparing appearance...', applyingAppearance: 'Applying appearance...', noResults: 'No results',
     preparingPng: 'Preparing PNG...', pngSaved: 'PNG saved.', noCharacterExport: 'No character to export.', pngCreateError: 'Could not create PNG.', pngExportError: 'Could not export PNG.',
     appearanceLoaded: 'Appearance loaded from WakGroup.', appearanceSaved: 'Appearance saved.', appearanceSaveError: 'Could not save appearance.', savingAppearance: 'Saving appearance...',
     element_fire: 'Fire', element_water: 'Water', element_earth: 'Earth', element_air: 'Air',
@@ -146,7 +159,7 @@ const CC_COPY = {
     channel1: 'Canal 1 - Tissu base', channel2: 'Canal 2 - Secondaire', channel3: 'Canal 3 - Metal', channel4: 'Canal 4 - Detail A', channel5: 'Canal 5 - Detail B', channel6: 'Canal 6 - Ombre',
     auras: 'Auras', equipmentAuras: 'Auras d equipement', noAura: 'Aucune', saveAppearance: 'Enregistrer apparence',
     wardrobeModal: 'Vestiaire', wardrobeOf: 'Tenue de', closeWardrobe: 'Fermer le vestiaire', catalog: 'catalogue', searchCostume: 'Rechercher costume...', externalNoCostume: 'Sans costume externe',
-    visualEquipment: 'Equipement visuel', visual: 'Visuel', equipment: 'Equipement', none: 'Aucun', searchByName: 'Rechercher par nom...', loading: 'Chargement...', noResults: 'Aucun resultat',
+    visualEquipment: 'Equipement visuel', visual: 'Visuel', equipment: 'Equipement', none: 'Aucun', searchByName: 'Rechercher par nom...', loading: 'Chargement...', preparingCharacter: 'Preparation de l apparence...', applyingAppearance: 'Application de l apparence...', noResults: 'Aucun resultat',
     preparingPng: 'Preparation du PNG...', pngSaved: 'PNG enregistre.', noCharacterExport: 'Aucun personnage a exporter.', pngCreateError: 'Impossible de creer le PNG.', pngExportError: 'Impossible d exporter le PNG.',
     appearanceLoaded: 'Apparence chargee depuis WakGroup.', appearanceSaved: 'Apparence enregistree.', appearanceSaveError: 'Impossible d enregistrer l apparence.', savingAppearance: 'Enregistrement...',
     element_fire: 'Feu', element_water: 'Eau', element_earth: 'Terre', element_air: 'Air',
@@ -180,7 +193,7 @@ const CC_COPY = {
     channel1: 'Canal 1 - Tecido base', channel2: 'Canal 2 - Secundario', channel3: 'Canal 3 - Metal', channel4: 'Canal 4 - Detalhe A', channel5: 'Canal 5 - Detalhe B', channel6: 'Canal 6 - Sombra',
     auras: 'Auras', equipmentAuras: 'Auras de equipamento', noAura: 'Nenhuma', saveAppearance: 'Salvar aparencia',
     wardrobeModal: 'Guarda-roupa', wardrobeOf: 'Vestuário de', closeWardrobe: 'Fechar guarda-roupa', catalog: 'catalogo', searchCostume: 'Buscar traje...', externalNoCostume: 'Sem traje externo',
-    visualEquipment: 'Equipamento visual', visual: 'Visual', equipment: 'Equipamento', none: 'Nenhum', searchByName: 'Buscar por nome...', loading: 'Carregando...', noResults: 'Sem resultados',
+    visualEquipment: 'Equipamento visual', visual: 'Visual', equipment: 'Equipamento', none: 'Nenhum', searchByName: 'Buscar por nome...', loading: 'Carregando...', preparingCharacter: 'Preparando aparencia...', applyingAppearance: 'Aplicando aparencia...', noResults: 'Sem resultados',
     preparingPng: 'Preparando PNG...', pngSaved: 'PNG salvo.', noCharacterExport: 'Nao ha personagem para exportar.', pngCreateError: 'Nao foi possivel criar o PNG.', pngExportError: 'Nao foi possivel exportar o PNG.',
     appearanceLoaded: 'Aparencia carregada do WakGroup.', appearanceSaved: 'Aparencia salva.', appearanceSaveError: 'Nao foi possivel salvar a aparencia.', savingAppearance: 'Salvando aparencia...',
     element_fire: 'Fogo', element_water: 'Agua', element_earth: 'Terra', element_air: 'Ar',
@@ -761,6 +774,8 @@ function CharacterCreator() {
   const [paletteImportText, setPaletteImportText] = useState('');
   const [paletteStatus, setPaletteStatus] = useState('');
   const [saveStatus, setSaveStatus] = useState('');
+  const [stageLoading, setStageLoading] = useState(true);
+  const [stageLoadingLabel, setStageLoadingLabel] = useState('preparing');
   const [pngDefaultPalettes, setPngDefaultPalettes] = useState(null);
   const set = useCallback((patch) => setState(s => ({ ...s, ...patch })), []);
 
@@ -777,14 +792,18 @@ function CharacterCreator() {
   const rotationRef = useRef(rotation);
   const auraCatalogRef = useRef(auraCatalog);
   const auraLoadVersionRef = useRef(0);
+  const stageLoadingRef = useRef(true);
   useEffect(() => { stateRef.current = state; }, [state]);
   useEffect(() => { rotationRef.current = rotation; }, [rotation]);
   useEffect(() => { auraCatalogRef.current = auraCatalog; }, [auraCatalog]);
+  useEffect(() => { stageLoadingRef.current = stageLoading; }, [stageLoading]);
 
   useEffect(() => {
     const onMessage = (event) => {
       const message = event.data || {};
       if (message.type === 'wakgroup:appearance-load' && message.appearance) {
+        setStageLoading(true);
+        setStageLoadingLabel('appearance');
         setState(current => ({ ...current, ...message.appearance }));
         if (typeof message.appearance.rotation === 'number') setRotation(message.appearance.rotation);
         setSaveStatus(ccText(normalizeLanguage(message.language || language), 'appearanceLoaded'));
@@ -797,7 +816,7 @@ function CharacterCreator() {
       }
     };
     window.addEventListener('message', onMessage);
-    window.parent?.postMessage({ type: 'wakgroup:creator-ready' }, window.location.origin);
+    window.parent?.postMessage({ type: 'wakgroup:creator-ready' }, getParentOrigin());
     return () => window.removeEventListener('message', onMessage);
   }, []);
 
@@ -809,7 +828,7 @@ function CharacterCreator() {
         rotation: rotationRef.current,
         savedAt: new Date().toISOString(),
       },
-    }, window.location.origin);
+    }, getParentOrigin());
     setSaveStatus(ccText(language, 'savingAppearance'));
   }, []);
 
@@ -992,6 +1011,8 @@ function CharacterCreator() {
     const engine = new window.AnmEngine(canvas);
     engineRef.current = engine;
 
+    setStageLoading(true);
+    setStageLoadingLabel('preparing');
     engine.load(buildManifest(activeClass, state)).then(() => {
       syncColors();
       startTsRef.current = null;
@@ -1001,6 +1022,10 @@ function CharacterCreator() {
       let lastFrameTs = 0;
       const loop = (ts) => {
         try {
+        if (stageLoadingRef.current) {
+          rafRef.current = requestAnimationFrame(loop);
+          return;
+        }
         // Auto-pause when document hidden â€” browsers usually halt rAF while
         // the tab is in the background, but explicit short-circuit keeps
         // the state stable across edge cases (e.g. occluded windows).
@@ -1130,6 +1155,7 @@ function CharacterCreator() {
           rafRef.current = requestAnimationFrame(loop);
         }
       };
+      requestAnimationFrame(() => setStageLoading(false));
       rafRef.current = requestAnimationFrame(loop);
     }).catch(err => {
       console.error('[CC] AnmEngine load failed:', err);
@@ -1151,9 +1177,18 @@ function CharacterCreator() {
     if (!didMountRef.current) { didMountRef.current = true; return; }
     const engine = engineRef.current;
     if (!engine) return;
+    setStageLoading(true);
+    setStageLoadingLabel('appearance');
     engine.reload(buildManifest(activeClass, state))
-      .then(() => syncColors())
-      .catch(err => console.error('[CC] reload failed:', err));
+      .then(() => {
+        syncColors();
+        startTsRef.current = null;
+        requestAnimationFrame(() => setStageLoading(false));
+      })
+      .catch(err => {
+        console.error('[CC] reload failed:', err);
+        setStageLoading(false);
+      });
   }, [activeClass, state.outfitId, state.hairStyleId, state.sharedCostumeId, state.hideHelmet, state.relicOverlayId, state.gender, state.classId, state.equipment, state.animation]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const syncColors = useCallback(() => {
@@ -1871,8 +1906,14 @@ function CharacterCreator() {
                   <canvas
                     ref={canvasRef}
                     id="characterCanvas"
-                    className="cc-character-canvas"
+                    className={'cc-character-canvas' + (stageLoading ? ' is-loading' : '')}
                   />
+                  {stageLoading && (
+                    <div className="cc-character-loading" aria-live="polite">
+                      <div className="cc-character-silhouette" />
+                      <span>{stageLoadingLabel === 'appearance' ? copy.applyingAppearance : copy.preparingCharacter}</span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="cc-stage-controls">
