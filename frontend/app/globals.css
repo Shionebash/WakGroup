@@ -3027,7 +3027,8 @@ h6 {
     }
 
     .creator-frame {
-        height: calc(100dvh - 72px - 58px - env(safe-area-inset-bottom, 0px));
+        /* navbar≈60 + page-pad=8 + toolbar≈46 + gap=6 + bottom-nav≈55 = 175px */
+        height: calc(100dvh - 175px - env(safe-area-inset-bottom, 0px));
         min-height: 480px;
     }
 
