@@ -186,7 +186,7 @@ export default function CharacterCreatorPage() {
                                     label: `${character.name} - Nv.${character.level}`,
                                 }))}
                             />
-                            <Link href="/profile" className="btn btn-secondary">Perfil</Link>
+                            <Link href="/profile" className="btn btn-secondary creator-profile-btn">Perfil</Link>
                         </>
                     ) : (
                         <Link href="/profile" className="btn btn-primary">Iniciar sesión para guardar</Link>
