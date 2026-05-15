@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { DM_Sans } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/lib/auth-context';
 import { ChatProvider } from '@/lib/chat-context';
@@ -9,6 +10,13 @@ import ToastContainer from '@/components/ToastContainer';
 import FloatingChatBar from '@/components/FloatingChatBar';
 import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar';
 import SplashScreen from '@/components/SplashScreen';
+import BottomNav from '@/components/BottomNav';
+
+const dmSans = DM_Sans({
+    subsets: ['latin'],
+    weight: ['300', '400', '500', '600', '700'],
+    display: 'swap',
+});
 
 const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL ||
@@ -53,7 +61,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="es" style={{ backgroundColor: '#1a1410' }}>
-            <body style={{ backgroundColor: '#1a1410' }}>
+            <body className={dmSans.className} style={{ backgroundColor: '#1a1410' }}>
                 <SplashScreen />
                 <ServiceWorkerRegistrar />
                 <AuthProvider>
@@ -66,6 +74,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             <Footer />
                             <ToastContainer />
                             <FloatingChatBar />
+                            <BottomNav />
                         </ChatProvider>
                     </LanguageProvider>
                 </AuthProvider>

@@ -8,6 +8,7 @@ import CustomSelect from '@/components/CustomSelect';
 import GroupCard from '@/components/GroupCard';
 import GroupDetailModal from '@/components/GroupDetailModal';
 import CreateGroupModal from '@/components/CreateGroupModal';
+import MobileFilterSheet from '@/components/MobileFilterSheet';
 import { GROUP_LANGUAGE_OPTIONS, getGroupLanguageLabel } from '@/lib/group-languages';
 import { DISCORD_INVITE_URL } from '@/lib/discord';
 
@@ -28,6 +29,7 @@ export default function HomePage() {
     const [filterStasis, setFilterStasis] = useState<number | ''>('');
     const [filterBand, setFilterBand] = useState<number | ''>('');
     const [filterLanguage, setFilterLanguage] = useState('');
+    const [showMobileFilters, setShowMobileFilters] = useState(false);
 
     const fetchGroups = useCallback(async () => {
         setLoading(true);
@@ -102,6 +104,31 @@ export default function HomePage() {
                         <p className="filters-subtitle">{t('home.searchPlaceholder', language)}</p>
                     </div>
                     <span className="results-chip">{filtered.length} {t('nav.groups', language).toLowerCase()}</span>
+                </div>
+
+                {/* Mobile: search bar + filter trigger button */}
+                <div className="mobile-filter-trigger">
+                    <div className="search-bar filter-control" style={{ flex: 1 }}>
+                        <span className="search-icon">🔍</span>
+                        <input
+                            className="search-input"
+                            placeholder={t('home.searchPlaceholder', language)}
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </div>
+                    <button
+                        className="btn btn-secondary press-fx"
+                        style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 6 }}
+                        onClick={() => setShowMobileFilters(true)}
+                    >
+                        🎛️
+                        {(filterServer || filterStasis || filterBand || filterLanguage) && (
+                            <span className="chip chip-green" style={{ fontSize: 10, padding: '2px 7px' }}>
+                                {[filterServer, filterStasis, filterBand, filterLanguage].filter(Boolean).length}
+                            </span>
+                        )}
+                    </button>
                 </div>
 
                 <div className="filters-bar filters-grid">
@@ -182,6 +209,15 @@ export default function HomePage() {
             )}
             {showCreate && (
                 <CreateGroupModal onClose={() => setShowCreate(false)} onCreated={fetchGroups} />
+            )}
+            {showMobileFilters && (
+                <MobileFilterSheet
+                    onClose={() => setShowMobileFilters(false)}
+                    filterServer={filterServer} setFilterServer={setFilterServer}
+                    filterStasis={filterStasis} setFilterStasis={setFilterStasis}
+                    filterLanguage={filterLanguage} setFilterLanguage={setFilterLanguage}
+                    filterBand={filterBand} setFilterBand={setFilterBand}
+                />
             )}
         </div>
     );
