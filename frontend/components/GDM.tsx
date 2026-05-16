@@ -4,6 +4,8 @@ import { useAuth } from '@/lib/auth-context';
 import { api } from '@/lib/api';
 import { useChat } from '@/lib/chat-context';
 import CustomSelect from '@/components/CustomSelect';
+import { useLanguage } from '@/lib/language-context';
+import { t } from '@/lib/translations';
 
 interface GroupDetailModalProps {
     groupId: string;
@@ -12,6 +14,7 @@ interface GroupDetailModalProps {
 
 export default function GroupDetailModal({ groupId, onClose }: GroupDetailModalProps) {
     const { user } = useAuth();
+    const { language } = useLanguage();
     const [group, setGroup] = useState<any>(null);
     const [characters, setCharacters] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -45,7 +48,7 @@ export default function GroupDetailModal({ groupId, onClose }: GroupDetailModalP
 
             } catch (err: any) {
                 console.error('Error detalle:', err.response?.data, err.message);
-                setError('Error al cargar grupo');
+                setError(t('group.errorLoad', language));
             } finally {
                 setLoading(false);
             }
@@ -55,7 +58,7 @@ export default function GroupDetailModal({ groupId, onClose }: GroupDetailModalP
 
     const handleApply = async () => {
         if (!selectedCharId) {
-            setError('Selecciona un personaje');
+            setError(t('group.selectCharacterError', language));
             return;
         }
 
@@ -70,7 +73,7 @@ export default function GroupDetailModal({ groupId, onClose }: GroupDetailModalP
             setMessage('¡Solicitud enviada!');
             setTimeout(() => onClose(), 1500);
         } catch (err: any) {
-            setError(err.response?.data?.error || 'Error al enviar solicitud');
+            setError(err.response?.data?.error || t('group.errorApply', language));
         } finally {
             setApplying(false);
         }
@@ -85,9 +88,9 @@ export default function GroupDetailModal({ groupId, onClose }: GroupDetailModalP
                 </div>
 
                 {loading ? (
-                    <div className="modal-body">Cargando...</div>
+                    <div className="modal-body">{t('common.loading', language)}</div>
                 ) : !group ? (
-                    <div className="modal-body">Grupo no encontrado</div>
+                    <div className="modal-body">{t('group.noGroups', language)}</div>
                 ) : (
                     <>
                         <div className="modal-body">
@@ -113,19 +116,19 @@ export default function GroupDetailModal({ groupId, onClose }: GroupDetailModalP
 
                             <div className="detail-grid">
                                 <div className="detail-item">
-                                    <span className="detail-label">Nivel Requerido:</span>
+                                    <span className="detail-label">{t('common.requiredLevel', language)}:</span>
                                     <span className="detail-value">{group.dungeon_lvl}</span>
                                 </div>
                                 <div className="detail-item">
-                                    <span className="detail-label">Stasis:</span>
+                                    <span className="detail-label">{t('common.stasis', language)}:</span>
                                     <span className="detail-value">{group.stasis}</span>
                                 </div>
                                 <div className="detail-item">
-                                    <span className="detail-label">Servidor:</span>
+                                    <span className="detail-label">{t('common.server', language)}:</span>
                                     <span className="detail-value">{group.server}</span>
                                 </div>
                                 <div className="detail-item">
-                                    <span className="detail-label">Estado:</span>
+                                    <span className="detail-label">{t('common.status', language)}:</span>
                                     <span className="detail-value">
                                         {group.status === 'open' ? '🟢 Abierto' : '🔴 Lleno'}
                                     </span>
@@ -133,11 +136,11 @@ export default function GroupDetailModal({ groupId, onClose }: GroupDetailModalP
                             </div>
 
                             <div className="detail-section">
-                                <h4>Miembros</h4>
+                                <h4>{t('common.members', language)}</h4>
                                 <div className="members-list">
 
                                     <div className="member-item">
-                                        <span className="member-label">Líder:</span>
+                                        <span className="member-label">{t('common.leader', language)}:</span>
                                         {group.leader_class_icon && (
                                             <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${group.leader_class_icon}`} alt="" className="class-icon" />
                                         )}
@@ -146,7 +149,7 @@ export default function GroupDetailModal({ groupId, onClose }: GroupDetailModalP
                                     </div>
                                     {/* Add group members here if available */}
                                     <div className="member-item">
-                                        <span className="member-label">Miembros:</span>
+                                        <span className="member-label">{t('common.members', language)}:</span>
                                         {group.member_class_icon && (
                                             <img src={group.member_class_icon} alt="" className="class-icon" />
                                         )}
@@ -161,11 +164,11 @@ export default function GroupDetailModal({ groupId, onClose }: GroupDetailModalP
 
                             {user && group.status === 'open' && (
                                 <div className="form-group">
-                                    <label>Selecciona tu personaje</label>
+                                    <label>{t('group.selectCharacter', language)}</label>
                                     <CustomSelect
                                         value={selectedCharId}
                                         onChange={e => setSelectedCharId(e)}
-                                        placeholder="Elige un personaje"
+                                        placeholder={t('group.selectCharacterPlaceholder', language)}
                                         options={characters.map(char => ({
                                             value: String(char.id),
                                             label: `${char.name} - ${char.class_name} Nv. ${char.level}`,
@@ -181,14 +184,14 @@ export default function GroupDetailModal({ groupId, onClose }: GroupDetailModalP
                                     className="btn btn-secondary"
                                     onClick={onClose}
                                 >
-                                    Cerrar
+                                    {t('common.close', language)}
                                 </button>
                                 <button
                                     className="btn btn-primary"
                                     onClick={handleApply}
                                     disabled={applying || !selectedCharId}
                                 >
-                                    {applying ? 'Enviando...' : '⚔ Solicitar Unirse'}
+                                    {applying ? t('pvp.sending', language) : `? ${t('group.apply', language)}`}
                                 </button>
                             </div>
                         )}

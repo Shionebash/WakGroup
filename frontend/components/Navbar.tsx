@@ -92,7 +92,7 @@ export default function Navbar() {
                         <div className="navbar-links">
                             <Link href="/" className="nav-link nav-link-rich">{t('nav.groups', language)}</Link>
                             <Link href="/dungeons" className="nav-link nav-link-rich">{t('nav.dungeons', language)}</Link>
-                            <Link href="/builder" className="nav-link nav-link-rich">Builder</Link>
+                            <Link href="/builder" className="nav-link nav-link-rich">{t('nav.builder', language)}</Link>
                             <Link href="/character-creator" className="nav-link nav-link-rich">{t('nav.creator', language)}</Link>
                             <Link href="/vspvp" className="nav-link nav-link-rich">{t('nav.pvp', language)}</Link>
                             <Link href="/wiki" className="nav-link nav-link-rich">{t('nav.wiki', language)}</Link>
@@ -193,7 +193,7 @@ export default function Navbar() {
                         <button
                             className={`hamburger-btn ${isMobileMenuOpen ? 'is-open' : ''}`}
                             onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-                            aria-label={isMobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+                            aria-label={isMobileMenuOpen ? t('common.closeMenu', language) : t('common.openMenu', language)}
                             aria-expanded={isMobileMenuOpen}
                         >
                             <span className="hamburger-line" />
@@ -215,8 +215,8 @@ export default function Navbar() {
             >
                 {/* Drawer header */}
                 <div className="mobile-drawer-header">
-                    <span className="mobile-drawer-title">Menú</span>
-                    <button className="mobile-drawer-close" onClick={closeMobileMenu} aria-label="Cerrar menú">✕</button>
+                    <span className="mobile-drawer-title">{t('common.menu', language)}</span>
+                    <button className="mobile-drawer-close" onClick={closeMobileMenu} aria-label={t('common.closeMenu', language)}>✕</button>
                 </div>
 
                 {/* User info */}
@@ -249,7 +249,7 @@ export default function Navbar() {
                     </Link>
                     <Link href="/builder" className="mobile-drawer-link" onClick={closeMobileMenu}>
                         <span className="mobile-drawer-link-icon">🛡️</span>
-                        Builder
+                        {t('nav.builder', language)}
                     </Link>
                     <Link href="/character-creator" className="mobile-drawer-link" onClick={closeMobileMenu}>
                         <span className="mobile-drawer-link-icon">CC</span>
@@ -276,14 +276,14 @@ export default function Navbar() {
                     {user && (
                         <Link href="/profile" className="mobile-drawer-link" onClick={closeMobileMenu}>
                             <span className="mobile-drawer-link-icon">👤</span>
-                            Perfil
+                            {t('nav.profile', language)}
                         </Link>
                     )}
                 </nav>
 
                 {/* Language selector */}
                 <div className="mobile-drawer-section">
-                    <span className="mobile-drawer-section-label">Idioma</span>
+                    <span className="mobile-drawer-section-label">{t('common.language', language)}</span>
                     <div className="mobile-drawer-langs">
                         {Object.entries(LANGUAGE_LABELS).map(([code, label]) => {
                             const current = code as Language;

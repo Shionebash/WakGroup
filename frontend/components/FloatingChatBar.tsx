@@ -2,6 +2,8 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { useChat, ChatMessage, ChatSession } from '@/lib/chat-context';
+import { useLanguage } from '@/lib/language-context';
+import { t } from '@/lib/translations';
 
 function useIsMobile() {
     const [isMobile, setIsMobile] = useState(false);
@@ -168,6 +170,7 @@ function MobileSheetPanel({
     connected: boolean;
     userId: string;
 }) {
+    const { language } = useLanguage();
     const [input, setInput] = useState('');
     const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -194,14 +197,14 @@ function MobileSheetPanel({
                     }} />
                     <span className="chat-sheet-group-name">💬 {session.groupName}</span>
                 </div>
-                <button className="chat-sheet-close-btn" onClick={onClose} aria-label="Cerrar chat">✕</button>
+                <button className="chat-sheet-close-btn" onClick={onClose} aria-label={t('chat.close', language)}>✕</button>
             </div>
 
             {/* Messages */}
             <div className="chat-sheet-messages" onClick={onFocus}>
                 {session.messages.length === 0 && (
                     <div style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: 13, marginTop: 48 }}>
-                        No hay mensajes aún. ¡Sé el primero!
+                        {t('chat.empty', language)}
                     </div>
                 )}
                 {session.messages.map((msg) => (
@@ -217,7 +220,7 @@ function MobileSheetPanel({
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
                     onFocus={onFocus}
-                    placeholder={connected ? 'Escribe un mensaje...' : 'Conectando...'}
+                    placeholder={connected ? t('chat.placeholder', language) : t('chat.connecting', language)}
                     maxLength={500}
                     disabled={!connected}
                     className="chat-sheet-input"
@@ -226,7 +229,7 @@ function MobileSheetPanel({
                     onClick={handleSend}
                     disabled={!connected || !input.trim()}
                     className="chat-sheet-send-btn"
-                    aria-label="Enviar"
+                    aria-label={t('chat.send', language)}
                 >
                     ➤
                 </button>
@@ -248,6 +251,7 @@ function ChatPanel({
     connected: boolean;
     userId: string;
 }) {
+    const { language } = useLanguage();
     const [input, setInput] = useState('');
     const bottomRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -322,10 +326,10 @@ function ChatPanel({
                     )}
                 </div>
                 <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-                    <button onClick={(e) => { e.stopPropagation(); onToggle(); }} style={headerBtn} title={session.open ? 'Minimizar' : 'Expandir'}>
+                    <button onClick={(e) => { e.stopPropagation(); onToggle(); }} style={headerBtn} title={session.open ? t('chat.minimize', language) : t('chat.expand', language)}>
                         {session.open ? '⌄' : '⌃'}
                     </button>
-                    <button onClick={(e) => { e.stopPropagation(); onClose(); }} style={headerBtn} title="Cerrar chat">
+                    <button onClick={(e) => { e.stopPropagation(); onClose(); }} style={headerBtn} title={t('chat.close', language)}>
                         ✕
                     </button>
                 </div>
@@ -340,7 +344,7 @@ function ChatPanel({
                     }}>
                         {session.messages.length === 0 && (
                             <div style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: 12, marginTop: 40 }}>
-                                No hay mensajes aún. ¡Sé el primero!
+                                {t('chat.empty', language)}
                             </div>
                         )}
                         {session.messages.map((msg) => (
@@ -360,7 +364,7 @@ function ChatPanel({
                             onChange={(e) => setInput(e.target.value)}
                             onKeyDown={handleKeyDown}
                             onFocus={onFocus}
-                            placeholder="Escribe un mensaje..."
+                            placeholder={t('chat.placeholder', language)}
                             maxLength={500}
                             disabled={!connected}
                             style={{

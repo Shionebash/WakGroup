@@ -3,16 +3,19 @@ import { useEffect, useRef, useState } from 'react';
 import { useChat } from '@/lib/chat-context';
 import { useAuth } from '@/lib/auth-context';
 import { api } from '@/lib/api';
+import { useLanguage } from '@/lib/language-context';
+import { t } from '@/lib/translations';
 
-const TYPE_LABELS: Record<string, { icon: string; label: string }> = {
-    application_received: { icon: '📨', label: 'Nueva solicitud de unión' },
-    application_accepted: { icon: '✅', label: 'Solicitud aceptada' },
-    application_rejected: { icon: '❌', label: 'Solicitud rechazada' },
-    group_message:        { icon: '💬', label: 'Mensaje en grupo' },
-};
+const TYPE_LABELS = {
+    application_received: { icon: '??', labelKey: 'notification.newApplication' },
+    application_accepted: { icon: '?', labelKey: 'notification.applicationAccepted' },
+    application_rejected: { icon: '?', labelKey: 'notification.applicationRejected' },
+    group_message:        { icon: '??', labelKey: 'notification.newMessage' },
+} as const;
 
 export default function NotificationBell() {
     const { user } = useAuth();
+    const { language } = useLanguage();
     const { notifications, unreadCount, markAllRead, refreshNotifications } = useChat();
     const [open, setOpen] = useState(false);
     const [permissionState, setPermissionState] = useState<string>('default');
@@ -54,7 +57,7 @@ export default function NotificationBell() {
             {/* Bell button */}
             <button
                 onClick={handleOpen}
-                title="Notificaciones"
+                title={t('overlay.notifications', language)}
                 style={{
                     background: 'none', border: 'none', cursor: 'pointer',
                     position: 'relative', padding: '4px 6px', borderRadius: 6,
@@ -97,7 +100,7 @@ export default function NotificationBell() {
                         borderBottom: '1px solid var(--border-color)',
                     }}>
                         <span style={{ fontWeight: 700, fontSize: 14, color: 'var(--primary-color)' }}>
-                            🔔 Notificaciones
+                            🔔 {t('overlay.notifications', language)}
                         </span>
                         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                             {permissionState !== 'granted' && permissionState !== 'denied' && (
@@ -106,21 +109,21 @@ export default function NotificationBell() {
                                     border: 'none', borderRadius: 4, fontSize: 10,
                                     padding: '3px 7px', cursor: 'pointer', fontWeight: 600,
                                 }}>
-                                    Activar avisos
+                                    {t('notification.enableAlerts', language)}
                                 </button>
                             )}
                             {permissionState === 'denied' && (
-                                <span style={{ fontSize: 10, color: 'var(--error-color)' }}>Avisos bloqueados</span>
+                                <span style={{ fontSize: 10, color: 'var(--error-color)' }}>{t('notification.alertsBlocked', language)}</span>
                             )}
                             {permissionState === 'granted' && (
-                                <span style={{ fontSize: 10, color: 'var(--success-color)' }}>✓ Avisos activos</span>
+                                <span style={{ fontSize: 10, color: 'var(--success-color)' }}>✓ {t('notification.alertsActive', language)}</span>
                             )}
                             {notifications.length > 0 && (
                                 <button onClick={markAllRead} style={{
                                     background: 'none', border: 'none',
                                     color: 'var(--text-secondary)', fontSize: 11, cursor: 'pointer',
                                 }}>
-                                    Leer todo
+                                    {t('notification.readAll', language)}
                                 </button>
                             )}
                         </div>
@@ -131,7 +134,7 @@ export default function NotificationBell() {
                         {recent.length === 0 ? (
                             <div style={{ padding: 32, textAlign: 'center', color: 'var(--text-secondary)', fontSize: 13 }}>
                                 <div style={{ fontSize: 32, marginBottom: 8 }}>🔔</div>
-                                Sin notificaciones
+                                {t('notification.empty', language)}
                             </div>
                         ) : recent.map(n => (
                             <NotifItem
@@ -149,7 +152,8 @@ export default function NotificationBell() {
 
 // ── Single notification row ────────────────────────────────────────
 function NotifItem({ notif, onAction }: { notif: any; onAction: () => void }) {
-    const meta = TYPE_LABELS[notif.type] ?? { icon: '📣', label: notif.type };
+    const { language } = useLanguage();
+    const meta = TYPE_LABELS[notif.type as keyof typeof TYPE_LABELS] ?? { icon: '!', labelKey: null };
     const payload = typeof notif.payload === 'string'
         ? JSON.parse(notif.payload) : (notif.payload ?? {});
 
@@ -179,7 +183,7 @@ function NotifItem({ notif, onAction }: { notif: any; onAction: () => void }) {
     const timeStr = (() => {
         const d = new Date(notif.created_at);
         const diff = Date.now() - d.getTime();
-        if (diff < 60_000) return 'ahora';
+        if (diff < 60_000) return t('notification.now', language);
         if (diff < 3_600_000) return `${Math.floor(diff / 60_000)}m`;
         if (diff < 86_400_000) return `${Math.floor(diff / 3_600_000)}h`;
         return d.toLocaleDateString('es');
@@ -204,7 +208,7 @@ function NotifItem({ notif, onAction }: { notif: any; onAction: () => void }) {
                     color: notif.is_read ? 'var(--text-secondary)' : 'var(--text-primary)',
                     marginBottom: 2,
                 }}>
-                    {meta.label}
+                    {meta.labelKey ? t(meta.labelKey, language) : notif.type}
                 </div>
 
                 {payload.from_username && (
@@ -221,15 +225,15 @@ function NotifItem({ notif, onAction }: { notif: any; onAction: () => void }) {
                 {isApplicationReceived && applicationId && (
                     <div style={{ display: 'flex', gap: 6, marginTop: 6 }}>
                         {done === 'accepted' ? (
-                            <span style={{ fontSize: 11, color: 'var(--success-color)', fontWeight: 600 }}>✅ Aceptado</span>
+                            <span style={{ fontSize: 11, color: 'var(--success-color)', fontWeight: 600 }}>{t('profile.accepted', language)}</span>
                         ) : done === 'rejected' ? (
-                            <span style={{ fontSize: 11, color: 'var(--error-color)', fontWeight: 600 }}>❌ Rechazado</span>
+                            <span style={{ fontSize: 11, color: 'var(--error-color)', fontWeight: 600 }}>{t('profile.rejected', language)}</span>
                         ) : (
                             <>
                                 <button
                                     onClick={() => handleAction('accepted')}
                                     disabled={!!acting}
-                                    title="Aceptar solicitud"
+                                    title={t('group.accept', language)}
                                     style={{
                                         background: acting === 'accepted' ? 'var(--success-color)' : 'rgba(76,175,80,0.15)',
                                         border: '1px solid var(--success-color)',
@@ -249,7 +253,7 @@ function NotifItem({ notif, onAction }: { notif: any; onAction: () => void }) {
                                 <button
                                     onClick={() => handleAction('rejected')}
                                     disabled={!!acting}
-                                    title="Rechazar solicitud"
+                                    title={t('group.reject', language)}
                                     style={{
                                         background: acting === 'rejected' ? 'var(--error-color)' : 'rgba(244,67,54,0.15)',
                                         border: '1px solid var(--error-color)',

@@ -10,6 +10,12 @@ type TranslationKey =
   | 'nav.login'
   | 'nav.logout'
   | 'nav.profile'
+  | 'nav.builder'
+  | 'nav.more'
+  | 'nav.moreSections'
+  | 'nav.builderDesc'
+  | 'nav.creatorDesc'
+  | 'nav.wikiDesc'
   | 'common.open'
   | 'common.closed'
   | 'common.full'
@@ -75,6 +81,15 @@ type TranslationKey =
   | 'chat.placeholder'
   | 'chat.send'
   | 'chat.open'
+  | 'chat.close'
+  | 'chat.minimize'
+  | 'chat.expand'
+  | 'chat.connecting'
+  | 'chat.placeholderEnter'
+  | 'chat.empty'
+  | 'chat.emptyWrite'
+  | 'chat.group'
+  | 'chat.connected'
   | 'overlay.notifications'
   | 'notification.newApplication'
   | 'notification.applicationAccepted'
@@ -175,6 +190,19 @@ type TranslationKey =
   | 'common.locale'
   | 'common.back'
   | 'common.close'
+  | 'common.menu'
+  | 'common.openMenu'
+  | 'common.closeMenu'
+  | 'common.filters'
+  | 'common.clear'
+  | 'common.clearAll'
+  | 'common.applyFilters'
+  | 'common.all'
+  | 'common.ready'
+  | 'common.saving'
+  | 'common.loginFailed'
+  | 'common.retryInSeconds'
+  | 'common.backHome'
   | 'home.title'
   | 'home.subtitle'
   | 'home.searchPlaceholder'
@@ -189,6 +217,10 @@ type TranslationKey =
   | 'home.emptyTitle'
   | 'home.emptyDesc'
   | 'home.emptyCta'
+  | 'home.sortGroups'
+  | 'home.sortRecent'
+  | 'home.sortStasis'
+  | 'home.sortMembers'
   | 'dungeons.title'
   | 'dungeons.subtitle'
   | 'dungeons.searchPlaceholder'
@@ -221,6 +253,55 @@ type TranslationKey =
   | 'pvp.emptyTitle'
   | 'pvp.emptyDesc'
   | 'pvp.emptyCta'
+  | 'pvp.arena'
+  | 'pvp.allModes'
+  | 'pvp.createTitle'
+  | 'pvp.titleLabel'
+  | 'pvp.titlePlaceholder'
+  | 'pvp.modeLabel'
+  | 'pvp.equipmentBandLabel'
+  | 'pvp.equipmentBandHelp'
+  | 'pvp.yourCharacter'
+  | 'pvp.creating'
+  | 'pvp.notFound'
+  | 'pvp.dragHint'
+  | 'pvp.freeSlot'
+  | 'pvp.dropHere'
+  | 'pvp.dragToChangeTeam'
+  | 'pvp.openChat'
+  | 'pvp.selectCharacterJoin'
+  | 'pvp.sending'
+  | 'pvp.applicationSent'
+  | 'pvp.delete'
+  | 'pvp.deleteConfirm'
+  | 'pvp.deleted'
+  | 'pvp.errorLoad'
+  | 'pvp.errorCreate'
+  | 'pvp.errorDelete'
+  | 'pvp.errorTeam'
+  | 'creator.eyebrow'
+  | 'creator.title'
+  | 'creator.subtitle'
+  | 'creator.loadingCharacters'
+  | 'creator.chooseCharacter'
+  | 'creator.loginToSave'
+  | 'creator.emptyTitle'
+  | 'creator.emptyBody'
+  | 'creator.createCharacter'
+  | 'creator.activeCharacter'
+  | 'creator.noCharacter'
+  | 'creator.freeView'
+  | 'creator.role'
+  | 'creator.status'
+  | 'creator.savedTitle'
+  | 'creator.savedBody'
+  | 'creator.saveErrorTitle'
+  | 'creator.saveErrorBody'
+  | 'creator.chooseToSave'
+  | 'creator.contextNote'
+  | 'creator.saving'
+  | 'creator.preparing'
+  | 'creator.iframeTitle'
   | 'wiki.confirmDelete'
   | 'wiki.toastDeleted'
   | 'wiki.errorDelete'
@@ -333,6 +414,12 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
   'nav.login': { es: '🔑 Login con Discord', en: '🔑 Login with Discord', fr: '🔑 Connexion Discord', pt: '🔑 Login com Discord' },
   'nav.logout': { es: 'Logout', en: 'Logout', fr: 'Déconnexion', pt: 'Sair' },
   'nav.profile': { es: 'Perfil', en: 'Profile', fr: 'Profil', pt: 'Perfil' },
+  'nav.builder': { es: 'Builder', en: 'Builder', fr: 'Builder', pt: 'Builder' },
+  'nav.more': { es: 'Mas', en: 'More', fr: 'Plus', pt: 'Mais' },
+  'nav.moreSections': { es: 'Mas secciones', en: 'More sections', fr: 'Plus de sections', pt: 'Mais secoes' },
+  'nav.builderDesc': { es: 'Arma tu build perfecta', en: 'Build your perfect setup', fr: 'Composez votre build ideale', pt: 'Monte sua build perfeita' },
+  'nav.creatorDesc': { es: 'Disena la apariencia de tu personaje', en: 'Design your character appearance', fr: 'Creez l apparence de votre personnage', pt: 'Desenhe a aparencia do seu personagem' },
+  'nav.wikiDesc': { es: 'Guias y estrategias', en: 'Guides and strategies', fr: 'Guides et strategies', pt: 'Guias e estrategias' },
   'common.open': { es: 'Abierto', en: 'Open', fr: 'Ouvert', pt: 'Aberto' },
   'common.closed': { es: 'Cerrado', en: 'Closed', fr: 'Fermé', pt: 'Fechado' },
   'common.loading': { es: 'Cargando...', en: 'Loading...', fr: 'Chargement...', pt: 'Carregando...' },
@@ -398,6 +485,15 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
   'chat.placeholder': { es: 'Escribe un mensaje...', en: 'Write a message...', fr: 'Écrire un message...', pt: 'Escreva uma mensagem...' },
   'chat.send': { es: 'Enviar', en: 'Send', fr: 'Envoyer', pt: 'Enviar' },
   'chat.open': { es: 'Abrir chat', en: 'Open chat', fr: 'Ouvrir le chat', pt: 'Abrir chat' },
+  'chat.close': { es: 'Cerrar chat', en: 'Close chat', fr: 'Fermer le chat', pt: 'Fechar chat' },
+  'chat.minimize': { es: 'Minimizar', en: 'Minimize', fr: 'Reduire', pt: 'Minimizar' },
+  'chat.expand': { es: 'Expandir', en: 'Expand', fr: 'Agrandir', pt: 'Expandir' },
+  'chat.connecting': { es: 'Conectando...', en: 'Connecting...', fr: 'Connexion...', pt: 'Conectando...' },
+  'chat.placeholderEnter': { es: 'Escribe un mensaje... (Enter para enviar)', en: 'Write a message... (Enter to send)', fr: 'Ecrivez un message... (Entree pour envoyer)', pt: 'Escreva uma mensagem... (Enter para enviar)' },
+  'chat.empty': { es: 'No hay mensajes aun. Se el primero!', en: 'No messages yet. Be the first!', fr: 'Aucun message pour le moment. Soyez le premier !', pt: 'Ainda nao ha mensagens. Seja o primeiro!' },
+  'chat.emptyWrite': { es: 'No hay mensajes aun. Se el primero en escribir!', en: 'No messages yet. Be the first to write!', fr: 'Aucun message pour le moment. Soyez le premier a ecrire !', pt: 'Ainda nao ha mensagens. Seja o primeiro a escrever!' },
+  'chat.group': { es: 'Chat del grupo', en: 'Group chat', fr: 'Chat du groupe', pt: 'Chat do grupo' },
+  'chat.connected': { es: 'Conectado', en: 'Connected', fr: 'Connecte', pt: 'Conectado' },
   'overlay.notifications': { es: 'Notificaciones', en: 'Notifications', fr: 'Notifications', pt: 'Notificações' },
   'notification.newApplication': { es: 'Nueva solicitud', en: 'New application', fr: 'Nouvelle demande', pt: 'Nova candidatura' },
   'notification.applicationAccepted': { es: 'Solicitud aceptada', en: 'Application accepted', fr: 'Demande acceptée', pt: 'Candidatura aceita' },
@@ -448,6 +544,10 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
   'home.emptyTitle': { es: 'Sin grupos disponibles', en: 'No groups available', fr: 'Aucun groupe disponible', pt: 'Nenhum grupo disponível' },
   'home.emptyDesc': { es: 'No hay grupos activos con estos filtros. ¡Crea el tuyo!', en: 'No active groups with these filters. Create yours!', fr: 'Aucun groupe actif avec ces filtres. Créez le vôtre !', pt: 'Não há grupos ativos com esses filtros. Crie o seu!' },
   'home.emptyCta': { es: 'Crear el primer grupo', en: 'Create the first group', fr: 'Créer le premier groupe', pt: 'Criar o primeiro grupo' },
+  'home.sortGroups': { es: 'Ordenar grupos', en: 'Sort groups', fr: 'Trier les groupes', pt: 'Ordenar grupos' },
+  'home.sortRecent': { es: 'Recientes', en: 'Recent', fr: 'Recents', pt: 'Recentes' },
+  'home.sortStasis': { es: 'Stasis', en: 'Stasis', fr: 'Stase', pt: 'Stasis' },
+  'home.sortMembers': { es: 'Miembros', en: 'Members', fr: 'Membres', pt: 'Membros' },
   'dungeons.title': { es: 'Mazmorras', en: 'Dungeons', fr: 'Donjons', pt: 'Masmorras' },
   'dungeons.subtitle': { es: 'Todas las mazmorras del mundo de los Doce', en: 'All dungeons in the World of Twelve', fr: 'Tous les donjons du Monde des Douze', pt: 'Todas as masmorras do Mundo dos Doze' },
   'dungeons.searchPlaceholder': { es: 'Buscar mazmorra...', en: 'Search dungeon...', fr: 'Rechercher un donjon...', pt: 'Buscar masmorra...' },
@@ -466,6 +566,55 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
   'pvp.emptyTitle': { es: 'Sin enfrentamientos disponibles', en: 'No matches available', fr: 'Aucun match disponible', pt: 'Nenhum confronto disponível' },
   'pvp.emptyDesc': { es: 'No hay grupos PVP activos con estos filtros. ¡Crea el tuyo!', en: 'No active PVP groups with these filters. Create yours!', fr: 'Aucun groupe PVP actif avec ces filtres. Créez le vôtre !', pt: 'Não há grupos PVP ativos com esses filtros. Crie o seu!' },
   'pvp.emptyCta': { es: 'Crear el primer enfrentamiento', en: 'Create the first match', fr: 'Créer le premier match', pt: 'Criar o primeiro confronto' },
+  'pvp.arena': { es: 'Arena PvP', en: 'PvP Arena', fr: 'Arene PvP', pt: 'Arena PvP' },
+  'pvp.allModes': { es: 'Todos', en: 'All', fr: 'Tous', pt: 'Todos' },
+  'pvp.createTitle': { es: 'Crear enfrentamiento PVP', en: 'Create PVP match', fr: 'Creer un match PVP', pt: 'Criar confronto PVP' },
+  'pvp.titleLabel': { es: 'Titulo del enfrentamiento', en: 'Match title', fr: 'Titre du match', pt: 'Titulo do confronto' },
+  'pvp.titlePlaceholder': { es: 'Ej: Busco rival serio, entrenamiento amistoso...', en: 'e.g., Serious rival wanted, friendly training...', fr: 'Ex. : Rival serieux recherche, entrainement amical...', pt: 'Ex.: Procuro rival serio, treino amistoso...' },
+  'pvp.modeLabel': { es: 'Modo PVP', en: 'PVP mode', fr: 'Mode PVP', pt: 'Modo PVP' },
+  'pvp.equipmentBandLabel': { es: 'Franja de nivel del equipamiento', en: 'Equipment level band', fr: 'Tranche de niveau d equipement', pt: 'Faixa de nivel do equipamento' },
+  'pvp.equipmentBandHelp': { es: 'Franja de nivel maximo del equipo permitido en el PVP', en: 'Maximum level band for gear allowed in PVP', fr: 'Tranche de niveau maximum de l equipement autorise en PVP', pt: 'Faixa de nivel maximo do equipamento permitido no PVP' },
+  'pvp.yourCharacter': { es: 'Tu personaje', en: 'Your character', fr: 'Votre personnage', pt: 'Seu personagem' },
+  'pvp.creating': { es: 'Creando...', en: 'Creating...', fr: 'Creation...', pt: 'Criando...' },
+  'pvp.notFound': { es: 'Enfrentamiento no encontrado', en: 'Match not found', fr: 'Match introuvable', pt: 'Confronto nao encontrado' },
+  'pvp.dragHint': { es: 'Arrastra tu personaje al equipo que deseas', en: 'Drag your character to the team you want', fr: 'Glissez votre personnage vers l equipe souhaitee', pt: 'Arraste seu personagem para a equipe desejada' },
+  'pvp.freeSlot': { es: 'Libre', en: 'Free', fr: 'Libre', pt: 'Livre' },
+  'pvp.dropHere': { es: 'Soltar aqui', en: 'Drop here', fr: 'Deposer ici', pt: 'Soltar aqui' },
+  'pvp.dragToChangeTeam': { es: 'Arrastra para cambiar de equipo', en: 'Drag to change team', fr: 'Glissez pour changer d equipe', pt: 'Arraste para trocar de equipe' },
+  'pvp.openChat': { es: 'Abrir chat del grupo', en: 'Open group chat', fr: 'Ouvrir le chat du groupe', pt: 'Abrir chat do grupo' },
+  'pvp.selectCharacterJoin': { es: 'Selecciona tu personaje para unirte', en: 'Select your character to join', fr: 'Selectionnez votre personnage pour rejoindre', pt: 'Selecione seu personagem para entrar' },
+  'pvp.sending': { es: 'Enviando...', en: 'Sending...', fr: 'Envoi...', pt: 'Enviando...' },
+  'pvp.applicationSent': { es: 'Solicitud enviada!', en: 'Application sent!', fr: 'Demande envoyee !', pt: 'Solicitacao enviada!' },
+  'pvp.delete': { es: 'Eliminar enfrentamiento', en: 'Delete match', fr: 'Supprimer le match', pt: 'Excluir confronto' },
+  'pvp.deleteConfirm': { es: 'Eliminar este enfrentamiento?', en: 'Delete this match?', fr: 'Supprimer ce match ?', pt: 'Excluir este confronto?' },
+  'pvp.deleted': { es: 'Enfrentamiento eliminado', en: 'Match deleted', fr: 'Match supprime', pt: 'Confronto excluido' },
+  'pvp.errorLoad': { es: 'Error al cargar el enfrentamiento', en: 'Error loading match', fr: 'Erreur de chargement du match', pt: 'Erro ao carregar confronto' },
+  'pvp.errorCreate': { es: 'Error al crear enfrentamiento', en: 'Error creating match', fr: 'Erreur lors de la creation du match', pt: 'Erro ao criar confronto' },
+  'pvp.errorDelete': { es: 'Error al eliminar el enfrentamiento', en: 'Error deleting match', fr: 'Erreur lors de la suppression du match', pt: 'Erro ao excluir confronto' },
+  'pvp.errorTeam': { es: 'Error al cambiar equipo', en: 'Error changing team', fr: 'Erreur lors du changement d equipe', pt: 'Erro ao trocar equipe' },
+  'creator.eyebrow': { es: 'Creador visual', en: 'Visual creator', fr: 'Createur visuel', pt: 'Criador visual' },
+  'creator.title': { es: 'Estudio de personaje', en: 'Character studio', fr: 'Studio de personnage', pt: 'Estudio de personagem' },
+  'creator.subtitle': { es: 'Disena la apariencia, revisa el personaje activo y guarda los cambios en tu perfil.', en: 'Design the appearance, review the active character, and save changes to your profile.', fr: 'Creez l apparence, verifiez le personnage actif et enregistrez les changements dans votre profil.', pt: 'Desenhe a aparencia, revise o personagem ativo e salve as alteracoes no perfil.' },
+  'creator.loadingCharacters': { es: 'Cargando personajes...', en: 'Loading characters...', fr: 'Chargement des personnages...', pt: 'Carregando personagens...' },
+  'creator.chooseCharacter': { es: 'Elige personaje', en: 'Choose character', fr: 'Choisir un personnage', pt: 'Escolha personagem' },
+  'creator.loginToSave': { es: 'Iniciar sesion para guardar', en: 'Sign in to save', fr: 'Connectez-vous pour enregistrer', pt: 'Entrar para salvar' },
+  'creator.emptyTitle': { es: 'Primero crea un personaje', en: 'Create a character first', fr: 'Creez d abord un personnage', pt: 'Crie um personagem primeiro' },
+  'creator.emptyBody': { es: 'El creador puede abrirse sin personaje, pero necesitas uno en tu perfil para guardar la apariencia.', en: 'The creator can open without a character, but you need one in your profile to save the appearance.', fr: 'Le createur peut s ouvrir sans personnage, mais vous devez en avoir un dans votre profil pour enregistrer l apparence.', pt: 'O criador pode abrir sem personagem, mas voce precisa de um no perfil para salvar a aparencia.' },
+  'creator.createCharacter': { es: 'Crear personaje', en: 'Create character', fr: 'Creer un personnage', pt: 'Criar personagem' },
+  'creator.activeCharacter': { es: 'Personaje activo', en: 'Active character', fr: 'Personnage actif', pt: 'Personagem ativo' },
+  'creator.noCharacter': { es: 'Sin personaje', en: 'No character', fr: 'Aucun personnage', pt: 'Sem personagem' },
+  'creator.freeView': { es: 'Vista libre', en: 'Free view', fr: 'Vue libre', pt: 'Vista livre' },
+  'creator.role': { es: 'Rol', en: 'Role', fr: 'Role', pt: 'Papel' },
+  'creator.status': { es: 'Estado', en: 'Status', fr: 'Statut', pt: 'Status' },
+  'creator.savedTitle': { es: 'Apariencia guardada', en: 'Appearance saved', fr: 'Apparence enregistree', pt: 'Aparencia salva' },
+  'creator.savedBody': { es: '{name} ya tiene su apariencia visual.', en: '{name} now has a saved visual appearance.', fr: '{name} a maintenant son apparence visuelle.', pt: '{name} agora tem a aparencia visual salva.' },
+  'creator.saveErrorTitle': { es: 'Error al guardar', en: 'Save error', fr: 'Erreur d enregistrement', pt: 'Erro ao salvar' },
+  'creator.saveErrorBody': { es: 'No se pudo guardar la apariencia.', en: 'Could not save the appearance.', fr: 'Impossible d enregistrer l apparence.', pt: 'Nao foi possivel salvar a aparencia.' },
+  'creator.chooseToSave': { es: 'Elige un personaje de WakGroup para guardar.', en: 'Choose a WakGroup character to save.', fr: 'Choisissez un personnage WakGroup pour enregistrer.', pt: 'Escolha um personagem WakGroup para salvar.' },
+  'creator.contextNote': { es: 'El editor interno mantiene el render, los assets y el guardado original de WakGroup.', en: 'The internal editor keeps WakGroup original rendering, assets, and save flow.', fr: 'L editeur interne conserve le rendu, les ressources et l enregistrement original de WakGroup.', pt: 'O editor interno mantem o render, os assets e o salvamento original do WakGroup.' },
+  'creator.saving': { es: 'Guardando...', en: 'Saving...', fr: 'Enregistrement...', pt: 'Salvando...' },
+  'creator.preparing': { es: 'Preparando estudio...', en: 'Preparing studio...', fr: 'Preparation du studio...', pt: 'Preparando estudio...' },
+  'creator.iframeTitle': { es: 'Creador visual WakGroup', en: 'WakGroup visual creator', fr: 'Createur visuel WakGroup', pt: 'Criador visual WakGroup' },
   'wiki.confirmDelete': { es: '¿Eliminar esta guía?', en: 'Delete this guide?', fr: 'Supprimer ce guide ?', pt: 'Excluir este guia?' },
   'wiki.toastDeleted': { es: '🗑 Guía eliminada', en: '🗑 Guide deleted', fr: '🗑 Guide supprimé', pt: '🗑 Guia excluído' },
   'wiki.errorDelete': { es: 'Error al eliminar.', en: 'Error deleting.', fr: 'Erreur de suppression.', pt: 'Erro ao excluir.' },
@@ -539,6 +688,19 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
   'dungeons.cardDescription': { es: 'Encuentra grupos activos o crea una convocatoria enfocada en esta mazmorra.', en: 'Find active groups or create a call focused on this dungeon.', fr: 'Trouvez des groupes actifs ou creez un appel cible sur ce donjon.', pt: 'Encontre grupos ativos ou crie uma chamada focada nesta masmorra.' },
   'dungeons.wiki': { es: 'Wiki', en: 'Wiki', fr: 'Wiki', pt: 'Wiki' },
   'common.close': { es: 'Cerrar', en: 'Close', fr: 'Fermer', pt: 'Fechar' },
+  'common.menu': { es: 'Menu', en: 'Menu', fr: 'Menu', pt: 'Menu' },
+  'common.openMenu': { es: 'Abrir menu', en: 'Open menu', fr: 'Ouvrir le menu', pt: 'Abrir menu' },
+  'common.closeMenu': { es: 'Cerrar menu', en: 'Close menu', fr: 'Fermer le menu', pt: 'Fechar menu' },
+  'common.filters': { es: 'Filtros', en: 'Filters', fr: 'Filtres', pt: 'Filtros' },
+  'common.clear': { es: 'Limpiar', en: 'Clear', fr: 'Effacer', pt: 'Limpar' },
+  'common.clearAll': { es: 'Limpiar todo', en: 'Clear all', fr: 'Tout effacer', pt: 'Limpar tudo' },
+  'common.applyFilters': { es: 'Aplicar filtros', en: 'Apply filters', fr: 'Appliquer les filtres', pt: 'Aplicar filtros' },
+  'common.all': { es: 'Todos', en: 'All', fr: 'Tous', pt: 'Todos' },
+  'common.ready': { es: 'Listo', en: 'Ready', fr: 'Pret', pt: 'Pronto' },
+  'common.saving': { es: 'Guardando', en: 'Saving', fr: 'Enregistrement', pt: 'Salvando' },
+  'common.loginFailed': { es: 'No se pudo iniciar sesion', en: 'Could not sign in', fr: 'Connexion impossible', pt: 'Nao foi possivel iniciar sessao' },
+  'common.retryInSeconds': { es: 'Vuelve a intentarlo en aproximadamente {seconds} segundos.', en: 'Try again in about {seconds} seconds.', fr: 'Reessayez dans environ {seconds} secondes.', pt: 'Tente novamente em aproximadamente {seconds} segundos.' },
+  'common.backHome': { es: 'Volver al inicio', en: 'Back home', fr: 'Retour a l accueil', pt: 'Voltar ao inicio' },
   'group.errorLoad': { es: 'Error al cargar grupo', en: 'Error loading group', fr: 'Erreur de chargement du groupe', pt: 'Erro ao carregar grupo' },
   'group.selectCharacterError': { es: 'Selecciona un personaje', en: 'Select a character', fr: 'Sélectionnez un personnage', pt: 'Selecione um personagem' },
   'group.errorApply': { es: 'Error al enviar solicitud', en: 'Error sending application', fr: 'Erreur lors de l\'envoi de la demande', pt: 'Erro ao enviar solicitação' },

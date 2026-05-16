@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { useLanguage } from '@/lib/language-context';
+import { t } from '@/lib/translations';
 import { api } from '@/lib/api';
 import CustomSelect from '@/components/CustomSelect';
 import { addToast } from '@/components/ToastContainer';
@@ -78,6 +79,13 @@ export default function CharacterCreatorPage() {
     }, [fetchCharacters]);
 
     useEffect(() => {
+        document.body.classList.add('creator-route');
+        return () => {
+            document.body.classList.remove('creator-route');
+        };
+    }, []);
+
+    useEffect(() => {
         setClientOrigin(window.location.origin);
     }, []);
 
@@ -101,7 +109,7 @@ export default function CharacterCreatorPage() {
                 iframeRef.current?.contentWindow?.postMessage({
                     type: 'wakgroup:appearance-save-result',
                     ok: false,
-                    error: 'Elige un personaje de WakGroup para guardar.',
+                    error: t('creator.chooseToSave', language),
                 }, IFRAME_ORIGIN);
                 return;
             }
@@ -123,15 +131,15 @@ export default function CharacterCreatorPage() {
                         : item
                 )));
                 iframeRef.current?.contentWindow?.postMessage({ type: 'wakgroup:appearance-save-result', ok: true }, IFRAME_ORIGIN);
-                addToast({ title: 'Apariencia guardada', body: `${selectedCharacter.name} ya tiene su apariencia visual.` });
+                addToast({ title: t('creator.savedTitle', language), body: t('creator.savedBody', language).replace('{name}', selectedCharacter.name) });
             } catch (error: any) {
-                const body = error.response?.data?.error || 'No se pudo guardar la apariencia.';
+                const body = error.response?.data?.error || t('creator.saveErrorBody', language);
                 iframeRef.current?.contentWindow?.postMessage({
                     type: 'wakgroup:appearance-save-result',
                     ok: false,
                     error: body,
                 }, IFRAME_ORIGIN);
-                addToast({ title: 'Error al guardar', body });
+                addToast({ title: t('creator.saveErrorTitle', language), body });
             } finally {
                 setSaving(false);
             }
@@ -139,7 +147,7 @@ export default function CharacterCreatorPage() {
 
         window.addEventListener('message', onMessage);
         return () => window.removeEventListener('message', onMessage);
-    }, [selectedCharacter, sendAppearanceToFrame, sendConfigToFrame]);
+    }, [language, selectedCharacter, sendAppearanceToFrame, sendConfigToFrame]);
 
     useEffect(() => {
         if (ready) sendConfigToFrame();
@@ -148,7 +156,7 @@ export default function CharacterCreatorPage() {
     const iframeSrc = useMemo(
         () => {
             const params = new URLSearchParams({
-                v: 'wakgroup-creator-8',
+                v: 'wakgroup-creator-9',
                 lang: language,
             });
             if (clientOrigin) params.set('parentOrigin', clientOrigin);
@@ -162,16 +170,15 @@ export default function CharacterCreatorPage() {
     }, [iframeSrc]);
 
     return (
-        <div className="container character-creator-page" style={{ paddingTop: 16, paddingBottom: 32, maxWidth: 1480 }}>
-            <section className="creator-toolbar">
-                <div className="creator-toolbar-copy">
-                    <h1 className="title-gold creator-title">Creador visual</h1>
-                    <p>
-                        Diseña la apariencia de tus personajes y guárdala en tu perfil.
-                    </p>
+        <div className="container character-creator-page creator-app-shell" style={{ maxWidth: 1480 }}>
+            <section className="app-toolbar creator-app-toolbar">
+                <div className="app-toolbar-copy">
+                    <span className="eyebrow">{t('creator.eyebrow', language)}</span>
+                    <h1>{t('creator.title', language)}</h1>
+                    <p>{t('creator.subtitle', language)}</p>
                 </div>
 
-                <div className="creator-toolbar-actions">
+                <div className="app-toolbar-actions creator-toolbar-actions">
                     {authLoading ? (
                         <div className="spinner" />
                     ) : user ? (
@@ -180,16 +187,16 @@ export default function CharacterCreatorPage() {
                                 className="creator-character-select"
                                 value={selectedCharacterId}
                                 onChange={(value) => setSelectedCharacterId(value)}
-                                placeholder={loadingChars ? 'Cargando personajes...' : 'Elige personaje'}
+                                placeholder={loadingChars ? t('creator.loadingCharacters', language) : t('creator.chooseCharacter', language)}
                                 options={characters.map((character) => ({
                                     value: character.id,
                                     label: `${character.name} - Nv.${character.level}`,
                                 }))}
                             />
-                            <Link href="/profile" className="btn btn-secondary creator-profile-btn">Perfil</Link>
+                            <Link href="/profile" className="btn btn-secondary creator-profile-btn">{t('nav.profile', language)}</Link>
                         </>
                     ) : (
-                        <Link href="/profile" className="btn btn-primary">Iniciar sesión para guardar</Link>
+                        <Link href="/profile" className="btn btn-primary">{t('creator.loginToSave', language)}</Link>
                     )}
                 </div>
             </section>
@@ -197,25 +204,61 @@ export default function CharacterCreatorPage() {
             {user && characters.length === 0 && !loadingChars && (
                 <div className="empty-state creator-empty">
                     <div className="empty-state-icon">WG</div>
-                    <h3>Primero crea un personaje</h3>
-                    <p>El creador puede abrirse sin personaje, pero necesitas uno en tu perfil para guardar la apariencia.</p>
-                    <Link href="/profile" className="btn btn-primary">Crear personaje</Link>
+                    <h3>{t('creator.emptyTitle', language)}</h3>
+                    <p>{t('creator.emptyBody', language)}</p>
+                    <Link href="/profile" className="btn btn-primary">{t('creator.createCharacter', language)}</Link>
                 </div>
             )}
 
-            <section className="creator-frame-shell">
-                {saving && <div className="creator-save-badge">Guardando...</div>}
-                {clientOrigin ? (
-                    <iframe
-                        ref={iframeRef}
-                        className="creator-frame"
-                        src={iframeSrc}
-                        title="Creador visual WakGroup"
-                        allow="clipboard-write"
-                    />
-                ) : (
-                    <div className="creator-frame" />
-                )}
+            <section className="creator-workbench">
+                <aside className="creator-context-panel">
+                    <div className="panel-head">
+                        <div>
+                            <span className="eyebrow">{t('creator.activeCharacter', language)}</span>
+                            <h3>{selectedCharacter?.name || t('creator.noCharacter', language)}</h3>
+                        </div>
+                        <span className={`status-dot ${ready ? 'is-ready' : ''}`} />
+                    </div>
+                    <div className="creator-context-body">
+                        <div className="creator-portrait-card">
+                            <strong>{selectedCharacter?.name?.slice(0, 2)?.toUpperCase() || 'WG'}</strong>
+                            <span>{selectedCharacter ? `Nv. ${selectedCharacter.level}` : t('creator.freeView', language)}</span>
+                        </div>
+                        <div className="creator-stat-grid">
+                            <div>
+                                <span>{t('common.server', language)}</span>
+                                <strong>{selectedCharacter?.server || '-'}</strong>
+                            </div>
+                            <div>
+                                <span>{t('creator.role', language)}</span>
+                                <strong>{selectedCharacter?.role || '-'}</strong>
+                            </div>
+                            <div>
+                                <span>{t('creator.status', language)}</span>
+                                <strong>{saving ? t('common.saving', language) : ready ? t('common.ready', language) : t('common.loading', language)}</strong>
+                            </div>
+                        </div>
+                        <p className="creator-context-note">
+                            {t('creator.contextNote', language)}
+                        </p>
+                    </div>
+                </aside>
+
+                <div className="creator-frame-shell">
+                    {saving && <div className="creator-save-badge">{t('creator.saving', language)}</div>}
+                    {!ready && clientOrigin && <div className="creator-loading-badge">{t('creator.preparing', language)}</div>}
+                    {clientOrigin ? (
+                        <iframe
+                            ref={iframeRef}
+                            className="creator-frame"
+                            src={iframeSrc}
+                            title={t('creator.iframeTitle', language)}
+                            allow="clipboard-write"
+                        />
+                    ) : (
+                        <div className="creator-frame" />
+                    )}
+                </div>
             </section>
         </div>
     );

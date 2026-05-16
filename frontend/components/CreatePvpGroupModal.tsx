@@ -45,7 +45,7 @@ export default function CreatePvpGroupModal({ onClose, onCreated }: CreatePvpGro
     useEffect(() => {
         api.get('/characters')
             .then(r => setCharacters(r.data))
-            .catch(() => setError('Error al cargar personajes'))
+            .catch(() => setError(t('group.errorLoadData', language)))
             .finally(() => setLoading(false));
     }, []);
 
@@ -66,7 +66,7 @@ export default function CreatePvpGroupModal({ onClose, onCreated }: CreatePvpGro
             onCreated();
             onClose();
         } catch (err: any) {
-            setError(err.response?.data?.error || 'Error al crear enfrentamiento');
+            setError(err.response?.data?.error || t('pvp.errorCreate', language));
         } finally {
             setSubmitting(false);
         }
@@ -78,12 +78,12 @@ export default function CreatePvpGroupModal({ onClose, onCreated }: CreatePvpGro
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal" onClick={e => e.stopPropagation()}>
                 <div className="modal-header">
-                    <h2 style={{ color: selectedModeColor }}>⚔ Crear Enfrentamiento PVP</h2>
+                    <h2 style={{ color: selectedModeColor }}>? {t('pvp.createTitle', language)}</h2>
                     <button className="modal-close" onClick={onClose}>✕</button>
                 </div>
 
                 {loading ? (
-                    <div className="modal-body">Cargando...</div>
+                    <div className="modal-body">{t('common.loading', language)}</div>
                 ) : (
                     <form onSubmit={handleSubmit} className="modal-body">
                         {error && <div className="error-message">{error}</div>}
@@ -95,7 +95,7 @@ export default function CreatePvpGroupModal({ onClose, onCreated }: CreatePvpGro
                                 type="text"
                                 value={formData.title}
                                 onChange={e => setFormData({ ...formData, title: e.target.value })}
-                                placeholder="Ej: Busco rival serio, Entrenamiento amistoso..."
+                                placeholder={t('pvp.titlePlaceholder', language)}
                                 maxLength={100}
                                 required
                             />
@@ -103,7 +103,7 @@ export default function CreatePvpGroupModal({ onClose, onCreated }: CreatePvpGro
 
                         {/* Modo PVP */}
                         <div className="form-group">
-                            <label>Modo PVP</label>
+                            <label>{t('pvp.modeLabel', language)}</label>
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 10, marginTop: 4 }}>
                                 {PVP_MODES.map(mode => (
                                     <button
@@ -142,7 +142,7 @@ export default function CreatePvpGroupModal({ onClose, onCreated }: CreatePvpGro
 
                         {/* Franja de equipamiento */}
                         <div className="form-group">
-                            <label>Franja de nivel del equipamiento</label>
+                            <label>{t('pvp.equipmentBandLabel', language)}</label>
                             <CustomSelect
                                 value={String(formData.equipment_band)}
                                 onChange={e => setFormData({ ...formData, equipment_band: Number(e) })}
@@ -194,11 +194,11 @@ export default function CreatePvpGroupModal({ onClose, onCreated }: CreatePvpGro
                         <div className="form-row">
                             {/* Personaje líder */}
                             <div className="form-group">
-                                <label>Tu personaje</label>
+                                <label>{t('pvp.yourCharacter', language)}</label>
                                 <CustomSelect
                                     value={formData.character_id}
                                     onChange={e => setFormData({ ...formData, character_id: e })}
-                                    placeholder="Selecciona personaje"
+                                    placeholder={t('group.selectCharacterPlaceholder', language)}
                                     options={characters.map(char => ({
                                         value: String(char.id),
                                         label: `${char.name} - ${char.class_name} Nv. ${char.level}`,
@@ -208,7 +208,7 @@ export default function CreatePvpGroupModal({ onClose, onCreated }: CreatePvpGro
 
                             {/* Servidor */}
                             <div className="form-group">
-                                <label>Servidor</label>
+                                <label>{t('common.server', language)}</label>
                                 <CustomSelect
                                     value={formData.server}
                                     onChange={e => setFormData({ ...formData, server: e })}
@@ -219,7 +219,7 @@ export default function CreatePvpGroupModal({ onClose, onCreated }: CreatePvpGro
 
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" onClick={onClose}>
-                                Cancelar
+                                {t('common.cancel', language)}
                             </button>
                             <button
                                 type="submit"

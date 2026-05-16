@@ -31,11 +31,11 @@
     isolation: isolate;
     overflow: visible;
     z-index: 24;
-    display: grid;
-    grid-template-columns: minmax(280px, 0.9fr) minmax(250px, 0.76fr) minmax(460px, 1.5fr);
-    gap: 8px;
-    align-items: start;
-    padding: clamp(8px, 0.95vw, 11px);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    padding: 10px 14px;
 }
 
 .topBuilder > * {
@@ -79,6 +79,34 @@
     transform: scaleX(-1);
 }
 
+/* App redesign polish: keep builder logic intact, align shell with v2 site */
+.pageShell {
+    padding-top: 18px;
+}
+
+.shell {
+    --panel-bg: var(--bg-1, #1d1711);
+    --panel-border: var(--line, rgba(154, 132, 96, 0.34));
+    --panel-soft: rgba(255, 255, 255, 0.025);
+    --panel-soft-strong: rgba(255, 255, 255, 0.045);
+    --text-strong: var(--text, #f7efe2);
+    --text-soft: var(--text-3, #9b8b76);
+    gap: 10px;
+}
+
+.topBuilder,
+.panel {
+    border-radius: 12px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 18px 42px rgba(0, 0, 0, 0.28);
+}
+
+.topBuilder {
+    padding: 10px;
+    background:
+        radial-gradient(circle at top right, rgba(212, 165, 116, 0.08), transparent 36%),
+        var(--bg-1, #1d1711);
+}
+
 .topBuilderBackdropWash {
     position: absolute;
     inset: 0;
@@ -89,18 +117,20 @@
 
 .identity {
     display: grid;
-    grid-template-columns: 54px minmax(0, 1fr);
+    grid-template-columns: 40px minmax(0, 1fr);
     gap: 8px;
     align-items: center;
     align-self: center;
+    flex: 1 1 auto;
+    min-width: 0;
     z-index: 30;
 }
 
 .classPortrait {
-    width: 54px;
-    height: 54px;
+    width: 40px;
+    height: 40px;
     overflow: hidden;
-    border-radius: 18px;
+    border-radius: 12px;
     border: 1px solid rgba(212, 165, 116, 0.22);
     background:
         radial-gradient(circle at top, rgba(255, 207, 92, 0.18), transparent 56%),
@@ -167,10 +197,8 @@
     gap: 5px;
     align-items: center;
     justify-content: flex-end;
-    grid-column: auto;
-    justify-self: end;
-    align-self: start;
-    padding-top: 15px;
+    margin-left: auto;
+    padding-top: 0;
 }
 
 .guildBonusAnchor {
@@ -254,7 +282,8 @@
 }
 
 .topActionMessage {
-    grid-column: 1 / -1;
+    flex: 0 0 100%;
+    order: 9;
     margin: -2px 0 0;
     color: var(--text-soft);
     font-size: 0.82rem;
@@ -265,7 +294,8 @@
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 6px;
-    grid-column: 1 / -1;
+    flex: 0 0 100%;
+    order: 10;
 }
 
 .preferenceGroup {
@@ -358,6 +388,140 @@
     min-width: 0;
 }
 
+/* ── Class Picker Button ── */
+.classPickerBtn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 5px 10px 5px 6px;
+    border: 1px solid rgba(212, 165, 116, 0.22);
+    border-radius: var(--r-sm, 10px);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text, #efe3d0);
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.15s, background 0.15s;
+}
+.classPickerBtn:hover {
+    border-color: rgba(212, 165, 116, 0.45);
+    background: rgba(212, 165, 116, 0.07);
+}
+.classPickerBtnIcon {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+.classPickerBtnPlaceholder {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 6px;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+.classPickerBtnName {
+    font-size: 0.82rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+}
+
+/* ── Class Picker Modal ── */
+.classPickerOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(10, 8, 6, 0.72);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(3px);
+}
+.classPickerCard {
+    background: var(--bg-2, #211c17);
+    border: 1px solid rgba(212, 165, 116, 0.2);
+    border-radius: 18px;
+    padding: 18px;
+    max-width: 480px;
+    width: 100%;
+    max-height: 80dvh;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+.classPickerHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-strong, #fff);
+}
+.classPickerClose {
+    background: transparent;
+    border: 0;
+    color: var(--text-3, rgba(239,227,208,0.5));
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    line-height: 1;
+}
+.classPickerClose:hover { color: var(--text, #efe3d0); background: rgba(255,255,255,0.06); }
+.classPickerGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: 6px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+.classPickerItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 4px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    cursor: pointer;
+    transition: border-color 0.14s, background 0.14s;
+}
+.classPickerItem:hover {
+    border-color: rgba(212, 165, 116, 0.35);
+    background: rgba(212, 165, 116, 0.07);
+}
+.classPickerItemActive {
+    border-color: rgba(212, 165, 116, 0.7) !important;
+    background: rgba(212, 165, 116, 0.12) !important;
+}
+.classPickerItemIcon {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+}
+.classPickerItemName {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--text-3, rgba(239,227,208,0.6));
+    text-align: center;
+    line-height: 1.2;
+    word-break: break-word;
+}
+.classPickerItemActive .classPickerItemName {
+    color: var(--primary-color, #d4a574);
+}
+
 .levelTopControl {
     flex: 0 0 auto;
     width: auto;
@@ -391,11 +555,15 @@
 
 .topEquipment {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(clamp(56px, 4.5vw, 72px), 1fr));
-    gap: 6px;
+    grid-template-columns: repeat(15, minmax(clamp(44px, 4vw, 58px), 1fr));
+    gap: 5px;
     align-self: stretch;
     align-items: start;
-    grid-column: 1 / -1;
+    flex: 0 0 100%;
+    order: 11;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
 }
 
 .equipSlot {
@@ -489,29 +657,40 @@
 }
 
 .tabBar {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 10px;
+    display: inline-flex;
+    gap: 2px;
+    padding: 3px;
+    border: 1px solid rgba(212, 165, 116, 0.18);
+    border-radius: 14px;
+    background: rgba(22, 18, 15, 0.9);
+    align-self: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
 }
 
 .tabButton {
-    min-height: 50px;
-    border-radius: 16px;
-    border: 1px solid rgba(212, 165, 116, 0.14);
-    background:
-        linear-gradient(180deg, rgba(54, 48, 40, 0.9), rgba(30, 25, 20, 0.96));
-    color: var(--text-soft);
-    font-size: 0.98rem;
-    font-weight: 800;
+    flex-shrink: 0;
+    min-height: 32px;
+    padding: 0 16px;
+    border-radius: 11px;
+    border: 0;
+    background: transparent;
+    color: rgba(239, 227, 208, 0.55);
+    font-size: 0.88rem;
+    font-weight: 700;
     cursor: pointer;
-    transition: border-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
+    white-space: nowrap;
+    transition: background 0.16s ease, color 0.16s ease;
 }
 
-.tabButton:hover,
+.tabButton:hover {
+    color: rgba(239, 227, 208, 0.85);
+}
+
 .tabButtonActive {
-    color: var(--text-strong);
-    border-color: rgba(255, 207, 92, 0.38);
-    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.09);
+    color: #ffd97a;
 }
 
 .contentGrid {
@@ -712,8 +891,37 @@
 
 .filterGrid {
     display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+}
+
+.filterSearchRow {
+    display: contents;
+}
+
+.filterControls {
+    display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 8px;
+}
+
+.filterToggleBtn {
+    display: none;
+}
+
+.filterCount {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: rgba(120, 177, 103, 0.85);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    margin-left: 4px;
 }
 
 .filterGrid > * {
@@ -721,7 +929,7 @@
 }
 
 .filterFieldWide {
-    grid-column: span 2;
+    grid-column: 1 / -1;
 }
 
 .filterField:has(:global(.custom-select-trigger.is-open)) {
@@ -918,6 +1126,30 @@
     min-height: 50px;
     padding: 10px 12px;
     border-bottom: 1px solid rgba(212, 165, 116, 0.14);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+}
+
+.aptitudeSectionHeader:hover {
+    background: rgba(212, 165, 116, 0.06);
+}
+
+.aptitudeSectionCollapsed .aptitudeSectionHeader {
+    border-bottom: none;
+}
+
+.aptitudeSectionHeaderRight {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.aptitudeSectionCaret {
+    font-size: 0.75rem;
+    color: var(--text-3);
+    flex-shrink: 0;
+    transition: transform 0.15s;
 }
 
 .aptitudeSectionHeader h3,
@@ -1511,12 +1743,17 @@
 
 .itemActions {
     display: flex;
-    align-items: center;
+    flex-direction: column-reverse;
+    gap: 6px;
+    align-items: stretch;
     align-self: stretch;
+    justify-content: center;
+    overflow: visible;
+    min-width: max-content;
 }
 
 .itemActions > button {
-    align-self: center;
+    width: 100%;
 }
 
 .statChips {
@@ -2192,7 +2429,6 @@
 }
 
 @media (max-width: 980px) {
-    .tabBar,
     .filterGrid,
     .summaryGrid,
     .statGridWide,
@@ -2205,7 +2441,7 @@
     }
 
     .topEquipment {
-        grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+        grid-template-columns: repeat(15, minmax(44px, 1fr));
     }
 
     .summarySectionsGrid {
@@ -2322,12 +2558,13 @@
     }
 
     .identity {
-        grid-template-columns: 72px minmax(0, 1fr);
+        grid-template-columns: 36px minmax(0, 1fr);
     }
 
     .classPortrait {
-        width: 72px;
-        height: 72px;
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
     }
 
     .secondaryStatsGrid {
@@ -2346,7 +2583,41 @@
     }
 
     .topEquipment {
-        grid-template-columns: repeat(auto-fit, minmax(68px, 1fr));
+        grid-template-columns: repeat(15, 44px);
+        min-width: 0;
+        max-width: 100%;
+        flex-basis: 100%;
+        overflow-x: auto;
+    }
+
+    .preferencePanel {
+        display: none;
+    }
+
+    .topControls {
+        flex-wrap: nowrap;
+        flex: 0 0 100%;
+        min-width: 0;
+        max-width: 100%;
+        order: 5;
+        gap: 6px;
+    }
+
+    .levelTopControl {
+        width: auto;
+        flex: 0 1 90px;
+    }
+
+    .classPickerBtn {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+
+    .tabBar {
+        display: flex;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
     }
 
     .itemCard,
@@ -3587,4 +3858,242 @@
         flex: 1 1 calc(50% - 3px);
         min-width: 108px;
     }
+}
+
+@media (max-width: 640px) {
+    .pageShell {
+        width: calc(100vw - 16px) !important;
+        max-width: calc(100vw - 16px) !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        padding-bottom: calc(116px + env(safe-area-inset-bottom, 0px)) !important;
+        margin-left: auto;
+        margin-right: auto;
+        overflow-x: hidden;
+    }
+
+    .shell,
+    .panel {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        overflow-x: hidden;
+    }
+
+    .topBuilder {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        overflow: hidden;
+        border-radius: 12px;
+        padding: 8px 12px;
+    }
+
+    .topBuilderBackdropFigure {
+        right: 0;
+        width: min(46vw, 160px);
+        max-width: 46%;
+        opacity: 0.72;
+    }
+
+    .topBuilderBackdropFigureSecondary {
+        display: none;
+    }
+
+    .topActions {
+        display: none;
+    }
+
+    .preferenceSelectors {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .preferenceCapsule {
+        min-width: 0;
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .topEquipment {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        flex-basis: 100%;
+        grid-template-columns: repeat(15, 44px) !important;
+        gap: 4px;
+        overflow-x: auto;
+    }
+
+    .equipSlot {
+        min-width: 0;
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+
+    .equipSlotHint {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .leftRail,
+    .rightRail {
+        display: none;
+    }
+
+    .contentGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .filterSearchRow {
+        display: flex;
+        gap: 8px;
+        align-items: flex-end;
+    }
+
+    .filterSearchRow > .filterField {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .filterToggleBtn {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        flex-shrink: 0;
+        min-height: 44px;
+        padding: 0 14px;
+        border-radius: 12px;
+        border: 1px solid rgba(212, 165, 116, 0.22);
+        background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.025));
+        color: var(--text-primary);
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .filterToggleBtnActive {
+        border-color: rgba(212, 165, 116, 0.5);
+        background: rgba(212, 165, 116, 0.12);
+    }
+
+    .filterControls {
+        display: none;
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .filterControlsOpen {
+        display: grid;
+    }
+
+    .tabBar {
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .tabBar::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/* ── Compare card (simple inline version) ─────────────────────────────────── */
+
+.compareCardHead {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--line, rgba(255,255,255,0.08));
+    font-size: 0.82rem;
+}
+
+.compareNameEq {
+    font-weight: 600;
+    color: var(--text-soft, #a8a89a);
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 38%;
+}
+
+.compareArrow {
+    color: var(--text-soft, #a8a89a);
+    flex-shrink: 0;
+    font-size: 0.8rem;
+}
+
+.compareNameNew {
+    font-weight: 700;
+    color: var(--text-strong, #e8dcc8);
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 38%;
+}
+
+.compareRows {
+    display: grid;
+    gap: 4px;
+    padding: 8px 10px;
+}
+
+.compareRowGain {
+    background: rgba(95, 188, 102, 0.12);
+    border-color: rgba(95, 188, 102, 0.24) !important;
+    color: #c6f0c7;
+}
+
+.compareRowLoss {
+    background: rgba(226, 86, 86, 0.12);
+    border-color: rgba(226, 86, 86, 0.24) !important;
+    color: #ffc5c5;
+}
+
+.compareStatEq {
+    color: var(--text-soft, #a8a89a);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.85rem;
+}
+
+.compareStatArrow {
+    color: var(--text-soft, #a8a89a);
+    font-size: 0.75rem;
+    flex-shrink: 0;
+}
+
+.compareStatNew {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    min-width: 40px;
+    text-align: right;
+}
+
+.compareEmpty {
+    color: var(--text-soft, #a8a89a);
+    font-size: 0.84rem;
+    padding: 8px 10px;
+    margin: 0;
+    text-align: center;
+}
+
+.compareBtnActive {
+    background: rgba(212, 165, 116, 0.14) !important;
+    border-color: #d4a574 !important;
+    color: #d4a574 !important;
+    outline: none;
+    min-width: max-content;
+}
+
+.compareSummaryRow {
+    font-weight: 700;
+    border-width: 1.5px;
+}
+.compareSummaryRow .compareStatNew {
+    font-size: 1rem;
 }

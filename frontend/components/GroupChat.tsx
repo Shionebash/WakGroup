@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useGroupChat, ChatMessage } from '@/lib/useGroupChat';
 import { getDiscordAvatar } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
+import { useLanguage } from '@/lib/language-context';
+import { t } from '@/lib/translations';
 
 interface GroupChatProps {
     groupId: string;
@@ -11,6 +13,7 @@ interface GroupChatProps {
 
 export default function GroupChat({ groupId, isMember }: GroupChatProps) {
     const { user } = useAuth();
+    const { language } = useLanguage();
     const { messages, connected, error, loadingHistory, sendMessage } = useGroupChat(groupId, isMember);
     const [input, setInput] = useState('');
     const bottomRef = useRef<HTMLDivElement>(null);
@@ -38,7 +41,7 @@ export default function GroupChat({ groupId, isMember }: GroupChatProps) {
             <div style={styles.lockedBox}>
                 <span style={{ fontSize: 28 }}>🔒</span>
                 <p style={{ color: 'var(--text-secondary)', fontSize: 13, marginTop: 8 }}>
-                    El chat es solo para miembros del grupo
+                    {t('group.chatLocked', language)}
                 </p>
             </div>
         );
@@ -61,7 +64,7 @@ export default function GroupChat({ groupId, isMember }: GroupChatProps) {
                         background: connected ? 'var(--success-color)' : 'var(--border-color)',
                         display: 'inline-block'
                     }} />
-                    {connected ? 'Conectado' : 'Conectando...'}
+                    {connected ? t('chat.connected', language) : t('chat.connecting', language)}
                 </span>
             </div>
 
@@ -75,7 +78,7 @@ export default function GroupChat({ groupId, isMember }: GroupChatProps) {
 
                 {!loadingHistory && messages.length === 0 && (
                     <div style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: 13, padding: 24 }}>
-                        No hay mensajes aún. ¡Sé el primero en escribir!
+                        {t('chat.emptyWrite', language)}
                     </div>
                 )}
 
@@ -105,7 +108,7 @@ export default function GroupChat({ groupId, isMember }: GroupChatProps) {
                     value={input}
                     onChange={e => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder="Escribe un mensaje... (Enter para enviar)"
+                    placeholder={t('chat.placeholderEnter', language)}
                     maxLength={500}
                     disabled={!connected}
                 />

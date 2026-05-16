@@ -51,25 +51,30 @@ export default function VspvpPage() {
         : groups;
 
     return (
-        <div className="container" style={{ paddingTop: 32, paddingBottom: 48 }}>
-            <section className="hero-shell" style={{ marginBottom: 30 }}>
-                <div className="hero-panel hero-panel-pvp hero-panel-single">
-                    <div className="hero-copy">
-                        <span className="hero-eyebrow">PvP Arena</span>
-                        <h1 className="title-gold hero-title">{t('nav.pvp', language)}</h1>
-                        <p className="hero-description">{t('pvp.subtitle', language)}</p>
-                        {user && (
-                            <div className="hero-actions">
-                                <button className="btn btn-primary btn-large" onClick={() => setShowCreate(true)}>
-                                    {t('pvp.create', language)}
-                                </button>
-                            </div>
-                        )}
+        <div className="container app-page-shell" style={{ paddingTop: 24, paddingBottom: 48 }}>
+            <section className="app-toolbar app-toolbar-pvp">
+                <div className="app-toolbar-copy">
+                    <span className="eyebrow">{t('pvp.arena', language)}</span>
+                    <h1>{t('nav.pvp', language)} <span className="count">{filtered.length}</span></h1>
+                    <p>{t('pvp.subtitle', language)}</p>
+                </div>
+                <div className="app-toolbar-actions">
+                    <div className="segmented-control" aria-label={t('pvp.mode', language)}>
+                        {['', '1v1', '3v3', '6v6'].map((mode) => (
+                            <button key={mode || 'all'} className={filterMode === mode ? 'is-on' : ''} onClick={() => setFilterMode(mode)}>
+                                {mode || t('pvp.allModes', language)}
+                            </button>
+                        ))}
                     </div>
+                    {user && (
+                        <button className="btn btn-primary" onClick={() => setShowCreate(true)}>
+                            {t('pvp.create', language)}
+                        </button>
+                    )}
                 </div>
             </section>
 
-            <section className="filters-shell filters-shell-pvp">
+            <section className="filters-shell filters-shell-pvp filter-strip">
                 <div className="filters-head">
                     <div>
                         <h2 className="filters-title">{t('common.search', language)}</h2>
@@ -123,6 +128,20 @@ export default function VspvpPage() {
                             ...GROUP_LANGUAGE_OPTIONS.map((code) => ({ value: code, label: getGroupLanguageLabel(code) })),
                         ]}
                     />
+                </div>
+                <div className="sub-filters">
+                    <span className="label">{t('pvp.mode', language)}</span>
+                    {PVP_MODES.map((mode) => (
+                        <button key={mode} className={`pill ${filterMode === mode ? 'is-active' : ''}`} onClick={() => setFilterMode(filterMode === mode ? '' : mode)}>
+                            {mode}
+                        </button>
+                    ))}
+                    <span className="label">{t('common.server', language)}</span>
+                    {SERVERS.map((server) => (
+                        <button key={server} className={`pill ${filterServer === server ? 'is-active' : ''}`} onClick={() => setFilterServer(filterServer === server ? '' : server)}>
+                            {server}
+                        </button>
+                    ))}
                 </div>
             </section>
 

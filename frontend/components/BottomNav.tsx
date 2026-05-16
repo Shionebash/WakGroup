@@ -3,21 +3,22 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { useLanguage, LANGUAGE_LABELS, LANGUAGE_FLAGS, Language } from '@/lib/language-context';
+import { t } from '@/lib/translations';
 
 /* ── Tabs ─────────────────────────────────────────────────── */
 const TABS = [
-    { id: 'home',     href: '/',         label: 'Grupos',    icon: 'home'    },
-    { id: 'dungeons', href: '/dungeons', label: 'Mazmorras', icon: 'castle'  },
-    { id: 'pvp',      href: '/vspvp',    label: 'PvP',       icon: 'pvp'     },
-    { id: 'profile',  href: '/profile',  label: 'Perfil',    icon: 'user'    },
-    { id: 'more',     href: null,        label: 'Más',       icon: 'more'    },
+    { id: 'home',     href: '/',         labelKey: 'nav.groups',   icon: 'home'   },
+    { id: 'dungeons', href: '/dungeons', labelKey: 'nav.dungeons', icon: 'castle' },
+    { id: 'pvp',      href: '/vspvp',    labelKey: 'nav.pvp',      icon: 'pvp'    },
+    { id: 'profile',  href: '/profile',  labelKey: 'nav.profile',  icon: 'user'   },
+    { id: 'more',     href: null,        labelKey: 'nav.more',     icon: 'more'   },
 ] as const;
 
 const MORE_ITEMS = [
-    { href: '/builder',           label: 'Builder', emoji: '🛡️', desc: 'Arma tu build perfecta'               },
-    { href: '/character-creator', label: 'Creador', emoji: '⭐', desc: 'Diseña la apariencia de tu personaje' },
-    { href: '/wiki',              label: 'Wiki',    emoji: '📖', desc: 'Guías y estrategias'                  },
-];
+    { href: '/builder',           labelKey: 'nav.builder', emoji: 'B', descKey: 'nav.builderDesc' },
+    { href: '/character-creator', labelKey: 'nav.creator', emoji: 'CC', descKey: 'nav.creatorDesc' },
+    { href: '/wiki',              labelKey: 'nav.wiki',    emoji: 'W', descKey: 'nav.wikiDesc' },
+] as const;
 
 /* ── SVG icons ────────────────────────────────────────────── */
 function NavIcon({ name, color }: { name: string; color: string }) {
@@ -82,7 +83,7 @@ export default function BottomNav() {
                 <div className="bottom-nav-more-overlay" onClick={() => setMoreOpen(false)}>
                     <div className="bottom-nav-more-sheet" onClick={e => e.stopPropagation()}>
                         <div className="bottom-nav-more-handle"/>
-                        <div className="bottom-nav-more-title">Más secciones</div>
+                        <div className="bottom-nav-more-title">{t('nav.moreSections', language)}</div>
                         {MORE_ITEMS.map(item => (
                             <button
                                 key={item.href}
@@ -91,15 +92,15 @@ export default function BottomNav() {
                             >
                                 <span className="bottom-nav-more-icon">{item.emoji}</span>
                                 <div style={{ flex: 1 }}>
-                                    <div className="bottom-nav-more-item-label">{item.label}</div>
-                                    <div className="bottom-nav-more-item-desc">{item.desc}</div>
+                                    <div className="bottom-nav-more-item-label">{t(item.labelKey, language)}</div>
+                                    <div className="bottom-nav-more-item-desc">{t(item.descKey, language)}</div>
                                 </div>
                                 <span className="bottom-nav-more-chev">›</span>
                             </button>
                         ))}
 
                         {/* Language selector */}
-                        <div className="bottom-nav-more-section-label">Idioma</div>
+                        <div className="bottom-nav-more-section-label">{t('common.language', language)}</div>
                         <div className="bottom-nav-more-langs">
                             {(Object.entries(LANGUAGE_LABELS) as [Language, string][]).map(([code, label]) => (
                                 <button
@@ -122,7 +123,7 @@ export default function BottomNav() {
                                         style={{ width: '100%' }}
                                         onClick={() => { logout(); setMoreOpen(false); }}
                                     >
-                                        Cerrar sesión
+                                        {t('nav.logout', language)}
                                     </button>
                                 ) : (
                                     <button
@@ -130,7 +131,7 @@ export default function BottomNav() {
                                         style={{ width: '100%' }}
                                         onClick={() => { router.push('/profile'); setMoreOpen(false); }}
                                     >
-                                        Iniciar sesión
+                                        {t('profile.loginDiscord', language)}
                                     </button>
                                 )}
                             </div>
@@ -149,11 +150,11 @@ export default function BottomNav() {
                             key={tab.id}
                             className={`bottom-nav-tab press-fx${active ? ' active' : ''}`}
                             onClick={() => tab.id === 'more' ? setMoreOpen(true) : router.push(tab.href!)}
-                            aria-label={tab.label}
+                            aria-label={t(tab.labelKey, language)}
                         >
                             {active && <span className="bottom-nav-indicator"/>}
                             <NavIcon name={tab.icon} color={color}/>
-                            <span className="bottom-nav-label">{tab.label}</span>
+                            <span className="bottom-nav-label">{t(tab.labelKey, language)}</span>
                         </button>
                     );
                 })}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react';
 import CustomSelect from '@/components/CustomSelect';
 import { BuilderStatLabel } from '@/components/BuilderStatLabel';
 import { BuilderItemStatsHover } from '@/components/BuilderItemStatsHover';
@@ -166,6 +166,12 @@ const COPY = {
     summary: 'Resumen',
     equip: 'Equipar',
     equipped: 'Equipada',
+    compare: 'Comparar',
+    comparing: 'Comparando',
+    compareClose: 'Dejar de comparar',
+    compareVs: '→',
+    compareGained: 'Ganado',
+    compareLost: 'Perdido',
     loading: 'Cargando piezas...',
     noResults: 'No hay piezas con esos filtros.',
     relics: 'Reliquias',
@@ -192,10 +198,10 @@ const COPY = {
     importSuccess: 'Build importado.',
     exportSuccess: 'Build exportado.',
     unequip: 'Desequipar',
-    compare: 'Comparacion',
-    compareEmpty: 'Selecciona una pieza del catalogo para compararla con la equipada.',
-    compareNoEquipped: 'No hay item equipado en este slot. La comparacion se hace contra vacio.',
-    compareSame: 'Esta pieza ya esta equipada en el slot activo.',
+    compareTitle: 'Comparación',
+    compareEmpty: 'Selecciona una pieza del catálogo para compararla con la equipada.',
+    compareNoEquipped: 'No hay item equipado en este slot. La comparación se hace contra vacío.',
+    compareSame: 'Esta pieza ya está equipada en el slot activo.',
     compareNoStatChange: 'Sin cambios netos en el build (por ejemplo mismo valor agregado y quitado).',
     compareVsEquipped: 'vs equipado actual',
     compareBuildDelta: 'Diferencia en el build',
@@ -828,7 +834,17 @@ export default function BuilderPage() {
     const [manualStatAdjustments, setManualStatAdjustments] = useState<Record<number, number>>({});
     const [activeManualStatId, setActiveManualStatId] = useState<number | null>(null);
     const [manualInputDrafts, setManualInputDrafts] = useState<Record<number, string>>({});
+    const [showMobileFilters, setShowMobileFilters] = useState(false);
+    const [showClassPicker, setShowClassPicker] = useState(false);
+    const [collapsedAptitudeSections, setCollapsedAptitudeSections] = useState<Set<string>>(new Set(APTITUDE_SECTIONS.map((s) => s.id)));
+    const [compareItemId, setCompareItemId] = useState<number | null>(null);
+    const toggleAptitudeSection = (id: string) => setCollapsedAptitudeSections((prev) => {
+        const next = new Set(prev);
+        next.has(id) ? next.delete(id) : next.add(id);
+        return next;
+    });
     const importBuildInputRef = useRef<HTMLInputElement | null>(null);
+    const activeFilterCount = [minItemLevel > 0, maxItemLevel > 0, rarity > 0, itemTypeId > 0, statKey !== ''].filter(Boolean).length;
 
     useEffect(() => {
         api.get<BuilderMetadataResponse>('/builder/metadata')
@@ -1426,7 +1442,17 @@ export default function BuilderPage() {
                         </div>
                     </div>
                     <div className={styles.topControls}>
-                        <label className={`${styles.topControl} ${styles.classTopControl}`.trim()}><span>{copy.class}</span><CustomSelect value={String(selectedClassId)} onChange={(value) => setSelectedClassId(Number(value))} options={classOptions} /></label>
+                        <button
+                            type="button"
+                            className={styles.classPickerBtn}
+                            onClick={() => setShowClassPicker(true)}
+                            aria-label={copy.class}
+                        >
+                            {selectedClass?.icon
+                                ? <img src={getAssetUrl(selectedClass.icon)} alt="" className={styles.classPickerBtnIcon} />
+                                : <span className={styles.classPickerBtnPlaceholder}>?</span>}
+                            <span className={styles.classPickerBtnName}>{selectedClass ? getText(selectedClass.names, language) : copy.class}</span>
+                        </button>
                         <label className={`${styles.topControl} ${styles.levelTopControl}`.trim()}><span>{copy.level}</span><CustomSelect value={String(buildLevel)} onChange={(value) => setBuildLevel(Number(value))} options={buildLevelOptions} className={styles.levelHeaderSelect} menuClassName={styles.levelHeaderSelectMenu} /></label>
                     </div>
                     <div className={styles.topActions}>
@@ -1540,13 +1566,26 @@ export default function BuilderPage() {
                     <section className={`${styles.centerStage} ${tab === 'characteristics' || tab === 'adjustments' || tab === 'enchantments' || tab === 'summary' ? styles.centerStageWide : ''}`}>
                         {tab === 'equipment' && <div className={styles.panel}>
                             <div className={styles.filterGrid}>
-                                <label className={`${styles.filterField} ${styles.filterFieldWide}`}><span>{copy.search}</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={copy.searchPlaceholder} /></label>
-                                <label className={styles.filterField}><span>{copy.minLevel}</span><CustomSelect value={String(minItemLevel)} onChange={handleMinItemLevelChange} options={minLevelOptions} /></label>
-                                <label className={styles.filterField}><span>{copy.maxLevel}</span><CustomSelect value={String(maxItemLevel)} onChange={handleMaxItemLevelChange} options={maxLevelOptions} /></label>
-                                <label className={styles.filterField}><span>{copy.rarity}</span><CustomSelect value={String(rarity)} onChange={(value) => setRarity(Number(value) || 0)} options={rarityOptions} /></label>
-                                <label className={styles.filterField}><span>{copy.itemType}</span><CustomSelect value={String(itemTypeId)} onChange={(value) => setItemTypeId(Number(value) || 0)} options={itemTypeOptions} /></label>
-                                <label className={styles.filterField}><span>{copy.statFilter}</span><CustomSelect value={statKey} onChange={setStatKey} options={statOptions} /></label>
-                                <label className={styles.filterField}><span>{copy.statSort}</span><CustomSelect value={statSortDirection} onChange={(value) => setStatSortDirection(value === 'asc' ? 'asc' : 'desc')} options={statSortOptions} disabled={!statKey} /></label>
+                                {/* Desktop: search full-width. Mobile: search + filter toggle button */}
+                                <div className={styles.filterSearchRow}>
+                                    <label className={`${styles.filterField} ${styles.filterFieldWide}`}><span>{copy.search}</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={copy.searchPlaceholder} /></label>
+                                    <button
+                                        type="button"
+                                        className={`${styles.filterToggleBtn} ${showMobileFilters ? styles.filterToggleBtnActive : ''}`}
+                                        onClick={() => setShowMobileFilters((v) => !v)}
+                                        aria-label={copy.filters}
+                                    >
+                                        🎛️{activeFilterCount > 0 && <span className={styles.filterCount}>{activeFilterCount}</span>}
+                                    </button>
+                                </div>
+                                <div className={`${styles.filterControls} ${showMobileFilters ? styles.filterControlsOpen : ''}`}>
+                                    <label className={styles.filterField}><span>{copy.minLevel}</span><CustomSelect value={String(minItemLevel)} onChange={handleMinItemLevelChange} options={minLevelOptions} /></label>
+                                    <label className={styles.filterField}><span>{copy.maxLevel}</span><CustomSelect value={String(maxItemLevel)} onChange={handleMaxItemLevelChange} options={maxLevelOptions} /></label>
+                                    <label className={styles.filterField}><span>{copy.rarity}</span><CustomSelect value={String(rarity)} onChange={(value) => setRarity(Number(value) || 0)} options={rarityOptions} /></label>
+                                    <label className={styles.filterField}><span>{copy.itemType}</span><CustomSelect value={String(itemTypeId)} onChange={(value) => setItemTypeId(Number(value) || 0)} options={itemTypeOptions} /></label>
+                                    <label className={styles.filterField}><span>{copy.statFilter}</span><CustomSelect value={statKey} onChange={setStatKey} options={statOptions} /></label>
+                                    <label className={styles.filterField}><span>{copy.statSort}</span><CustomSelect value={statSortDirection} onChange={(value) => setStatSortDirection(value === 'asc' ? 'asc' : 'desc')} options={statSortOptions} disabled={!statKey} /></label>
+                                </div>
                             </div>
                             <div className={styles.catalogList}>{loadingItems ? <div className={styles.emptyState}>{copy.loading}</div> : items.length === 0 ? <div className={styles.emptyState}>{copy.noResults}</div> : items.map((item) => {
                                 const rarityLabel = metadata?.rarities.find((entry) => entry.id === item.rarity);
@@ -1558,7 +1597,7 @@ export default function BuilderPage() {
                                 const resistanceTotal = getItemSummaryTotal(item, ITEM_SUMMARY_RESISTANCE_ACTION_IDS);
                                 const focusStatEntry = statKey ? item.stats.find((entry) => entry.key === statKey) || null : null;
                                 const focusStatValue = statKey ? getItemStatTotalByKey(item, statKey) : 0;
-                                return <article key={`${activeSlot}-${item.id}`} className={`${styles.itemCard} ${blocked ? styles.itemCardInvalid : RARITY_SURFACE[item.rarity] || styles.raritySurfaceCommon} ${expanded ? styles.itemCardPreview : ''}`.trim()} onClick={() => setPreviewItemId((current) => current === item.id ? null : item.id)}><div className={styles.itemIconBox}><BuilderItemStatsHover language={language} item={{ id: item.id, title: item.title, description: item.description, level: item.level, stats: item.stats }}><ItemIcon item={item} alt={getText(item.title, language)} className={styles.itemIconImg} fallback={getText(item.itemTypeName, language).slice(0, 1)} /></BuilderItemStatsHover></div><div className={styles.itemBody}><div className={styles.itemHeader}><div><h4>{getText(item.title, language)}</h4><p>{getText(item.itemTypeName, language)} - {copy.levelShort} {item.level}</p></div><span className={`${styles.rarityTag} ${RARITY_TONES[item.rarity] || ''}`}>{rarityLabel ? getText(rarityLabel.label, language) : `R${item.rarity}`}</span></div><div className={styles.itemSummaryGrid}>
+                                return <Fragment key={`${activeSlot}-${item.id}`}><article className={`${styles.itemCard} ${blocked ? styles.itemCardInvalid : RARITY_SURFACE[item.rarity] || styles.raritySurfaceCommon} ${expanded ? styles.itemCardPreview : ''}`.trim()} onClick={() => setPreviewItemId((current) => current === item.id ? null : item.id)}><div className={styles.itemIconBox}><BuilderItemStatsHover language={language} item={{ id: item.id, title: item.title, description: item.description, level: item.level, stats: item.stats }}><ItemIcon item={item} alt={getText(item.title, language)} className={styles.itemIconImg} fallback={getText(item.itemTypeName, language).slice(0, 1)} /></BuilderItemStatsHover></div><div className={styles.itemBody}><div className={styles.itemHeader}><div><h4>{getText(item.title, language)}</h4><p>{getText(item.itemTypeName, language)} - {copy.levelShort} {item.level}</p></div><span className={`${styles.rarityTag} ${RARITY_TONES[item.rarity] || ''}`}>{rarityLabel ? getText(rarityLabel.label, language) : `R${item.rarity}`}</span></div><div className={styles.itemSummaryGrid}>
                                                                     <div className={styles.itemSummaryMetric}>
                                                                         <span>{copy.itemMasteryTotal}</span>
                                                                         <strong>{formatStatValue(120, masteryTotal, { signed: true, label: copy.itemMasteryTotal })}</strong>
@@ -1578,54 +1617,67 @@ export default function BuilderPage() {
                                                                             <BuilderStatLabel actionId={entry.actionId} label={entry.label} iconClassName={styles.statChipIcon} />
                                                                         </span>
                                                                     ))}
-                                                                </div></div> : null}{blocked ? <div className={styles.itemConditionWarning}>{copy.invalidCondition}: {Array.from(new Set(nextEquipIssues)).join(', ')}</div> : null}</div><div className={styles.itemActions}><button type="button" className={`btn ${equipped ? 'btn-secondary' : 'btn-primary'}`} disabled={blocked} onClick={(event) => { event.stopPropagation(); if (!activeSlot || blocked) return; setEquippedBySlot((current) => ({ ...current, [activeSlot]: item })); setInspectedSlot(activeSlot); }}>{blocked ? copy.cannotEquip : equipped ? copy.equipped : copy.equip}</button></div></article>;
+                                                                </div></div> : null}{blocked ? <div className={styles.itemConditionWarning}>{copy.invalidCondition}: {Array.from(new Set(nextEquipIssues)).join(', ')}</div> : null}</div><div className={styles.itemActions}>{(() => { const equippedItem = activeSlot ? equippedBySlot[activeSlot] : null; const canCompare = !!equippedItem && !equipped; return canCompare ? <button type="button" className={`btn btn-secondary ${compareItemId === item.id ? styles.compareBtnActive : ''}`} onClick={(event) => { event.stopPropagation(); setCompareItemId((c) => c === item.id ? null : item.id); }}>{compareItemId === item.id ? copy.compareClose : copy.compare}</button> : null; })()}<button type="button" className={`btn ${equipped ? 'btn-secondary' : 'btn-primary'}`} disabled={blocked} onClick={(event) => { event.stopPropagation(); if (!activeSlot || blocked) return; setEquippedBySlot((current) => ({ ...current, [activeSlot]: item })); setInspectedSlot(activeSlot); setCompareItemId(null); }}>{blocked ? copy.cannotEquip : equipped ? copy.equipped : copy.equip}</button></div></article>{(() => { if (compareItemId !== item.id) return null; const equippedItem = activeSlot ? equippedBySlot[activeSlot] : null; if (!equippedItem) return null; const eqMastery = getItemSummaryTotal(equippedItem, ITEM_SUMMARY_MASTERY_ACTION_IDS); const cmMastery = getItemSummaryTotal(item, ITEM_SUMMARY_MASTERY_ACTION_IDS); const masteryDelta = cmMastery - eqMastery; const eqResistance = getItemSummaryTotal(equippedItem, ITEM_SUMMARY_RESISTANCE_ACTION_IDS); const cmResistance = getItemSummaryTotal(item, ITEM_SUMMARY_RESISTANCE_ACTION_IDS); const resistanceDelta = cmResistance - eqResistance; const equippedMap = new Map<number, { value: number; label: string }>(equippedItem.stats.map((s: any) => [s.actionId, { value: s.value, label: s.label }])); const comparedMap = new Map<number, { value: number; label: string }>(item.stats.map((s: any) => [s.actionId, { value: s.value, label: s.label }])); const allIds = new Set([...equippedMap.keys(), ...comparedMap.keys()]); const rows = Array.from(allIds).map((id) => { const eq = equippedMap.get(id); const cm = comparedMap.get(id); const eqVal = eq?.value ?? 0; const cmVal = cm?.value ?? 0; const delta = cmVal - eqVal; const label = eq?.label || cm?.label || String(id); return { id, label, eqVal, cmVal, delta }; }).filter((r) => r.delta !== 0); return <div className={styles.compareCard}><div className={styles.compareCardHead}><span className={styles.compareNameEq}>{getText(equippedItem.title, language)}</span><span className={styles.compareArrow}>→</span><span className={styles.compareNameNew}>{getText(item.title, language)}</span></div><div className={styles.compareRows}>{masteryDelta !== 0 && <div className={`${styles.compareRow} ${styles.compareSummaryRow} ${masteryDelta > 0 ? styles.compareRowGain : styles.compareRowLoss}`}><BuilderStatLabel actionId={120} label={copy.itemMasteryTotal} className={styles.compareStatLabel} iconClassName={styles.compareStatIcon} /><span className={styles.compareStatEq}>{eqMastery > 0 ? '+' : ''}{eqMastery}</span><span className={styles.compareStatArrow}>→</span><span className={styles.compareStatNew}>{masteryDelta > 0 ? '+' : ''}{masteryDelta}</span></div>}{resistanceDelta !== 0 && <div className={`${styles.compareRow} ${styles.compareSummaryRow} ${resistanceDelta > 0 ? styles.compareRowGain : styles.compareRowLoss}`}><BuilderStatLabel actionId={80} label={copy.itemResistanceTotal} className={styles.compareStatLabel} iconClassName={styles.compareStatIcon} /><span className={styles.compareStatEq}>{eqResistance > 0 ? '+' : ''}{eqResistance}</span><span className={styles.compareStatArrow}>→</span><span className={styles.compareStatNew}>{resistanceDelta > 0 ? '+' : ''}{resistanceDelta}</span></div>}{rows.length === 0 && masteryDelta === 0 && resistanceDelta === 0 ? <p className={styles.compareEmpty}>Stats idénticos</p> : rows.map((r) => <div key={r.id} className={`${styles.compareRow} ${r.delta > 0 ? styles.compareRowGain : styles.compareRowLoss}`}><BuilderStatLabel actionId={r.id} label={r.label} className={styles.compareStatLabel} iconClassName={styles.compareStatIcon} /><span className={styles.compareStatEq}>{r.eqVal > 0 ? '+' : ''}{r.eqVal}</span><span className={styles.compareStatArrow}>→</span><span className={styles.compareStatNew}>{r.delta > 0 ? '+' : ''}{r.delta}</span></div>)}</div></div>; })()}</Fragment>;
                             })}</div>
                         </div>}
 
                         {tab === 'characteristics' && (
                             <div className={styles.characteristicsStack}>
                                 <div className={styles.aptitudeLayout}>
-                                    {localizedAptitudeSections.map((section) => (
-                                        <section key={section.id} className={styles.aptitudeSection}>
-                                            <header className={`${styles.aptitudeSectionHeader} ${APTITUDE_SECTION_TONES[section.id]}`}>
+                                    {localizedAptitudeSections.map((section) => {
+                                        const isCollapsed = collapsedAptitudeSections.has(section.id);
+                                        return (
+                                        <section key={section.id} className={`${styles.aptitudeSection} ${isCollapsed ? styles.aptitudeSectionCollapsed : ''}`}>
+                                            <header
+                                                className={`${styles.aptitudeSectionHeader} ${APTITUDE_SECTION_TONES[section.id]}`}
+                                                onClick={() => toggleAptitudeSection(section.id)}
+                                                role="button"
+                                                aria-expanded={!isCollapsed}
+                                            >
                                                 <h3>{section.label}</h3>
-                                                <strong>{spentBySection[section.id]}/{availableBySection[section.id]} {copy.points}</strong>
-                                            </header>
-                                            <div className={styles.aptitudeTable}>
-                                                <div className={styles.aptitudeTableHead}>
-                                                    <span>{copy.aptitude}</span>
-                                                    <span>{copy.maxLevels}</span>
-                                                    <span>{copy.currentValue}</span>
+                                                <div className={styles.aptitudeSectionHeaderRight}>
+                                                    <strong>{spentBySection[section.id]}/{availableBySection[section.id]} {copy.points}</strong>
+                                                    <span className={styles.aptitudeSectionCaret}>{isCollapsed ? '▸' : '▾'}</span>
                                                 </div>
-                                                <div className={styles.aptitudeRows}>
-                                                    {section.lines.map((line) => {
-                                                        const spent = aptitudes[line.id] || 0;
-                                                        const maxLabel = formatAptitudeMax(line.max, copy.noLimit);
-                                                        return (
-                                                            <div key={line.id} className={styles.aptitudeRow}>
-                                                                <div className={styles.aptitudeName}>{line.label}</div>
-                                                                <div className={styles.aptitudeLimit}>
-                                                                    <span className={`${styles.aptitudePill} ${Number.isFinite(line.max) ? styles.aptitudePillLimit : styles.aptitudePillSoft}`}>
-                                                                        {maxLabel}
-                                                                    </span>
-                                                                </div>
-                                                                <div className={styles.aptitudeValueCell}>
-                                                                    <span className={`${styles.aptitudePill} ${spent > 0 ? styles.aptitudePillActive : styles.aptitudePillSoft}`}>
-                                                                        {spent} {spent === 1 ? copy.pointShort : copy.pointsShort}
-                                                                    </span>
-                                                                    <div className={styles.aptitudeControls}>
-                                                                        <button type="button" className={styles.aptitudeButton} onClick={(event) => changeAptitude(section, line, spent - (event.shiftKey ? 10 : 1))}>-</button>
-                                                                        <strong>{spent}</strong>
-                                                                        <button type="button" className={styles.aptitudeButton} onClick={(event) => changeAptitude(section, line, spent + (event.shiftKey ? 10 : 1))}>+</button>
+                                            </header>
+                                            {!isCollapsed && (
+                                                <div className={styles.aptitudeTable}>
+                                                    <div className={styles.aptitudeTableHead}>
+                                                        <span>{copy.aptitude}</span>
+                                                        <span>{copy.maxLevels}</span>
+                                                        <span>{copy.currentValue}</span>
+                                                    </div>
+                                                    <div className={styles.aptitudeRows}>
+                                                        {section.lines.map((line) => {
+                                                            const spent = aptitudes[line.id] || 0;
+                                                            const maxLabel = formatAptitudeMax(line.max, copy.noLimit);
+                                                            return (
+                                                                <div key={line.id} className={styles.aptitudeRow}>
+                                                                    <div className={styles.aptitudeName}>{line.label}</div>
+                                                                    <div className={styles.aptitudeLimit}>
+                                                                        <span className={`${styles.aptitudePill} ${Number.isFinite(line.max) ? styles.aptitudePillLimit : styles.aptitudePillSoft}`}>
+                                                                            {maxLabel}
+                                                                        </span>
+                                                                    </div>
+                                                                    <div className={styles.aptitudeValueCell}>
+                                                                        <span className={`${styles.aptitudePill} ${spent > 0 ? styles.aptitudePillActive : styles.aptitudePillSoft}`}>
+                                                                            {spent} {spent === 1 ? copy.pointShort : copy.pointsShort}
+                                                                        </span>
+                                                                        <div className={styles.aptitudeControls}>
+                                                                            <button type="button" className={styles.aptitudeButton} onClick={(event) => changeAptitude(section, line, spent - (event.shiftKey ? 10 : 1))}>-</button>
+                                                                            <strong>{spent}</strong>
+                                                                            <button type="button" className={styles.aptitudeButton} onClick={(event) => changeAptitude(section, line, spent + (event.shiftKey ? 10 : 1))}>+</button>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        );
-                                                    })}
+                                                            );
+                                                        })}
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            )}
                                         </section>
-                                    ))}
+                                        );
+                                    })}
 
                                     <section className={`${styles.aptitudeSection} ${styles.aptitudeSummarySection}`}>
                                         <header className={`${styles.aptitudeSectionHeader} ${styles.aptitudeToneSummary}`}>
@@ -1880,6 +1932,30 @@ export default function BuilderPage() {
                     </aside>
                 </div>
             </section>
+
+            {showClassPicker && (
+                <div className={styles.classPickerOverlay} onClick={() => setShowClassPicker(false)} role="dialog" aria-modal="true" aria-label={copy.class}>
+                    <div className={styles.classPickerCard} onClick={(e) => e.stopPropagation()}>
+                        <div className={styles.classPickerHeader}>
+                            <span>{copy.class}</span>
+                            <button type="button" className={styles.classPickerClose} onClick={() => setShowClassPicker(false)} aria-label={copy.close}>✕</button>
+                        </div>
+                        <div className={styles.classPickerGrid}>
+                            {(metadata?.classes || []).map((cls) => (
+                                <button
+                                    key={cls.id}
+                                    type="button"
+                                    className={`${styles.classPickerItem} ${cls.id === selectedClassId ? styles.classPickerItemActive : ''}`}
+                                    onClick={() => { setSelectedClassId(cls.id); setShowClassPicker(false); }}
+                                >
+                                    <img src={getAssetUrl(cls.icon)} alt={getText(cls.names, language)} className={styles.classPickerItemIcon} />
+                                    <span className={styles.classPickerItemName}>{getText(cls.names, language)}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

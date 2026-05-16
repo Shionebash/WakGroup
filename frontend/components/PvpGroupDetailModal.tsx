@@ -66,7 +66,7 @@ export default function PvpGroupDetailModal({ groupId, onClose, onDeleted }: Pvp
             setIsLeader(leader);
             setIsMember(leader || member);
         } catch {
-            setError('Error al cargar el enfrentamiento');
+            setError(t('pvp.errorLoad', language));
         } finally {
             setLoading(false);
         }
@@ -75,14 +75,14 @@ export default function PvpGroupDetailModal({ groupId, onClose, onDeleted }: Pvp
     useEffect(() => { fetchGroup(); }, [groupId, user]);
 
     const handleApply = async () => {
-        if (!selectedCharId) { setError('Selecciona un personaje'); return; }
+        if (!selectedCharId) { setError(t('group.selectCharacterError', language)); return; }
         setApplying(true); setError(null);
         try {
             await api.post('/pvp-applications', { pvp_group_id: groupId, character_id: selectedCharId });
             setMessage('¡Solicitud enviada!');
             setTimeout(() => onClose(), 2000);
         } catch (err: any) {
-            setError(err.response?.data?.error || 'Error al enviar solicitud');
+            setError(err.response?.data?.error || t('group.errorApply', language));
         } finally { setApplying(false); }
     };
 
@@ -91,15 +91,15 @@ export default function PvpGroupDetailModal({ groupId, onClose, onDeleted }: Pvp
     };
 
     const handleDeleteGroup = async () => {
-        if (!confirm('¿Eliminar este enfrentamiento?')) return;
+        if (!confirm(t('pvp.deleteConfirm', language))) return;
         setDeleting(true);
         try {
             await api.delete(`/pvp-groups/${groupId}`);
-            addToast({ title: '🗑 Enfrentamiento eliminado' });
+            addToast({ title: t('pvp.deleted', language) });
             onClose();
             onDeleted?.();
         } catch (err: any) {
-            setError(err.response?.data?.error || 'Error al eliminar el enfrentamiento');
+            setError(err.response?.data?.error || t('pvp.errorDelete', language));
         } finally {
             setDeleting(false);
         }
@@ -109,65 +109,65 @@ export default function PvpGroupDetailModal({ groupId, onClose, onDeleted }: Pvp
         if (!user) return;
         const userChar = characters.find(c => c.user_id === user.id);
         if (!userChar) {
-            setError('No tienes personajes en este grupo');
+            setError(t('group.errorNoCharacters', language));
             return;
         }
         if (!confirm('¿Estás seguro de que quieres salir del grupo?')) return;
         try {
             await api.delete(`/pvp-groups/${groupId}/members/${userChar.id}`);
-            addToast({ title: '👋 Has salido del grupo' });
+            addToast({ title: t('group.toastLeft', language) });
             onClose();
             onDeleted?.();
         } catch (err: any) {
-            setError(err.response?.data?.error || 'Error al salir del grupo');
+            setError(err.response?.data?.error || t('group.errorLeave', language));
         }
     };
 
     const handleKickMember = async (characterId: string, charName: string) => {
-        if (!confirm(`¿Expulsar a ${charName} del grupo?`)) return;
+        if (!confirm(t('group.confirmKick', language).replace('{name}', charName))) return;
         try {
             await api.delete(`/pvp-groups/${groupId}/members/${characterId}`);
-            addToast({ title: `👢 ${charName} ha sido expulsado` });
+            addToast({ title: t('group.toastKicked', language).replace('{name}', charName) });
             // Refresh group data
             const groupRes = await api.get(`/pvp-groups/${groupId}`);
             setGroup(groupRes.data);
         } catch (err: any) {
-            setError(err.response?.data?.error || 'Error al expulsar miembro');
+            setError(err.response?.data?.error || t('group.errorKick', language));
         }
     };
 
     const handleLeaveGroupAsLeader = async () => {
         const members = group?.members || [];
         if (members.length === 0) {
-            if (!confirm('Eres el único miembro. ¿Cerrar el grupo?')) return;
+            if (!confirm(t('group.confirmClose', language))) return;
             try {
                 await api.patch(`/pvp-groups/${groupId}/close`);
-                addToast({ title: 'Grupo cerrado' });
+                addToast({ title: t('group.toastClosed', language) });
                 onClose();
                 return;
             } catch (err: any) {
-                setError(err.response?.data?.error || 'Error al cerrar grupo');
+                setError(err.response?.data?.error || t('group.errorClose', language));
             }
             return;
         }
         
         const newLeader = members[0];
-        if (!confirm(`¿Salir del grupo? El liderazgo se pasará a ${newLeader.char_name}.`)) return;
+        if (!confirm(t('group.confirmLeaveLeader', language).replace('{name}', newLeader.char_name))) return;
         
         try {
             await api.delete(`/pvp-groups/${groupId}/leader`);
-            addToast({ title: `👑 Liderazgo transferido a ${newLeader.char_name}` });
+            addToast({ title: t('group.toastTransfer', language).replace('{name}', newLeader.char_name) });
             onClose();
         } catch (err: any) {
-            setError(err.response?.data?.error || 'Error al transferir liderazgo');
+            setError(err.response?.data?.error || t('group.errorTransfer', language));
         }
     };
 
     const handleTransferLeadership = async (newLeaderCharId: string, newLeaderName: string) => {
-        if (!confirm(`¿Transferir liderazgo a ${newLeaderName}?`)) return;
+        if (!confirm(t('group.confirmTransfer', language).replace('{name}', newLeaderName))) return;
         try {
             await api.put(`/pvp-groups/${groupId}/transfer-leadership`, { new_leader_character_id: newLeaderCharId });
-            addToast({ title: `👑 Liderazgo transferido a ${newLeaderName}` });
+            addToast({ title: t('group.toastTransfer', language).replace('{name}', newLeaderName) });
             const groupRes = await api.get(`/pvp-groups/${groupId}`);
             setGroup(groupRes.data);
         } catch (err: any) {
@@ -207,7 +207,7 @@ export default function PvpGroupDetailModal({ groupId, onClose, onDeleted }: Pvp
                 };
             });
         } catch (err: any) {
-            setError(err.response?.data?.error || 'Error al cambiar equipo');
+            setError(err.response?.data?.error || t('pvp.errorTeam', language));
         }
     };
 
@@ -263,24 +263,24 @@ export default function PvpGroupDetailModal({ groupId, onClose, onDeleted }: Pvp
                 </div>
 
                 {loading ? (
-                    <div className="modal-body">Cargando...</div>
+                    <div className="modal-body">{t('common.loading', language)}</div>
                 ) : !group ? (
-                    <div className="modal-body">Enfrentamiento no encontrado</div>
+                    <div className="modal-body">{t('pvp.notFound', language)}</div>
                 ) : (
                     <>
                         <div className="modal-body">
                             {/* Info row */}
                             <div className="detail-grid" style={{ marginBottom: 20 }}>
                                 <div className="detail-item">
-                                    <span className="detail-label">Modo:</span>
+                                    <span className="detail-label">{t('pvp.mode', language)}:</span>
                                     <span className="detail-value" style={{ color: modeColor, fontWeight: 700 }}>{group.pvp_mode}</span>
                                 </div>
                                 <div className="detail-item">
-                                    <span className="detail-label">Franja:</span>
+                                    <span className="detail-label">{t('pvp.band', language)}:</span>
                                     <span className="detail-value">Nv. {group.equipment_band}</span>
                                 </div>
                                 <div className="detail-item">
-                                    <span className="detail-label">Servidor:</span>
+                                    <span className="detail-label">{t('common.server', language)}:</span>
                                     <span className="detail-value">{group.server}</span>
                                 </div>
                                 <div className="detail-item">
@@ -288,7 +288,7 @@ export default function PvpGroupDetailModal({ groupId, onClose, onDeleted }: Pvp
                                     <span className="detail-value">{formatGroupLanguages(group.languages)}</span>
                                 </div>
                                 <div className="detail-item">
-                                    <span className="detail-label">Estado:</span>
+                                    <span className="detail-label">{t('common.status', language)}:</span>
                                     <span className="detail-value">{group.status === 'open' ? '🟢 Abierto' : '🔴 Lleno'}</span>
                                 </div>
                             </div>
@@ -300,7 +300,7 @@ export default function PvpGroupDetailModal({ groupId, onClose, onDeleted }: Pvp
                                     marginBottom: 10, fontSize: 12, color: 'var(--text-secondary)'
                                 }}>
                                     {isMember && (
-                                        <span>💡 Arrastra tu personaje al equipo que deseas</span>
+                                        <span>?? {t('pvp.dragHint', language)}</span>
                                     )}
                                 </div>
 
@@ -360,7 +360,7 @@ export default function PvpGroupDetailModal({ groupId, onClose, onDeleted }: Pvp
                                     onClick={handleOpenChat}
                                     style={{ width: '100%', justifyContent: 'center', marginBottom: 8 }}
                                 >
-                                    💬 Abrir chat del grupo
+                                    ?? {t('pvp.openChat', language)}
                                 </button>
                             )}
                             {!isMember && user && (
@@ -369,7 +369,7 @@ export default function PvpGroupDetailModal({ groupId, onClose, onDeleted }: Pvp
                                     border: '1px solid var(--border-color)', borderRadius: 8,
                                     fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8,
                                 }}>
-                                    🔒 El chat está disponible solo para miembros del grupo.
+                                    🔒 {t('group.chatLocked', language)}
                                 </div>
                             )}
 
@@ -378,11 +378,11 @@ export default function PvpGroupDetailModal({ groupId, onClose, onDeleted }: Pvp
 
                             {user && group.status === 'open' && !isMember && (
                                 <div className="form-group" style={{ marginTop: 12 }}>
-                                    <label>Selecciona tu personaje para unirte</label>
+                                    <label>{t('pvp.selectCharacterJoin', language)}</label>
                                     <CustomSelect
                                         value={selectedCharId}
                                         onChange={e => setSelectedCharId(e)}
-                                        placeholder="Elige un personaje"
+                                        placeholder={t('group.selectCharacterPlaceholder', language)}
                                         options={characters.map((char: any) => ({
                                             value: String(char.id),
                                             label: `${char.name} - ${char.class_name} Nv. ${char.level}`,
@@ -394,14 +394,14 @@ export default function PvpGroupDetailModal({ groupId, onClose, onDeleted }: Pvp
 
                         {user && group.status === 'open' && !isMember && (
                             <div className="modal-footer">
-                                <button className="btn btn-secondary" onClick={onClose}>Cerrar</button>
+                                <button className="btn btn-secondary" onClick={onClose}>{t('common.close', language)}</button>
                                 <button
                                     className="btn btn-primary"
                                     onClick={handleApply}
                                     disabled={applying || !selectedCharId}
                                     style={{ background: modeColor, color: '#0a0a0a' }}
                                 >
-                                    {applying ? 'Enviando...' : '⚔ Solicitar Unirse'}
+                                    {applying ? t('pvp.sending', language) : `? ${t('pvp.apply', language)}`}
                                 </button>
                             </div>
                         )}
@@ -420,15 +420,15 @@ export default function PvpGroupDetailModal({ groupId, onClose, onDeleted }: Pvp
                                             value: String(m.char_id),
                                             label: m.char_name,
                                         }))}
-                                        placeholder="Transferir liderazgo"
+                                        placeholder={t('group.transfer', language)}
                                         className="form-select"
                                     />
                                 )}
                                 <button className="btn btn-warning" onClick={handleLeaveGroupAsLeader} style={{ color: '#000' }}>
-                                    🚪 Salir y pasar liderazgo
+                                    ?? {t('group.leaveAndTransfer', language)}
                                 </button>
                                 <button className="btn btn-danger" onClick={handleDeleteGroup} disabled={deleting}>
-                                    {deleting ? 'Eliminando...' : '🗑 Eliminar enfrentamiento'}
+                                    {deleting ? t('group.deleting', language) : `?? ${t('pvp.delete', language)}`}
                                 </button>
                             </div>
                         )}
@@ -436,7 +436,7 @@ export default function PvpGroupDetailModal({ groupId, onClose, onDeleted }: Pvp
                         {isMember && !isLeader && (
                             <div className="modal-footer" style={{ justifyContent: 'flex-end' }}>
                                 <button className="btn btn-danger" onClick={handleLeaveGroup}>
-                                    🚪 Salir del grupo
+                                    ?? {t('group.leave', language)}
                                 </button>
                             </div>
                         )}
@@ -468,6 +468,7 @@ function TeamZone({
     isLeader?: boolean;
     onKick?: (charId: string, charName: string) => void;
 }) {
+    const { language } = useLanguage();
     return (
         <div
             onDragOver={onDragOver}
@@ -527,7 +528,7 @@ function TeamZone({
                     fontSize: 12,
                     color: config.color,
                 }}>
-                    Libre
+                    {t('pvp.freeSlot', language)}
                 </div>
             ))}
 
@@ -557,6 +558,7 @@ function PlayerChip({
     isLeader?: boolean;
     onKick?: () => void;
 }) {
+    const { language } = useLanguage();
     return (
         <div
             draggable={draggable}
@@ -573,7 +575,7 @@ function PlayerChip({
                 transition: 'border-color 0.2s, opacity 0.2s',
                 userSelect: 'none',
             }}
-            title={draggable ? 'Arrastra para cambiar de equipo' : ''}
+            title={draggable ? t('pvp.dragToChangeTeam', language) : ''}
         >
             {player.classIcon && (
                 <img
@@ -604,7 +606,7 @@ function PlayerChip({
                 <button
                     onClick={(e) => { e.stopPropagation(); onKick(); }}
                     style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, padding: '2px', flexShrink: 0 }}
-                    title="Expulsar"
+                    title={t('group.kick', language)}
                 >
                     👢
                 </button>

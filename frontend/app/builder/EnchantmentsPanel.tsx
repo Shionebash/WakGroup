@@ -357,7 +357,7 @@ export function EnchantmentsPanel({
     equippedBySlot: Record<string, EnchantmentItem>;
     slotOrder: string[];
     language: Language;
-    /** Nivel mÃ¡ximo del tramo elegido (p. ej. 245); usado para Â«X% del nivelÂ» en sublimaciones. */
+    /** Nivel máximo del tramo elegido (p. ej. 245); usado para «X% del nivel» en sublimaciones. */
     buildLevel: number;
     baseStats: Map<number, number>;
     initialSnapshot?: EnchantmentsSnapshot | null;

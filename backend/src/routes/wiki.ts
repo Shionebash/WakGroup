@@ -76,6 +76,11 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
 // GET /wiki/:id - detail single post
 router.get('/:id', async (req: Request, res: Response): Promise<void> => {
     const db = getDb();
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(req.params.id)) {
+        res.status(404).json({ error: 'Post no encontrado' });
+        return;
+    }
+
     try {
         const postResult = await db.query(`
             SELECT wp.*, d.name_es as dungeon_name, u.username, u.avatar

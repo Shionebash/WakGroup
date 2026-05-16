@@ -72,39 +72,33 @@ function WikiContent() {
     };
 
     return (
-        <div className="container" style={{ paddingTop: 32, paddingBottom: 48 }}>
-            <section className="hero-shell" style={{ marginBottom: 26 }}>
-                <div className="hero-panel hero-panel-single wiki-hero-panel">
-                    <div className="hero-copy">
-                        <span className="hero-eyebrow">{t('wiki.eyebrow', language)}</span>
-                        <h1 className="title-gold hero-title">{t('wiki.title', language)}</h1>
-                        <p className="hero-description">{t('wiki.subtitle', language)}</p>
-                        <div className="dungeons-hero-stats">
-                            <div className="dungeons-hero-pill">
-                                <strong>{filtered.length}</strong>
-                                <span>{t('wiki.visibleCount', language)}</span>
-                            </div>
-                            <div className="dungeons-hero-pill">
-                                <strong>{featured.length}</strong>
-                                <span>{t('wiki.featuredCount', language)}</span>
-                            </div>
-                            <div className="dungeons-hero-pill">
-                                <strong>{recent.length}</strong>
-                                <span>{t('wiki.recentCount', language)}</span>
-                            </div>
+        <div className="container app-page-shell" style={{ paddingTop: 24, paddingBottom: 48 }}>
+            <section className="app-toolbar">
+                <div className="app-toolbar-copy">
+                    <span className="eyebrow">{t('wiki.eyebrow', language)}</span>
+                    <h1>{t('wiki.title', language)} <span className="count">{filtered.length}</span></h1>
+                    <p>{t('wiki.subtitle', language)}</p>
+                </div>
+                <div className="app-toolbar-actions">
+                    <div className="dungeons-hero-stats compact-stats">
+                        <div className="dungeons-hero-pill">
+                            <strong>{featured.length}</strong>
+                            <span>{t('wiki.featuredCount', language)}</span>
+                        </div>
+                        <div className="dungeons-hero-pill">
+                            <strong>{recent.length}</strong>
+                            <span>{t('wiki.recentCount', language)}</span>
                         </div>
                     </div>
                     {user && (
-                        <div className="wiki-hero-cta">
-                            <button className="btn btn-primary btn-large" onClick={() => setShowCreate(true)}>
-                                + {t('wiki.new', language)}
-                            </button>
-                        </div>
+                        <button className="btn btn-primary" onClick={() => setShowCreate(true)}>
+                            + {t('wiki.new', language)}
+                        </button>
                     )}
                 </div>
             </section>
 
-            <section className="filters-shell" style={{ marginBottom: 24 }}>
+            <section className="filters-shell filter-strip" style={{ marginBottom: 24 }}>
                 <div className="filters-head">
                     <div>
                         <h2 className="filters-title">{t('common.search', language)}</h2>

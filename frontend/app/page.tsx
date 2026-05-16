@@ -30,6 +30,7 @@ export default function HomePage() {
     const [filterBand, setFilterBand] = useState<number | ''>('');
     const [filterLanguage, setFilterLanguage] = useState('');
     const [showMobileFilters, setShowMobileFilters] = useState(false);
+    const [sort, setSort] = useState<'recent' | 'stasis' | 'members'>('recent');
 
     const fetchGroups = useCallback(async () => {
         setLoading(true);
@@ -52,7 +53,7 @@ export default function HomePage() {
         fetchGroups();
     }, [fetchGroups]);
 
-    const filtered = search
+    const filteredBase = search
         ? groups.filter((g) => {
             const dungeonName = g.dungeon_name || '';
             return (
@@ -62,42 +63,52 @@ export default function HomePage() {
         })
         : groups;
 
+    const filtered = [...filteredBase].sort((a, b) => {
+        if (sort === 'stasis') return Number(b.stasis || 0) - Number(a.stasis || 0);
+        if (sort === 'members') return Number(b.member_count || 1) - Number(a.member_count || 1);
+        return 0;
+    });
+
+    const activeFilterCount = [filterServer, filterStasis, filterBand, filterLanguage].filter(Boolean).length;
+    const clearFilters = () => {
+        setSearch('');
+        setFilterServer('');
+        setFilterStasis('');
+        setFilterBand('');
+        setFilterLanguage('');
+    };
+
     return (
-        <div className="container" style={{ paddingTop: 32, paddingBottom: 48 }}>
-            <section className="hero-shell" style={{ marginBottom: 30 }}>
-                <div className="hero-panel hero-panel-home hero-panel-single">
-                    <div className="hero-copy">
-                        <span className="hero-eyebrow">WakGroup</span>
-                        <h1 className="title-gold hero-title">{t('home.title', language)}</h1>
-                        <p className="hero-description">{t('home.subtitle', language)}</p>
-                        <div className="hero-actions">
-                            {user && (
-                                <button className="btn btn-primary btn-large" onClick={() => setShowCreate(true)}>
-                                    {t('home.createGroup', language)}
-                                </button>
-                            )}
-                            <a
-                                className="btn btn-secondary btn-large"
-                                href={DISCORD_INVITE_URL}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {t('home.joinDiscord', language)}
-                            </a>
-                            <a
-                                className="btn btn-secondary btn-large"
-                                href={DESKTOP_DOWNLOAD_URL}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {t('home.downloadMiniApp', language)}
-                            </a>
-                        </div>
+        <div className="container app-page-shell" style={{ paddingTop: 24, paddingBottom: 48 }}>
+            <section className="app-toolbar">
+                <div className="app-toolbar-copy">
+                    <span className="eyebrow">WakGroup</span>
+                    <h1>{t('home.title', language)} <span className="count">{filtered.length}</span></h1>
+                    <p>{t('home.subtitle', language)}</p>
+                </div>
+                <div className="app-toolbar-actions">
+                    <div className="segmented-control" aria-label={t('home.sortGroups', language)}>
+                        <button className={sort === 'recent' ? 'is-on' : ''} onClick={() => setSort('recent')}>{t('home.sortRecent', language)}</button>
+                        <button className={sort === 'stasis' ? 'is-on' : ''} onClick={() => setSort('stasis')}>{t('home.sortStasis', language)}</button>
+                        <button className={sort === 'members' ? 'is-on' : ''} onClick={() => setSort('members')}>{t('home.sortMembers', language)}</button>
+                    </div>
+                    <div className="toolbar-button-row">
+                        {user && (
+                            <button className="btn btn-primary" onClick={() => setShowCreate(true)}>
+                                {t('home.createGroup', language)}
+                            </button>
+                        )}
+                        <a className="btn btn-secondary" href={DISCORD_INVITE_URL} target="_blank" rel="noopener noreferrer">
+                            {t('home.joinDiscord', language)}
+                        </a>
+                        <a className="btn btn-secondary navbar-desktop-only" href={DESKTOP_DOWNLOAD_URL} target="_blank" rel="noopener noreferrer">
+                            {t('home.downloadMiniApp', language)}
+                        </a>
                     </div>
                 </div>
             </section>
 
-            <section className="filters-shell">
+            <section className="filters-shell filter-strip">
                 <div className="filters-head">
                     <div>
                         <h2 className="filters-title">{t('common.search', language)}</h2>
@@ -125,7 +136,7 @@ export default function HomePage() {
                         🎛️
                         {(filterServer || filterStasis || filterBand || filterLanguage) && (
                             <span className="chip chip-green" style={{ fontSize: 10, padding: '2px 7px' }}>
-                                {[filterServer, filterStasis, filterBand, filterLanguage].filter(Boolean).length}
+                                {activeFilterCount}
                             </span>
                         )}
                     </button>
@@ -176,6 +187,21 @@ export default function HomePage() {
                             ...GROUP_LANGUAGE_OPTIONS.map((code) => ({ value: code, label: getGroupLanguageLabel(code) })),
                         ]}
                     />
+                </div>
+                <div className="sub-filters">
+                    <span className="label">{t('common.server', language)}</span>
+                    {SERVERS.filter(Boolean).map((server) => (
+                        <button key={server} className={`pill ${filterServer === server ? 'is-active' : ''}`} onClick={() => setFilterServer(filterServer === server ? '' : server)}>
+                            {server}
+                        </button>
+                    ))}
+                    <span className="label">{t('common.stasis', language)}</span>
+                    {[1, 3, 5, 7, 10].map((value) => (
+                        <button key={value} className={`pill ${filterStasis === value ? 'is-active' : ''}`} onClick={() => setFilterStasis(filterStasis === value ? '' : value)}>
+                            S{value}
+                        </button>
+                    ))}
+                    {(activeFilterCount > 0 || search) && <button className="btn btn-ghost btn-sm" onClick={clearFilters}>{t('common.clear', language)}</button>}
                 </div>
             </section>
 

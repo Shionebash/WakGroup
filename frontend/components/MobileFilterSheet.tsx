@@ -58,17 +58,17 @@ export default function MobileFilterSheet({
                 <div className="mobile-filter-handle"/>
 
                 <div className="mobile-filter-header">
-                    <span className="mobile-filter-title">Filtros</span>
+                    <span className="mobile-filter-title">{t('common.filters', language)}</span>
                     {hasFilters && (
                         <button className="mobile-filter-clear press-fx" onClick={handleClear}>
-                            Limpiar todo
+                            {t('common.clearAll', language)}
                         </button>
                     )}
                 </div>
 
                 {/* Servidor */}
                 <div className="mobile-filter-section">
-                    <div className="mobile-filter-section-label">{t('home.allServers', language) || 'Servidor'}</div>
+                    <div className="mobile-filter-section-label">{t('common.server', language)}</div>
                     <div className="mobile-filter-pills">
                         {SERVERS.map(s => (
                             <button
@@ -84,7 +84,7 @@ export default function MobileFilterSheet({
 
                 {/* Stasis */}
                 <div className="mobile-filter-section">
-                    <div className="mobile-filter-section-label">Stasis</div>
+                    <div className="mobile-filter-section-label">{t('common.stasis', language)}</div>
                     <div className="mobile-filter-pills">
                         {STASIS_OPTIONS.map(n => (
                             <button
@@ -100,7 +100,7 @@ export default function MobileFilterSheet({
 
                 {/* Banda de nivel */}
                 <div className="mobile-filter-section">
-                    <div className="mobile-filter-section-label">Nivel mínimo</div>
+                    <div className="mobile-filter-section-label">{t('dungeon.minLevel', language)}</div>
                     <div className="mobile-filter-pills">
                         {BAND_OPTIONS.map(n => (
                             <button
@@ -116,7 +116,7 @@ export default function MobileFilterSheet({
 
                 {/* Idioma */}
                 <div className="mobile-filter-section">
-                    <div className="mobile-filter-section-label">Idioma</div>
+                    <div className="mobile-filter-section-label">{t('common.language', language)}</div>
                     <div className="mobile-filter-pills">
                         {GROUP_LANGUAGE_OPTIONS.map(code => (
                             <button
@@ -131,7 +131,7 @@ export default function MobileFilterSheet({
                 </div>
 
                 <button className="mobile-filter-apply press-fx" onClick={handleApply}>
-                    Aplicar filtros
+                    {t('common.applyFilters', language)}
                 </button>
             </div>
         </div>

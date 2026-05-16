@@ -48,32 +48,26 @@ export default function DungeonsPage() {
     const featured = filtered.slice(0, 3);
 
     return (
-        <div className="container" style={{ paddingTop: 32, paddingBottom: 48 }}>
-            <section className="hero-shell" style={{ marginBottom: 26 }}>
-                <div className="hero-panel hero-panel-single dungeons-hero-panel">
-                    <div className="hero-copy">
-                        <span className="hero-eyebrow">{t('dungeons.eyebrow', language)}</span>
-                        <h1 className="title-gold hero-title">{t('dungeons.title', language)}</h1>
-                        <p className="hero-description">{t('dungeons.subtitle', language)}</p>
-                        <div className="dungeons-hero-stats">
-                            <div className="dungeons-hero-pill">
-                                <strong>{filtered.length}</strong>
-                                <span>{t('dungeons.visibleCount', language)}</span>
-                            </div>
-                            <div className="dungeons-hero-pill">
-                                <strong>{grouped.length}</strong>
-                                <span>{t('dungeons.activeBands', language)}</span>
-                            </div>
-                            <div className="dungeons-hero-pill">
-                                <strong>{featured.length}</strong>
-                                <span>{t('dungeons.featuredCount', language)}</span>
-                            </div>
-                        </div>
+        <div className="container app-page-shell" style={{ paddingTop: 24, paddingBottom: 48 }}>
+            <section className="app-toolbar">
+                <div className="app-toolbar-copy">
+                    <span className="eyebrow">{t('dungeons.eyebrow', language)}</span>
+                    <h1>{t('dungeons.title', language)} <span className="count">{filtered.length}</span></h1>
+                    <p>{t('dungeons.subtitle', language)}</p>
+                </div>
+                <div className="dungeons-hero-stats compact-stats">
+                    <div className="dungeons-hero-pill">
+                        <strong>{filtered.length}</strong>
+                        <span>{t('dungeons.visibleCount', language)}</span>
+                    </div>
+                    <div className="dungeons-hero-pill">
+                        <strong>{grouped.length}</strong>
+                        <span>{t('dungeons.activeBands', language)}</span>
                     </div>
                 </div>
             </section>
 
-            <section className="filters-shell" style={{ marginBottom: 24 }}>
+            <section className="filters-shell filter-strip" style={{ marginBottom: 24 }}>
                 <div className="filters-head">
                     <div>
                         <h2 className="filters-title">{t('common.search', language)}</h2>
