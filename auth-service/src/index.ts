@@ -1,9 +1,9 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import helmet from 'helmet';
+import { default as helmet } from 'helmet';
 import cookieParser from 'cookie-parser';
-import rateLimit from 'express-rate-limit';
+import { rateLimit } from 'express-rate-limit';
 
 import authRoutes from './routes/auth.js';
 import { checkDbConnection } from './db/database.js';
@@ -99,8 +99,10 @@ app.use((err: Error, req: express.Request, res: express.Response, next: express.
 });
 
 const PORT = Number(process.env.PORT) || 4010;
-app.listen(PORT, () => {
-    console.log(`[auth-service] WakGroup Auth Service running on port ${PORT}`);
-});
+if (process.env.VERCEL !== '1') {
+    app.listen(PORT, () => {
+        console.log(`[auth-service] WakGroup Auth Service running on port ${PORT}`);
+    });
+}
 
 export default app;
